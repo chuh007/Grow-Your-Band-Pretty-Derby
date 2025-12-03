@@ -1,0 +1,1 @@
+Reflex is distributed under the terms of the MIT License. A complete version of the license is available in the LICENSE file in this repository. Any contribution made to this project will be licensed under the MIT License.
