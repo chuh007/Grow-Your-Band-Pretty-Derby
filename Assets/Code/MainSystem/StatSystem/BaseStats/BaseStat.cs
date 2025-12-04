@@ -4,7 +4,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
 {
     public class BaseStat : IModifierStat
     {
-        public CommonStatType CommonStatType { get; private set; }
+        public StatType StatType { get; private set; }
         public string StatName { get; private set; }
         public int CurrentValue { get; private set; }
         public int MinValue { get; private set; }
@@ -13,7 +13,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
 
         public BaseStat(CommonStatData data)
         {
-            CommonStatType = data.commonStatType;
+            StatType = data.statType;
             CurrentValue = data.currentValue;
             StatName = data.statName;
             StatIcon = data.statIcon;

@@ -1,21 +1,32 @@
 ﻿namespace Code.MainSystem.StatSystem.BaseStats
 {
-    public enum CommonStatType
+    public enum StatType
     {
-        Money,
-        Debt,
-        Society,
-        PayBackDebt,
-        Stress
-    }
+        // Common
+        Condition,
+        Mental,
 
-    public enum MemberStatType
-    {
-        
-    }
+        // Guitar
+        GuitarEndurance,
+        GuitarConcentration,
 
-    public enum TeamStatType
-    {
-        
+        // Drums
+        DrumsSenseOfRhythm,
+        DrumsPower,
+
+        // Bass
+        BassDexterity,
+        BassSenseOfRhythm,
+
+        // Vocal
+        VocalVocalization,
+        VocalBreathing,
+
+        // Piano
+        PianoDexterity,
+        PianoStagePresence,
+
+        // Team
+        TeamHarmony
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
-    [CreateAssetMenu(fileName = "BaseStatData", menuName = "SO/CommonData", order = 0)]
+    [CreateAssetMenu(fileName = "Stat data", menuName = "SO/Stat data", order = 0)]
     public class CommonStatData : ScriptableObject
     {
-        public CommonStatType commonStatType;
+        public StatType statType;
         public string statName;
         public int currentValue;
         public int minValue;
