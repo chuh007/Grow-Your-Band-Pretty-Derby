@@ -1,10 +1,10 @@
 ﻿namespace Code.Core.Bus.GameEvents
 {
-    public struct TurnUseEvent : IEvent
+    public struct TurnReturnEvent : IEvent
     {
         public int Value;
 
-        public TurnUseEvent(int value)
+        public TurnReturnEvent(int value)
         {
             Value = value;
         }
