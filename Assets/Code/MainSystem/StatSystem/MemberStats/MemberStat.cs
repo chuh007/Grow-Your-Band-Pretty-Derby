@@ -3,14 +3,18 @@ using UnityEngine;
 using Code.Core.Bus;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.StatSystem.Manager;
 
 namespace Code.MainSystem.StatSystem.MemberStats
 {
     public class MemberStat : AbstractStats
     {
+        [SerializeField] private MemberType memberType;
         [SerializeField] protected List<StatData> memberStatData;
         
         protected readonly Dictionary<StatType, BaseStat> MemberStats = new();
+        
+        public MemberType MemberType => memberType;
         
         protected override void Awake()
         {
