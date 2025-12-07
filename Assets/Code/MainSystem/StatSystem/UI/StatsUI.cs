@@ -21,10 +21,10 @@ namespace Code.MainSystem.StatSystem.UI
             statIcon.sprite = _stat.StatIcon;
             statSlider.minValue = 0f;
             statSlider.maxValue = 1f;
-            Update();
+            UpdateUI();
         }
 
-        public void Update()
+        public void UpdateUI()
         {
             statValueText.text = $"{_stat.CurrentValue.ToString()} / {_stat.MaxValue}";
 

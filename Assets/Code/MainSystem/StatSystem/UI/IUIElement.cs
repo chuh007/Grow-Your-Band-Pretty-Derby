@@ -3,7 +3,7 @@
     public interface IUIElement<T>
     {
         void EnableFor(T stats);
-        void Update();
+        void UpdateUI();
     }
     
     public interface IUIElement<T1, T2>
