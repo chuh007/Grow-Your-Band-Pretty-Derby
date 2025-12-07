@@ -11,7 +11,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int MaxValue { get; private set; }
         public Sprite StatIcon { get; private set; }
 
-        public BaseStat(CommonStatData data)
+        public BaseStat(StatData data)
         {
             StatType = data.statType;
             CurrentValue = data.currentValue;
@@ -27,16 +27,19 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public void MultiplyValue(int value)
             => CurrentValue = Mathf.Clamp(CurrentValue * value, MinValue, MaxValue);
 
-        public void MinusValue(int value)
-            => CurrentValue = Mathf.Clamp(CurrentValue - value, MinValue, MaxValue);
-
         public void SubtractValue(int value)
             => CurrentValue = Mathf.Clamp(CurrentValue - value, MinValue, MaxValue);
 
-        public void PlusPerScentValue(int value)
-            => CurrentValue = (int)(CurrentValue + CurrentValue * (value / 100.0));
+        public void PlusPercentValue(int value)
+        {
+            int addValue = Mathf.RoundToInt(CurrentValue * (value / 100f));
+            CurrentValue = Mathf.Clamp(CurrentValue + addValue, MinValue, MaxValue);
+        }
 
-        public void MinusPerScentValue(int value)
-            => CurrentValue = (int)(CurrentValue - CurrentValue * (value / 100.0));
+        public void MinusPercentValue(int value)
+        {
+            int subtractValue = Mathf.RoundToInt(CurrentValue * (value / 100f));
+            CurrentValue = Mathf.Clamp(CurrentValue - subtractValue, MinValue, MaxValue);
+        }
     }
 }

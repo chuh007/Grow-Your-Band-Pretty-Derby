@@ -1,45 +1,46 @@
 ﻿using UnityEngine;
-using Code.MainSystem.StatSystem.UI;
 using System.Collections.Generic;
+using Code.Core.Bus;
+using Code.MainSystem.StatSystem.Events;
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
     public abstract class AbstractStats : MonoBehaviour
     {
-        [SerializeField] protected List<CommonStatData> commonStatData;
-        [SerializeField] protected StatsUI[] statUI;
+        [SerializeField] protected List<StatData> commonStatData;
 
-        protected readonly Dictionary<StatType, BaseStat> Stats = new();
-        protected readonly Dictionary<StatType, StatsUI> StatUIs = new();
+        protected readonly Dictionary<StatType, BaseStat> CommonStats = new();
 
         protected virtual void Awake()
         {
             foreach (var data in commonStatData)
             {
                 BaseStat stat = new BaseStat(data);
-                Stats[data.statType] = stat;
+                CommonStats[data.statType] = stat;
             }
         }
 
-        protected virtual void Start()
+        public void CommonStatUpgrade(StatType statType, float failureValue)
         {
-            int idx = 0;
-            foreach (var baseStat in Stats)
+            float randValue = Random.Range(0f, 101f);
+            if (randValue <= failureValue)
             {
-                statUI[idx].EnableFor(baseStat.Value);
-                StatUIs[baseStat.Value.StatType] = statUI[idx];
-                idx++;
+                Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
+            }
+            else
+            {
+                BaseStat stat = CommonStats.GetValueOrDefault(statType);
+                if (stat != null)
+                {
+                    stat.PlusValue(100);
+                    Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
+                }
             }
         }
 
-        public void UpdateUI(StatType baseStatType)
+        public BaseStat GetCommonStat(StatType statType)
         {
-            StatUIs[baseStatType].Update();
-        }
-
-        public BaseStat GetStat(StatType baseStatType)
-        {
-            return Stats.GetValueOrDefault(baseStatType);  
+            return CommonStats.GetValueOrDefault(statType);  
         }
     }
 }
