@@ -23,3 +23,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dc2f160a7327b2348bde76014b51debb, type: 2}
   currentHealth: 0
   maxHealth: 0
+  Lesson1TeXT: "\uBC15\uC790 \uB9DE\uCD94\uAE30"
+  Lesson2TeXT: "\uC18D\uB3C5"

@@ -14,5 +14,7 @@ namespace Code.MainSystem.MainScreen.MemberData
         public List<StatData> stats;
         public int currentHealth;
         public int maxHealth;
+        public string Lesson1TeXT;
+        public string Lesson2TeXT;
     }
 }
