@@ -9,51 +9,56 @@ namespace Code.MainSystem.Turn
     
     public class TurnManager : MonoBehaviour
     {
-        public event Action<int> TurnChanged;
+        public event Action TurnChanged;
         public event Action TurnZero;
         
         [SerializeField] private int maxTurn;
-        [SerializeField] private int _remainingTurn;
+        
+        private int _currentTurn;
 
-        public int RemainingTurn
+        public int CurrentTurn
         {
-            get => _remainingTurn;
+            get => _currentTurn;
             set
             {
-                _remainingTurn = value;
-                if (value <= 0)
-                {
-                    TurnZero?.Invoke();
-                }
-                TurnChanged?.Invoke(value);
+                _currentTurn = value;
+                TurnChanged?.Invoke();
             }
         }
+        public int NextTargetTurn { get; private set; }
 
         private void Awake()
         {
             Bus<TurnUseEvent>.OnEvent += HandleTurnUse;
             Bus<TurnReturnEvent>.OnEvent += HandleTurnReturn;
+            Bus<TargetTurnSetEvent>.OnEvent += HandleTurnSet;
         }
 
         private void Start()
         {
-            RemainingTurn = maxTurn;
+            CurrentTurn = 0;
         }
 
         private void OnDestroy()
         {
             Bus<TurnUseEvent>.OnEvent -= HandleTurnUse;
             Bus<TurnReturnEvent>.OnEvent -= HandleTurnReturn;
+            Bus<TargetTurnSetEvent>.OnEvent -= HandleTurnSet;
         }
-
+        
         private void HandleTurnUse(TurnUseEvent evt)
         {
-            RemainingTurn -= evt.Value;
+            CurrentTurn += evt.Value;
         }
 
         private void HandleTurnReturn(TurnReturnEvent evt)
         {
-            RemainingTurn += evt.Value;
+            CurrentTurn -= evt.Value;
+        }
+        
+        private void HandleTurnSet(TargetTurnSetEvent evt)
+        {
+            NextTargetTurn = evt.Value;
         }
     }
 }

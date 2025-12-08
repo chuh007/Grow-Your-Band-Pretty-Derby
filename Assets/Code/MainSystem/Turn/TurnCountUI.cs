@@ -24,9 +24,10 @@ namespace Code.MainSystem.Turn
             _turnManager.TurnChanged -= HandleTurnChange;
         }
 
-        private void HandleTurnChange(int value)
+        private void HandleTurnChange()
         {
-            turnText.SetText(value.ToString());
+            int toNextTurn = _turnManager.NextTargetTurn - _turnManager.CurrentTurn;
+            turnText.SetText(toNextTurn.ToString());
         }
     }
 }
