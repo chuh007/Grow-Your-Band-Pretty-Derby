@@ -12,9 +12,8 @@ namespace Code.MainSystem.MainScreen.MemberData
         public MemberType memberType;
         public Sprite unitImage;
         public List<StatData> stats;
-        public int currentHealth;
-        public int maxHealth;
-        public string Lesson1TeXT;
-        public string Lesson2TeXT;
+        public List<PersonalpracticeDataSO> personalPractices;
+        public float maxCondition;
+        public float currentCondition;
     }
 }

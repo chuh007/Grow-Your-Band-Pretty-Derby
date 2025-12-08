@@ -16,12 +16,12 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private List<TextMeshProUGUI> characterStatNameTexts = new List<TextMeshProUGUI>();
         [SerializeField] private List<TextMeshProUGUI> characterStatValueTexts = new List<TextMeshProUGUI>();
         [SerializeField] private List<Image> characterStatSprites = new List<Image>();
+        [SerializeField] private TextMeshProUGUI conditionText;
         [SerializeField] private Image characterIcon;
         [SerializeField] private PersonalPracticeCompo  personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo  teamPracticeCompo;
-
-        private UnitDataSO currentUnit;
         private bool _isTeamPractice = false;
+        private bool _isCharacterPractice = false;
 
         private void Awake()
         {
@@ -39,11 +39,6 @@ namespace Code.MainSystem.MainScreen
             }
         }
 
-        public void PracticeClick()
-        {
-            personalPracticeCompo.ButtonLoader(currentUnit);
-        }
-
         public void TeamClick()
         {
             _isTeamPractice = true;
@@ -54,8 +49,9 @@ namespace Code.MainSystem.MainScreen
         {
             if (unitDataDict.TryGetValue(type, out var unit))
             {
-                currentUnit = unit;
+                personalPracticeCompo.ButtonLoader(unit,characterStatNameTexts);
                 charterNameText.SetText(unit.unitName);
+                conditionText.SetText($"{unit.currentCondition+"/"+unit.maxCondition}");
 
                 for (int i = 0; i < 5; i++)
                 {

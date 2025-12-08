@@ -21,7 +21,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1f6885b4526d0764cbee8f780adab27d, type: 2}
   - {fileID: 11400000, guid: 37fcc8dcb4bb9f3449dd68f2afbe263c, type: 2}
   - {fileID: 11400000, guid: dc2f160a7327b2348bde76014b51debb, type: 2}
-  currentHealth: 0
-  maxHealth: 0
-  Lesson1TeXT: "\uB9AC\uB4EC\uAC8C\uC784\uD558\uAE30"
-  Lesson2TeXT: "\uBC15\uC790 \uB9DE\uCD94\uAE30"
+  personalPractices:
+  - {fileID: 11400000, guid: 26bf6c549897c654380fc35962e2d244, type: 2}
+  - {fileID: 11400000, guid: e6ff848408928fb4bbff90f106e30585, type: 2}
+  - {fileID: 11400000, guid: 53fac43b991d5954e916940f0e7cdad1, type: 2}
+  - {fileID: 11400000, guid: e0619b01af0e1ac4fa4ded34539234af, type: 2}
+  maxCondition: 100
+  currentCondition: 100
