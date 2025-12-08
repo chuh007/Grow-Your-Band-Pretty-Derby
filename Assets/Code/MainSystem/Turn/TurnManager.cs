@@ -10,12 +10,20 @@ namespace Code.MainSystem.Turn
     public class TurnManager : MonoBehaviour
     {
         public event Action TurnChanged;
-        public event Action TurnZero;
+        public event Action TargetTurnChanged;
+        public event Action GameEndEvent;
         
         [SerializeField] private int maxTurn;
         
         private int _currentTurn;
-
+        private int _targetTurn;
+        
+        public int MaxTurn
+        {
+            get => maxTurn;
+            set => maxTurn = value;
+        }
+        
         public int CurrentTurn
         {
             get => _currentTurn;
@@ -23,9 +31,19 @@ namespace Code.MainSystem.Turn
             {
                 _currentTurn = value;
                 TurnChanged?.Invoke();
+                if(_currentTurn >= maxTurn)
+                    GameEndEvent?.Invoke();
             }
         }
-        public int NextTargetTurn { get; private set; }
+        public int NextTargetTurn
+        {
+            get => _targetTurn;
+            private set
+            {
+                _targetTurn = value;
+                TargetTurnChanged?.Invoke();
+            }
+        }
 
         private void Awake()
         {
@@ -36,7 +54,7 @@ namespace Code.MainSystem.Turn
 
         private void Start()
         {
-            CurrentTurn = 0;
+            CurrentTurn = maxTurn;
         }
 
         private void OnDestroy()
