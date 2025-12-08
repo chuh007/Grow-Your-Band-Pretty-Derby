@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Condition data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.BaseStats.CommonStatData
   statType: 0
-  statName: "\uCEE8\uB514\uC158"
+  statName: "\uCCB4\uB825"
   currentValue: 0
   minValue: 0
   maxValue: 0
