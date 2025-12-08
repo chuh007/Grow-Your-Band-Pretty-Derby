@@ -54,7 +54,7 @@ namespace Code.Core
             _resourceManager.OnLoadCountChange += HandleLoadCountChange;
             
             DontDestroyOnLoad(gameObject);
-            _ = LoadProcess();
+            //_ = LoadProcess();
         }
 
         private void HandleLoadCountChange()
@@ -63,19 +63,19 @@ namespace Code.Core
             // LoadingScreenUI.SetProgress(_resourceManager.LoadCount,_resourceManager.NeedLoadCount);
         }
 
-        private async Task LoadProcess()
-        {
-            // isKey =false;
-            // _resourceManager.LoadCount = 0;
-            // _resourceManager.NeedLoadCount = 0;
-            // await Task.WhenAll(_resourceManager.LoadAllAsync<AudioClip>("BGM"),
-            //     _resourceManager.LoadAllAsync<GameObject>("default"));
-            // if (LoadingScreenUI != null)
-            // {
-            //     LoadingScreenUI.SetMessage("Loading complete..\npress any key to continue");
-            //     isKey = true;
-            // }
-        }
+        // private async Task LoadProcess()
+        // {
+        //     // isKey =false;
+        //     // _resourceManager.LoadCount = 0;
+        //     // _resourceManager.NeedLoadCount = 0;
+        //     // await Task.WhenAll(_resourceManager.LoadAllAsync<AudioClip>("BGM"),
+        //     //     _resourceManager.LoadAllAsync<GameObject>("default"));
+        //     // if (LoadingScreenUI != null)
+        //     // {
+        //     //     LoadingScreenUI.SetMessage("Loading complete..\npress any key to continue");
+        //     //     isKey = true;
+        //     // }
+        // }
 
         public T LoadAsset<T>(string key) where T : Object
         {
