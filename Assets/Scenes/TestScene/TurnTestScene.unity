@@ -526,6 +526,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2093574111}
     m_Modifications:
+    - target: {fileID: 5143463366543792979, guid: caa78447b9000ab49903081b36dc8c73, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a0a26d1d17db4a4083466cb38510deb, type: 2}
+    - target: {fileID: 5143463366543792979, guid: caa78447b9000ab49903081b36dc8c73, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -13652927414394703, guid: 0a0a26d1d17db4a4083466cb38510deb, type: 2}
+    - target: {fileID: 5143463366543792979, guid: caa78447b9000ab49903081b36dc8c73, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7013767343357440527, guid: caa78447b9000ab49903081b36dc8c73, type: 3}
       propertyPath: m_Name
       value: TurnCountUI
