@@ -22,20 +22,19 @@ namespace Code.MainSystem.StatSystem.BaseStats
 
         public void CommonStatUpgrade(StatType statType, float successRate,float value)
         {
-            float randValue = Random.Range(0f, 101f);
-            if (randValue >= successRate)
+            BaseStat stat = CommonStats.GetValueOrDefault(statType);
+            
+            float randValue = Random.Range(0f, 100f);
+            bool success = randValue < successRate;
+
+            if (!success)
             {
                 Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
+                return;
             }
-            else
-            {
-                BaseStat stat = CommonStats.GetValueOrDefault(statType);
-                if (stat != null)
-                {
-                    stat.PlusValue((int)value);
-                    Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
-                }
-            }
+
+            stat.PlusValue((int)value);
+            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
         }
 
         public BaseStat GetCommonStat(StatType statType)

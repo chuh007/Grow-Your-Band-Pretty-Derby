@@ -40,7 +40,14 @@ namespace Code.MainSystem.StatSystem.Manager
             }
             else
             {
-                UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
+                if (evt.statType is StatType.Condition or StatType.Mental)
+                {
+                    UpgradeCommonStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
+                }
+                else
+                {
+                    UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
+                }
             }
         }
         
@@ -83,8 +90,13 @@ namespace Code.MainSystem.StatSystem.Manager
         public void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
         {
             var member = _memberMap.GetValueOrDefault(memberType);
-            if (member != null)
-                member.MemberStatUpgrade(statType, successRate, value);
+            member?.MemberStatUpgrade(statType, successRate, value);
+        }
+        
+        public void UpgradeCommonStat(MemberType memberType, StatType statType, float successRate, float value)
+        {
+            var member = _memberMap.GetValueOrDefault(memberType);
+            member?.CommonStatUpgrade(statType, successRate, value);
         }
 
         public void UpgradeAllMemberStat(StatType statType, float successRate, float value)
