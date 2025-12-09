@@ -23,9 +23,10 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private Image characterIcon;
         [SerializeField] private PersonalPracticeCompo  personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo  teamPracticeCompo;
+        [SerializeField] private StatManager statManager;
         private bool _isTeamPractice = false;
         private bool _isCharacterPractice = false;
-        private string unittype;
+        private UnitDataSO unitDataSO;
 
         private void Awake()
         {
@@ -48,7 +49,10 @@ namespace Code.MainSystem.MainScreen
         {
             if (evt.Upgrade)
             {
-                MemberBtnClicked(unittype);
+                for (int i = 0; i < 5; i++)
+                {
+                    characterStatValueTexts[i].SetText($"{statManager.GetMemberStat(unitDataSO.memberType,unitDataSO.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unitDataSO.memberType,unitDataSO.stats[i].statType).MaxValue}");
+                }
             }
         }
 
@@ -65,9 +69,9 @@ namespace Code.MainSystem.MainScreen
 
         public void MemberBtnClicked(string type)
         {
-            unittype = type;
             if (unitDataDict.TryGetValue(type, out var unit))
             {
+                unitDataSO = unit;
                 personalPracticeCompo.ButtonLoader(unit,characterStatNameTexts);
                 charterNameText.SetText(unit.unitName);
                 conditionText.SetText($"{unit.currentCondition+"/"+unit.maxCondition}");
@@ -75,7 +79,7 @@ namespace Code.MainSystem.MainScreen
                 for (int i = 0; i < 5; i++)
                 {
                     characterStatNameTexts[i].SetText(unit.stats[i].statName);
-                    characterStatValueTexts[i].SetText($"{unit.stats[i].currentValue} / {unit.stats[i].maxValue}");
+                    characterStatValueTexts[i].SetText($"{statManager.GetMemberStat(unit.memberType,unit.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType,unit.stats[i].statType).MaxValue}");
                     //characterStatSprites[i].sprite = unit.stats[i].statIcon;
                 }
 

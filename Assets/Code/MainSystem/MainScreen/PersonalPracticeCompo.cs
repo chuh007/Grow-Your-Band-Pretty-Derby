@@ -14,11 +14,14 @@ namespace Code.MainSystem.MainScreen
     {
         [SerializeField] private List<Image> arrowObjs = new List<Image>();
         [SerializeField] private List<TextMeshProUGUI> probabilitytexts = new List<TextMeshProUGUI>();
+        [SerializeField] private TextMeshProUGUI conditionText = null;
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
         private List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
         private UnitDataSO _currentUnit;
         private int _currentLesson = -1;
+        private float _currentCondition = 0;
+
         public void ButtonLoader(UnitDataSO currentUnit,List<TextMeshProUGUI> units)
         {
             foreach (var text in probabilitytexts)
@@ -48,10 +51,19 @@ namespace Code.MainSystem.MainScreen
             if (_currentLesson == index)
             {
                 Debug.Log($"훈련시작");
-                Bus<PracticenEvent>.Raise(new PracticenEvent(PracticenType.Personal,_currentUnit.memberType,_currentUnit.personalPractices[index].PracticeStatType,_currentUnit.currentCondition,_currentUnit.personalPractices[index].statIncrease));
-                _currentUnit.currentCondition -= _currentUnit.personalPractices[index].statIncrease;
-                _currentUnit.currentCondition = Mathf.Clamp(_currentUnit.currentCondition, 0, 100);
+                Bus<PracticenEvent>.Raise(new PracticenEvent(
+                    PracticenType.Personal,
+                    _currentUnit.memberType,
+                    _currentUnit.personalPractices[index].PracticeStatType,
+                    _currentCondition,
+                    _currentUnit.personalPractices[index].statIncrease
+                ));
+                
+                _currentCondition -= _currentUnit.personalPractices[index].statIncrease;
+                _currentCondition = Mathf.Clamp(_currentCondition, 0, 100);
+                conditionText.SetText($"{_currentCondition}/{_currentUnit.maxCondition}");
             }
+
             else
             {
                 if (_currentLesson < 0)
