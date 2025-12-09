@@ -4074,6 +4074,7 @@ MonoBehaviour:
   characterIcon: {fileID: 154937796}
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 0}
+  statManager: {fileID: 2127672356}
 --- !u!114 &904073742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4097,6 +4098,7 @@ MonoBehaviour:
   - {fileID: 1077817155}
   - {fileID: 264693673}
   - {fileID: 121545764}
+  conditionText: {fileID: 1415003166}
   lesson1Text: {fileID: 481430920}
   lesson2Text: {fileID: 499302770}
 --- !u!1 &939267184
@@ -4849,6 +4851,62 @@ PrefabInstance:
       propertyPath: m_Name
       value: BandManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2517096513483231311, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: memberStatData.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2517096513483231311, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1f6885b4526d0764cbee8f780adab27d, type: 2}
+    - target: {fileID: 2517096513483231311, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 37fcc8dcb4bb9f3449dd68f2afbe263c, type: 2}
+    - target: {fileID: 4734787503100043509, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: memberStatData.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734787503100043509, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 4cee347a750e36c4e8c97aea05cb8474, type: 2}
+    - target: {fileID: 4734787503100043509, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 18b9352dc673d2a4c94ae66fb0c1abe6, type: 2}
+    - target: {fileID: 5440278777511406785, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: memberStatData.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440278777511406785, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 58ff9e77b9332c24988c4d9690d624b1, type: 2}
+    - target: {fileID: 5440278777511406785, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 48e704ab41754824cba63e613a06f8d6, type: 2}
+    - target: {fileID: 5440278777511406785, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: acf12a006a695d047a3e9b56b9288c22, type: 2}
+    - target: {fileID: 5440278777511406785, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 4364a7085f556b440b727fd6f9abc75d, type: 2}
+    - target: {fileID: 6283842062045677984, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: memberStatData.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6283842062045677984, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 980198409400b9944bec3f4185d355f2, type: 2}
+    - target: {fileID: 6283842062045677984, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a82af34ee579aca47bf3b1ed4506f6d5, type: 2}
     - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
       propertyPath: memberStats.Array.size
       value: 5
@@ -4873,6 +4931,18 @@ PrefabInstance:
       propertyPath: 'memberStats.Array.data[4]'
       value: 
       objectReference: {fileID: 1138437379}
+    - target: {fileID: 7406150467514899826, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: memberStatData.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406150467514899826, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: fd458ead59eb7da4abc67b538c9f2337, type: 2}
+    - target: {fileID: 7406150467514899826, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStatData.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 7b6e22f286dd1754396f391b1f8fa43b, type: 2}
     - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 563.0406
@@ -8235,6 +8305,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062400907}
   m_CullTransparentMesh: 1
+--- !u!114 &2127672356 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+  m_PrefabInstance: {fileID: 1138437378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2b65a2e1f2a4cc8b4d75cf61334ebd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.Manager.StatManager
 --- !u!1001 &1155719355747564277
 PrefabInstance:
   m_ObjectHideFlags: 0
