@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.BaseStats.CommonStatData
   statType: 6
   statName: "\uC190\uB180\uB9BC"
-  currentValue: 0
+  currentValue: 5
   minValue: 0
-  maxValue: 0
+  maxValue: 9999
   statIcon: {fileID: 0}

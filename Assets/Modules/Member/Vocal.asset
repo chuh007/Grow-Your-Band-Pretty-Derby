@@ -24,7 +24,7 @@ MonoBehaviour:
   personalPractices:
   - {fileID: 11400000, guid: 26bf6c549897c654380fc35962e2d244, type: 2}
   - {fileID: 11400000, guid: e6ff848408928fb4bbff90f106e30585, type: 2}
-  - {fileID: 11400000, guid: 5a3b82556147ec14bbc917b115aedb13, type: 2}
   - {fileID: 11400000, guid: e78747427ba84e346899de478913f87a, type: 2}
+  - {fileID: 11400000, guid: 5a3b82556147ec14bbc917b115aedb13, type: 2}
   maxCondition: 100
   currentCondition: 100

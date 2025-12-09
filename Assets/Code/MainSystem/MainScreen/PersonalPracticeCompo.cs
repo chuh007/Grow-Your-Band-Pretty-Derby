@@ -50,6 +50,7 @@ namespace Code.MainSystem.MainScreen
                 Debug.Log($"훈련시작");
                 Bus<PracticenEvent>.Raise(new PracticenEvent(PracticenType.Personal,_currentUnit.memberType,_currentUnit.personalPractices[index].PracticeStatType,_currentUnit.currentCondition,_currentUnit.personalPractices[index].statIncrease));
                 _currentUnit.currentCondition -= _currentUnit.personalPractices[index].statIncrease;
+                _currentUnit.currentCondition = Mathf.Clamp(_currentUnit.currentCondition, 0, 100);
             }
             else
             {
