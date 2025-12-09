@@ -1,7 +1,8 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using TMPro;
@@ -51,7 +52,18 @@ namespace Code.MainSystem.MainScreen
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    characterStatValueTexts[i].SetText($"{statManager.GetMemberStat(unitDataSO.memberType,unitDataSO.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unitDataSO.memberType,unitDataSO.stats[i].statType).MaxValue}");
+                    if (unitDataSO.stats[i].statType == StatType.TeamHarmony)
+                    {
+                        characterStatValueTexts[i]
+                            .SetText(
+                                $"{statManager.GetTeamStat(unitDataSO.stats[i].statType).CurrentValue} / {statManager.GetTeamStat(unitDataSO.stats[i].statType).MaxValue}");
+                    }
+                    else
+                    {
+                        characterStatValueTexts[i]
+                            .SetText(
+                                $"{statManager.GetMemberStat(unitDataSO.memberType, unitDataSO.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unitDataSO.memberType, unitDataSO.stats[i].statType).MaxValue}");
+                    }
                 }
             }
         }
@@ -79,7 +91,19 @@ namespace Code.MainSystem.MainScreen
                 for (int i = 0; i < 5; i++)
                 {
                     characterStatNameTexts[i].SetText(unit.stats[i].statName);
-                    characterStatValueTexts[i].SetText($"{statManager.GetMemberStat(unit.memberType,unit.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType,unit.stats[i].statType).MaxValue}");
+                    if (unit.stats[i].statType == StatType.TeamHarmony)
+                    {
+                        characterStatValueTexts[i]
+                            .SetText(
+                                $"{statManager.GetTeamStat(unit.stats[i].statType).CurrentValue} / {statManager.GetTeamStat(unit.stats[i].statType).MaxValue}");
+                    }
+                    else
+                    {
+                        Debug.Log(statManager.GetMemberStat(unit.memberType, unit.stats[i].statType).CurrentValue);
+                        characterStatValueTexts[i]
+                            .SetText(
+                                $"{statManager.GetMemberStat(unit.memberType, unit.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType, unit.stats[i].statType).MaxValue}");
+                    }
                     //characterStatSprites[i].sprite = unit.stats[i].statIcon;
                 }
 
