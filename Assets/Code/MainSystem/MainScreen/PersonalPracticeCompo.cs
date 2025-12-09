@@ -24,6 +24,7 @@ namespace Code.MainSystem.MainScreen
 
         public void ButtonLoader(UnitDataSO currentUnit,List<TextMeshProUGUI> units)
         {
+            
             foreach (var text in probabilitytexts)
             {
                 text.SetText("");
@@ -42,6 +43,7 @@ namespace Code.MainSystem.MainScreen
             if(currentUnit == null)
                 return;
             _currentUnit = currentUnit;
+            _currentCondition = currentUnit.currentCondition;
             lesson1Text.SetText(currentUnit.personalPractices[2].PracticeStatName);
             lesson2Text.SetText(currentUnit.personalPractices[3].PracticeStatName);
         }
@@ -58,8 +60,8 @@ namespace Code.MainSystem.MainScreen
                     _currentCondition,
                     _currentUnit.personalPractices[index].statIncrease
                 ));
-                
-                _currentCondition -= _currentUnit.personalPractices[index].statIncrease;
+
+                _currentCondition -= _currentUnit.personalPractices[index].StaminaReduction;
                 _currentCondition = Mathf.Clamp(_currentCondition, 0, 100);
                 conditionText.SetText($"{_currentCondition}/{_currentUnit.maxCondition}");
             }
