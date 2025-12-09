@@ -87,6 +87,8 @@ namespace Code.MainSystem.MainScreen
 
         public void PracticeBtnClick(int index)
         {
+            if(_currentUnit == null)
+                return;
             _isCanprobabilityText = true;
             if (_currentLesson == index)
             {
