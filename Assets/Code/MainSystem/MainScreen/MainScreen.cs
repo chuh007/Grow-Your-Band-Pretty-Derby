@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Code.Core.Bus;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using TMPro;
 using UnityEngine;
@@ -22,6 +25,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private TeamPracticeCompo  teamPracticeCompo;
         private bool _isTeamPractice = false;
         private bool _isCharacterPractice = false;
+        private string unittype;
 
         private void Awake()
         {
@@ -37,6 +41,20 @@ namespace Code.MainSystem.MainScreen
                     Debug.LogWarning($"Duplicate key detected for memberType: {key}");
                 }
             }
+            Bus<StatUpgradeEvent>.OnEvent += HandleEvent;
+        }
+
+        private void HandleEvent(StatUpgradeEvent evt)
+        {
+            if (evt.Upgrade)
+            {
+                MemberBtnClicked(unittype);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            Bus<StatUpgradeEvent>.OnEvent -= HandleEvent;
         }
 
         public void TeamClick()
@@ -47,6 +65,7 @@ namespace Code.MainSystem.MainScreen
 
         public void MemberBtnClicked(string type)
         {
+            unittype = type;
             if (unitDataDict.TryGetValue(type, out var unit))
             {
                 personalPracticeCompo.ButtonLoader(unit,characterStatNameTexts);

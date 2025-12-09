@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Mental
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.MemberData.PersonalpracticeDataSO
   PracticeStatType: 1
+  PracticeStatName: 
   personalpracticeDescription: "\uBA58\uD0C8\uC62C\uB824\uC90C"
-  StaminaReduction: 0
-  statIncrease: 0
+  StaminaReduction: 2
+  statIncrease: 10

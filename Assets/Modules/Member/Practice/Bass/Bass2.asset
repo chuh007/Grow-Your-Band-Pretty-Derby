@@ -15,5 +15,5 @@ MonoBehaviour:
   PracticeStatType: 7
   PracticeStatName: "\uBC15\uC790\uB9DE\uCD94\uAE30"
   personalpracticeDescription: "\uBC15\uC790\uAC10 \uC99D\uAC00"
-  StaminaReduction: 0
-  statIncrease: 0
+  StaminaReduction: 2
+  statIncrease: 10
