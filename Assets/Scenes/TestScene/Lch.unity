@@ -3360,9 +3360,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 904073741}
-        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.MainScreen, Assembly-CSharp
-        m_MethodName: CancelPracticeClick
+      - m_Target: {fileID: 904073742}
+        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.PersonalPracticeCompo,
+          Assembly-CSharp
+        m_MethodName: CancelBtnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

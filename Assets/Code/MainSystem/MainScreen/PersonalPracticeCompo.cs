@@ -20,22 +20,11 @@ namespace Code.MainSystem.MainScreen
         private List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
         private UnitDataSO _currentUnit;
         private int _currentLesson = -1;
-        private float _currentCondition = 0;
+        private float _currentCondition = 100;
+        private bool _isCanprobabilityText = false;
 
         public void ButtonLoader(UnitDataSO currentUnit,List<TextMeshProUGUI> units)
         {
-            
-            foreach (var text in probabilitytexts)
-            {
-                text.SetText("");
-            }
-
-            foreach (var obj in arrowObjs)
-            {
-                Color color = obj.color;
-                color.a = 0;
-                obj.color = color;
-            }
             if (_texts.Count == 0 && units != null)
             {
                 _texts = units;
@@ -43,13 +32,62 @@ namespace Code.MainSystem.MainScreen
             if(currentUnit == null)
                 return;
             _currentUnit = currentUnit;
-            _currentCondition = currentUnit.currentCondition;
+            
             lesson1Text.SetText(currentUnit.personalPractices[2].PracticeStatName);
             lesson2Text.SetText(currentUnit.personalPractices[3].PracticeStatName);
+            if (_isCanprobabilityText)
+            {
+                foreach (var text in probabilitytexts)
+                {
+                    text.SetText("");
+                }
+                switch (_currentUnit.memberType)
+                {
+                    case MemberType.Bass:
+                        probabilitytexts[0].SetText($"{_currentUnit.currentCondition}%");
+                        break;
+                    case MemberType.Drums:
+                        probabilitytexts[1].SetText($"{_currentUnit.currentCondition}%");
+                        break;
+                    case MemberType.Guitar:
+                        probabilitytexts[2].SetText($"{_currentUnit.currentCondition}%");
+                        break;
+                    case MemberType.Piano:
+                        probabilitytexts[3].SetText($"{_currentUnit.currentCondition}%");
+                        break;
+                    case MemberType.Vocal:
+                        probabilitytexts[4].SetText($"{_currentUnit.currentCondition}%");
+                        break;
+                }
+            }
+            else
+            {
+                foreach (var text in probabilitytexts)
+                {
+                    text.SetText("");
+                }
+            }
+
+        }
+
+        public void CancelBtnClick()
+        {
+            foreach (var text in probabilitytexts)
+            {
+                text.SetText("");
+            }
+            foreach (var obj in arrowObjs)
+            {
+                Color color = obj.color;
+                color.a = 0;
+                obj.color = color;
+            }
+            _isCanprobabilityText = false;
         }
 
         public void PracticeBtnClick(int index)
         {
+            _isCanprobabilityText = true;
             if (_currentLesson == index)
             {
                 Debug.Log($"훈련시작");
