@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Code.Core;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
+using System.Collections.Generic;
 using Code.MainSystem.StatSystem.MemberStats;
 using Code.MainSystem.StatSystem.TeamStats;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -25,6 +28,25 @@ namespace Code.MainSystem.StatSystem.Manager
             {
                 _memberMap[member.MemberType] = member;
             }
+
+            Bus<PracticenEvent>.OnEvent += HandlePractice;
+        }
+
+        private void HandlePractice(PracticenEvent evt)
+        {
+            if (evt.Type == PracticenType.Team)
+            {
+                UpgradeTeamStat(evt.statType, evt.SuccessRate,evt.Value);
+            }
+            else
+            {
+                UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            Bus<PracticenEvent>.OnEvent -= HandlePractice;
         }
 
         #region GetStat
@@ -58,24 +80,24 @@ namespace Code.MainSystem.StatSystem.Manager
         
         #region UpgradeStat
 
-        public void UpgradeMemberStat(MemberType memberType, StatType statType, float failureRate)
+        public void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
         {
             var member = _memberMap.GetValueOrDefault(memberType);
             if (member != null)
-                member.MemberStatUpgrade(statType, failureRate);
+                member.MemberStatUpgrade(statType, successRate, value);
         }
 
-        public void UpgradeAllMemberStat(StatType statType, float failureRate)
+        public void UpgradeAllMemberStat(StatType statType, float successRate, float value)
         {
             foreach (var member in memberStats)
             {
-                member.MemberStatUpgrade(statType, failureRate);
+                member.MemberStatUpgrade(statType, successRate,value);
             }
         }
 
-        public void UpgradeTeamStat(StatType statType, float failureRate)
+        public void UpgradeTeamStat(StatType statType, float successRate,float value)
         {
-            teamStat.TeamStatUpgrade(statType, failureRate);
+            teamStat.TeamStatUpgrade(statType, successRate, value);
         }
 
         #endregion

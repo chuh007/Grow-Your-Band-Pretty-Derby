@@ -11,10 +11,10 @@ namespace Code.MainSystem.StatSystem.TeamStats
             return GetCommonStat(statType);
         }
         
-        public void TeamStatUpgrade(StatType statType, float failureRate)
+        public void TeamStatUpgrade(StatType statType, float successRate, float value)
         {
             float randValue = UnityEngine.Random.Range(0f, 101f);
-            if (randValue <= failureRate)
+            if (randValue >= successRate)
             {
                 Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
             }
@@ -23,7 +23,7 @@ namespace Code.MainSystem.StatSystem.TeamStats
                 BaseStat stat = GetCommonStat(statType);
                 if (stat != null)
                 {
-                    stat.PlusValue(100);
+                    stat.PlusValue((int)value);
                     Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
                     Bus<TeamStatValueChangedEvent>.Raise(
                         new TeamStatValueChangedEvent(statType, 100)
