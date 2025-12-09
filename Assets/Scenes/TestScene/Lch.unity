@@ -4837,6 +4837,142 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077817152}
   m_CullTransparentMesh: 1
+--- !u!1001 &1138437378
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1692745422035134223, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_Name
+      value: BandManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: memberStats.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStats.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1138437383}
+    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStats.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1138437382}
+    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStats.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1138437381}
+    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStats.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1138437380}
+    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: 'memberStats.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1138437379}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 563.0406
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 815.79486
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+--- !u!114 &1138437379 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5440278777511406785, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+  m_PrefabInstance: {fileID: 1138437378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
+--- !u!114 &1138437380 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4734787503100043509, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+  m_PrefabInstance: {fileID: 1138437378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
+--- !u!114 &1138437381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2517096513483231311, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+  m_PrefabInstance: {fileID: 1138437378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
+--- !u!114 &1138437382 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6283842062045677984, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+  m_PrefabInstance: {fileID: 1138437378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
+--- !u!114 &1138437383 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7406150467514899826, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
+  m_PrefabInstance: {fileID: 1138437378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
 --- !u!1 &1163832924
 GameObject:
   m_ObjectHideFlags: 0
@@ -8251,3 +8387,4 @@ SceneRoots:
   - {fileID: 1517285261}
   - {fileID: 904073740}
   - {fileID: 605969509}
+  - {fileID: 1138437378}

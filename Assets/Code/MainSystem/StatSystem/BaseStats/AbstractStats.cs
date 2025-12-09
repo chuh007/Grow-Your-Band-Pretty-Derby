@@ -20,10 +20,10 @@ namespace Code.MainSystem.StatSystem.BaseStats
             }
         }
 
-        public void CommonStatUpgrade(StatType statType, float failureValue)
+        public void CommonStatUpgrade(StatType statType, float successRate,float value)
         {
             float randValue = Random.Range(0f, 101f);
-            if (randValue <= failureValue)
+            if (randValue >= successRate)
             {
                 Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
             }
@@ -32,7 +32,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
                 BaseStat stat = CommonStats.GetValueOrDefault(statType);
                 if (stat != null)
                 {
-                    stat.PlusValue(100);
+                    stat.PlusValue((int)value);
                     Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
                 }
             }
