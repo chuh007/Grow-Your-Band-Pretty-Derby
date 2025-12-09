@@ -48,7 +48,7 @@ namespace Code.MainSystem.MainScreen
             if (_currentLesson == index)
             {
                 Debug.Log($"훈련시작");
-                Bus<PracticenEvent>.Raise(new PracticenEvent(PracticenType.Personal,_currentUnit.personalPractices[index].statIncrease));
+                Bus<PracticenEvent>.Raise(new PracticenEvent(PracticenType.Personal,_currentUnit.memberType,_currentUnit.personalPractices[index].PracticeStatType,_currentUnit.currentCondition,_currentUnit.personalPractices[index].statIncrease));
                 _currentUnit.currentCondition -= _currentUnit.personalPractices[index].statIncrease;
             }
             else
