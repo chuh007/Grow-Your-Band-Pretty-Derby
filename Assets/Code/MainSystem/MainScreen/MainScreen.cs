@@ -1,8 +1,7 @@
-﻿﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Code.Core.Bus;
+using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using TMPro;
@@ -13,59 +12,31 @@ namespace Code.MainSystem.MainScreen
 {
     public class MainScreen : MonoBehaviour
     {
-        [SerializeField] private List<UnitDataSO> unitDataSOList = new List<UnitDataSO>();
-        private Dictionary<string, UnitDataSO> unitDataDict = new Dictionary<string, UnitDataSO>();
+        [Header("Data")]
+        [SerializeField] private List<UnitDataSO> unitDataSOList;
+        private UnitSelector unitSelector;
 
+        [Header("UI")]
         [SerializeField] private TextMeshProUGUI charterNameText;
-        [SerializeField] private List<TextMeshProUGUI> characterStatNameTexts = new List<TextMeshProUGUI>();
-        [SerializeField] private List<TextMeshProUGUI> characterStatValueTexts = new List<TextMeshProUGUI>();
-        [SerializeField] private List<Image> characterStatSprites = new List<Image>();
+        [SerializeField] private List<TextMeshProUGUI> statNameTexts;
+        [SerializeField] private List<TextMeshProUGUI> statValueTexts;
+        [SerializeField] private List<Image> statIcons;
         [SerializeField] private TextMeshProUGUI conditionText;
         [SerializeField] private Image characterIcon;
-        [SerializeField] private PersonalPracticeCompo  personalPracticeCompo;
-        [SerializeField] private TeamPracticeCompo  teamPracticeCompo;
+
+        [Header("Components")]
+        [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
+        [SerializeField] private TeamPracticeCompo teamPracticeCompo;
         [SerializeField] private StatManager statManager;
-        private bool _isTeamPractice = false;
-        private bool _isCharacterPractice = false;
-        private UnitDataSO unitDataSO;
+
+        private StatUIUpdater statUIUpdater;
 
         private void Awake()
         {
-            foreach (var unit in unitDataSOList)
-            {
-                var key = unit.memberType.ToString();
-                if (!unitDataDict.ContainsKey(key))
-                {
-                    unitDataDict.Add(key, unit);
-                }
-                else
-                {
-                    Debug.LogWarning($"Duplicate key detected for memberType: {key}");
-                }
-            }
-            Bus<StatUpgradeEvent>.OnEvent += HandleEvent;
-        }
+            unitSelector = new UnitSelector(unitDataSOList);
+            statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
 
-        private void HandleEvent(StatUpgradeEvent evt)
-        {
-            if (evt.Upgrade)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    if (unitDataSO.stats[i].statType == StatType.TeamHarmony)
-                    {
-                        characterStatValueTexts[i]
-                            .SetText(
-                                $"{statManager.GetTeamStat(unitDataSO.stats[i].statType).CurrentValue} / {statManager.GetTeamStat(unitDataSO.stats[i].statType).MaxValue}");
-                    }
-                    else
-                    {
-                        characterStatValueTexts[i]
-                            .SetText(
-                                $"{statManager.GetMemberStat(unitDataSO.memberType, unitDataSO.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unitDataSO.memberType, unitDataSO.stats[i].statType).MaxValue}");
-                    }
-                }
-            }
+            Bus<StatUpgradeEvent>.OnEvent += HandleEvent;
         }
 
         private void OnDestroy()
@@ -73,44 +44,31 @@ namespace Code.MainSystem.MainScreen
             Bus<StatUpgradeEvent>.OnEvent -= HandleEvent;
         }
 
-        public void TeamClick()
+        private void HandleEvent(StatUpgradeEvent evt)
         {
-            _isTeamPractice = true;
+            if (evt.Upgrade && unitSelector.CurrentUnit != null)
+            {
+                statUIUpdater.UpdateStatValues(unitSelector.CurrentUnit);
+            }
         }
 
+        public void TeamClick()
+        {
+        }
 
         public void MemberBtnClicked(string type)
         {
-            if (unitDataDict.TryGetValue(type, out var unit))
+            if (unitSelector.TryGetUnit(type, out UnitDataSO unit))
             {
-                unitDataSO = unit;
-                personalPracticeCompo.ButtonLoader(unit,characterStatNameTexts);
-                charterNameText.SetText(unit.unitName);
-                conditionText.SetText($"{unit.currentCondition+"/"+unit.maxCondition}");
+                personalPracticeCompo.ButtonLoader(unit, statNameTexts);
 
-                for (int i = 0; i < 5; i++)
-                {
-                    characterStatNameTexts[i].SetText(unit.stats[i].statName);
-                    if (unit.stats[i].statType == StatType.TeamHarmony)
-                    {
-                        characterStatValueTexts[i]
-                            .SetText(
-                                $"{statManager.GetTeamStat(unit.stats[i].statType).CurrentValue} / {statManager.GetTeamStat(unit.stats[i].statType).MaxValue}");
-                    }
-                    else
-                    {
-                        Debug.Log(statManager.GetMemberStat(unit.memberType, unit.stats[i].statType).CurrentValue);
-                        characterStatValueTexts[i]
-                            .SetText(
-                                $"{statManager.GetMemberStat(unit.memberType, unit.stats[i].statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType, unit.stats[i].statType).MaxValue}");
-                    }
-                    //characterStatSprites[i].sprite = unit.stats[i].statIcon;
-                }
+                charterNameText.SetText(unit.unitName);
+                conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
+
+                statUIUpdater.UpdateAll(unit);
 
                 characterIcon.sprite = unit.unitImage;
-                Color iconColor = characterIcon.color;
-                iconColor.a = 1f;
-                characterIcon.color = iconColor;
+                characterIcon.color = new Color(1, 1, 1, 1);
             }
             else
             {

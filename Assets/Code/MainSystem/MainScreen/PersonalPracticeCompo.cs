@@ -12,147 +12,146 @@ namespace Code.MainSystem.MainScreen
 {
     public class PersonalPracticeCompo : MonoBehaviour
     {
-        [SerializeField] private List<Image> arrowObjs = new List<Image>();
-        [SerializeField] private List<TextMeshProUGUI> probabilitytexts = new List<TextMeshProUGUI>();
-        [SerializeField] private TextMeshProUGUI conditionText = null;
+        [SerializeField] private List<Image> arrowObjs;
+        [SerializeField] private List<TextMeshProUGUI> probabilityTexts;
+        [SerializeField] private TextMeshProUGUI conditionText;
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
-        private List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
+
+        private List<TextMeshProUGUI> _statTexts = new List<TextMeshProUGUI>();
         private UnitDataSO _currentUnit;
         private int _currentLesson = -1;
-        private float _currentCondition = 100;
-        private bool _isCanprobabilityText = false;
+        private float _currentCondition = 100f;
+        private bool _showProbability = false;
 
-        public void ButtonLoader(UnitDataSO currentUnit,List<TextMeshProUGUI> units)
+        private readonly Dictionary<MemberType, int> _memberTypeIndexMap = new Dictionary<MemberType, int>
         {
-            if (_texts.Count == 0 && units != null)
-            {
-                _texts = units;
-            }
-            if(currentUnit == null)
-                return;
-            _currentUnit = currentUnit;
-            
-            lesson1Text.SetText(currentUnit.personalPractices[2].PracticeStatName);
-            lesson2Text.SetText(currentUnit.personalPractices[3].PracticeStatName);
-            if (_isCanprobabilityText)
-            {
-                foreach (var text in probabilitytexts)
-                {
-                    text.SetText("");
-                }
-                switch (_currentUnit.memberType)
-                {
-                    case MemberType.Bass:
-                        probabilitytexts[0].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Drums:
-                        probabilitytexts[1].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Guitar:
-                        probabilitytexts[2].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Piano:
-                        probabilitytexts[3].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Vocal:
-                        probabilitytexts[4].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                }
-            }
-            else
-            {
-                foreach (var text in probabilitytexts)
-                {
-                    text.SetText("");
-                }
-            }
+            { MemberType.Bass, 0 },
+            { MemberType.Drums, 1 },
+            { MemberType.Guitar, 2 },
+            { MemberType.Piano, 3 },
+            { MemberType.Vocal, 4 }
+        };
 
+        public void ButtonLoader(UnitDataSO currentUnit, List<TextMeshProUGUI> statTexts)
+        {
+            if (statTexts != null && _statTexts.Count == 0)
+                _statTexts = statTexts;
+
+            if (currentUnit == null)
+                return;
+
+            _currentUnit = currentUnit;
+            _currentCondition = currentUnit.currentCondition;
+
+            UpdateLessonTexts();
+            ClearProbabilityTexts();
+
+            if (_showProbability)
+                ShowCurrentProbability();
         }
 
         public void CancelBtnClick()
         {
-            foreach (var text in probabilitytexts)
-            {
-                text.SetText("");
-            }
-            foreach (var obj in arrowObjs)
-            {
-                Color color = obj.color;
-                color.a = 0;
-                obj.color = color;
-            }
-            _isCanprobabilityText = false;
+            ClearProbabilityTexts();
+            SetAllArrowAlphas(0f);
+            _showProbability = false;
         }
 
         public void PracticeBtnClick(int index)
         {
-            if(_currentUnit == null)
+            if (_currentUnit == null || index >= _currentUnit.personalPractices.Count)
                 return;
-            _isCanprobabilityText = true;
+
+            _showProbability = true;
+
             if (_currentLesson == index)
             {
-                Debug.Log($"훈련시작");
+                Debug.Log("훈련시작");
+
+                var practice = _currentUnit.personalPractices[index];
+
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,
                     _currentUnit.memberType,
-                    _currentUnit.personalPractices[index].PracticeStatType,
+                    practice.PracticeStatType,
                     _currentCondition,
-                    _currentUnit.personalPractices[index].statIncrease
+                    practice.statIncrease
                 ));
 
-                _currentCondition -= _currentUnit.personalPractices[index].StaminaReduction;
-                _currentCondition = Mathf.Clamp(_currentCondition, 0, 100);
+                _currentCondition -= practice.StaminaReduction;
+                _currentCondition = Mathf.Clamp(_currentCondition, 0f, 100f);
                 conditionText.SetText($"{_currentCondition}/{_currentUnit.maxCondition}");
             }
-
             else
             {
-                if (_currentLesson < 0)
-                {
-                    Color c = arrowObjs[index].color;
-                    c.a = 1f;
-                    arrowObjs[index].color = c;
+                UpdateLessonSelection(index);
+                ShowCurrentProbability();
+            }
+        }
+        
+        private void UpdateLessonTexts()
+        {
+            if (_currentUnit.personalPractices.Count >= 4)
+            {
+                lesson1Text.SetText(_currentUnit.personalPractices[2].PracticeStatName);
+                lesson2Text.SetText(_currentUnit.personalPractices[3].PracticeStatName);
+            }
+        }
 
-                    _texts[index].SetText($"{_currentUnit.stats[index].statName}++");
-                    _currentLesson = index;
-                }
-                else
-                {
+        private void UpdateLessonSelection(int newIndex)
+        {
+            if (_currentLesson >= 0 && _currentLesson < _statTexts.Count)
+            {
+                _statTexts[_currentLesson].SetText(_currentUnit.stats[_currentLesson].statName);
+                SetArrowAlpha(_currentLesson, 0f);
+            }
 
-                    _texts[_currentLesson].SetText($"{_currentUnit.stats[_currentLesson].statName}");
+            if (newIndex < _statTexts.Count)
+            {
+                _statTexts[newIndex].SetText($"{_currentUnit.stats[newIndex].statName}++");
+                SetArrowAlpha(newIndex, 1f);
+            }
 
-                    Color oldC = arrowObjs[_currentLesson].color;
-                    oldC.a = 0f;
-                    arrowObjs[_currentLesson].color = oldC;
+            _currentLesson = newIndex;
+        }
 
-                    Color newC = arrowObjs[index].color;
-                    newC.a = 1f;
-                    arrowObjs[index].color = newC;
+        private void SetArrowAlpha(int index, float alpha)
+        {
+            if (index >= 0 && index < arrowObjs.Count)
+            {
+                var color = arrowObjs[index].color;
+                color.a = alpha;
+                arrowObjs[index].color = color;
+            }
+        }
 
-                    _texts[index].SetText($"{_currentUnit.stats[index].statName}++");
+        private void SetAllArrowAlphas(float alpha)
+        {
+            foreach (var arrow in arrowObjs)
+            {
+                var color = arrow.color;
+                color.a = alpha;
+                arrow.color = color;
+            }
+        }
 
-                    _currentLesson = index;
-                }
+        private void ClearProbabilityTexts()
+        {
+            foreach (var text in probabilityTexts)
+                text.SetText("");
+        }
 
-                switch (_currentUnit.memberType)
-                {
-                    case MemberType.Bass:
-                        probabilitytexts[0].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Drums:
-                        probabilitytexts[1].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Guitar:
-                        probabilitytexts[2].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Piano:
-                        probabilitytexts[3].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                    case MemberType.Vocal:
-                        probabilitytexts[4].SetText($"{_currentUnit.currentCondition}%");
-                        break;
-                }
+        private void ShowCurrentProbability()
+        {
+            if (_currentUnit == null)
+                return;
+
+            ClearProbabilityTexts();
+
+            if (_memberTypeIndexMap.TryGetValue(_currentUnit.memberType, out int index) && index < probabilityTexts.Count)
+            {
+                probabilityTexts[index].SetText($"{_currentCondition}%");
             }
         }
     }
