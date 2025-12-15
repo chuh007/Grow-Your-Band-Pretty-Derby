@@ -87,27 +87,27 @@ namespace Code.MainSystem.StatSystem.Manager
         
         #region UpgradeStat
 
-        public void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
+        private void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
         {
             var member = _memberMap.GetValueOrDefault(memberType);
-            member?.MemberStatUpgrade(statType, successRate, value);
-        }
-        
-        public void UpgradeCommonStat(MemberType memberType, StatType statType, float successRate, float value)
-        {
-            var member = _memberMap.GetValueOrDefault(memberType);
-            member?.CommonStatUpgrade(statType, successRate, value);
+            member?.StatUpgrade(statType, successRate, value);
         }
 
-        public void UpgradeAllMemberStat(StatType statType, float successRate, float value)
+        private void UpgradeCommonStat(MemberType memberType, StatType statType, float successRate, float value)
+        {
+            var member = _memberMap.GetValueOrDefault(memberType);
+            member?.StatUpgrade(statType, successRate, value);
+        }
+
+        private void UpgradeAllMemberStat(StatType statType, float successRate, float value)
         {
             foreach (var member in memberStats)
             {
-                member.MemberStatUpgrade(statType, successRate,value);
+                member.StatUpgrade(statType, successRate,value);
             }
         }
 
-        public void UpgradeTeamStat(StatType statType, float successRate,float value)
+        private void UpgradeTeamStat(StatType statType, float successRate,float value)
         {
             teamStat.TeamStatUpgrade(statType, successRate, value);
         }

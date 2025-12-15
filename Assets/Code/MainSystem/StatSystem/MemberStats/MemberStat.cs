@@ -12,8 +12,6 @@ namespace Code.MainSystem.StatSystem.MemberStats
         [SerializeField] private MemberType memberType;
         [SerializeField] protected List<StatData> memberStatData;
         
-        protected readonly Dictionary<StatType, BaseStat> MemberStats = new();
-        
         public MemberType MemberType => memberType;
         
         protected override void Awake()
@@ -23,7 +21,7 @@ namespace Code.MainSystem.StatSystem.MemberStats
             foreach (var data in memberStatData)
             {
                 BaseStat stat = new BaseStat(data);
-                MemberStats[data.statType] = stat;
+                Stats[data.statType] = stat;
             }
 
             Bus<TeamStatValueChangedEvent>.OnEvent += OnTeamStatChanged;
@@ -37,38 +35,7 @@ namespace Code.MainSystem.StatSystem.MemberStats
         private void OnTeamStatChanged(TeamStatValueChangedEvent evt)
         {
             BaseStat stat = GetStat(evt.StatType);
-            if (stat != null)
-            {
-                stat.PlusValue(evt.AddValue);
-            }
-        }
-
-        public void MemberStatUpgrade(StatType statType, float successRate, float value)
-        {
-            BaseStat stat = MemberStats.GetValueOrDefault(statType);
-            
-            float randValue = Random.Range(0f, 100f);
-            bool success = randValue < successRate;
-
-            if (!success)
-            {
-                Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
-                return;
-            }
-
-            stat.PlusValue((int)value);
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
-        }
-
-        public BaseStat GetMemberStat(StatType statType)
-        {
-            return MemberStats.GetValueOrDefault(statType);  
-        }
-
-        public BaseStat GetStat(StatType statType)
-        {
-            return MemberStats.GetValueOrDefault(statType) 
-                   ?? CommonStats.GetValueOrDefault(statType);
+            stat?.PlusValue(evt.AddValue);
         }
     }
 }

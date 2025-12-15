@@ -7,22 +7,13 @@ namespace Code.MainSystem.StatSystem.BaseStats
 {
     public abstract class AbstractStats : MonoBehaviour
     {
-        [SerializeField] protected List<StatData> commonStatData;
+        protected readonly Dictionary<StatType, BaseStat> Stats = new();
 
-        protected readonly Dictionary<StatType, BaseStat> CommonStats = new();
+        protected virtual void Awake() { }
 
-        protected virtual void Awake()
+        public void StatUpgrade(StatType statType, float successRate,float value)
         {
-            foreach (var data in commonStatData)
-            {
-                BaseStat stat = new BaseStat(data);
-                CommonStats[data.statType] = stat;
-            }
-        }
-
-        public void CommonStatUpgrade(StatType statType, float successRate,float value)
-        {
-            BaseStat stat = CommonStats.GetValueOrDefault(statType);
+            BaseStat stat = Stats.GetValueOrDefault(statType);
             
             float randValue = Random.Range(0f, 100f);
             bool success = randValue < successRate;
@@ -37,9 +28,9 @@ namespace Code.MainSystem.StatSystem.BaseStats
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
         }
 
-        public BaseStat GetCommonStat(StatType statType)
+        public BaseStat GetStat(StatType statType)
         {
-            return CommonStats.GetValueOrDefault(statType);  
+            return Stats.GetValueOrDefault(statType);  
         }
     }
 }

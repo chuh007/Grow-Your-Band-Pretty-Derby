@@ -8,7 +8,7 @@ namespace Code.MainSystem.StatSystem.TeamStats
     {
         public BaseStat GetTeamStat(StatType statType)
         {
-            return GetCommonStat(statType);
+            return GetStat(statType);
         }
         
         public void TeamStatUpgrade(StatType statType, float successRate, float value)
@@ -20,15 +20,15 @@ namespace Code.MainSystem.StatSystem.TeamStats
             }
             else
             {
-                BaseStat stat = GetCommonStat(statType);
-                if (stat != null)
-                {
-                    stat.PlusValue((int)value);
-                    Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
-                    Bus<TeamStatValueChangedEvent>.Raise(
-                        new TeamStatValueChangedEvent(statType, 100)
-                    );
-                }
+                BaseStat stat = GetStat(statType);
+                if (stat == null) 
+                    return;
+                
+                stat.PlusValue((int)value);
+                Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
+                Bus<TeamStatValueChangedEvent>.Raise(
+                    new TeamStatValueChangedEvent(statType, 100)
+                );
             }
         }
     }
