@@ -82,7 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b65a2e1f2a4cc8b4d75cf61334ebd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.Manager.StatManager
-  memberStat:
+  memberStats:
   - {fileID: 7406150467514899826}
   - {fileID: 6283842062045677984}
   - {fileID: 2517096513483231311}
