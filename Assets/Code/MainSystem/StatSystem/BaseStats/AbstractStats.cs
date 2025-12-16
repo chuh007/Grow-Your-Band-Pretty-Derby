@@ -14,9 +14,10 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public void StatUpgrade(StatType statType, float successRate,float value)
         {
             BaseStat stat = Stats.GetValueOrDefault(statType);
-            
-            float randValue = Random.Range(0f, 100f);
-            bool success = randValue < successRate;
+
+            float successValue = (float)GetStat(StatType.Condition).CurrentValue / GetStat(StatType.Condition).MaxValue;
+
+            bool success = Random.value < successValue;
 
             if (!success)
             {

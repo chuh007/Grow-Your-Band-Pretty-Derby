@@ -61,12 +61,12 @@ namespace Code.MainSystem.StatSystem.Manager
         public BaseStat GetMemberStat(MemberType memberType, StatType statType)
         {
             var member = _memberMap.GetValueOrDefault(memberType);
-            return member != null ? member.GetStat(statType) : null;
+            return member?.GetStat(statType);
         }
 
         public BaseStat GetTeamStat(StatType statType)
         {
-            return teamStat != null ? teamStat.GetTeamStat(statType) : null;
+            return teamStat?.GetTeamStat(statType);
         }
         
         public IReadOnlyDictionary<MemberType, BaseStat> GetAllMemberStat(StatType statType)

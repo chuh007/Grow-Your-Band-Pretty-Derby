@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code.Core;
 using UnityEngine;
 using Code.Core.Bus;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -11,6 +12,7 @@ namespace Code.MainSystem.StatSystem.MemberStats
     {
         [SerializeField] private MemberType memberType;
         [SerializeField] protected List<StatData> memberStatData;
+        [SerializeField] private string dataPath;
         
         public MemberType MemberType => memberType;
         
@@ -18,6 +20,8 @@ namespace Code.MainSystem.StatSystem.MemberStats
         {
             base.Awake();
 
+            //GameManager.Instance.LoadAsset<List<StatData>>(dataPath);
+            
             foreach (var data in memberStatData)
             {
                 BaseStat stat = new BaseStat(data);
