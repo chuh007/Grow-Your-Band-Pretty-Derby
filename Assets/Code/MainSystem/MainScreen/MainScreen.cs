@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Code.Core.Bus;
+using System.Threading.Tasks;
+using Code.Core;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Events;
@@ -12,9 +13,8 @@ namespace Code.MainSystem.MainScreen
 {
     public class MainScreen : MonoBehaviour
     {
-        [Header("Data")]
-        [SerializeField] private List<UnitDataSO> unitDataSOList;
-        private UnitSelector unitSelector;
+        [Header("Addressables Keys/Labels")]
+        [SerializeField] private string unitLabel = "Units"; // Addressables label for all units
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI charterNameText;
@@ -26,54 +26,63 @@ namespace Code.MainSystem.MainScreen
 
         [Header("Components")]
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
-        [SerializeField] private TeamPracticeCompo teamPracticeCompo;
         [SerializeField] private StatManager statManager;
 
+        private UnitSelector unitSelector;
         private StatUIUpdater statUIUpdater;
+        private List<UnitDataSO> loadedUnits;
 
-        private void Awake()
+        private async void Start()
         {
-            unitSelector = new UnitSelector(unitDataSOList);
+            await LoadUnitsAsync();
+        }
+
+        private async Task LoadUnitsAsync()
+        {
+            loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
+            unitSelector = new UnitSelector();
+            unitSelector.Init(loadedUnits);
+
             statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
 
-            Bus<StatUpgradeEvent>.OnEvent += HandleEvent;
-        }
-
-        private void OnDestroy()
-        {
-            Bus<StatUpgradeEvent>.OnEvent -= HandleEvent;
-        }
-
-        private void HandleEvent(StatUpgradeEvent evt)
-        {
-            if (evt.Upgrade && unitSelector.CurrentUnit != null)
+            if (loadedUnits.Count > 0)
             {
-                statUIUpdater.UpdateStatValues(unitSelector.CurrentUnit);
+                SelectUnit(loadedUnits[0]);
             }
-        }
-
-        public void TeamClick()
-        {
         }
 
         public void MemberBtnClicked(string type)
         {
             if (unitSelector.TryGetUnit(type, out UnitDataSO unit))
             {
-                personalPracticeCompo.ButtonLoader(unit, statNameTexts);
-
-                charterNameText.SetText(unit.unitName);
-                conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
-
-                statUIUpdater.UpdateAll(unit);
-
-                characterIcon.sprite = unit.unitImage;
-                characterIcon.color = new Color(1, 1, 1, 1);
+                SelectUnit(unit);
             }
             else
             {
-                Debug.LogWarning($"No unit data found for type: {type}");
+                Debug.LogWarning($"No unit found for type: {type}");
             }
+        }
+
+        private void SelectUnit(UnitDataSO unit)
+        {
+            personalPracticeCompo.ButtonLoader(unit, statNameTexts);
+
+            charterNameText.SetText(unit.unitName);
+            conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
+
+            statUIUpdater.UpdateAll(unit);
+
+            LoadUnitSprite(unit);
+        }
+
+        private async void LoadUnitSprite(UnitDataSO unit)
+        {
+            if (string.IsNullOrEmpty(unit.spriteAddressableKey))
+                return;
+
+            var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(unit.spriteAddressableKey);
+            characterIcon.sprite = sprite;
+            characterIcon.color = Color.white;
         }
     }
 }

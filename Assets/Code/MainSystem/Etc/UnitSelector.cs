@@ -1,28 +1,22 @@
 ﻿using System.Collections.Generic;
 using Code.MainSystem.MainScreen.MemberData;
+using UnityEngine;
 
 namespace Code.MainSystem.Etc
 {
     public class UnitSelector
     {
-        private readonly Dictionary<string, UnitDataSO> unitDict;
+        private readonly Dictionary<string, UnitDataSO> unitDict = new();
         public UnitDataSO CurrentUnit { get; private set; }
 
-        public UnitSelector(List<UnitDataSO> unitList)
+        public void Init(List<UnitDataSO> units)
         {
-            unitDict = new Dictionary<string, UnitDataSO>();
-
-            foreach (var unit in unitList)
+            unitDict.Clear();
+            foreach (var unit in units)
             {
-                var key = unit.memberType.ToString();
+                string key = unit.memberType.ToString();
                 if (!unitDict.ContainsKey(key))
-                {
                     unitDict.Add(key, unit);
-                }
-                else
-                {
-                    UnityEngine.Debug.LogWarning($"Duplicate key detected: {key}");
-                }
             }
         }
 
@@ -30,9 +24,7 @@ namespace Code.MainSystem.Etc
         {
             bool found = unitDict.TryGetValue(type, out unit);
             if (found)
-            {
                 CurrentUnit = unit;
-            }
             return found;
         }
     }

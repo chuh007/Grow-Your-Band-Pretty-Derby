@@ -3,8 +3,8 @@ using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
 namespace Code.MainSystem.Etc
 {
@@ -31,14 +31,8 @@ namespace Code.MainSystem.Etc
             {
                 var stat = unit.stats[i];
                 nameTexts[i].SetText(stat.statName);
-
-                var valueText = $"{GetCurrentValue(unit, stat.statType)} / {GetMaxValue(unit, stat.statType)}";
-                valueTexts[i].SetText(valueText);
-
-                if (i < iconImages.Count)
-                {
-                    iconImages[i].sprite = stat.statIcon;
-                }
+                valueTexts[i].SetText($"{statManager.GetMemberStat(unit.memberType, stat.statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType, stat.statType).MaxValue}");
+                iconImages[i].sprite = stat.statIcon;
             }
         }
 
@@ -49,23 +43,8 @@ namespace Code.MainSystem.Etc
             for (int i = 0; i < count; i++)
             {
                 var stat = unit.stats[i];
-                var valueText = $"{GetCurrentValue(unit, stat.statType)} / {GetMaxValue(unit, stat.statType)}";
-                valueTexts[i].SetText(valueText);
+                valueTexts[i].SetText($"{statManager.GetMemberStat(unit.memberType, stat.statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType, stat.statType).MaxValue}");
             }
-        }
-
-        private float GetCurrentValue(UnitDataSO unit, StatType type)
-        {
-            return type == StatType.TeamHarmony
-                ? statManager.GetTeamStat(type).CurrentValue
-                : statManager.GetMemberStat(unit.memberType, type).CurrentValue;
-        }
-
-        private float GetMaxValue(UnitDataSO unit, StatType type)
-        {
-            return type == StatType.TeamHarmony
-                ? statManager.GetTeamStat(type).MaxValue
-                : statManager.GetMemberStat(unit.memberType, type).MaxValue;
         }
     }
 }
