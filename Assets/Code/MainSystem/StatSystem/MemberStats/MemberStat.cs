@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Code.Core;
-using UnityEngine;
+﻿using UnityEngine;
 using Code.Core.Bus;
+using System.Collections.Generic;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
@@ -13,36 +12,39 @@ namespace Code.MainSystem.StatSystem.MemberStats
     {
         [SerializeField] private MemberType memberType;
         [SerializeField] private string statDataLabel;
-        [SerializeField] private string dataPath;
+
+        private readonly List<StatData> _statDataList = new();
         
         public MemberType MemberType => memberType;
-        
+
         protected override async void Awake()
         {
             base.Awake();
 
             var handle = Addressables.LoadAssetsAsync<StatData>(
                 statDataLabel,
-                OnStatDataLoaded
+                data => _statDataList.Add(data)
             );
 
             await handle.Task;
 
+            InitializeStats(_statDataList);
+
             Bus<TeamStatValueChangedEvent>.OnEvent += OnTeamStatChanged;
+        }
+
+        private void InitializeStats(List<StatData> list)
+        {
+            foreach (var data in list)
+            {
+                BaseStat stat = new BaseStat(data);
+                Stats[data.statType] = stat;
+            }
         }
 
         private void OnDestroy()
         {
             Bus<TeamStatValueChangedEvent>.OnEvent -= OnTeamStatChanged;
-        }
-
-        private void OnStatDataLoaded(StatData data)
-        {
-            if (Stats.ContainsKey(data.statType))
-                return;
-
-            BaseStat stat = new BaseStat(data);
-            Stats[data.statType] = stat;
         }
 
         private void OnTeamStatChanged(TeamStatValueChangedEvent evt)

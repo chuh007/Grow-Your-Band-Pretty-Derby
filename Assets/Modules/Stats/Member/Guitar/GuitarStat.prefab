@@ -45,8 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
   memberType: 0
-  memberStatData:
-  - {fileID: 11400000, guid: 58ff9e77b9332c24988c4d9690d624b1, type: 2}
-  - {fileID: 11400000, guid: 48e704ab41754824cba63e613a06f8d6, type: 2}
-  - {fileID: 11400000, guid: 7b6e22f286dd1754396f391b1f8fa43b, type: 2}
-  - {fileID: 11400000, guid: fd458ead59eb7da4abc67b538c9f2337, type: 2}
+  statDataLabel: GuitarStatData
