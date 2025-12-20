@@ -5,28 +5,28 @@ using Code.Core.Bus;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
+using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.StatSystem.MemberStats
 {
     public class MemberStat : AbstractStats
     {
         [SerializeField] private MemberType memberType;
-        [SerializeField] protected List<StatData> memberStatData;
+        [SerializeField] private string statDataLabel;
         [SerializeField] private string dataPath;
         
         public MemberType MemberType => memberType;
         
-        protected override void Awake()
+        protected override async void Awake()
         {
             base.Awake();
 
-            //GameManager.Instance.LoadAsset<List<StatData>>(dataPath);
-            
-            foreach (var data in memberStatData)
-            {
-                BaseStat stat = new BaseStat(data);
-                Stats[data.statType] = stat;
-            }
+            var handle = Addressables.LoadAssetsAsync<StatData>(
+                statDataLabel,
+                OnStatDataLoaded
+            );
+
+            await handle.Task;
 
             Bus<TeamStatValueChangedEvent>.OnEvent += OnTeamStatChanged;
         }
@@ -34,6 +34,15 @@ namespace Code.MainSystem.StatSystem.MemberStats
         private void OnDestroy()
         {
             Bus<TeamStatValueChangedEvent>.OnEvent -= OnTeamStatChanged;
+        }
+
+        private void OnStatDataLoaded(StatData data)
+        {
+            if (Stats.ContainsKey(data.statType))
+                return;
+
+            BaseStat stat = new BaseStat(data);
+            Stats[data.statType] = stat;
         }
 
         private void OnTeamStatChanged(TeamStatValueChangedEvent evt)
