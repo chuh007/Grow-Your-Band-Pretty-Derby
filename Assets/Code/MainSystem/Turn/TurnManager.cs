@@ -9,39 +9,23 @@ namespace Code.MainSystem.Turn
     
     public class TurnManager : MonoBehaviour
     {
-        public event Action TurnChanged;
-        public event Action TargetTurnChanged;
-        public event Action GameEndEvent;
+        public event Action<int> TurnChanged;
+        public event Action TurnZero;
         
         [SerializeField] private int maxTurn;
-        
-        private int _currentTurn;
-        private int _targetTurn;
-        
-        public int MaxTurn
+        [SerializeField] private int _remainingTurn;
+
+        public int RemainingTurn
         {
-            get => maxTurn;
-            set => maxTurn = value;
-        }
-        
-        public int CurrentTurn
-        {
-            get => _currentTurn;
+            get => _remainingTurn;
             set
             {
-                _currentTurn = value;
-                TurnChanged?.Invoke();
-                if(_currentTurn >= maxTurn)
-                    GameEndEvent?.Invoke();
-            }
-        }
-        public int NextTargetTurn
-        {
-            get => _targetTurn;
-            private set
-            {
-                _targetTurn = value;
-                TargetTurnChanged?.Invoke();
+                _remainingTurn = value;
+                if (value <= 0)
+                {
+                    TurnZero?.Invoke();
+                }
+                TurnChanged?.Invoke(value);
             }
         }
 
@@ -49,34 +33,27 @@ namespace Code.MainSystem.Turn
         {
             Bus<TurnUseEvent>.OnEvent += HandleTurnUse;
             Bus<TurnReturnEvent>.OnEvent += HandleTurnReturn;
-            Bus<TargetTurnSetEvent>.OnEvent += HandleTurnSet;
         }
 
         private void Start()
         {
-            CurrentTurn = maxTurn;
+            RemainingTurn = maxTurn;
         }
 
         private void OnDestroy()
         {
             Bus<TurnUseEvent>.OnEvent -= HandleTurnUse;
             Bus<TurnReturnEvent>.OnEvent -= HandleTurnReturn;
-            Bus<TargetTurnSetEvent>.OnEvent -= HandleTurnSet;
         }
-        
+
         private void HandleTurnUse(TurnUseEvent evt)
         {
-            CurrentTurn += evt.Value;
+            RemainingTurn -= evt.Value;
         }
 
         private void HandleTurnReturn(TurnReturnEvent evt)
         {
-            CurrentTurn -= evt.Value;
-        }
-        
-        private void HandleTurnSet(TargetTurnSetEvent evt)
-        {
-            NextTargetTurn = evt.Value;
+            RemainingTurn += evt.Value;
         }
     }
 }
