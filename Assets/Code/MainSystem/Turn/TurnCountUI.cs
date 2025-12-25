@@ -17,16 +17,19 @@ namespace Code.MainSystem.Turn
         private void Awake()
         {
             _turnManager.TurnChanged += HandleTurnChange;
+            _turnManager.TargetTurnChanged += HandleTurnChange;
         }
 
         private void OnDestroy()
         {
             _turnManager.TurnChanged -= HandleTurnChange;
+            _turnManager.TargetTurnChanged -= HandleTurnChange;
         }
 
-        private void HandleTurnChange(int value)
+        private void HandleTurnChange()
         {
-            turnText.SetText(value.ToString());
+            int toNextTurn = _turnManager.MaxTurn - _turnManager.CurrentTurn + _turnManager.NextTargetTurn;
+            turnText.SetText(toNextTurn.ToString());
         }
     }
 }
