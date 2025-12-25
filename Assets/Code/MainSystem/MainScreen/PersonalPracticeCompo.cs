@@ -22,6 +22,7 @@ namespace Code.MainSystem.MainScreen
         private float _currentCondition;
         private int _currentLesson = -1;
         private bool _showProbability = false;
+
         private readonly Dictionary<MemberType, int> _memberTypeIndexMap = new()
         {
             { MemberType.Bass, 0 },
@@ -40,12 +41,15 @@ namespace Code.MainSystem.MainScreen
             lesson2Text.SetText(unit.personalPractices.Count > 3 ? unit.personalPractices[3].PracticeStatName : "");
 
             ClearProbabilityTexts();
+            HideAllArrows();
+            HideAllProbabilityTexts();
         }
 
         public void CancelBtnClick()
         {
             ClearProbabilityTexts();
-            SetAllArrowAlphas(0f);
+            HideAllArrows();
+            HideAllProbabilityTexts();
             _showProbability = false;
         }
 
@@ -71,18 +75,20 @@ namespace Code.MainSystem.MainScreen
             {
                 UpdateLessonSelection(index);
                 ShowCurrentProbability();
+                ShowArrowForLesson(index);  
+                ShowAllProbabilityTexts();  
             }
         }
 
         private void UpdateLessonSelection(int newIndex)
         {
             _currentLesson = newIndex;
-            // Arrow / UI feedback
         }
 
         private void ClearProbabilityTexts()
         {
-            foreach (var t in probabilityTexts) t.SetText("");
+            foreach (var t in probabilityTexts)
+                t.SetText("");
         }
 
         private void ShowCurrentProbability()
@@ -91,16 +97,37 @@ namespace Code.MainSystem.MainScreen
             {
                 probabilityTexts[idx].SetText($"{_currentCondition}%");
             }
-
         }
 
-        private void SetAllArrowAlphas(float a)
+        private void ShowArrowForLesson(int lessonIndex)
+        {
+            for (int i = 0; i < arrowObjs.Count; i++)
+            {
+                arrowObjs[i].gameObject.SetActive(i == lessonIndex);
+            }
+        }
+
+        private void HideAllArrows()
         {
             foreach (var img in arrowObjs)
             {
-                Color c = img.color;
-                c.a = a;
-                img.color = c;
+                img.gameObject.SetActive(false);
+            }
+        }
+
+        private void ShowAllProbabilityTexts()
+        {
+            foreach (var t in probabilityTexts)
+            {
+                t.gameObject.SetActive(true);
+            }
+        }
+
+        private void HideAllProbabilityTexts()
+        {
+            foreach (var t in probabilityTexts)
+            {
+                t.gameObject.SetActive(false);
             }
         }
     }

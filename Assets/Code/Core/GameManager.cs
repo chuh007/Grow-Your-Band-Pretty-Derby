@@ -19,14 +19,14 @@ namespace Code.Core
             get
             {
                 if (_instance is null)
-                    _instance = FindObjectOfType<GameManager>();
+                    _instance = FindAnyObjectByType<GameManager>();
                 return _instance;
             }
         }
 
         private void Awake()
         {
-            GameManager[] managers = FindObjectsOfType<GameManager>();
+            GameManager[] managers = FindObjectsByType<GameManager>(FindObjectsSortMode.None);
 
             if (managers.Length > 1)
             {
