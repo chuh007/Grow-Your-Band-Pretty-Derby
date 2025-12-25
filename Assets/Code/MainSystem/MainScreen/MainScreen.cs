@@ -14,7 +14,7 @@ namespace Code.MainSystem.MainScreen
     public class MainScreen : MonoBehaviour
     {
         [Header("Addressables Keys/Labels")]
-        [SerializeField] private string unitLabel = "Units"; // Addressables label for all units
+        [SerializeField] private string unitLabel = "Units"; 
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI charterNameText;

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.MemberData.UnitStatSO
   unitName: Guitar
   memberType: 0
-  unitImage: {fileID: 8702507947865688393, guid: b0643fd0f83e6bc4aafc23532de834a9, type: 3}
+  spriteAddressableKey: GuitarSprtes
   stats:
   - {fileID: 11400000, guid: 58ff9e77b9332c24988c4d9690d624b1, type: 2}
   - {fileID: 11400000, guid: 48e704ab41754824cba63e613a06f8d6, type: 2}

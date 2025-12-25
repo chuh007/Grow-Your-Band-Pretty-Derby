@@ -25,16 +25,32 @@ namespace Code.MainSystem.Etc
 
         public void UpdateAll(UnitDataSO unit)
         {
-            int count = Mathf.Min(unit.stats.Count, nameTexts.Count);
+            if (unit == null || unit.stats == null)
+            {
+                Debug.LogError("Unit or unit.stats is null.");
+                return;
+            }
+
+            int count = Mathf.Min(unit.stats.Count, nameTexts.Count, valueTexts.Count, iconImages.Count);
 
             for (int i = 0; i < count; i++)
             {
                 var stat = unit.stats[i];
-                nameTexts[i].SetText(stat.statName);
-                valueTexts[i].SetText($"{statManager.GetMemberStat(unit.memberType, stat.statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType, stat.statType).MaxValue}");
-                iconImages[i].sprite = stat.statIcon;
+                var memberStat = statManager.GetMemberStat(unit.memberType, stat.statType);
+
+                if (stat == null || memberStat == null)
+                {
+                    Debug.LogWarning($"Stat or memberStat is null at index {i}");
+                    continue;
+                }
+
+                nameTexts[i]?.SetText(stat.statName);
+                valueTexts[i]?.SetText($"{memberStat.CurrentValue} / {memberStat.MaxValue}");
+                if (iconImages[i] != null)
+                    iconImages[i].sprite = stat.statIcon;
             }
         }
+
 
         public void UpdateStatValues(UnitDataSO unit)
         {

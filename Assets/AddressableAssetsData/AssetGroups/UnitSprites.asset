@@ -10,14 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: UnitSprites
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: Default Local Group
-  m_GUID: 4b4de78eb427cf14cb021559754d2590
-  m_SerializeEntries: []
+  m_GroupName: UnitSprites
+  m_GUID: 5d26b90e24a0c154889d5227cd64ee36
+  m_SerializeEntries:
+  - m_GUID: b0643fd0f83e6bc4aafc23532de834a9
+    m_Address: Guitar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarSprtes
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: d3b4352dbf8198c4dbe5cfdf14d15351, type: 2}
-    - {fileID: 11400000, guid: 11fe06ea03933c445b85750a1409321f, type: 2}
+    - {fileID: 11400000, guid: be7003ffd55610645a0145a05daa349c, type: 2}
+    - {fileID: 11400000, guid: 362a5d68f5a921b4595a5972a2395c3c, type: 2}
