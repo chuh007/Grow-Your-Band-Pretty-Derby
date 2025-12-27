@@ -13,11 +13,13 @@ namespace Code.MainSystem.Outing
         private void Awake()
         {
             Bus<DialogueStatUpgradeEvent>.OnEvent += HandleDialogueStatUpgrade;
+            Bus<DialogueEndEvent>.OnEvent += HandleDialogueEnd;
         }
 
         private void OnDestroy()
         {
             Bus<DialogueStatUpgradeEvent>.OnEvent -= HandleDialogueStatUpgrade;
+            Bus<DialogueEndEvent>.OnEvent += HandleDialogueEnd;
         }
         
         private void Start()
@@ -30,6 +32,11 @@ namespace Code.MainSystem.Outing
         {
             resultSender.changeStats.Add
                 (new StatVariation{targetStat = evt.StatType, variation = evt.StatValue});
+        }
+        
+        private void HandleDialogueEnd(DialogueEndEvent evt)
+        {
+            // 씬 넘기기
         }
     }
 }

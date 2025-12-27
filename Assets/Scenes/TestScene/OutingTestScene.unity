@@ -5375,30 +5375,6 @@ PrefabInstance:
       propertyPath: 'memberStatData.Array.data[3]'
       value: 
       objectReference: {fileID: 11400000, guid: a82af34ee579aca47bf3b1ed4506f6d5, type: 2}
-    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-      propertyPath: memberStats.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-      propertyPath: 'memberStats.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1138437383}
-    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-      propertyPath: 'memberStats.Array.data[1]'
-      value: 
-      objectReference: {fileID: 1138437382}
-    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-      propertyPath: 'memberStats.Array.data[2]'
-      value: 
-      objectReference: {fileID: 1138437381}
-    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-      propertyPath: 'memberStats.Array.data[3]'
-      value: 
-      objectReference: {fileID: 1138437380}
-    - target: {fileID: 7066245799285573770, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-      propertyPath: 'memberStats.Array.data[4]'
-      value: 
-      objectReference: {fileID: 1138437379}
     - target: {fileID: 7406150467514899826, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
       propertyPath: memberStatData.Array.size
       value: 4
@@ -5456,61 +5432,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
---- !u!114 &1138437379 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5440278777511406785, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-  m_PrefabInstance: {fileID: 1138437378}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
---- !u!114 &1138437380 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4734787503100043509, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-  m_PrefabInstance: {fileID: 1138437378}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
---- !u!114 &1138437381 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2517096513483231311, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-  m_PrefabInstance: {fileID: 1138437378}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
---- !u!114 &1138437382 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6283842062045677984, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-  m_PrefabInstance: {fileID: 1138437378}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
---- !u!114 &1138437383 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7406150467514899826, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
-  m_PrefabInstance: {fileID: 1138437378}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 832b1b56299a4e28ae9384b05c0e3a47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.MemberStats.MemberStat
 --- !u!1 &1148835445
 GameObject:
   m_ObjectHideFlags: 0

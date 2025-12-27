@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0aee1c1b674a029853cfbbf444e9b7, type: 3}
   m_Name: StatChangeDialogueEvent
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueEvent.StatChangeDialogueEventSO
+  statType: 2
   statChangeAmount: 2
