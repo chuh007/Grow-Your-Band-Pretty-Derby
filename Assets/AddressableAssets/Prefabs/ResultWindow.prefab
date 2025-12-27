@@ -737,7 +737,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4402884448375076391}
   - component: {fileID: 5485668701039254842}
-  - component: {fileID: 229485035402480137}
   m_Layer: 5
   m_Name: ResultWindow
   m_TagString: Untagged
@@ -783,51 +782,6 @@ MonoBehaviour:
   - {fileID: 3588512612870957888}
   - {fileID: 7049117415699898833}
   - {fileID: 4682858919525551252}
-  clickCatcher: {fileID: 229485035402480137}
---- !u!114 &229485035402480137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7491905472274973571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8904065711705584997
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,6 +1181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.UI.StatBox
   icon: {fileID: 5502347345995286951}
   valueText: {fileID: 2156802188304432703}
+  nameText: {fileID: 7522613754377872095}
 --- !u!114 &2156802188304432703 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2247913173940205391, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
@@ -1254,6 +1209,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6886633412985967183, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
   m_PrefabInstance: {fileID: 206234530955905392}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7522613754377872095 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7690178306630675375, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
+  m_PrefabInstance: {fileID: 206234530955905392}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &3861517872649866917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1429,9 +1395,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.UI.StatBox
   icon: {fileID: 8869325992024936050}
   valueText: {fileID: 3072843718974142954}
+  nameText: {fileID: 6858945292398290186}
 --- !u!114 &3072843718974142954 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2247913173940205391, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
+  m_PrefabInstance: {fileID: 3861517872649866917}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &6858945292398290186 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7690178306630675375, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
   m_PrefabInstance: {fileID: 3861517872649866917}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -1604,6 +1582,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3588512612870957888}
   m_SourcePrefab: {fileID: 100100000, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
+--- !u!114 &1816927496234325277 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7690178306630675375, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
+  m_PrefabInstance: {fileID: 8326598819534683826}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &3178478215460056317 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6886633412985967183, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
@@ -1639,6 +1628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.UI.StatBox
   icon: {fileID: 4399725972758871653}
   valueText: {fileID: 7835195303638419965}
+  nameText: {fileID: 1816927496234325277}
 --- !u!114 &7835195303638419965 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2247913173940205391, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
@@ -1798,6 +1788,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7049117415699898833}
   m_SourcePrefab: {fileID: 100100000, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
+--- !u!114 &1442974702528464117 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7690178306630675375, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
+  m_PrefabInstance: {fileID: 9133152384241332058}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &2390643041366588693 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6886633412985967183, guid: 091ef15372a0ac24c84e696299ead47f, type: 3}
@@ -1844,3 +1845,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.UI.StatBox
   icon: {fileID: 3476650546710998925}
   valueText: {fileID: 7029354493151483925}
+  nameText: {fileID: 1442974702528464117}

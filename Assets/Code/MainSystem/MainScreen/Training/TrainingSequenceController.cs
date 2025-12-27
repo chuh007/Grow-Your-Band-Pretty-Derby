@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Code.Core;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -10,52 +12,71 @@ namespace Code.MainSystem.MainScreen.Training
     {
         [SerializeField] private Transform sdRoot;
         [SerializeField] private Transform uiRoot;
+        [SerializeField] private StatManager statManager;
 
-        private GameObject _currentSD;
-
-        public async UniTask PlayTrainingSequence(bool isSuccsed, PersonalpracticeDataSO personalPracticeDataSO)
+        public async UniTask PlayTrainingSequence(
+            bool isSuccess,
+            PersonalpracticeDataSO practiceData,
+            UnitDataSO unit)
         {
-            var idleSDPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>("Training/SD/Idle");
-            var idleSDImage = await GameManager.Instance.LoadAddressableAsync<Sprite>(personalPracticeDataSO.ProgressImageAddresableKey);
-            var idleSDInstance = Instantiate(idleSDPrefab, sdRoot);
-            var progressImageUI = idleSDInstance.GetComponent<TrainingProgressImage>();
-            if (progressImageUI != null)
-                progressImageUI.SetProgressImage(idleSDImage);
+            var idleSDPrefab =
+                await GameManager.Instance.LoadAddressableAsync<GameObject>("Training/SD/Idle");
+            var progressSprite =
+                await GameManager.Instance.LoadAddressableAsync<Sprite>(practiceData.ProgressImageAddresableKey);
 
-            var progressBar = idleSDInstance.GetComponentInChildren<TrainingProgressBar>();
-            if (progressBar != null)
-                await progressBar.Play(1.0f);
+            var idleInstance = Instantiate(idleSDPrefab, sdRoot);
+            idleInstance.GetComponent<TrainingProgressImage>()
+                ?.SetProgressImage(progressSprite);
 
-            Destroy(idleSDInstance);
+            var bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();
+            if (bar != null)
+                await bar.Play(1f);
 
+            Destroy(idleInstance);
             
-            var resultUIPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>("Training/UI/Result");
-            var resultUIInstance = Instantiate(resultUIPrefab, uiRoot);
-            var resultUI = resultUIInstance.GetComponent<TrainingResultUI>();
+            var resultPrefab =
+                await GameManager.Instance.LoadAddressableAsync<GameObject>("Training/UI/Result");
+            var resultInstance = Instantiate(resultPrefab, uiRoot);
+            var resultUI = resultInstance.GetComponent<TrainingResultUI>();
+
+            var idleSprite =
+                await GameManager.Instance.LoadAddressableAsync<Sprite>(practiceData.IdleImageAddressableKey);
+            var resultSprite =
+                await GameManager.Instance.LoadAddressableAsync<Sprite>(
+                    isSuccess
+                        ? practiceData.SuccseImageAddressableKey
+                        : practiceData.FaillImageAddressableKey);
             
-            var idleSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>("Training/Sprite/Idle");
-            var resultSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(
-                isSuccsed ? personalPracticeDataSO.SuccseImageAddressableKey : personalPracticeDataSO.FaillImageAddressableKey);
-            
-            var statList = new List<(Sprite, int, int)>
+            StatType targetType = practiceData.PracticeStatType;
+
+            var statList = new List<(string name, Sprite icon, int baseValue, int delta)>();
+
+            for (int i = 0; i < unit.stats.Count && statList.Count < 4; i++)
             {
-                (await GameManager.Instance.LoadAddressableAsync<Sprite>("Icon/Performance"), 100, isSuccsed ? 30 : 0),
-                (await GameManager.Instance.LoadAddressableAsync<Sprite>("Icon/Sense"), 80, isSuccsed ? 20 : 0),
-            };
-            
-            await resultUI.Play(idleSprite, resultSprite, statList, isSuccsed, () =>
-            {
-                Debug.Log("결과창 닫힘");
-            });
-        }
+                var stat = unit.stats[i];
+                var memberStat = statManager.GetMemberStat(unit.memberType, stat.statType);
 
+                int delta =
+                    (isSuccess && stat.statType == targetType)
+                        ? Mathf.RoundToInt(practiceData.statIncrease)
+                        : 0;
 
-        private void Cleanup()
-        {
-            foreach (Transform child in sdRoot)
-                Destroy(child.gameObject);
-            foreach (Transform child in uiRoot)
-                Destroy(child.gameObject);
+                statList.Add((
+                    stat.statName,
+                    stat.statIcon,
+                    Mathf.RoundToInt(memberStat.CurrentValue),
+                    delta
+                ));
+            }
+
+            await resultUI.Play(
+                idleSprite,
+                resultSprite,
+                statList,
+                isSuccess,
+                () => gameObject.SetActive(false)
+            );
+
         }
     }
 }
