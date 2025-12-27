@@ -43,16 +43,9 @@ namespace Code.MainSystem.StatSystem.TeamStats
             return GetStat(statType);
         }
 
-        public void TeamStatUpgrade(StatType statType, float successRate, float value)
+        public void ApplyTeamStatIncrease(float value)
         {
-            float randValue = Random.Range(0f, 101f);
-            if (randValue >= successRate)
-            {
-                Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
-                return;
-            }
-
-            BaseStat stat = GetStat(statType);
+            BaseStat stat = GetStat(StatType.TeamHarmony);
             if (stat == null)
                 return;
 
@@ -60,7 +53,7 @@ namespace Code.MainSystem.StatSystem.TeamStats
 
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
             Bus<TeamStatValueChangedEvent>.Raise(
-                new TeamStatValueChangedEvent(statType, (int)value)
+                new TeamStatValueChangedEvent(StatType.TeamHarmony, (int)value)
             );
         }
     }

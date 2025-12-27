@@ -34,6 +34,7 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<RestEvent>.OnEvent += HandleRest;
             Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
             Bus<StatAllIncreaseEvent>.OnEvent += HandleStatAllUpgrade;
+            Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatUpgrade;
         }
 
         private void HandleRest(RestEvent evt)
@@ -45,7 +46,7 @@ namespace Code.MainSystem.StatSystem.Manager
         {
             if (evt.Type == PracticenType.Team)
             {
-                UpgradeTeamStat(evt.statType, evt.SuccessRate,evt.Value);
+                UpgradeTeamStat(evt.SuccessRate,evt.Value);
             }
             else
             {
@@ -59,6 +60,7 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<RestEvent>.OnEvent -= HandleRest;
             Bus<StatIncreaseEvent>.OnEvent -= HandleStatUpgrade;
             Bus<StatAllIncreaseEvent>.OnEvent -= HandleStatAllUpgrade;
+            Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatUpgrade;
         }
 
         #region GetStat
@@ -125,6 +127,11 @@ namespace Code.MainSystem.StatSystem.Manager
                 pair.ApplyStatIncrease(evt.StatType, evt.Value);
         }
         
+        private void HandleTeamStatUpgrade(TeamStatIncreaseEvent evt)
+        {
+            teamStat.ApplyTeamStatIncrease(evt.AddValue);
+        }
+        
         private bool CalculateUpgradeSuccess(AbstractStats target, StatType statType, float baseSuccessRate)
         {
             BaseStat condition = target.GetStat(StatType.Condition);
@@ -147,9 +154,21 @@ namespace Code.MainSystem.StatSystem.Manager
             return baseValue * (1f + bonus);
         }
 
-        private void UpgradeTeamStat(StatType statType, float successRate,float value)
+        private void UpgradeTeamStat(float successRate, float value)
         {
-            teamStat.TeamStatUpgrade(statType, successRate, value);
+            bool success = CalculateTeamUpgradeSuccess(successRate);
+
+            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
+
+            if (!success)
+                return;
+
+            teamStat.ApplyTeamStatIncrease(value);
+        }
+
+        private bool CalculateTeamUpgradeSuccess(float baseSuccessRate)
+        {
+            return Random.value < baseSuccessRate;
         }
         
         private void Rest(MemberType memberType)
