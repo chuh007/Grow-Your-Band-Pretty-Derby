@@ -33,6 +33,7 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent += HandlePractice;
             Bus<RestEvent>.OnEvent += HandleRest;
             Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
+            Bus<StatAllIncreaseEvent>.OnEvent += HandleStatAllUpgrade;
         }
 
         private void HandleRest(RestEvent evt)
@@ -57,6 +58,7 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent -= HandlePractice;
             Bus<RestEvent>.OnEvent -= HandleRest;
             Bus<StatIncreaseEvent>.OnEvent -= HandleStatUpgrade;
+            Bus<StatAllIncreaseEvent>.OnEvent -= HandleStatAllUpgrade;
         }
 
         #region GetStat
@@ -115,6 +117,12 @@ namespace Code.MainSystem.StatSystem.Manager
             
             float finalValue = CalculateUpgradeValue(member, evt.statType, evt.Value);
             member.ApplyStatIncrease(evt.statType, finalValue);
+        }
+        
+        private void HandleStatAllUpgrade(StatAllIncreaseEvent evt)
+        {
+            foreach (var pair in memberStats)
+                pair.ApplyStatIncrease(evt.StatType, evt.Value);
         }
         
         private bool CalculateUpgradeSuccess(AbstractStats target, StatType statType, float baseSuccessRate)
