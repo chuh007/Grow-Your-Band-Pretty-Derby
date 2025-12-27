@@ -24,10 +24,10 @@ namespace Code.MainSystem.StatSystem.UI
         {
             if (_currentUnit == null)
             {
+                Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
                 return;
             }
 
-                Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
             Bus<RestEvent>.Raise(new RestEvent(_currentUnit.memberType));
             UpdateConditionText();
         }
