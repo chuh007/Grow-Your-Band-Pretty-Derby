@@ -113,12 +113,12 @@ namespace Code.MainSystem.StatSystem.Manager
         
         private void HandleStatUpgrade(StatIncreaseEvent evt)
         {
-            var member = _memberMap.GetValueOrDefault(evt.memberType);
+            var member = _memberMap.GetValueOrDefault(evt.MemberType);
             if (member is null)
                 return;
             
-            float finalValue = CalculateUpgradeValue(member, evt.statType, evt.Value);
-            member.ApplyStatIncrease(evt.statType, finalValue);
+            float finalValue = CalculateUpgradeValue(member, evt.StatType, evt.Value);
+            member.ApplyStatIncrease(evt.StatType, finalValue);
         }
         
         private void HandleStatAllUpgrade(StatAllIncreaseEvent evt)
