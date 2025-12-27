@@ -29,6 +29,12 @@ namespace Code.MainSystem.StatSystem.BaseStats
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
         }
 
+        public void RestState(int recoverValue)
+        {
+            BaseStat stat = Stats.GetValueOrDefault(StatType.Condition);
+            stat.PlusValue(recoverValue);
+        }
+
         public BaseStat GetStat(StatType statType)
         {
             return Stats.GetValueOrDefault(statType);  

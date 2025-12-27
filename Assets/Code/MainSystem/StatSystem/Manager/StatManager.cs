@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Code.MainSystem.StatSystem.MemberStats;
 using Code.MainSystem.StatSystem.TeamStats;
 using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Events;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -30,6 +31,12 @@ namespace Code.MainSystem.StatSystem.Manager
             }
 
             Bus<PracticenEvent>.OnEvent += HandlePractice;
+            Bus<RestEvent>.OnEvent += HandleRest;
+        }
+
+        private void HandleRest(RestEvent evt)
+        {
+            Rest(evt.MemberType);
         }
 
         private void HandlePractice(PracticenEvent evt)
@@ -85,7 +92,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         #endregion
         
-        #region UpgradeStat
+        #region OperationStat
 
         private void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
         {
@@ -111,6 +118,13 @@ namespace Code.MainSystem.StatSystem.Manager
         {
             teamStat.TeamStatUpgrade(statType, successRate, value);
         }
+
+        
+        private void Rest(MemberType statType)
+        {
+            var member = _memberMap.GetValueOrDefault(statType);
+            member?.RestState(10);
+        } 
 
         #endregion
     }
