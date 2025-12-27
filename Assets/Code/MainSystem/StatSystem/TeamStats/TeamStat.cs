@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -11,9 +12,22 @@ namespace Code.MainSystem.StatSystem.TeamStats
     {
         [SerializeField] private string statLabel;
 
-        protected override async void Awake()
+        private bool _initialized;
+
+        protected override void Awake()
         {
             base.Awake();
+        }
+
+        public async Task InitializeAsync()
+        {
+            if (_initialized)
+                return;
+
+            if (string.IsNullOrEmpty(statLabel))
+            {
+                return;
+            }
 
             var statDataList = new List<StatData>();
 
@@ -23,8 +37,8 @@ namespace Code.MainSystem.StatSystem.TeamStats
             );
 
             await handle.Task;
-
             InitializeStats(statDataList);
+            _initialized = true;
         }
 
         private void InitializeStats(List<StatData> list)
@@ -40,11 +54,16 @@ namespace Code.MainSystem.StatSystem.TeamStats
 
         public BaseStat GetTeamStat(StatType statType)
         {
-            return GetStat(statType);
+            return _initialized ? GetStat(statType) : null;
         }
 
         public void ApplyTeamStatIncrease(float value)
         {
+            if (!_initialized)
+            {
+                return;
+            }
+
             BaseStat stat = GetStat(StatType.TeamHarmony);
             if (stat == null)
                 return;

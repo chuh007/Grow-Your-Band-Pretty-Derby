@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -7,6 +8,7 @@ using Code.MainSystem.StatSystem.MemberStats;
 using Code.MainSystem.StatSystem.TeamStats;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
+using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -22,7 +24,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private Dictionary<MemberType, MemberStat> _memberMap;
 
-        private void Awake()
+        private async void Awake()
         {
             _memberMap = new Dictionary<MemberType, MemberStat>();
             foreach (var member in memberStats)
@@ -35,6 +37,8 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
             Bus<StatAllIncreaseEvent>.OnEvent += HandleStatAllUpgrade;
             Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatUpgrade;
+            await teamStat.InitializeAsync();
+            
         }
 
         private void HandleRest(RestEvent evt)
