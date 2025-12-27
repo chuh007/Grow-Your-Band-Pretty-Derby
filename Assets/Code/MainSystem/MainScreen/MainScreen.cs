@@ -4,6 +4,7 @@ using Code.Core;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.StatSystem.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,7 @@ namespace Code.MainSystem.MainScreen
 
         [Header("Components")]
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
+        [SerializeField] private RestCompo restCompo;
         [SerializeField] private StatManager statManager;
 
         private UnitSelector _unitSelector;
@@ -69,6 +71,7 @@ namespace Code.MainSystem.MainScreen
             if (unit == null) return;
 
             personalPracticeCompo.Init(unit, _statUIUpdater);
+            restCompo.Init(unit);
 
             charterNameText.SetText(unit.unitName);
             conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
