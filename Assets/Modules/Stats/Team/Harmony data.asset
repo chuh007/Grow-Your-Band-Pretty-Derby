@@ -16,5 +16,5 @@ MonoBehaviour:
   statName: "\uD558\uBAA8\uB2C8"
   currentValue: 0
   minValue: 0
-  maxValue: 0
+  maxValue: 100
   statIcon: {fileID: 0}

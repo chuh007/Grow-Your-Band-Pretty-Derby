@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Units
   m_GUID: 4b4de78eb427cf14cb021559754d2590
   m_SerializeEntries:
+  - m_GUID: 090323a9efeff4d4ba98caa54f873725
+    m_Address: Assets/Modules/Stats/Member/Piano/Condition data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 32cc6c82b33076e49a05bf90e85d1a0f
     m_Address: Assets/AddressableAssets/SO/Member/Drum.asset
     m_ReadOnly: 0
@@ -27,11 +33,29 @@ MonoBehaviour:
     m_SerializedLabels:
     - Units
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4364a7085f556b440b727fd6f9abc75d
+    m_Address: Assets/Modules/Stats/Member/Piano/StagePresence data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4578632d21d883c499f0211dc47b413b
+    m_Address: Assets/Modules/Stats/Member/Piano/Mental data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 71d51d76f72d94e4199dbd662e885d13
     m_Address: Assets/AddressableAssets/SO/Member/Piano.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acf12a006a695d047a3e9b56b9288c22
+    m_Address: Assets/Modules/Stats/Member/Piano/Dexterity data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ccf5440b38f01004fb888f35da2c25e1
     m_Address: Assets/AddressableAssets/SO/Member/Bass.asset
