@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.MemberData.PersonalpracticeDataSO
   PracticeStatType: 5
   PracticeStatName: "\uB09C\uD0C0"
-  personalpracticeDescription: "\uD30C\uC6CC \uC0C1\uC2B9"
+  PersonalpracticeDescription: 
   StaminaReduction: 2
   statIncrease: 10
+  ProgressImageAddresableKey: Sprites/Test/ProgressImage
+  IdleImageAddressableKey: Sprites/Test/Idle
+  FaillImageAddressableKey: Sprites/Test/Faill
+  SuccseImageAddressableKey: Sprites/Test/Succse

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 4b4de78eb427cf14cb021559754d2590
   m_currentHash:
     serializedVersion: 2
-    Hash: 580b1055057886d3763c52f06cae20ef
+    Hash: e26f5e7f21757c5c66989920f005c9ce
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -60,8 +60,10 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 11400000, guid: f58aea9ff8b9069468d9b9f64ad4edce, type: 2}
   - {fileID: 11400000, guid: bb9ab54da9283954da6148778d570c9f, type: 2}
   - {fileID: 11400000, guid: f89e8e11921302f41acf850cfbe82f43, type: 2}
+  - {fileID: 11400000, guid: 011cb9f93770ec841bf8745b11acf533, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -102,7 +104,8 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - Units
-    - GuitarSprtes
+    - AddresableSprites
+    - Training
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: abcdcd90432562f4fb79f7f0f6dc188b, type: 2}

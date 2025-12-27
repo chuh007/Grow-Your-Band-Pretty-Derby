@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Training;
+using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,11 +20,28 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private TextMeshProUGUI conditionText;
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
+        [SerializeField] private TrainingSequenceController trainingSequenceController;
 
         private UnitDataSO _currentUnit;
         private float _currentCondition;
         private int _currentLesson = -1;
         private bool _showProbability = false;
+        private bool _isSuccse = false;
+
+        private void OnEnable()
+        {
+            Bus<StatUpgradeEvent>.OnEvent += HnaldeCanUpgarede;
+        }
+
+        private void HnaldeCanUpgarede(StatUpgradeEvent evt)
+        {
+            _isSuccse = evt.Upgrade;
+        }
+
+        private void OnDisable()
+        {
+            Bus<StatUpgradeEvent>.OnEvent -= HnaldeCanUpgarede;
+        }
 
         private readonly Dictionary<MemberType, int> _memberTypeIndexMap = new()
         {
@@ -53,19 +73,26 @@ namespace Code.MainSystem.MainScreen
             _showProbability = false;
         }
 
-        public void PracticeBtnClick(int index)
+        public async void PracticeBtnClick(int index)
         {
             if (_currentUnit == null || index >= _currentUnit.personalPractices.Count) return;
 
             if (_currentLesson == index)
             {
                 var p = _currentUnit.personalPractices[index];
+                
+                trainingSequenceController.gameObject.SetActive(true);
+                
+                if (trainingSequenceController != null)
+                    await trainingSequenceController.PlayTrainingSequence(_isSuccse,p);
+                
+                float statGain = _isSuccse ? p.statIncrease : 0;
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,
                     _currentUnit.memberType,
                     p.PracticeStatType,
                     _currentCondition,
-                    p.statIncrease));
+                    statGain));
 
                 _currentCondition -= p.StaminaReduction;
                 _currentCondition = Mathf.Clamp(_currentCondition, 0f, _currentUnit.maxCondition);
@@ -79,6 +106,7 @@ namespace Code.MainSystem.MainScreen
                 ShowAllProbabilityTexts();  
             }
         }
+
 
         private void UpdateLessonSelection(int newIndex)
         {
