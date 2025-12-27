@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Code.Core;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using TMPro;
 using UnityEngine;
@@ -28,9 +27,10 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private StatManager statManager;
 
-        private UnitSelector unitSelector;
-        private StatUIUpdater statUIUpdater;
-        private List<UnitDataSO> loadedUnits;
+        private UnitSelector _unitSelector;
+        private StatUIUpdater _statUIUpdater;
+        private List<UnitDataSO> _loadedUnits;
+        private Button _currentSelectedButton;
 
         private async void Start()
         {
@@ -39,23 +39,24 @@ namespace Code.MainSystem.MainScreen
 
         private async Task LoadUnitsAsync()
         {
-            loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
-            unitSelector = new UnitSelector();
-            unitSelector.Init(loadedUnits);
+            _loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
+            _unitSelector = new UnitSelector();
+            _unitSelector.Init(_loadedUnits);
 
-            statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
+            _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
 
-            if (loadedUnits.Count > 0)
+            if (_loadedUnits.Count > 0)
             {
-                SelectUnit(loadedUnits[0]);
+                SelectUnit(_loadedUnits[0]);
             }
         }
 
+
         public void MemberBtnClicked(string type)
         {
-            if (unitSelector.TryGetUnit(type, out UnitDataSO unit))
-            {
-                SelectUnit(unit);
+            if (_unitSelector.TryGetUnit(type, out UnitDataSO unit) && unit != null)
+            { 
+                SelectUnit(unit); 
             }
             else
             {
@@ -65,20 +66,21 @@ namespace Code.MainSystem.MainScreen
 
         private void SelectUnit(UnitDataSO unit)
         {
-            personalPracticeCompo.ButtonLoader(unit, statNameTexts);
+            if (unit == null) return;
+
+            personalPracticeCompo.Init(unit, _statUIUpdater);
 
             charterNameText.SetText(unit.unitName);
             conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
 
-            statUIUpdater.UpdateAll(unit);
+            _statUIUpdater.UpdateAll(unit);
 
             LoadUnitSprite(unit);
         }
 
         private async void LoadUnitSprite(UnitDataSO unit)
         {
-            if (string.IsNullOrEmpty(unit.spriteAddressableKey))
-                return;
+            if (string.IsNullOrEmpty(unit.spriteAddressableKey)) return;
 
             var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(unit.spriteAddressableKey);
             characterIcon.sprite = sprite;

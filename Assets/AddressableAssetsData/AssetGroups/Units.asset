@@ -33,11 +33,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Units
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7629ed5ee293a874e9be7610267b6d6d
-    m_Address: Training/UI/Result
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ccf5440b38f01004fb888f35da2c25e1
     m_Address: Assets/AddressableAssets/SO/Member/Bass.asset
     m_ReadOnly: 0

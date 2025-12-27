@@ -14,7 +14,7 @@ namespace Code.MainSystem.Etc
             unitDict.Clear();
             foreach (var unit in units)
             {
-                string key = unit.memberType.ToString();
+                string key = unit.memberType.ToString().ToLower();
                 if (!unitDict.ContainsKey(key))
                     unitDict.Add(key, unit);
             }
@@ -22,7 +22,7 @@ namespace Code.MainSystem.Etc
 
         public bool TryGetUnit(string type, out UnitDataSO unit)
         {
-            bool found = unitDict.TryGetValue(type, out unit);
+            bool found = unitDict.TryGetValue(type.ToLower(), out unit);
             if (found)
                 CurrentUnit = unit;
             return found;

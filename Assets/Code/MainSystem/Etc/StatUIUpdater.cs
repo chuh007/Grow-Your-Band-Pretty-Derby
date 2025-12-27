@@ -3,8 +3,8 @@ using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using TMPro;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Code.MainSystem.Etc
 {
@@ -15,7 +15,11 @@ namespace Code.MainSystem.Etc
         private readonly List<Image> iconImages;
         private readonly StatManager statManager;
 
-        public StatUIUpdater(List<TextMeshProUGUI> names, List<TextMeshProUGUI> values, List<Image> icons, StatManager manager)
+        public StatUIUpdater(
+            List<TextMeshProUGUI> names,
+            List<TextMeshProUGUI> values,
+            List<Image> icons,
+            StatManager manager)
         {
             nameTexts = names;
             valueTexts = values;
@@ -25,41 +29,60 @@ namespace Code.MainSystem.Etc
 
         public void UpdateAll(UnitDataSO unit)
         {
-            if (unit == null || unit.stats == null)
-            {
-                Debug.LogError("Unit or unit.stats is null.");
-                return;
-            }
+            if (unit == null || unit.stats == null) return;
 
-            int count = Mathf.Min(unit.stats.Count, nameTexts.Count, valueTexts.Count, iconImages.Count);
-
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < unit.stats.Count; i++)
             {
+                if (i >= valueTexts.Count || valueTexts[i] == null) continue;
+
                 var stat = unit.stats[i];
-                var memberStat = statManager.GetMemberStat(unit.memberType, stat.statType);
 
-                if (stat == null || memberStat == null)
+                BaseStat statData = stat.statType == StatType.TeamHarmony
+                    ? statManager.GetTeamStat(stat.statType)
+                    : statManager.GetMemberStat(unit.memberType, stat.statType);
+
+                if (statData == null)
                 {
-                    Debug.LogWarning($"Stat or memberStat is null at index {i}");
+                    Debug.LogError($"Stat is NULL : {stat.statType}");
+                    valueTexts[i].SetText("0 / 0");
                     continue;
                 }
 
-                nameTexts[i]?.SetText(stat.statName);
-                valueTexts[i]?.SetText($"{memberStat.CurrentValue} / {memberStat.MaxValue}");
+                nameTexts[i].SetText(stat.statName);
+                valueTexts[i].SetText($"{statData.CurrentValue} / {statData.MaxValue}");
                 if (iconImages[i] != null)
                     iconImages[i].sprite = stat.statIcon;
             }
         }
 
-
-        public void UpdateStatValues(UnitDataSO unit)
+        public void PreviewStat(UnitDataSO unit, StatType targetType, float increase)
         {
-            int count = Mathf.Min(unit.stats.Count, valueTexts.Count);
+            if (unit == null || unit.stats == null) return;
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < unit.stats.Count; i++)
             {
+                if (i >= valueTexts.Count || valueTexts[i] == null) continue;
+
                 var stat = unit.stats[i];
-                valueTexts[i].SetText($"{statManager.GetMemberStat(unit.memberType, stat.statType).CurrentValue} / {statManager.GetMemberStat(unit.memberType, stat.statType).MaxValue}");
+
+                BaseStat statData = stat.statType == StatType.TeamHarmony
+                    ? statManager.GetTeamStat(stat.statType)
+                    : statManager.GetMemberStat(unit.memberType, stat.statType);
+
+                if (statData == null)
+                {
+                    Debug.LogError($"Stat is NULL : {stat.statType}");
+                    continue;
+                }
+
+                if (stat.statType == targetType)
+                {
+                    valueTexts[i].SetText($"<color=green>{statData.CurrentValue + increase} (+{increase})</color> / {statData.MaxValue}");
+                }
+                else
+                {
+                    valueTexts[i].SetText($"{statData.CurrentValue} / {statData.MaxValue}");
+                }
             }
         }
     }

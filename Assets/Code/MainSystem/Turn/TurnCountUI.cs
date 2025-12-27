@@ -20,6 +20,11 @@ namespace Code.MainSystem.Turn
             _turnManager.TargetTurnChanged += HandleTurnChange;
         }
 
+        private void Start()
+        {
+            Bus<TargetTurnSetEvent>.Raise(new TargetTurnSetEvent(15));
+        }
+
         private void OnDestroy()
         {
             _turnManager.TurnChanged -= HandleTurnChange;

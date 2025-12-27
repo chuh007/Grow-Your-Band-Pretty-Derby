@@ -6,42 +6,32 @@ using Code.Core.Bus.GameEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.Etc;
 using Code.MainSystem.StatSystem.Manager;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace Code.MainSystem.MainScreen
 {
     public class PersonalPracticeCompo : MonoBehaviour
     {
+        [Header("UI")]
+        [SerializeField] private HealthBar healthBar;
+        [SerializeField] private TrainingSequenceController trainingSequenceController;
         [SerializeField] private List<Image> arrowObjs;
         [SerializeField] private List<TextMeshProUGUI> probabilityTexts;
-        [SerializeField] private TextMeshProUGUI conditionText;
+        [SerializeField] private List<Button> practiceButtons;
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
-        [SerializeField] private TrainingSequenceController trainingSequenceController;
 
         private UnitDataSO _currentUnit;
         private float _currentCondition;
-        private int _currentLesson = -1;
-        private bool _showProbability = false;
-        private bool _isSuccse = false;
+        private float _previewDamage;
+        private int _selectedPracticeIndex = -1;
+        private bool _isSuccess;
 
-        private void OnEnable()
-        {
-            Bus<StatUpgradeEvent>.OnEvent += HnaldeCanUpgarede;
-        }
-
-        private void HnaldeCanUpgarede(StatUpgradeEvent evt)
-        {
-            _isSuccse = evt.Upgrade;
-        }
-
-        private void OnDisable()
-        {
-            Bus<StatUpgradeEvent>.OnEvent -= HnaldeCanUpgarede;
-        }
+        private StatUIUpdater _statUIUpdater;
 
         private readonly Dictionary<MemberType, int> _memberTypeIndexMap = new()
         {
@@ -52,102 +42,144 @@ namespace Code.MainSystem.MainScreen
             { MemberType.Vocal, 4 }
         };
 
-        public void ButtonLoader(UnitDataSO unit, List<TextMeshProUGUI> statTexts)
+        #region LifeCycle
+
+        private void OnEnable()
+        {
+            Bus<StatUpgradeEvent>.OnEvent += OnStatUpgradeResult;
+        }
+
+        private void OnDisable()
+        {
+            Bus<StatUpgradeEvent>.OnEvent -= OnStatUpgradeResult;
+        }
+
+        private void OnStatUpgradeResult(StatUpgradeEvent evt)
+        {
+            _isSuccess = evt.Upgrade;
+        }
+
+        #endregion
+
+        #region Init
+
+        public void Init(UnitDataSO unit, StatUIUpdater statUIUpdater)
         {
             _currentUnit = unit;
+            _statUIUpdater = statUIUpdater;
             _currentCondition = unit.currentCondition;
 
-            lesson1Text.SetText(unit.personalPractices.Count > 2 ? unit.personalPractices[2].PracticeStatName : "");
-            lesson2Text.SetText(unit.personalPractices.Count > 3 ? unit.personalPractices[3].PracticeStatName : "");
+            healthBar.SetHealth(_currentCondition, unit.maxCondition);
+            _statUIUpdater.UpdateAll(unit);
+            
+            lesson1Text.text = unit.stats.Count > 2 ? unit.stats[2].statName : "";
+            lesson2Text.text = unit.stats.Count > 3 ? unit.stats[3].statName : "";
 
-            ClearProbabilityTexts();
+            _selectedPracticeIndex = -1;
+
             HideAllArrows();
             HideAllProbabilityTexts();
+
+            UpdateButtonsState();
         }
 
-        public void CancelBtnClick()
-        {
-            ClearProbabilityTexts();
-            HideAllArrows();
-            HideAllProbabilityTexts();
-            _showProbability = false;
-        }
+        #endregion
+
+        #region Practice Button
 
         public async void PracticeBtnClick(int index)
         {
-            if (_currentUnit == null || index >= _currentUnit.personalPractices.Count) return;
+            if (_currentUnit == null) return;
+            if (index < 0 || index >= _currentUnit.personalPractices.Count) return;
+            if (TrainingManager.Instance.IsMemberTrained(_currentUnit.memberType)) return;
 
-            if (_currentLesson == index)
+            var practice = _currentUnit.personalPractices[index];
+
+            if (_selectedPracticeIndex == index)
             {
-                var p = _currentUnit.personalPractices[index];
-                
                 trainingSequenceController.gameObject.SetActive(true);
-                
-                if (trainingSequenceController != null)
-                    await trainingSequenceController.PlayTrainingSequence(_isSuccse,p);
-                
-                float statGain = _isSuccse ? p.statIncrease : 0;
+                await trainingSequenceController
+                    .PlayTrainingSequence(_isSuccess, practice, _currentUnit);
+
+                float realDamage = practice.StaminaReduction;
+
+                _currentCondition = Mathf.Clamp(
+                    _currentCondition - realDamage,
+                    0,
+                    _currentUnit.maxCondition);
+
+                _currentUnit.currentCondition = _currentCondition;
+                healthBar.ApplyHealth(realDamage);
+
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,
                     _currentUnit.memberType,
-                    p.PracticeStatType,
+                    practice.PracticeStatType,
                     _currentCondition,
-                    statGain));
+                    _isSuccess ? practice.statIncrease : 0
+                ));
 
-                _currentCondition -= p.StaminaReduction;
-                _currentCondition = Mathf.Clamp(_currentCondition, 0f, _currentUnit.maxCondition);
-                conditionText.SetText($"{_currentCondition}/{_currentUnit.maxCondition}");
+                TrainingManager.Instance.MarkMemberTrained(_currentUnit.memberType);
+
+                _selectedPracticeIndex = -1;
+                _statUIUpdater.UpdateAll(_currentUnit);
+
+                HideAllArrows();
+                HideAllProbabilityTexts();
+                UpdateButtonsState();
+                return;
             }
-            else
+
+            _selectedPracticeIndex = index;
+            _previewDamage = practice.StaminaReduction;
+
+            healthBar.PrevieMinusHealth(_previewDamage);
+            _statUIUpdater.PreviewStat(_currentUnit, practice.PracticeStatType, practice.statIncrease);
+
+            ShowArrow(index);
+            ShowProbability();
+        }
+
+        #endregion
+
+        #region UI Helpers
+
+        private void UpdateButtonsState()
+        {
+            bool trained = TrainingManager.Instance.IsMemberTrained(_currentUnit.memberType);
+
+            foreach (var btn in practiceButtons)
             {
-                UpdateLessonSelection(index);
-                ShowCurrentProbability();
-                ShowArrowForLesson(index);  
-                ShowAllProbabilityTexts();  
+                btn.interactable = !trained;
+                btn.image.color = trained ? Color.gray : Color.white;
             }
         }
 
-
-        private void UpdateLessonSelection(int newIndex)
-        {
-            _currentLesson = newIndex;
-        }
-
-        private void ClearProbabilityTexts()
-        {
-            foreach (var t in probabilityTexts)
-                t.SetText("");
-        }
-
-        private void ShowCurrentProbability()
-        {
-            if (_memberTypeIndexMap.TryGetValue((MemberType)(int)_currentUnit.memberType, out int idx) && idx < probabilityTexts.Count)
-            {
-                probabilityTexts[idx].SetText($"{_currentCondition}%");
-            }
-        }
-
-        private void ShowArrowForLesson(int lessonIndex)
+        private void ShowArrow(int index)
         {
             for (int i = 0; i < arrowObjs.Count; i++)
             {
-                arrowObjs[i].gameObject.SetActive(i == lessonIndex);
+                arrowObjs[i].gameObject.SetActive(i == index);
             }
         }
 
         private void HideAllArrows()
         {
-            foreach (var img in arrowObjs)
+            foreach (var arrow in arrowObjs)
             {
-                img.gameObject.SetActive(false);
+                arrow.gameObject.SetActive(false);
             }
         }
 
-        private void ShowAllProbabilityTexts()
+        private void ShowProbability()
         {
-            foreach (var t in probabilityTexts)
+            if (_memberTypeIndexMap.TryGetValue(_currentUnit.memberType, out int idx) &&
+                idx < probabilityTexts.Count)
             {
-                t.gameObject.SetActive(true);
+                for (int i = 0; i < probabilityTexts.Count; i++)
+                    probabilityTexts[i].gameObject.SetActive(i == idx);
+
+                probabilityTexts[idx].SetText($"{Mathf.FloorToInt(_currentCondition)}%");
             }
         }
 
@@ -158,5 +190,7 @@ namespace Code.MainSystem.MainScreen
                 t.gameObject.SetActive(false);
             }
         }
+
+        #endregion
     }
 }
