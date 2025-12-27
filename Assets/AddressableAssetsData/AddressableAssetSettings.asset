@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 4b4de78eb427cf14cb021559754d2590
   m_currentHash:
     serializedVersion: 2
-    Hash: bb227c8493606c23d5e15a4ccfe33a46
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -60,6 +60,7 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 11400000, guid: 2a0ae0d7793ab764d8589486f05b4f6d, type: 2}
   - {fileID: 11400000, guid: bb9ab54da9283954da6148778d570c9f, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
@@ -100,6 +101,12 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - VocalStatData
+    - BassStatData
+    - DrumsStatData
+    - GuitarStatData
+    - PianoStatData
+    - TeamStatData
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: abcdcd90432562f4fb79f7f0f6dc188b, type: 2}
