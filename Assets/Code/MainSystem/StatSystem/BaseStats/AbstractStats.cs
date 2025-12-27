@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Code.Core.Bus;
-using Code.MainSystem.StatSystem.Events;
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
@@ -11,33 +9,23 @@ namespace Code.MainSystem.StatSystem.BaseStats
 
         protected virtual void Awake() { }
 
-        public void StatUpgrade(StatType statType, float successRate,float value)
+        public void ApplyStatIncrease(StatType statType, float value)
         {
             BaseStat stat = Stats.GetValueOrDefault(statType);
 
-            float successValue = (float)GetStat(StatType.Condition).CurrentValue / GetStat(StatType.Condition).MaxValue;
-
-            bool success = Random.value < successValue;
-
-            if (!success)
-            {
-                Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
-                return;
-            }
-
-            stat.PlusValue((int)value);
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
+            stat?.PlusValue((int)value);
         }
 
-        public void RestState(int recoverValue)
+        public void ApplyRecover(StatType statType, int recoverValue)
         {
-            BaseStat stat = Stats.GetValueOrDefault(StatType.Condition);
-            stat.PlusValue(recoverValue);
+            BaseStat stat = Stats.GetValueOrDefault(statType);
+
+            stat?.PlusValue(recoverValue);
         }
 
         public BaseStat GetStat(StatType statType)
         {
-            return Stats.GetValueOrDefault(statType);  
+            return Stats.GetValueOrDefault(statType);
         }
     }
 }

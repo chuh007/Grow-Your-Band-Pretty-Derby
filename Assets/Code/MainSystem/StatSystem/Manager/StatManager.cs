@@ -47,14 +47,7 @@ namespace Code.MainSystem.StatSystem.Manager
             }
             else
             {
-                if (evt.statType is StatType.Condition or StatType.Mental)
-                {
-                    UpgradeCommonStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
-                }
-                else
-                {
-                    UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
-                }
+                UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
             }
         }
         
@@ -97,34 +90,62 @@ namespace Code.MainSystem.StatSystem.Manager
         private void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
         {
             var member = _memberMap.GetValueOrDefault(memberType);
-            member?.StatUpgrade(statType, successRate, value);
+            if (member is null)
+                return;
+
+            bool success = CalculateUpgradeSuccess(member, statType, successRate);
+
+            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
+
+            if (!success) 
+                return;
+
+            float finalValue = CalculateUpgradeValue(member, statType, value);
+            member.ApplyStatIncrease(statType, finalValue);
+        }
+        
+        private bool CalculateUpgradeSuccess(AbstractStats target, StatType statType, float baseSuccessRate)
+        {
+            BaseStat condition = target.GetStat(StatType.Condition);
+            if (condition == null) 
+                return false;
+
+            float conditionRatio = (float)condition.CurrentValue / (float)condition.MaxValue;
+            float finalRate = baseSuccessRate * conditionRatio;
+
+            return Random.value < finalRate;
         }
 
-        private void UpgradeCommonStat(MemberType memberType, StatType statType, float successRate, float value)
+        private float CalculateUpgradeValue(AbstractStats target, StatType statType, float baseValue)
         {
-            var member = _memberMap.GetValueOrDefault(memberType);
-            member?.StatUpgrade(statType, successRate, value);
-        }
+            BaseStat mental = target.GetStat(StatType.Mental);
+            if (mental == null)
+                return baseValue;
 
-        private void UpgradeAllMemberStat(StatType statType, float successRate, float value)
-        {
-            foreach (var member in memberStats)
-            {
-                member.StatUpgrade(statType, successRate,value);
-            }
+            float bonus = mental.CurrentValue * 0.01f;
+            return baseValue * (1f + bonus);
         }
 
         private void UpgradeTeamStat(StatType statType, float successRate,float value)
         {
             teamStat.TeamStatUpgrade(statType, successRate, value);
         }
-
         
-        private void Rest(MemberType statType)
+        private void Rest(MemberType memberType)
         {
-            var member = _memberMap.GetValueOrDefault(statType);
-            member?.RestState(10);
-        } 
+            var member = _memberMap.GetValueOrDefault(memberType);
+            if (member is null) 
+                return;
+
+            int recoverValue = CalculateRestRecover(member);
+            member.ApplyRecover(StatType.Condition, recoverValue);
+        }
+
+        private int CalculateRestRecover(AbstractStats target)
+        {
+            BaseStat mental = target.GetStat(StatType.Mental);
+            return mental == null ? 10 : 10 + (int)(mental.CurrentValue * 0.5f);
+        }
 
         #endregion
     }
