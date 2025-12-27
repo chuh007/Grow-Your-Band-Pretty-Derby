@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
-using Code.Core.Addressable;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 namespace Code.Core
@@ -9,22 +12,17 @@ namespace Code.Core
     public class GameManager : MonoBehaviour
     {
         [field: SerializeField] public int Priority { get; private set; } = 1;
-        //[SerializeField] private LoadingScreenUI LoadingScreenUI;
-        bool isKey = false;
-        
         private static GameManager _instance;
 
         public static GameManager Instance
         {
             get
             {
-                if(_instance is null)
-                    _instance = FindFirstObjectByType<GameManager>();
+                if (_instance is null)
+                    _instance = FindAnyObjectByType<GameManager>();
                 return _instance;
             }
         }
-
-        private GameResourceManager _resourceManager = new();
 
         private void Awake()
         {
@@ -32,63 +30,37 @@ namespace Code.Core
 
             if (managers.Length > 1)
             {
-                int highPriority = managers[0].Priority;
-                GameManager highPriorityManager = managers[0];
-                for (int i = 0; i < managers.Length; i++)
+                foreach (var m in managers)
                 {
-                    if (managers[i].Priority > highPriority)
+                    if (m.Priority > Priority)
                     {
-                        Destroy(highPriorityManager.gameObject);
-                        highPriority = managers[i].Priority;
-                        highPriorityManager = managers[i];
+                        Destroy(gameObject);
+                        return;
                     }
                 }
-                _instance = highPriorityManager;
             }
-            else
-            {
-                _instance = this;
-            }
-            
-            _resourceManager = new GameResourceManager();
-            _resourceManager.OnLoadCountChange += HandleLoadCountChange;
-            
+
+            _instance = this;
             DontDestroyOnLoad(gameObject);
-            //_ = LoadProcess();
         }
-
-        private void HandleLoadCountChange()
+        
+        public async Task<List<T>> LoadAllAddressablesAsync<T>(string label)
+            where T : Object
         {
-            // if(LoadingScreenUI == null)return;
-            // LoadingScreenUI.SetProgress(_resourceManager.LoadCount,_resourceManager.NeedLoadCount);
+            var handle = Addressables.LoadAssetsAsync<T>(label, null);
+            await handle.Task;
+
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+                return new List<T>(handle.Result);
+
+            return new List<T>();
         }
-
-        // private async Task LoadProcess()
-        // {
-        //     // isKey =false;
-        //     // _resourceManager.LoadCount = 0;
-        //     // _resourceManager.NeedLoadCount = 0;
-        //     // await Task.WhenAll(_resourceManager.LoadAllAsync<AudioClip>("BGM"),
-        //     //     _resourceManager.LoadAllAsync<GameObject>("default"));
-        //     // if (LoadingScreenUI != null)
-        //     // {
-        //     //     LoadingScreenUI.SetMessage("Loading complete..\npress any key to continue");
-        //     //     isKey = true;
-        //     // }
-        // }
-
-        public T LoadAsset<T>(string key) where T : Object
+        
+        public async Task<T> LoadAddressableAsync<T>(string key)
+            where T : Object
         {
-            return _resourceManager.Load<T>(key);
-        }
-
-        private void OnDestroy()
-        {
-            if (_instance == this)
-            {
-                _instance = null;
-                _resourceManager?.Dispose();
-            }
+            var handle = Addressables.LoadAssetAsync<T>(key);
+            return await handle.Task;
         }
     }
 }

@@ -16,5 +16,5 @@ MonoBehaviour:
   statName: "\uC190\uB180\uB9BC"
   currentValue: 5
   minValue: 0
-  maxValue: 9999
+  maxValue: 100
   statIcon: {fileID: 0}

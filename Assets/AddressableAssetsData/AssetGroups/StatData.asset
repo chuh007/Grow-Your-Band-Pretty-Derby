@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: StatData
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: StatData
+  m_GUID: d2c067deba9f72a409827f6bb9ce69b5
+  m_SerializeEntries:
+  - m_GUID: 18b9352dc673d2a4c94ae66fb0c1abe6
+    m_Address: Assets/Modules/Stats/Member/Vocal/Vocalization data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - VocalStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cef8e61a3dc39a4a9f43f7454226092
+    m_Address: Assets/Modules/Stats/Member/Drums/Condition data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DrumsStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f6885b4526d0764cbee8f780adab27d
+    m_Address: Assets/Modules/Stats/Member/Bass/Dexterity data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BassStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2405f10911ea4084d93f3e610bb61396
+    m_Address: Assets/Modules/Stats/Member/Drums/Mental data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DrumsStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c591cf73029b4b4cb5c88ad2f2a3963
+    m_Address: Assets/Modules/Stats/Member/Guitar/Mental data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37fcc8dcb4bb9f3449dd68f2afbe263c
+    m_Address: Assets/Modules/Stats/Member/Bass/SenseOfRhythm data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BassStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48e704ab41754824cba63e613a06f8d6
+    m_Address: Assets/Modules/Stats/Member/Bass/Mental data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BassStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4cee347a750e36c4e8c97aea05cb8474
+    m_Address: Assets/Modules/Stats/Member/Vocal/Breathing data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - VocalStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58ff9e77b9332c24988c4d9690d624b1
+    m_Address: Assets/Modules/Stats/Member/Bass/Condition data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BassStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 644443d6cff95f44cb87fa4ee3ac870c
+    m_Address: Assets/Modules/Stats/Member/Guitar/Condition data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b6e22f286dd1754396f391b1f8fa43b
+    m_Address: Assets/Modules/Stats/Member/Guitar/Endurance data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83180a4302d9aed438532dcc85899165
+    m_Address: Assets/Modules/Stats/Member/Vocal/Mental data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - VocalStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 980198409400b9944bec3f4185d355f2
+    m_Address: Assets/Modules/Stats/Member/Drums/Power data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DrumsStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a82af34ee579aca47bf3b1ed4506f6d5
+    m_Address: Assets/Modules/Stats/Member/Drums/SenseOfRhythm  data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DrumsStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc2f160a7327b2348bde76014b51debb
+    m_Address: Assets/Modules/Stats/Team/Harmony data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - TeamStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1482a76f813f1844922c35f70038bed
+    m_Address: Assets/Modules/Stats/Member/Vocal/Condition data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - VocalStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fd458ead59eb7da4abc67b538c9f2337
+    m_Address: Assets/Modules/Stats/Member/Guitar/Concentration  data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e88c812f20726fb40afb8b0dbc2f2abb, type: 2}
+    - {fileID: 11400000, guid: b58f5003e73821148b04b8d95e457ce7, type: 2}
