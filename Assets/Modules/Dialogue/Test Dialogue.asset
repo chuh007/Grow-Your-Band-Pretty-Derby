@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
   - {fileID: 1208040086343421634, guid: 79f207fa03251374984180437024066a, type: 3}
+  - {fileID: 1208040086343421634, guid: 79f207fa03251374984180437024066a, type: 3}
   <DialogueDetails>k__BackingField:
   - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: d766355927ca165488c156c650949062, type: 2}
     <DialogueDetail>k__BackingField: "\uC774\uAC83\uC740 \uB354\uBBF8\uC774\uC624.\n\uC65C
