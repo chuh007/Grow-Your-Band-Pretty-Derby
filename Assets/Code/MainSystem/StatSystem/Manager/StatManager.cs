@@ -32,6 +32,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
             Bus<PracticenEvent>.OnEvent += HandlePractice;
             Bus<RestEvent>.OnEvent += HandleRest;
+            Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
         }
 
         private void HandleRest(RestEvent evt)
@@ -54,6 +55,8 @@ namespace Code.MainSystem.StatSystem.Manager
         private void OnDestroy()
         {
             Bus<PracticenEvent>.OnEvent -= HandlePractice;
+            Bus<RestEvent>.OnEvent -= HandleRest;
+            Bus<StatIncreaseEvent>.OnEvent -= HandleStatUpgrade;
         }
 
         #region GetStat
@@ -104,6 +107,16 @@ namespace Code.MainSystem.StatSystem.Manager
             member.ApplyStatIncrease(statType, finalValue);
         }
         
+        private void HandleStatUpgrade(StatIncreaseEvent evt)
+        {
+            var member = _memberMap.GetValueOrDefault(evt.memberType);
+            if (member is null)
+                return;
+            
+            float finalValue = CalculateUpgradeValue(member, evt.statType, evt.Value);
+            member.ApplyStatIncrease(evt.statType, finalValue);
+        }
+        
         private bool CalculateUpgradeSuccess(AbstractStats target, StatType statType, float baseSuccessRate)
         {
             BaseStat condition = target.GetStat(StatType.Condition);
@@ -112,7 +125,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
             float conditionRatio = (float)condition.CurrentValue / (float)condition.MaxValue;
             float finalRate = baseSuccessRate * conditionRatio;
-
+            
             return Random.value < finalRate;
         }
 
