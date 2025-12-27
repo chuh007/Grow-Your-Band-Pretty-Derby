@@ -23,8 +23,11 @@ namespace Code.MainSystem.StatSystem.UI
         public void Rest()
         {
             if (_currentUnit == null)
+            {
                 return;
+            }
 
+                Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
             Bus<RestEvent>.Raise(new RestEvent(_currentUnit.memberType));
             UpdateConditionText();
         }
