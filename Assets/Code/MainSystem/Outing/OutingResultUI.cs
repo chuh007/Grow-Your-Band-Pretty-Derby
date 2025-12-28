@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.OutingEvents;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -35,6 +37,7 @@ namespace Code.MainSystem.Outing
         private void CloseOutingScene()
         {
             closeButton.onClick.RemoveAllListeners();
+            Bus<OutingEndEvent>.Raise(new OutingEndEvent()); 
             SceneManager.UnloadSceneAsync("OutingScene");
         }
     }
