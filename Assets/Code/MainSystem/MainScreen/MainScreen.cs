@@ -23,9 +23,11 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private List<Image> statIcons;
         [SerializeField] private TextMeshProUGUI conditionText;
         [SerializeField] private Image characterIcon;
+        [SerializeField] private GameObject teamPanel;
 
         [Header("Components")]
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
+        [SerializeField] private TeamPracticeCompo teamPracticeCompo;
         [SerializeField] private RestCompo restCompo;
         [SerializeField] private StatManager statManager;
 
@@ -46,11 +48,18 @@ namespace Code.MainSystem.MainScreen
             _unitSelector.Init(_loadedUnits);
 
             _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
+            
+            teamPracticeCompo.CacheUnits(_loadedUnits);
 
             if (_loadedUnits.Count > 0)
             {
                 SelectUnit(_loadedUnits[0]);
             }
+        }
+
+        public void TeamButtonClicked()
+        {
+            teamPanel.gameObject.SetActive(true);
         }
 
 
