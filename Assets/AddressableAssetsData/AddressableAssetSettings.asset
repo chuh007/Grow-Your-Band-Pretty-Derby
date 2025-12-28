@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 4b4de78eb427cf14cb021559754d2590
   m_currentHash:
     serializedVersion: 2
-    Hash: 5918e31cf58c6a7b807942230e87ff33
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -65,6 +65,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f89e8e11921302f41acf850cfbe82f43, type: 2}
   - {fileID: 11400000, guid: 011cb9f93770ec841bf8745b11acf533, type: 2}
   - {fileID: 11400000, guid: cb0bf4ded46a9714d8d773551bad8256, type: 2}
+  - {fileID: 11400000, guid: 3a0747a445723cb4787b13596199b3ce, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -113,6 +114,7 @@ MonoBehaviour:
     - PianoStatData
     - VocalStatData
     - TeamStatData
+    - Outing
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: abcdcd90432562f4fb79f7f0f6dc188b, type: 2}

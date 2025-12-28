@@ -30,7 +30,7 @@ namespace Code.MainSystem.MainScreen
         private float _previewDamage;
         private int _selectedPracticeIndex = -1;
         private bool _isSuccess;
-
+   
         private StatUIUpdater _statUIUpdater;
 
         private readonly Dictionary<MemberType, int> _memberTypeIndexMap = new()
