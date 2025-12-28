@@ -36,7 +36,7 @@ namespace Code.MainSystem.MainScreen.Training
             }
         }
         
-        public void MarkMembersTrainedForTeam(List<MemberType> members)
+        public void MarkMembersTrainedForTeam(IEnumerable<MemberType> members)
         {
             foreach (var member in members)
             {
@@ -52,11 +52,16 @@ namespace Code.MainSystem.MainScreen.Training
 
         public void MarkMemberTrained(MemberType member)
         {
-            if (!_trainedMembers.Contains(member))
-            {
-                _trainedMembers.Add(member);
-                CheckAllMembersTrained();
-            }
+            if (_trainedMembers.Contains(member))
+                return;
+
+            _trainedMembers.Add(member);
+
+            Bus<MemberTrainingStateChangedEvent>.Raise(
+                new MemberTrainingStateChangedEvent(member)
+            );
+
+            CheckAllMembersTrained();
         }
 
         public bool IsTeamTrained()
