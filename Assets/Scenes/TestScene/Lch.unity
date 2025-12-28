@@ -5401,8 +5401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d1c6b802a4141a48e32766371a7294b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.UI.RestCompo
-  statManager: {fileID: 2127672356}
-  conditionText: {fileID: 1155719355747564278}
+  healthBar: {fileID: 508380102}
 --- !u!114 &904073744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5417,6 +5416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.TeamPracticeCompo
   successRateText: {fileID: 1005940934}
   startPracticeButton: {fileID: 1458116338}
+  RhythmGameScene: 
   memberButtons:
   - {fileID: 14745568}
   - {fileID: 879693989}
