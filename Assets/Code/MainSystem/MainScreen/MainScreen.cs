@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Code.Core;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.StatSystem.UI;
 using TMPro;
@@ -14,7 +17,7 @@ namespace Code.MainSystem.MainScreen
     public class MainScreen : MonoBehaviour
     {
         [Header("Addressables Keys/Labels")]
-        [SerializeField] private string unitLabel = "Units"; 
+        [SerializeField] private string unitLabel = "Units";
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI charterNameText;
@@ -25,6 +28,9 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private Image characterIcon;
         [SerializeField] private GameObject teamPanel;
 
+        [Header("Member Buttons (기본 화면)")]
+        [SerializeField] private List<Button> memberButtons;
+
         [Header("Components")]
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
@@ -32,23 +38,61 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private StatManager statManager;
 
         public UnitSelector UnitSelector { get; private set; }
+
         private StatUIUpdater _statUIUpdater;
         private List<UnitDataSO> _loadedUnits;
-        private Button _currentSelectedButton;
+        
+        private readonly Dictionary<MemberType, Button> _memberButtonMap = new();
+
+        #region Unity LifeCycle
 
         private async void Start()
         {
+            CacheMemberButtons();
             await LoadUnitsAsync();
+            RefreshAllMemberButtons();
+        }
+
+        private void OnEnable()
+        {
+            Bus<MemberTrainingStateChangedEvent>.OnEvent += OnMemberTrainingStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            Bus<MemberTrainingStateChangedEvent>.OnEvent -= OnMemberTrainingStateChanged;
+        }
+
+        #endregion
+
+        #region Init
+
+        private void CacheMemberButtons()
+        {
+            _memberButtonMap.Clear();
+
+            foreach (var btn in memberButtons)
+            {
+                if (System.Enum.TryParse(btn.name, out MemberType type))
+                {
+                    _memberButtonMap[type] = btn;
+                }
+                else
+                {
+                    Debug.LogWarning($"Member 버튼 이름이 MemberType과 다름 : {btn.name}");
+                }
+            }
         }
 
         private async Task LoadUnitsAsync()
         {
             _loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
+
             UnitSelector = new UnitSelector();
             UnitSelector.Init(_loadedUnits);
 
             _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
-            
+
             teamPracticeCompo.CacheUnits(_loadedUnits);
 
             if (_loadedUnits.Count > 0)
@@ -57,23 +101,68 @@ namespace Code.MainSystem.MainScreen
             }
         }
 
+        #endregion
+
+        #region Event Handling
+
+        private void OnMemberTrainingStateChanged(MemberTrainingStateChangedEvent evt)
+        {
+            UpdateMemberButtonVisual(evt.MemberType);
+        }
+
+        #endregion
+
+        #region Member Button Visual
+
+        private void RefreshAllMemberButtons()
+        {
+            foreach (var kv in _memberButtonMap)
+            {
+                UpdateMemberButtonVisual(kv.Key);
+            }
+        }
+
+        private void UpdateMemberButtonVisual(MemberType member)
+        {
+            if (!_memberButtonMap.TryGetValue(member, out var btn))
+                return;
+
+            bool isTrained = TrainingManager.Instance.IsMemberTrained(member);
+
+            var image = btn.GetComponent<Image>();
+            if (image != null)
+            {
+                image.color = isTrained ? Color.gray : Color.white;
+            }
+        }
+
+        #endregion
+
+        #region UI Interaction
+
         public void TeamButtonClicked()
         {
             teamPanel.gameObject.SetActive(true);
         }
 
-
         public void MemberBtnClicked(string type)
         {
+            if (!System.Enum.TryParse(type, out MemberType memberType))
+                return;
+
             if (UnitSelector.TryGetUnit(type, out UnitDataSO unit) && unit != null)
-            { 
-                SelectUnit(unit); 
+            {
+                SelectUnit(unit);
             }
             else
             {
                 Debug.LogWarning($"No unit found for type: {type}");
             }
         }
+
+        #endregion
+
+        #region Unit Selection
 
         private void SelectUnit(UnitDataSO unit)
         {
@@ -92,11 +181,14 @@ namespace Code.MainSystem.MainScreen
 
         private async void LoadUnitSprite(UnitDataSO unit)
         {
-            if (string.IsNullOrEmpty(unit.spriteAddressableKey)) return;
+            if (string.IsNullOrEmpty(unit.spriteAddressableKey))
+                return;
 
             var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(unit.spriteAddressableKey);
             characterIcon.sprite = sprite;
             characterIcon.color = Color.white;
         }
+
+        #endregion
     }
 }
