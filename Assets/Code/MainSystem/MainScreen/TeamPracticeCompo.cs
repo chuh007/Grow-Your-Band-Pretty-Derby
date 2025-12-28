@@ -14,8 +14,9 @@ namespace Code.MainSystem.MainScreen
     public class TeamPracticeCompo : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField] private TMP_Text successRateText;
+        [SerializeField] private TextMeshProUGUI successRateText;
         [SerializeField] private Button startPracticeButton;
+        [SerializeField] private string RhythmGameScene;
 
         [Header("Member Buttons (이미 배치된 버튼들)")]
         [SerializeField] private List<Button> memberButtons;
@@ -169,7 +170,7 @@ namespace Code.MainSystem.MainScreen
                 TrainingManager.Instance.MarkMemberTrained(member);
             }
 
-            SceneManager.LoadScene("RhythmGameScene");
+            SceneManager.LoadScene(RhythmGameScene);
         }
 
         #endregion
