@@ -20,6 +20,7 @@ namespace Code.MainSystem.Outing
         {
             Bus<DialogueStatUpgradeEvent>.OnEvent += HandleDialogueStatUpgrade;
             Bus<DialogueEndEvent>.OnEvent += HandleDialogueEnd;
+            resultSender.changeStats.Clear();
         }
 
         private void OnDestroy()
@@ -41,7 +42,7 @@ namespace Code.MainSystem.Outing
             
             var resultInstance = Instantiate(resultPrefab, uiRoot);
             var resultUI = resultInstance.GetComponent<OutingResultUI>();
-            await resultUI.ShowResultUI();
+            resultUI.ShowResultUI();
         }
         
         private void HandleDialogueStatUpgrade(DialogueStatUpgradeEvent evt)

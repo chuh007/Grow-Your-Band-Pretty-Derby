@@ -4,6 +4,8 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Code.MainSystem.Outing
 {
@@ -11,12 +13,15 @@ namespace Code.MainSystem.Outing
     {
         [SerializeField] private OutingResultSenderSO resultSender;
         [SerializeField] private TextMeshProUGUI resultText;
+        [SerializeField] private Button closeButton;
         
         // 포메팅용. 스텟 이름은 일반 텍스트. 증가량은 녹색
         private static readonly string RESULT_FORMAT = "{0} <color=#00FFAC>+{1}</color>"; 
         
-        public async UniTask ShowResultUI()
+        public void ShowResultUI()
         {
+            closeButton.onClick.RemoveAllListeners();
+            closeButton.onClick.AddListener(CloseOutingScene);
             StringBuilder resultBuilder = new StringBuilder();
             resultBuilder.Append("결과\n");
             foreach (var stat in resultSender.changeStats)
@@ -25,7 +30,11 @@ namespace Code.MainSystem.Outing
                 resultBuilder.AppendLine();
             }
             resultText.SetText(resultBuilder.ToString());
-            await UniTask.Delay(1000);
+        }
+
+        private void CloseOutingScene()
+        {
+            closeButton.onClick.RemoveAllListeners();
             SceneManager.UnloadSceneAsync("OutingScene");
         }
     }
