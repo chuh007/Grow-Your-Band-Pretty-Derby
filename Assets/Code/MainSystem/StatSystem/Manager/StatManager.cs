@@ -38,6 +38,7 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
             Bus<StatAllIncreaseEvent>.OnEvent += HandleStatAllUpgrade;
             Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatUpgrade;
+            Bus<StatAllMemberStatIncreaseEvent>.OnEvent += HandleAllMemberStatIncrease;
         }
 
         private void HandleRest(RestEvent evt)
@@ -64,6 +65,7 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<StatIncreaseEvent>.OnEvent -= HandleStatUpgrade;
             Bus<StatAllIncreaseEvent>.OnEvent -= HandleStatAllUpgrade;
             Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatUpgrade;
+            Bus<StatAllMemberStatIncreaseEvent>.OnEvent -= HandleAllMemberStatIncrease;
         }
 
         #region GetStat
@@ -111,6 +113,12 @@ namespace Code.MainSystem.StatSystem.Manager
                 return;
             
             member.ApplyStatIncrease(statType, value);
+        }
+        
+        private void HandleAllMemberStatIncrease(StatAllMemberStatIncreaseEvent evt)
+        {
+            var member = _memberMap.GetValueOrDefault(evt.MemberType);
+            member?.ApplyAllStatIncrease(evt.Value);
         }
         
         public bool PredictMemberPractice(float successRate)
