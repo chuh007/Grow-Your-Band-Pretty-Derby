@@ -103,7 +103,7 @@ namespace Code.MainSystem.StatSystem.Manager
             if (member is null)
                 return;
 
-            bool success = CalculateUpgradeSuccess(successRate);
+            bool success = PredictMemberPractice(successRate);
 
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
 
@@ -111,6 +111,11 @@ namespace Code.MainSystem.StatSystem.Manager
                 return;
             
             member.ApplyStatIncrease(statType, value);
+        }
+        
+        public bool PredictMemberPractice(float successRate)
+        {
+            return Random.Range(0f, 100f) < successRate;
         }
         
         private void HandleStatUpgrade(StatIncreaseEvent evt)
@@ -132,15 +137,10 @@ namespace Code.MainSystem.StatSystem.Manager
         {
             teamStat.ApplyTeamStatIncrease(evt.AddValue);
         }
-        
-        private bool CalculateUpgradeSuccess(float successRate)
-        {
-            return Random.Range(0f, 100f) < successRate;
-        }
 
         private void UpgradeTeamStat(float successRate, float value)
         {
-            bool success = CalculateTeamUpgradeSuccess(successRate);
+            bool success = PredictMemberPractice(successRate);
 
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
 
@@ -148,11 +148,6 @@ namespace Code.MainSystem.StatSystem.Manager
                 return;
 
             teamStat.ApplyTeamStatIncrease(value);
-        }
-
-        private bool CalculateTeamUpgradeSuccess(float successRate)
-        {
-            return Random.Range(0f, 100f) < successRate;
         }
         
         private void Rest(UnitDataSO unit)
