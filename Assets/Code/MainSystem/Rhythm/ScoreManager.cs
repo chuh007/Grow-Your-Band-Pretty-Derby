@@ -6,8 +6,6 @@ namespace Code.MainSystem.Rhythm
 {
     public class ScoreManager : MonoBehaviour
     {
-        public static ScoreManager Instance { get; private set; }
-
         public int CurrentScore { get; private set; }
         public int CurrentCombo { get; private set; }
         private int _maxCombo; 
@@ -23,16 +21,6 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private int goodScore = 50;
         [SerializeField] private int comboBonus = 10;
 
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
-        }
-
         private void Start()
         {
             Bus<SongEndEvent>.OnEvent += HandleSongEnd;
@@ -40,7 +28,6 @@ namespace Code.MainSystem.Rhythm
 
         private void OnDestroy()
         {
-            if (Instance == this) Instance = null;
             Bus<SongEndEvent>.OnEvent -= HandleSongEnd;
         }
 

@@ -1,47 +1,33 @@
 using UnityEngine;
 using System;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.Rhythm
 {
     public class JudgementSystem : MonoBehaviour
     {
-        public static JudgementSystem Instance { get; private set; }
-
         [Header("Dependencies")]
-        [SerializeField] private NoteManager noteManager;
+        [Inject] private NoteManager noteManager;
+        [Inject] private ScoreManager _scoreManager;
+        [Inject] private Conductor _conductor;
 
         [Header("Timing Windows (Seconds +/-)")]
         [SerializeField] private double perfectWindow = 0.050; 
         [SerializeField] private double greatWindow = 0.100;   
         [SerializeField] private double goodWindow = 0.150;    
 
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
-        }
-
-        private void OnDestroy()
-        {
-            if (Instance == this) Instance = null;
-        }
-
         public void OnInputDetected(int laneIndex)
         {
-            if (noteManager == null || Conductor.Instance == null) return;
+            if (noteManager == null || _conductor == null) return;
 
             NoteObject targetNote = noteManager.GetNearestNote(laneIndex);
             
             if (targetNote == null) return;
 
-            double songTime = Conductor.Instance.SongPosition;
+            double songTime = _conductor.SongPosition;
             double noteTime = targetNote.Data.Time;
 
-            double compensatedTime = songTime + Conductor.Instance.InputOffset;
+            double compensatedTime = songTime + _conductor.InputOffset;
 
             double diff = Math.Abs(noteTime - compensatedTime);
 
@@ -66,17 +52,17 @@ namespace Code.MainSystem.Rhythm
             int laneIndex = note.Data.LaneIndex;
             noteManager.DespawnNote(note);
 
-            if (ScoreManager.Instance != null)
+            if (_scoreManager != null)
             {
-                ScoreManager.Instance.RegisterResult(type, laneIndex);
+                _scoreManager.RegisterResult(type, laneIndex);
             }
         }
 
         public void HandleMiss()
         {
-            if (ScoreManager.Instance != null)
+            if (_scoreManager != null)
             {
-                ScoreManager.Instance.RegisterResult(JudgementType.Miss, -1);
+                _scoreManager.RegisterResult(JudgementType.Miss, -1);
             }
         }
     }

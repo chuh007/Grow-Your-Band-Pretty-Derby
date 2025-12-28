@@ -1,10 +1,13 @@
 using UnityEngine;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.Rhythm
 {
     public class MobileInputController : MonoBehaviour
     {
         [SerializeField] private int laneCount = 4;
+
+        [Inject] private JudgementSystem _judgementSystem;
 
         private float _laneWidth;
 
@@ -24,21 +27,21 @@ namespace Code.MainSystem.Rhythm
                     if (touch.phase == TouchPhase.Began)
                     {
                         int laneIndex = CalculateLaneIndex(touch.position.x);
-                        if (JudgementSystem.Instance != null)
+                        if (_judgementSystem != null)
                         {
-                            JudgementSystem.Instance.OnInputDetected(laneIndex);
+                            _judgementSystem.OnInputDetected(laneIndex);
                         }
                     }
                 }
             }
             
             #if UNITY_EDITOR || UNITY_STANDALONE
-            if (JudgementSystem.Instance != null)
+            if (_judgementSystem != null)
             {
-                if (Input.GetKeyDown(KeyCode.D)) JudgementSystem.Instance.OnInputDetected(0);
-                if (Input.GetKeyDown(KeyCode.F)) JudgementSystem.Instance.OnInputDetected(1);
-                if (Input.GetKeyDown(KeyCode.J)) JudgementSystem.Instance.OnInputDetected(2);
-                if (Input.GetKeyDown(KeyCode.K)) JudgementSystem.Instance.OnInputDetected(3);
+                if (Input.GetKeyDown(KeyCode.D)) _judgementSystem.OnInputDetected(0);
+                if (Input.GetKeyDown(KeyCode.F)) _judgementSystem.OnInputDetected(1);
+                if (Input.GetKeyDown(KeyCode.J)) _judgementSystem.OnInputDetected(2);
+                if (Input.GetKeyDown(KeyCode.K)) _judgementSystem.OnInputDetected(3);
             }
             #endif
         }

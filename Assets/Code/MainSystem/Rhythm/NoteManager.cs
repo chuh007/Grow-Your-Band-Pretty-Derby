@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -12,11 +13,16 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private Transform noteContainer; 
         [SerializeField] private int laneCount = 4;
 
+        [Inject] private Conductor _conductor;
+        [Inject] private JudgementSystem _judgementSystem;
+        [Inject] private ChartLoader _chartLoader;
+
         private Queue<NoteData> _noteQueue = new Queue<NoteData>();
         
         private List<NoteObject>[] _laneNotes;
 
         private Queue<NoteObject> _notePool = new Queue<NoteObject>();
+        private bool _externalChartLoaded = false;
 
         private void Awake()
         {
@@ -29,24 +35,41 @@ namespace Code.MainSystem.Rhythm
 
         private void Start()
         {
-            if (Conductor.Instance != null)
+            if (_conductor != null)
             {
-                Conductor.Instance.OnSongStart += HandleSongStart;
-                Conductor.Instance.OnSongEnd += HandleSongEnd;
+                _conductor.OnSongStart += HandleSongStart;
+                _conductor.OnSongEnd += HandleSongEnd;
             }
+        }
+
+        public void SetChart(List<NoteData> notes)
+        {
+            _noteQueue.Clear();
+            foreach (var note in notes)
+            {
+                _noteQueue.Enqueue(note);
+            }
+            _externalChartLoaded = true;
+            Debug.Log($"NoteManager: Chart Set via Bootstrapper. Total Notes: {notes.Count}");
         }
 
         private void OnDestroy()
         {
-            if (Conductor.Instance != null)
+            if (_conductor != null)
             {
-                Conductor.Instance.OnSongStart -= HandleSongStart;
-                Conductor.Instance.OnSongEnd -= HandleSongEnd;
+                _conductor.OnSongStart -= HandleSongStart;
+                _conductor.OnSongEnd -= HandleSongEnd;
             }
         }
 
         private void HandleSongStart()
         {
+            if (_externalChartLoaded)
+            {
+                Debug.Log("NoteManager: Song Started. Chart already loaded externally.");
+                return;
+            }
+
             Debug.Log("NoteManager: Song Started. Loading Chart...");
             LoadChartData();
         }
@@ -74,8 +97,14 @@ namespace Code.MainSystem.Rhythm
         private void LoadChartData()
         {
             _noteQueue.Clear();
+
+            if (_chartLoader == null)
+            {
+                Debug.LogError("NoteManager: ChartLoader not injected!");
+                return;
+            }
             
-            List<NoteData> notes = ChartLoader.LoadTestChart();
+            List<NoteData> notes = _chartLoader.LoadTestChart();
             
             foreach (var note in notes)
             {
@@ -87,7 +116,7 @@ namespace Code.MainSystem.Rhythm
 
         private void Update()
         {
-            if (Conductor.Instance == null) return;
+            if (_conductor == null) return;
 
             SpawnNotes();
             MoveNotes();
@@ -97,7 +126,7 @@ namespace Code.MainSystem.Rhythm
         {
             if (_noteQueue.Count == 0) return;
 
-            double currentSongTime = Conductor.Instance.SongPosition;
+            double currentSongTime = _conductor.SongPosition;
             double timeToReach = spawnDistance / noteSpeed;
             double spawnThresholdTime = currentSongTime + timeToReach;
 
@@ -110,7 +139,7 @@ namespace Code.MainSystem.Rhythm
 
         private void MoveNotes()
         {
-            double currentSongTime = Conductor.Instance.SongPosition;
+            double currentSongTime = _conductor.SongPosition;
 
             for (int lane = 0; lane < laneCount; lane++)
             {
@@ -124,9 +153,9 @@ namespace Code.MainSystem.Rhythm
 
                     if (visualY < -5.0f) 
                     {
-                        if (JudgementSystem.Instance != null)
+                        if (_judgementSystem != null)
                         {
-                            JudgementSystem.Instance.HandleMiss();
+                            _judgementSystem.HandleMiss();
                         }
                         
                         ReturnToPool(noteObj);

@@ -3,6 +3,7 @@ using Code.Core.Bus.GameEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -18,6 +19,8 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private TextMeshProUGUI finalComboText;
         [SerializeField] private TextMeshProUGUI rankText; 
         
+        [Inject] private Conductor _conductor;
+
         private void Start()
         {
             if(startPanel != null) startPanel.SetActive(true);
@@ -54,9 +57,9 @@ namespace Code.MainSystem.Rhythm
             if(startPanel != null) startPanel.SetActive(false);
             if(gameHudPanel != null) gameHudPanel.SetActive(true);
         
-            if (Conductor.Instance != null)
+            if (_conductor != null)
             {
-                Conductor.Instance.Play();
+                _conductor.Play();
             }
         }
 
