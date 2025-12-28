@@ -2,15 +2,12 @@
 using UnityEngine;
 using Code.Core.Bus;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
-using Code.MainSystem.StatSystem.Manager;
 
 namespace Code.MainSystem.StatSystem.UI
 {
     public class RestCompo : MonoBehaviour
     {
-        [SerializeField] private StatManager statManager;
         [SerializeField] private TextMeshProUGUI conditionText;
 
         private UnitDataSO _currentUnit;
@@ -18,6 +15,7 @@ namespace Code.MainSystem.StatSystem.UI
         public void Init(UnitDataSO unit)
         {
             _currentUnit = unit;
+            UpdateConditionText();
         }
 
         public void Rest()
@@ -28,21 +26,18 @@ namespace Code.MainSystem.StatSystem.UI
                 return;
             }
 
-            Bus<RestEvent>.Raise(new RestEvent(_currentUnit.memberType));
+            Bus<RestEvent>.Raise(new RestEvent(_currentUnit));
             UpdateConditionText();
         }
 
         private void UpdateConditionText()
         {
-            if (conditionText is null || _currentUnit is null)
+            if (_currentUnit == null || conditionText == null)
                 return;
 
-            var stat = statManager.GetMemberStat(_currentUnit.memberType,StatType.Condition);
             conditionText.SetText(
-                $"{stat.CurrentValue}/{stat.MaxValue}"
+                $"{_currentUnit.currentCondition}/{_currentUnit.maxCondition}"
             );
-            
-            Debug.Log($"{_currentUnit.name}: {conditionText.text}");
         }
     }
 }

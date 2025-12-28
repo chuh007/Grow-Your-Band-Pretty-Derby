@@ -3,6 +3,7 @@ using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
+using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.MemberStats;
 using Code.MainSystem.StatSystem.TeamStats;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -41,7 +42,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void HandleRest(RestEvent evt)
         {
-            Rest(evt.MemberType);
+            Rest(evt.Unit);
         }
 
         private void HandlePractice(PracticenEvent evt)
@@ -154,14 +155,19 @@ namespace Code.MainSystem.StatSystem.Manager
             return Random.Range(0f, 100f) < successRate;
         }
         
-        private void Rest(MemberType memberType)
+        private void Rest(UnitDataSO unit)
         {
-            var member = _memberMap.GetValueOrDefault(memberType);
-            if (member is null) 
+            if (unit is null)
+                return;
+
+            var member = _memberMap.GetValueOrDefault(unit.memberType);
+            if (member is null)
                 return;
 
             int recoverValue = CalculateRestRecover(member);
-            member.ApplyRecover(StatType.Condition, recoverValue);
+
+            unit.currentCondition += recoverValue;
+            unit.currentCondition = Mathf.Min(unit.currentCondition, unit.maxCondition);
         }
 
         private int CalculateRestRecover(AbstractStats target)
