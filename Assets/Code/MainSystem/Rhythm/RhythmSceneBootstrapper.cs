@@ -1,7 +1,6 @@
-using Code.MainSystem.Rhythm.Flow;
-using Code.MainSystem.Rhythm.Session;
 using UnityEngine;
 using Reflex.Attributes;
+using System.Collections.Generic;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -12,25 +11,21 @@ namespace Code.MainSystem.Rhythm
         [Inject] private Conductor _conductor;
         [Inject] private ScoreManager _scoreManager;
         
-        private ConcertFlowCoordinator _flowCoordinator;
+        [SerializeField] private RhythmGameDataSenderSO _dataSender;
 
         private void Start()
         {
-            _flowCoordinator = FindObjectOfType<ConcertFlowCoordinator>();
-
-            if (_flowCoordinator == null || _flowCoordinator.CurrentSession == null)
+            if (_dataSender == null)
             {
-                Debug.LogWarning("Bootstrapper: No ConcertFlowCoordinator or Session found. Running in Test Mode.");
+                Debug.LogWarning("Bootstrapper: RhythmGameDataSenderSO is not assigned. Running in Test Mode or Failed.");
                 return; 
             }
 
-            ConcertSession session = _flowCoordinator.CurrentSession;
-
-            Debug.Log($"Bootstrapper: Initializing Session for Song {session.SongId}");
+            Debug.Log($"Bootstrapper: Initializing Session for Song {_dataSender.SongId}");
 
             if (_noteManager != null)
             {
-                _noteManager.SetChart(session.CombinedChart);
+                _noteManager.SetChart(_dataSender.CombinedChart);
             }
         }
     }

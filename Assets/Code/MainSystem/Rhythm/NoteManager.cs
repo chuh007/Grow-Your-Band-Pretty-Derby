@@ -8,9 +8,11 @@ namespace Code.MainSystem.Rhythm
     {
         [Header("Settings")]
         [SerializeField] private GameObject notePrefab;
-        [SerializeField] private float noteSpeed = 5.0f;
-        [SerializeField] private float spawnDistance = 10.0f; 
-        [SerializeField] private Transform noteContainer; 
+        [SerializeField] private float noteSpeed = 800.0f;
+        [SerializeField] private float spawnDistance = 1200.0f; 
+        
+        [Tooltip("Assign the Lane UI Objects (Lane_0, Lane_1, etc.) here.")]
+        [SerializeField] private List<RectTransform> laneContainers; 
         [SerializeField] private int laneCount = 4;
 
         [Inject] private Conductor _conductor;
@@ -151,7 +153,7 @@ namespace Code.MainSystem.Rhythm
                     float visualY = (float)((noteObj.Data.Time - currentSongTime) * noteSpeed);
                     noteObj.SetPosition(visualY);
 
-                    if (visualY < -5.0f) 
+                    if (visualY < -100.0f) 
                     {
                         if (_judgementSystem != null)
                         {
@@ -170,6 +172,12 @@ namespace Code.MainSystem.Rhythm
             if (data.LaneIndex < 0 || data.LaneIndex >= laneCount) return;
 
             NoteObject noteObj = GetFromPool();
+            
+            if (laneContainers != null && data.LaneIndex < laneContainers.Count)
+            {
+                noteObj.transform.SetParent(laneContainers[data.LaneIndex], false);
+            }
+
             noteObj.Initialize(data);
             
             _laneNotes[data.LaneIndex].Add(noteObj);
@@ -203,7 +211,7 @@ namespace Code.MainSystem.Rhythm
             }
             else
             {
-                GameObject go = Instantiate(notePrefab, noteContainer != null ? noteContainer : transform);
+                GameObject go = Instantiate(notePrefab, transform);
                 NoteObject noteObj = go.GetComponent<NoteObject>();
                 if (noteObj == null) noteObj = go.AddComponent<NoteObject>();
                 return noteObj;
@@ -213,6 +221,7 @@ namespace Code.MainSystem.Rhythm
         private void ReturnToPool(NoteObject obj)
         {
             obj.Deactivate();
+            obj.transform.SetParent(transform, false);
             _notePool.Enqueue(obj);
         }
     }

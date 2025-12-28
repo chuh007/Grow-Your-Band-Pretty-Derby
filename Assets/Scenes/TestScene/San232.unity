@@ -273,6 +273,7 @@ MonoBehaviour:
   finalScoreText: {fileID: 0}
   finalComboText: {fileID: 0}
   rankText: {fileID: 0}
+  resultSender: {fileID: 0}
 --- !u!1 &195290422
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cba0ad634801a24da099914a4dd43a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.RhythmSceneBootstrapper
+  _dataSender: {fileID: 0}
 --- !u!1 &315496687
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,7 +483,6 @@ Transform:
   - {fileID: 1198126256}
   - {fileID: 2130563990}
   - {fileID: 2075442084}
-  - {fileID: 734949684}
   - {fileID: 1414561082}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1045,50 +1046,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!1 &734949683
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 734949684}
-  - component: {fileID: 734949685}
-  m_Layer: 0
-  m_Name: ConcertFlowCoordinator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &734949684
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 734949683}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 345081631}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &734949685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 734949683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcca305b3c849f742909d99b4ce37061, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.Flow.ConcertFlowCoordinator
 --- !u!1 &785851995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,7 +1461,7 @@ MonoBehaviour:
   notePrefab: {fileID: 0}
   noteSpeed: 5
   spawnDistance: 10
-  noteContainer: {fileID: 0}
+  laneContainers: []
   laneCount: 4
 --- !u!1 &1414561080
 GameObject:

@@ -72,5 +72,30 @@ namespace Code.MainSystem.Rhythm
             }";
             return LoadChart(json);
         }
+
+        public List<NoteData> LoadChartFromResources(string path)
+        {
+            TextAsset textAsset = Resources.Load<TextAsset>(path);
+            if (textAsset == null)
+            {
+                Debug.LogWarning($"ChartLoader: Could not find chart at path: {path}");
+                return new List<NoteData>();
+            }
+            return LoadChart(textAsset.text);
+        }
+
+        public List<NoteData> CombineCharts(List<List<NoteData>> allCharts)
+        {
+            List<NoteData> combined = new List<NoteData>();
+            foreach (var chart in allCharts)
+            {
+                combined.AddRange(chart);
+            }
+            
+            // Sort by time to ensure correct playback order
+            combined.Sort((a, b) => a.Time.CompareTo(b.Time));
+            
+            return combined;
+        }
     }
 }

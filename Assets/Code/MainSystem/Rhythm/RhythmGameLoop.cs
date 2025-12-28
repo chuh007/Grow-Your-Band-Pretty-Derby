@@ -19,6 +19,8 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private TextMeshProUGUI finalComboText;
         [SerializeField] private TextMeshProUGUI rankText; 
         
+        [SerializeField] private RhythmGameResultSender resultSender;
+        
         [Inject] private Conductor _conductor;
 
         private void Start()
@@ -65,7 +67,21 @@ namespace Code.MainSystem.Rhythm
 
         public void OnRestartButtonClicked()
         {
+            // Simply reload the scene to retry
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void OnExitToMainButtonClicked()
+        {
+            if (resultSender != null)
+            {
+                resultSender.SubmitResultAndExit();
+            }
+            else
+            {
+                Debug.LogWarning("RhythmGameLoop: ResultSender is missing!");
+                SceneManager.LoadScene("MainScene");
+            }
         }
     }
 }
