@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -27,18 +26,17 @@ namespace Code.MainSystem.StatSystem.Manager
         private async void Awake()
         {
             _memberMap = new Dictionary<MemberType, MemberStat>();
+            
+            await teamStat.InitializeAsync();
+            
             foreach (var member in memberStats)
-            {
                 _memberMap[member.MemberType] = member;
-            }
 
             Bus<PracticenEvent>.OnEvent += HandlePractice;
             Bus<RestEvent>.OnEvent += HandleRest;
             Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
             Bus<StatAllIncreaseEvent>.OnEvent += HandleStatAllUpgrade;
             Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatUpgrade;
-            await teamStat.InitializeAsync();
-            
         }
 
         private void HandleRest(RestEvent evt)
@@ -104,15 +102,14 @@ namespace Code.MainSystem.StatSystem.Manager
             if (member is null)
                 return;
 
-            bool success = CalculateUpgradeSuccess(member, statType, successRate);
+            bool success = CalculateUpgradeSuccess(successRate);
 
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
 
             if (!success) 
                 return;
-
-            float finalValue = CalculateUpgradeValue(member, statType, value);
-            member.ApplyStatIncrease(statType, finalValue);
+            
+            member.ApplyStatIncrease(statType, value);
         }
         
         private void HandleStatUpgrade(StatIncreaseEvent evt)
@@ -121,8 +118,7 @@ namespace Code.MainSystem.StatSystem.Manager
             if (member is null)
                 return;
             
-            float finalValue = CalculateUpgradeValue(member, evt.StatType, evt.Value);
-            member.ApplyStatIncrease(evt.StatType, finalValue);
+            member.ApplyStatIncrease(evt.StatType, evt.Value);
         }
         
         private void HandleStatAllUpgrade(StatAllIncreaseEvent evt)
@@ -136,26 +132,9 @@ namespace Code.MainSystem.StatSystem.Manager
             teamStat.ApplyTeamStatIncrease(evt.AddValue);
         }
         
-        private bool CalculateUpgradeSuccess(AbstractStats target, StatType statType, float baseSuccessRate)
+        private bool CalculateUpgradeSuccess(float successRate)
         {
-            BaseStat condition = target.GetStat(StatType.Condition);
-            if (condition == null) 
-                return false;
-
-            float conditionRatio = (float)condition.CurrentValue / (float)condition.MaxValue;
-            float finalRate = baseSuccessRate * conditionRatio;
-            
-            return Random.value < finalRate;
-        }
-
-        private float CalculateUpgradeValue(AbstractStats target, StatType statType, float baseValue)
-        {
-            BaseStat mental = target.GetStat(StatType.Mental);
-            if (mental == null)
-                return baseValue;
-
-            float bonus = mental.CurrentValue * 0.01f;
-            return baseValue * (1f + bonus);
+            return Random.Range(0f, 100f) < successRate;
         }
 
         private void UpgradeTeamStat(float successRate, float value)
@@ -170,9 +149,9 @@ namespace Code.MainSystem.StatSystem.Manager
             teamStat.ApplyTeamStatIncrease(value);
         }
 
-        private bool CalculateTeamUpgradeSuccess(float baseSuccessRate)
+        private bool CalculateTeamUpgradeSuccess(float successRate)
         {
-            return Random.value < baseSuccessRate;
+            return Random.Range(0f, 100f) < successRate;
         }
         
         private void Rest(MemberType memberType)
