@@ -35,6 +35,15 @@ namespace Code.MainSystem.MainScreen.Training
                 Destroy(gameObject);
             }
         }
+        
+        public void MarkMembersTrainedForTeam(List<MemberType> members)
+        {
+            foreach (var member in members)
+            {
+                MarkMemberTrained(member);
+            }
+        }
+
 
         public bool IsMemberTrained(MemberType member)
         {

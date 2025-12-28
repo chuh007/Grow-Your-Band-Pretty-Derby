@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
-using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.Etc;
 using Code.MainSystem.StatSystem.Manager;
+using Reflex.Attributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,12 +24,13 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
 
+        [Inject] private StatManager _statManager;
+        
         private UnitDataSO _currentUnit;
         private float _currentCondition;
         private float _previewDamage;
         private int _selectedPracticeIndex = -1;
-        private bool _isSuccess;
-   
+
         private StatUIUpdater _statUIUpdater;
 
         private readonly Dictionary<MemberType, int> _memberTypeIndexMap = new()
@@ -41,25 +41,6 @@ namespace Code.MainSystem.MainScreen
             { MemberType.Piano, 3 },
             { MemberType.Vocal, 4 }
         };
-
-        #region LifeCycle
-
-        private void OnEnable()
-        {
-            Bus<StatUpgradeEvent>.OnEvent += OnStatUpgradeResult;
-        }
-
-        private void OnDisable()
-        {
-            Bus<StatUpgradeEvent>.OnEvent -= OnStatUpgradeResult;
-        }
-
-        private void OnStatUpgradeResult(StatUpgradeEvent evt)
-        {
-            _isSuccess = evt.Upgrade;
-        }
-
-        #endregion
 
         #region Init
 
@@ -97,10 +78,22 @@ namespace Code.MainSystem.MainScreen
 
             if (_selectedPracticeIndex == index)
             {
+                bool success = _statManager.PredictMemberPractice(_currentCondition);
+
                 trainingSequenceController.gameObject.SetActive(true);
                 await trainingSequenceController
-                    .PlayTrainingSequence(_isSuccess, practice, _currentUnit);
+                    .PlayTrainingSequence(success, practice, _currentUnit);
 
+               
+
+                Bus<PracticenEvent>.Raise(new PracticenEvent(
+                    PracticenType.Personal,
+                    _currentUnit.memberType,
+                    practice.PracticeStatType,
+                    _currentCondition,
+                    success ? practice.statIncrease : 0
+                ));
+                
                 float realDamage = practice.StaminaReduction;
 
                 _currentCondition = Mathf.Clamp(
@@ -110,14 +103,6 @@ namespace Code.MainSystem.MainScreen
 
                 _currentUnit.currentCondition = _currentCondition;
                 healthBar.ApplyHealth(realDamage);
-
-                Bus<PracticenEvent>.Raise(new PracticenEvent(
-                    PracticenType.Personal,
-                    _currentUnit.memberType,
-                    practice.PracticeStatType,
-                    _currentCondition,
-                    _isSuccess ? practice.statIncrease : 0
-                ));
 
                 TrainingManager.Instance.MarkMemberTrained(_currentUnit.memberType);
 
