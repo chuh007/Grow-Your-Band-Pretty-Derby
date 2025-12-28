@@ -31,7 +31,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private RestCompo restCompo;
         [SerializeField] private StatManager statManager;
 
-        private UnitSelector _unitSelector;
+        public UnitSelector UnitSelector { get; private set; }
         private StatUIUpdater _statUIUpdater;
         private List<UnitDataSO> _loadedUnits;
         private Button _currentSelectedButton;
@@ -44,8 +44,8 @@ namespace Code.MainSystem.MainScreen
         private async Task LoadUnitsAsync()
         {
             _loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
-            _unitSelector = new UnitSelector();
-            _unitSelector.Init(_loadedUnits);
+            UnitSelector = new UnitSelector();
+            UnitSelector.Init(_loadedUnits);
 
             _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
             
@@ -65,7 +65,7 @@ namespace Code.MainSystem.MainScreen
 
         public void MemberBtnClicked(string type)
         {
-            if (_unitSelector.TryGetUnit(type, out UnitDataSO unit) && unit != null)
+            if (UnitSelector.TryGetUnit(type, out UnitDataSO unit) && unit != null)
             { 
                 SelectUnit(unit); 
             }
