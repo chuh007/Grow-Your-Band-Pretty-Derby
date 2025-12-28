@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Code.Core.Bus;
+using System.Threading.Tasks;
+using Code.Core;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.StatSystem.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,9 +13,8 @@ namespace Code.MainSystem.MainScreen
 {
     public class MainScreen : MonoBehaviour
     {
-        [Header("Data")]
-        [SerializeField] private List<UnitDataSO> unitDataSOList;
-        private UnitSelector unitSelector;
+        [Header("Addressables Keys/Labels")]
+        [SerializeField] private string unitLabel = "Units"; 
 
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI charterNameText;
@@ -23,57 +23,80 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private List<Image> statIcons;
         [SerializeField] private TextMeshProUGUI conditionText;
         [SerializeField] private Image characterIcon;
+        [SerializeField] private GameObject teamPanel;
 
         [Header("Components")]
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
+        [SerializeField] private RestCompo restCompo;
         [SerializeField] private StatManager statManager;
 
-        private StatUIUpdater statUIUpdater;
+        public UnitSelector UnitSelector { get; private set; }
+        private StatUIUpdater _statUIUpdater;
+        private List<UnitDataSO> _loadedUnits;
+        private Button _currentSelectedButton;
 
-        private void Awake()
+        private async void Start()
         {
-            unitSelector = new UnitSelector(unitDataSOList);
-            statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
-
-            Bus<StatUpgradeEvent>.OnEvent += HandleEvent;
+            await LoadUnitsAsync();
         }
 
-        private void OnDestroy()
+        private async Task LoadUnitsAsync()
         {
-            Bus<StatUpgradeEvent>.OnEvent -= HandleEvent;
-        }
+            _loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
+            UnitSelector = new UnitSelector();
+            UnitSelector.Init(_loadedUnits);
 
-        private void HandleEvent(StatUpgradeEvent evt)
-        {
-            if (evt.Upgrade && unitSelector.CurrentUnit != null)
+            _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
+            
+            teamPracticeCompo.CacheUnits(_loadedUnits);
+
+            if (_loadedUnits.Count > 0)
             {
-                statUIUpdater.UpdateStatValues(unitSelector.CurrentUnit);
+                SelectUnit(_loadedUnits[0]);
             }
         }
 
-        public void TeamClick()
+        public void TeamButtonClicked()
         {
+            teamPanel.gameObject.SetActive(true);
         }
+
 
         public void MemberBtnClicked(string type)
         {
-            if (unitSelector.TryGetUnit(type, out UnitDataSO unit))
-            {
-                personalPracticeCompo.ButtonLoader(unit, statNameTexts);
-
-                charterNameText.SetText(unit.unitName);
-                conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
-
-                statUIUpdater.UpdateAll(unit);
-
-                characterIcon.sprite = unit.unitImage;
-                characterIcon.color = new Color(1, 1, 1, 1);
+            if (UnitSelector.TryGetUnit(type, out UnitDataSO unit) && unit != null)
+            { 
+                SelectUnit(unit); 
             }
             else
             {
-                Debug.LogWarning($"No unit data found for type: {type}");
+                Debug.LogWarning($"No unit found for type: {type}");
             }
+        }
+
+        private void SelectUnit(UnitDataSO unit)
+        {
+            if (unit == null) return;
+
+            personalPracticeCompo.Init(unit, _statUIUpdater);
+            restCompo.Init(unit);
+
+            charterNameText.SetText(unit.unitName);
+            conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
+
+            _statUIUpdater.UpdateAll(unit);
+
+            LoadUnitSprite(unit);
+        }
+
+        private async void LoadUnitSprite(UnitDataSO unit)
+        {
+            if (string.IsNullOrEmpty(unit.spriteAddressableKey)) return;
+
+            var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(unit.spriteAddressableKey);
+            characterIcon.sprite = sprite;
+            characterIcon.color = Color.white;
         }
     }
 }

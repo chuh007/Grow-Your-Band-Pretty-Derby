@@ -1,32 +1,45 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Code.Core.Bus;
+using System.Collections.Generic;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
+using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.StatSystem.MemberStats
 {
     public class MemberStat : AbstractStats
     {
         [SerializeField] private MemberType memberType;
-        [SerializeField] protected List<StatData> memberStatData;
-        
-        protected readonly Dictionary<StatType, BaseStat> MemberStats = new();
+        [SerializeField] private string statDataLabel;
+
+        private readonly List<StatData> _statDataList = new();
         
         public MemberType MemberType => memberType;
-        
-        protected override void Awake()
+
+        protected override async void Awake()
         {
             base.Awake();
 
-            foreach (var data in memberStatData)
-            {
-                BaseStat stat = new BaseStat(data);
-                MemberStats[data.statType] = stat;
-            }
+            var handle = Addressables.LoadAssetsAsync<StatData>(
+                statDataLabel,
+                data => _statDataList.Add(data)
+            );
+
+            await handle.Task;
+
+            InitializeStats(_statDataList);
 
             Bus<TeamStatValueChangedEvent>.OnEvent += OnTeamStatChanged;
+        }
+
+        private void InitializeStats(List<StatData> list)
+        {
+            foreach (var data in list)
+            {
+                BaseStat stat = new BaseStat(data);
+                Stats[data.statType] = stat;
+            }
         }
 
         private void OnDestroy()
@@ -37,38 +50,7 @@ namespace Code.MainSystem.StatSystem.MemberStats
         private void OnTeamStatChanged(TeamStatValueChangedEvent evt)
         {
             BaseStat stat = GetStat(evt.StatType);
-            if (stat != null)
-            {
-                stat.PlusValue(evt.AddValue);
-            }
-        }
-
-        public void MemberStatUpgrade(StatType statType, float successRate, float value)
-        {
-            BaseStat stat = MemberStats.GetValueOrDefault(statType);
-            
-            float randValue = Random.Range(0f, 100f);
-            bool success = randValue < successRate;
-
-            if (!success)
-            {
-                Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
-                return;
-            }
-
-            stat.PlusValue((int)value);
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
-        }
-
-        public BaseStat GetMemberStat(StatType statType)
-        {
-            return MemberStats.GetValueOrDefault(statType);  
-        }
-
-        public BaseStat GetStat(StatType statType)
-        {
-            return MemberStats.GetValueOrDefault(statType) 
-                   ?? CommonStats.GetValueOrDefault(statType);
+            stat?.PlusValue(evt.AddValue);
         }
     }
 }

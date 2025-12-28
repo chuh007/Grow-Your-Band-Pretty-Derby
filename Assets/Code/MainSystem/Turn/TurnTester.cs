@@ -8,8 +8,6 @@ namespace Code.MainSystem.Turn
 {
     public class TurnTester : MonoBehaviour
     {
-        [SerializeField] private int targetTurn;
-        
         private void Update()
         {
             if (Keyboard.current.qKey.wasPressedThisFrame)
@@ -20,11 +18,6 @@ namespace Code.MainSystem.Turn
             if (Keyboard.current.wKey.wasPressedThisFrame)
             {
                 Bus<TurnReturnEvent>.Raise(new TurnReturnEvent(1));
-            }
-
-            if (Keyboard.current.eKey.wasPressedThisFrame)
-            {
-                Bus<TargetTurnSetEvent>.Raise(new TargetTurnSetEvent(targetTurn));
             }
         }
     }

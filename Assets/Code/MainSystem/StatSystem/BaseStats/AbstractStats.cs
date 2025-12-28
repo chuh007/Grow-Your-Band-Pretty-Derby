@@ -1,45 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Code.Core.Bus;
-using Code.MainSystem.StatSystem.Events;
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
     public abstract class AbstractStats : MonoBehaviour
     {
-        [SerializeField] protected List<StatData> commonStatData;
+        protected readonly Dictionary<StatType, BaseStat> Stats = new();
 
-        protected readonly Dictionary<StatType, BaseStat> CommonStats = new();
+        protected virtual void Awake() { }
 
-        protected virtual void Awake()
+        public void ApplyStatIncrease(StatType statType, float value)
         {
-            foreach (var data in commonStatData)
-            {
-                BaseStat stat = new BaseStat(data);
-                CommonStats[data.statType] = stat;
-            }
+            BaseStat stat = Stats.GetValueOrDefault(statType);
+
+            stat?.PlusValue((int)value);
         }
 
-        public void CommonStatUpgrade(StatType statType, float successRate,float value)
+        public void ApplyRecover(StatType statType, int recoverValue)
         {
-            BaseStat stat = CommonStats.GetValueOrDefault(statType);
-            
-            float randValue = Random.Range(0f, 100f);
-            bool success = randValue < successRate;
+            BaseStat stat = Stats.GetValueOrDefault(statType);
 
-            if (!success)
-            {
-                Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(false));
-                return;
-            }
-
-            stat.PlusValue((int)value);
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
+            stat?.PlusValue(recoverValue);
         }
 
-        public BaseStat GetCommonStat(StatType statType)
+        public BaseStat GetStat(StatType statType)
         {
-            return CommonStats.GetValueOrDefault(statType);  
+            return Stats.GetValueOrDefault(statType);
         }
     }
 }

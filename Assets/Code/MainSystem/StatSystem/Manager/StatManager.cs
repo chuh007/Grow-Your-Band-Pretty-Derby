@@ -3,9 +3,12 @@ using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
+using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.MemberStats;
 using Code.MainSystem.StatSystem.TeamStats;
 using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Events;
+using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -21,39 +24,46 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private Dictionary<MemberType, MemberStat> _memberMap;
 
-        private void Awake()
+        private async void Awake()
         {
             _memberMap = new Dictionary<MemberType, MemberStat>();
+            
+            await teamStat.InitializeAsync();
+            
             foreach (var member in memberStats)
-            {
                 _memberMap[member.MemberType] = member;
-            }
 
             Bus<PracticenEvent>.OnEvent += HandlePractice;
+            Bus<RestEvent>.OnEvent += HandleRest;
+            Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
+            Bus<StatAllIncreaseEvent>.OnEvent += HandleStatAllUpgrade;
+            Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatUpgrade;
+        }
+
+        private void HandleRest(RestEvent evt)
+        {
+            Rest(evt.Unit);
         }
 
         private void HandlePractice(PracticenEvent evt)
         {
             if (evt.Type == PracticenType.Team)
             {
-                UpgradeTeamStat(evt.statType, evt.SuccessRate,evt.Value);
+                UpgradeTeamStat(evt.SuccessRate,evt.Value);
             }
             else
             {
-                if (evt.statType is StatType.Condition or StatType.Mental)
-                {
-                    UpgradeCommonStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
-                }
-                else
-                {
-                    UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
-                }
+                UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
             }
         }
         
         private void OnDestroy()
         {
             Bus<PracticenEvent>.OnEvent -= HandlePractice;
+            Bus<RestEvent>.OnEvent -= HandleRest;
+            Bus<StatIncreaseEvent>.OnEvent -= HandleStatUpgrade;
+            Bus<StatAllIncreaseEvent>.OnEvent -= HandleStatAllUpgrade;
+            Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatUpgrade;
         }
 
         #region GetStat
@@ -61,12 +71,12 @@ namespace Code.MainSystem.StatSystem.Manager
         public BaseStat GetMemberStat(MemberType memberType, StatType statType)
         {
             var member = _memberMap.GetValueOrDefault(memberType);
-            return member != null ? member.GetStat(statType) : null;
+            return member?.GetStat(statType);
         }
 
         public BaseStat GetTeamStat(StatType statType)
         {
-            return teamStat != null ? teamStat.GetTeamStat(statType) : null;
+            return teamStat?.GetTeamStat(statType);
         }
         
         public IReadOnlyDictionary<MemberType, BaseStat> GetAllMemberStat(StatType statType)
@@ -85,31 +95,80 @@ namespace Code.MainSystem.StatSystem.Manager
 
         #endregion
         
-        #region UpgradeStat
+        #region OperationStat
 
-        public void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
+        private void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
         {
             var member = _memberMap.GetValueOrDefault(memberType);
-            member?.MemberStatUpgrade(statType, successRate, value);
+            if (member is null)
+                return;
+
+            bool success = PredictMemberPractice(successRate);
+
+            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
+
+            if (!success) 
+                return;
+            
+            member.ApplyStatIncrease(statType, value);
         }
         
-        public void UpgradeCommonStat(MemberType memberType, StatType statType, float successRate, float value)
+        public bool PredictMemberPractice(float successRate)
         {
-            var member = _memberMap.GetValueOrDefault(memberType);
-            member?.CommonStatUpgrade(statType, successRate, value);
+            return Random.Range(0f, 100f) < successRate;
+        }
+        
+        private void HandleStatUpgrade(StatIncreaseEvent evt)
+        {
+            var member = _memberMap.GetValueOrDefault(evt.MemberType);
+            if (member is null)
+                return;
+            
+            member.ApplyStatIncrease(evt.StatType, evt.Value);
+        }
+        
+        private void HandleStatAllUpgrade(StatAllIncreaseEvent evt)
+        {
+            foreach (var pair in memberStats)
+                pair.ApplyStatIncrease(evt.StatType, evt.Value);
+        }
+        
+        private void HandleTeamStatUpgrade(TeamStatIncreaseEvent evt)
+        {
+            teamStat.ApplyTeamStatIncrease(evt.AddValue);
         }
 
-        public void UpgradeAllMemberStat(StatType statType, float successRate, float value)
+        private void UpgradeTeamStat(float successRate, float value)
         {
-            foreach (var member in memberStats)
-            {
-                member.MemberStatUpgrade(statType, successRate,value);
-            }
+            bool success = PredictMemberPractice(successRate);
+
+            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
+
+            if (!success)
+                return;
+
+            teamStat.ApplyTeamStatIncrease(value);
+        }
+        
+        private void Rest(UnitDataSO unit)
+        {
+            if (unit is null)
+                return;
+
+            var member = _memberMap.GetValueOrDefault(unit.memberType);
+            if (member is null)
+                return;
+
+            int recoverValue = CalculateRestRecover(member);
+
+            unit.currentCondition += recoverValue;
+            unit.currentCondition = Mathf.Min(unit.currentCondition, unit.maxCondition);
         }
 
-        public void UpgradeTeamStat(StatType statType, float successRate,float value)
+        private int CalculateRestRecover(AbstractStats target)
         {
-            teamStat.TeamStatUpgrade(statType, successRate, value);
+            BaseStat mental = target.GetStat(StatType.Mental);
+            return mental == null ? 10 : 10 + (int)(mental.CurrentValue * 0.5f);
         }
 
         #endregion
