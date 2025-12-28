@@ -1,6 +1,6 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using Code.Core.Bus;
+using Code.MainSystem.MainScreen;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Events;
 
@@ -8,14 +8,16 @@ namespace Code.MainSystem.StatSystem.UI
 {
     public class RestCompo : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI conditionText;
+        [SerializeField] private HealthBar healthBar;
 
         private UnitDataSO _currentUnit;
 
         public void Init(UnitDataSO unit)
         {
             _currentUnit = unit;
-            UpdateConditionText();
+
+            if (healthBar != null)
+                healthBar.SetHealth(_currentUnit.currentCondition, _currentUnit.maxCondition);
         }
 
         public void Rest()
@@ -26,18 +28,15 @@ namespace Code.MainSystem.StatSystem.UI
                 return;
             }
 
+            float beforeCondition = _currentUnit.currentCondition;
+
             Bus<RestEvent>.Raise(new RestEvent(_currentUnit));
-            UpdateConditionText();
-        }
 
-        private void UpdateConditionText()
-        {
-            if (_currentUnit == null || conditionText == null)
-                return;
+            float afterCondition = _currentUnit.currentCondition;
+            float recoveredAmount = afterCondition - beforeCondition;
 
-            conditionText.SetText(
-                $"{_currentUnit.currentCondition}/{_currentUnit.maxCondition}"
-            );
+            if (healthBar != null && recoveredAmount > 0f)
+                healthBar.ApplyHealth(-recoveredAmount);
         }
     }
 }
