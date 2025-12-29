@@ -3,6 +3,7 @@ using Code.Core.Bus.GameEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -18,6 +19,10 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private TextMeshProUGUI finalComboText;
         [SerializeField] private TextMeshProUGUI rankText; 
         
+        [Inject] private RhythmGameResultSender _resultSender;
+        
+        [Inject] private Conductor _conductor;
+
         private void Start()
         {
             if(startPanel != null) startPanel.SetActive(true);
@@ -54,15 +59,29 @@ namespace Code.MainSystem.Rhythm
             if(startPanel != null) startPanel.SetActive(false);
             if(gameHudPanel != null) gameHudPanel.SetActive(true);
         
-            if (Conductor.Instance != null)
+            if (_conductor != null)
             {
-                Conductor.Instance.Play();
+                _conductor.Play();
             }
         }
 
         public void OnRestartButtonClicked()
         {
+            // Simply reload the scene to retry
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void OnExitToMainButtonClicked()
+        {
+            if (_resultSender != null)
+            {
+                _resultSender.SubmitResultAndExit();
+            }
+            else
+            {
+                Debug.LogWarning("RhythmGameLoop: ResultSender is missing!");
+                SceneManager.LoadScene("MainScene");
+            }
         }
     }
 }
