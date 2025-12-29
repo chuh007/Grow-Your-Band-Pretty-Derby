@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: HealthDialogue1
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
-  - {fileID: 21300000, guid: ca463b2e30202f041bfc14e8bda91e76, type: 3}
-  - {fileID: 21300000, guid: 550e4efbeb343734ca390779bae9fab3, type: 3}
+  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
   <DialogueDetails>k__BackingField:
   - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
     <DialogueDetail>k__BackingField: "\uB098\uB294 \uD5EC\uC2A4\uC7A5\uC5D0 \uAC14\uB2E4.\n\uB2E4\uC591\uD55C
