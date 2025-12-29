@@ -78,7 +78,15 @@ namespace Code.MainSystem.MainScreen.Training
         {
             _trainedMembers.Clear();
             _teamTrained = false;
+            
+            foreach (var member in _allMemberTypes)
+            {
+                Bus<MemberTrainingStateChangedEvent>.Raise(
+                    new MemberTrainingStateChangedEvent(member)
+                );
+            }
         }
+
         
         private void CheckAllMembersTrained()
         {
