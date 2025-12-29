@@ -13,6 +13,10 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private GameObject startPanel;
         [SerializeField] private GameObject gameHudPanel;
         [SerializeField] private GameObject resultPanel;
+
+        [Header("In-Game HUD")]
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private TextMeshProUGUI comboText;
         
         [Header("Result UI")]
         [SerializeField] private TextMeshProUGUI finalScoreText;
@@ -30,11 +34,23 @@ namespace Code.MainSystem.Rhythm
             if(resultPanel != null) resultPanel.SetActive(false);
         
             Bus<RhythmGameResultEvent>.OnEvent += OnGameResultReceived;
+            Bus<ScoreUpdateEvent>.OnEvent += OnScoreUpdated;
         }
         
         private void OnDestroy()
         {
             Bus<RhythmGameResultEvent>.OnEvent -= OnGameResultReceived;
+            Bus<ScoreUpdateEvent>.OnEvent -= OnScoreUpdated;
+        }
+
+        private void OnScoreUpdated(ScoreUpdateEvent evt)
+        {
+            if (scoreText != null) scoreText.text = $"SCORE: {evt.CurrentScore}";
+            if (comboText != null) 
+            {
+                comboText.text = evt.CurrentCombo > 0 ? $"{evt.CurrentCombo}" : "";
+                // 콤보 애니메이션 등을 여기에 추가할 수 있습니다.
+            }
         }
         
         private void OnGameResultReceived(RhythmGameResultEvent evt)

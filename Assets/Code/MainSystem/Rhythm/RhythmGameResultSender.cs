@@ -49,7 +49,7 @@ namespace Code.MainSystem.Rhythm
             dataSender.harmonyStatUpValue = memberCount * (int)(evt.FinalScore * 0.1f);
             
             dataSender.IsResultDataAvailable = true;
-            SceneManager.LoadScene("MainScene");
+            SceneManager.LoadScene("Lch");
         }
     }
 }

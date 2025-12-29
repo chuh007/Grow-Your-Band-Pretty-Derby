@@ -270,6 +270,8 @@ MonoBehaviour:
   startPanel: {fileID: 1875146978}
   gameHudPanel: {fileID: 1981468411}
   resultPanel: {fileID: 912719126}
+  scoreText: {fileID: 2131726634}
+  comboText: {fileID: 397182090}
   finalScoreText: {fileID: 1759830860}
   finalComboText: {fileID: 1837223868}
   rankText: {fileID: 2035719211}
