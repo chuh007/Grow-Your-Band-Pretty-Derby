@@ -27,7 +27,7 @@ namespace Code.MainSystem.StatSystem.UI
                 return;
             }
 
-            Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
+            //Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
             float beforeCondition = _currentUnit.currentCondition;
             Bus<RestEvent>.Raise(new RestEvent(_currentUnit));
 
