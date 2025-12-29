@@ -17,7 +17,7 @@ MonoBehaviour:
   PersonalpracticeDescription: 
   StaminaReduction: 2
   statIncrease: 10
-  ProgressImageAddresableKey: Sprites/Test/ProgressImage
+  ProgressImageAddresableKey: Sprites/Guitar/Idle
   IdleImageAddressableKey: Sprites/Guitar/Idle
   FaillImageAddressableKey: Sprites/Guitar/Faill
   SuccseImageAddressableKey: Sprites/Guitar/Succse
