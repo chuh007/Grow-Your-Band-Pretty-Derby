@@ -1,0 +1,12 @@
+{
+  "title": "Test Song (Guitar)",
+  "bpm": 120,
+  "offset": 0.0,
+  "notes": [
+    { "time": 2.25, "lane": 0, "type": 0 },
+    { "time": 2.75, "lane": 1, "type": 0 },
+    { "time": 3.25, "lane": 2, "type": 0 },
+    { "time": 3.75, "lane": 3, "type": 0 },
+    { "time": 4.0, "lane": 2, "type": 0 }
+  ]
+}

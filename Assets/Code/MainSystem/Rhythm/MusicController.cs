@@ -36,6 +36,7 @@ namespace Code.MainSystem.Rhythm
 
         public double GetCurrentTime()
         {
+            if (_audioSource.clip == null) return 0;
             return (double)_audioSource.time;
         }
 
