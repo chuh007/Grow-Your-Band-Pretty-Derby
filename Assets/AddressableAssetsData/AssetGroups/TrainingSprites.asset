@@ -14,7 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: TrainingSprites
   m_GUID: 2c7210149b25dd74fb4d2bc9682a3b2b
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 2168768e0c44d204598654fe7c2254d7
+    m_Address: Sprites/Guitar/Faill
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AddresableSprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54021ce0553dc4447bd68a62c7dddcaf
+    m_Address: Sprites/Guitar/Succse
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AddresableSprites
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf4b9847d9c4ed244a1b342e2a372498
+    m_Address: Sprites/Guitar/Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AddresableSprites
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
   m_SchemaSet:
