@@ -39,7 +39,13 @@ namespace Code.MainSystem.Dialogue
             }
             
             StopAllCoroutines();
-            
+            StartCoroutine(StartDialogueProcess(evt));
+        }
+
+        private IEnumerator StartDialogueProcess(DialogueStartEvent evt)
+        {
+            yield return null;
+
             _dialogueInformationSO = evt.DialogueSO;
             _dialogueIndex = 0;
             _state = DialogueState.Active;
