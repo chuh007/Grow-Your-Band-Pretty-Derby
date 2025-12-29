@@ -10,7 +10,6 @@ namespace Code.MainSystem.StatSystem.UI
     public class SelectRequiredUI : MonoBehaviour
     {
         [SerializeField] private GameObject blockMaskPanel;
-        [SerializeField] private Transform cloneRoot;
         [SerializeField] private List<GameObject> passthroughPanels;
 
         private readonly List<GameObject> _clones = new();
@@ -18,12 +17,8 @@ namespace Code.MainSystem.StatSystem.UI
 
         private void Awake()
         {
-            blockMaskPanel.SetActive(false);
-        }
-
-        private void OnEnable()
-        {
             Bus<SelectRequiredEvent>.OnEvent += HandleSelectRequired;
+            blockMaskPanel.SetActive(false);
         }
 
         private void OnDestroy()
@@ -57,7 +52,7 @@ namespace Code.MainSystem.StatSystem.UI
                 if (source is null)
                     continue;
 
-                var clone = CloneVisualHierarchy(source.transform, cloneRoot);
+                var clone = CloneVisualHierarchy(source.transform, blockMaskPanel.transform);
                 clone.name = source.name + "_Clone";
                 clone.SetActive(false);
 
@@ -69,8 +64,7 @@ namespace Code.MainSystem.StatSystem.UI
         {
             foreach (var clone in _clones)
             {
-                if (clone != null)
-                    clone.SetActive(value);
+                clone?.SetActive(value);
             }
         }
 
