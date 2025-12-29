@@ -2,6 +2,7 @@
 using Code.Core.Bus;
 using Code.MainSystem.MainScreen;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 
 namespace Code.MainSystem.StatSystem.UI
@@ -22,10 +23,8 @@ namespace Code.MainSystem.StatSystem.UI
 
         public void Rest()
         {
-            if (_currentUnit == null)
-            {
+            if (_currentUnit == null || TrainingManager.Instance.IsMemberTrained(_currentUnit.memberType))
                 return;
-            }
 
             //Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
             float beforeCondition = _currentUnit.currentCondition;
@@ -36,6 +35,8 @@ namespace Code.MainSystem.StatSystem.UI
 
             if (healthBar != null && recoveredAmount > 0f)
                 healthBar.ApplyHealth(-recoveredAmount);
+            
+            TrainingManager.Instance.MarkMemberTrained(_currentUnit.memberType);
         }
     }
 }
