@@ -14,7 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Training
   m_GUID: a8406934bb8a8de49bc6c99ca96b78ff
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 27018cba84565be43aa93fc329685a9d
+    m_Address: Training/SD/Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Training
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7629ed5ee293a874e9be7610267b6d6d
+    m_Address: Training/UI/Result
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Training
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
   m_SchemaSet:
