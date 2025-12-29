@@ -19,7 +19,7 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private TextMeshProUGUI finalComboText;
         [SerializeField] private TextMeshProUGUI rankText; 
         
-        [SerializeField] private RhythmGameResultSender resultSender;
+        [Inject] private RhythmGameResultSender _resultSender;
         
         [Inject] private Conductor _conductor;
 
@@ -73,9 +73,9 @@ namespace Code.MainSystem.Rhythm
 
         public void OnExitToMainButtonClicked()
         {
-            if (resultSender != null)
+            if (_resultSender != null)
             {
-                resultSender.SubmitResultAndExit();
+                _resultSender.SubmitResultAndExit();
             }
             else
             {
