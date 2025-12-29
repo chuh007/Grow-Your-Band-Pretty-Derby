@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d601a3c578d4c4eb9292b8fa7e5adda, type: 3}
   m_Name: RhythmGameDataSender
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.RhythmGameDataSenderSO
-  members: []
+  SongId: TestSong
+  MemberIds: 
+  Difficulty: 0
+  CombinedChart: []
+  IsResultDataAvailable: 0
   allStatUpValue: 0
   harmonyStatUpValue: 0

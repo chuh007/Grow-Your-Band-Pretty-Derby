@@ -9,7 +9,8 @@ namespace Code.MainSystem.Rhythm
         [Header("Settings")]
         [SerializeField] private GameObject notePrefab;
         [SerializeField] private float noteSpeed = 800.0f;
-        [SerializeField] private float spawnDistance = 1200.0f; 
+        [SerializeField] private float spawnDistance = 1200.0f;
+        [SerializeField] private float hitLineYOffset = -600.0f; // 판정선의 Y 좌표 오프셋 (Lane 중심 기준)
         
         [Tooltip("Assign the Lane UI Objects (Lane_0, Lane_1, etc.) here.")]
         [SerializeField] private List<RectTransform> laneContainers; 
@@ -150,10 +151,12 @@ namespace Code.MainSystem.Rhythm
                 {
                     NoteObject noteObj = list[i];
                     
-                    float visualY = (float)((noteObj.Data.Time - currentSongTime) * noteSpeed);
+                    // (남은 시간 * 속도) + 판정선 오프셋
+                    float visualY = (float)((noteObj.Data.Time - currentSongTime) * noteSpeed) + hitLineYOffset;
                     noteObj.SetPosition(visualY);
 
-                    if (visualY < -100.0f) 
+                    // 판정선보다 훨씬 아래로 내려갔을 때 미스 처리 (예: 오프셋보다 200픽셀 더 아래)
+                    if (visualY < hitLineYOffset - 200.0f) 
                     {
                         if (_judgementSystem != null)
                         {

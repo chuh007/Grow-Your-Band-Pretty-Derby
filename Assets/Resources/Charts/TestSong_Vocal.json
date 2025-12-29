@@ -1,0 +1,11 @@
+{
+  "title": "Test Song (Vocal)",
+  "bpm": 120,
+  "offset": 0.0,
+  "notes": [
+    { "time": 2.5, "lane": 1, "type": 0 },
+    { "time": 2.6, "lane": 2, "type": 0 },
+    { "time": 3.5, "lane": 2, "type": 0 },
+    { "time": 3.6, "lane": 1, "type": 0 }
+  ]
+}

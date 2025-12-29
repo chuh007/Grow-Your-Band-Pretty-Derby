@@ -18,6 +18,8 @@ namespace Code.MainSystem.Rhythm
 
         private void Update()
         {
+            // 터치 입력 처리 (New Input System의 Touchscreen 사용 권장되나, 
+            // 프로젝트 설정이 'Both'라면 기존 Input.touchCount도 동작함)
             if (Input.touchCount > 0)
             {
                 for (int i = 0; i < Input.touchCount; i++)
@@ -35,15 +37,16 @@ namespace Code.MainSystem.Rhythm
                 }
             }
             
-            // #if UNITY_EDITOR || UNITY_STANDALONE
-            // if (_judgementSystem != null)
-            // {
-            //     if (Input.GetKeyDown(KeyCode.D)) _judgementSystem.OnInputDetected(0);
-            //     if (Input.GetKeyDown(KeyCode.F)) _judgementSystem.OnInputDetected(1);
-            //     if (Input.GetKeyDown(KeyCode.J)) _judgementSystem.OnInputDetected(2);
-            //     if (Input.GetKeyDown(KeyCode.K)) _judgementSystem.OnInputDetected(3);
-            // }
-            // #endif
+            #if UNITY_EDITOR || UNITY_STANDALONE
+            if (_judgementSystem != null && UnityEngine.InputSystem.Keyboard.current != null)
+            {
+                var kb = UnityEngine.InputSystem.Keyboard.current;
+                if (kb.dKey.wasPressedThisFrame) _judgementSystem.OnInputDetected(0);
+                if (kb.fKey.wasPressedThisFrame) _judgementSystem.OnInputDetected(1);
+                if (kb.jKey.wasPressedThisFrame) _judgementSystem.OnInputDetected(2);
+                if (kb.kKey.wasPressedThisFrame) _judgementSystem.OnInputDetected(3);
+            }
+            #endif
         }
 
         private int CalculateLaneIndex(float screenX)

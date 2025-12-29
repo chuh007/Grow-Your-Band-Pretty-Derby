@@ -21,29 +21,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - VocalStatData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1cef8e61a3dc39a4a9f43f7454226092
-    m_Address: Assets/Modules/Stats/Member/Drums/Condition data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - DrumsStatData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1f6885b4526d0764cbee8f780adab27d
     m_Address: Assets/Modules/Stats/Member/Bass/Dexterity data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - BassStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2405f10911ea4084d93f3e610bb61396
-    m_Address: Assets/Modules/Stats/Member/Drums/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - DrumsStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2c591cf73029b4b4cb5c88ad2f2a3963
-    m_Address: Assets/Modules/Stats/Member/Guitar/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - GuitarStatData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 37fcc8dcb4bb9f3449dd68f2afbe263c
     m_Address: Assets/Modules/Stats/Member/Bass/SenseOfRhythm data.asset
@@ -69,23 +51,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - BassStatData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 644443d6cff95f44cb87fa4ee3ac870c
-    m_Address: Assets/Modules/Stats/Member/Guitar/Condition data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - GuitarStatData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7b6e22f286dd1754396f391b1f8fa43b
     m_Address: Assets/Modules/Stats/Member/Guitar/Endurance data.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - GuitarStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 83180a4302d9aed438532dcc85899165
-    m_Address: Assets/Modules/Stats/Member/Vocal/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - VocalStatData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 980198409400b9944bec3f4185d355f2
     m_Address: Assets/Modules/Stats/Member/Drums/Power data.asset
@@ -104,12 +74,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - TeamStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e1482a76f813f1844922c35f70038bed
-    m_Address: Assets/Modules/Stats/Member/Vocal/Condition data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - VocalStatData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fd458ead59eb7da4abc67b538c9f2337
     m_Address: Assets/Modules/Stats/Member/Guitar/Concentration  data.asset
