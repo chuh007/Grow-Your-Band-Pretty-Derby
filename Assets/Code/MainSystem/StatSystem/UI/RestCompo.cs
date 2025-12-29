@@ -24,12 +24,11 @@ namespace Code.MainSystem.StatSystem.UI
         {
             if (_currentUnit == null)
             {
-                Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
                 return;
             }
 
+            Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
             float beforeCondition = _currentUnit.currentCondition;
-
             Bus<RestEvent>.Raise(new RestEvent(_currentUnit));
 
             float afterCondition = _currentUnit.currentCondition;
