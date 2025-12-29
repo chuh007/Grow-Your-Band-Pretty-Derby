@@ -16,7 +16,7 @@ namespace Code.MainSystem.Rhythm
         public List<NoteData> CombinedChart;
         
         // 선택된 멤버를 담아서 넘겨주기. 버튼 누른 시점에 그 리스트 배껴오면 될듯
-        public List<IEnumerable<MemberType>> members;
+        public List<IEnumerable<MemberType>> members = new List<IEnumerable<MemberType>>();
         
         [Header("Game Result Data")]
         public bool IsResultDataAvailable;
