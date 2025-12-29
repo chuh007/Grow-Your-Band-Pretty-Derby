@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3998de81e08a472689545d08217672fd, type: 3}
   m_Name: OutingDataSender
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Outing.OutingResultSenderSO
-  targetMember: {fileID: 11400000, guid: ccf5440b38f01004fb888f35da2c25e1, type: 2}
-  selectedEvent: {fileID: 11400000, guid: edfa5a1fc6cb8aa46a10de8de73c1da5, type: 2}
-  changeStats: []
+  targetMember: {fileID: 11400000, guid: 352917e9a4e64554c9967dcb171ecc10, type: 2}
+  selectedEvent: {fileID: 11400000, guid: 4359f7718cb40d349b85fee735ff466e, type: 2}
+  changeStats:
+  - targetStat: 0
+    variation: 2

@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.Core.Bus;
+using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -32,6 +33,8 @@ namespace Code.MainSystem.Outing
 
         public void LoadAndDataSend()
         {
+            if (TrainingManager.Instance.IsMemberTrained(mainScreen.UnitSelector.CurrentUnit.memberType))
+                return;
             if (mainScreen.UnitSelector.CurrentUnit == null)
             {
                 Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());

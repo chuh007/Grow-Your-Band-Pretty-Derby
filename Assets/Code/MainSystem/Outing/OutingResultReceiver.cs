@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.OutingEvents;
+using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ namespace Code.MainSystem.Outing
                 Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
                     (outingResultSender.targetMember.memberType, stat.targetStat, stat.variation));
             }
+            TrainingManager.Instance.MarkMemberTrained(outingResultSender.targetMember.memberType);
         }
     }
 }
