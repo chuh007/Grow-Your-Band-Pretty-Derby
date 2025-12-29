@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.Rhythm;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -16,6 +17,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private Button startPracticeButton;    
         [SerializeField] private Button backButton;
         [SerializeField] private string RhythmGameScene;
+        [SerializeField] private RhythmGameDataSenderSO rhythmGameDataSenderSO;
 
         [Header("Member Buttons")]
         [SerializeField] private List<Button> memberButtons;
@@ -45,7 +47,6 @@ namespace Code.MainSystem.MainScreen
         public void CacheUnits(List<UnitDataSO> unitData)
         {
             _unitMap = new Dictionary<MemberType, UnitDataSO>();
-
             foreach (var unit in unitData)
                 _unitMap[unit.memberType] = unit;
 
@@ -54,6 +55,7 @@ namespace Code.MainSystem.MainScreen
 
         private void InitButtons()
         {
+            rhythmGameDataSenderSO.members.Clear();
             foreach (var btn in memberButtons)
             {
                 if (!Enum.TryParse(btn.name, out MemberType type))
@@ -140,7 +142,7 @@ namespace Code.MainSystem.MainScreen
             if (_selectedMembers.Count < 2) return;
             
             TrainingManager.Instance.MarkMembersTrainedForTeam(_selectedMembers);
-            
+            rhythmGameDataSenderSO.members.Add(_selectedMembers);
             SceneManager.LoadScene(RhythmGameScene);
         }
 

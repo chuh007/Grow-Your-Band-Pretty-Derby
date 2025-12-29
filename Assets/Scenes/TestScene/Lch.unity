@@ -5527,6 +5527,7 @@ MonoBehaviour:
   startPracticeButton: {fileID: 1458116338}
   backButton: {fileID: 546791192}
   RhythmGameScene: 
+  rhythmGameDataSenderSO: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
   memberButtons:
   - {fileID: 14745568}
   - {fileID: 879693989}

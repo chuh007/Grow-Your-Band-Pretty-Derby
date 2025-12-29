@@ -18,6 +18,6 @@ MonoBehaviour:
   StaminaReduction: 2
   statIncrease: 10
   ProgressImageAddresableKey: Sprites/Test/ProgressImage
-  IdleImageAddressableKey: Sprites/Test/Idle
-  FaillImageAddressableKey: Sprites/Test/Faill
-  SuccseImageAddressableKey: Sprites/Test/Succse
+  IdleImageAddressableKey: Sprites/Guitar/Idle
+  FaillImageAddressableKey: Sprites/Guitar/Faill
+  SuccseImageAddressableKey: Sprites/Guitar/Succse
