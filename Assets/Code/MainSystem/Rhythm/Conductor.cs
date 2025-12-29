@@ -52,6 +52,14 @@ namespace Code.MainSystem.Rhythm
             RecalculateBpmTiming();
         }
 
+        public void SetAudioClip(AudioClip clip)
+        {
+            if (_musicController != null)
+            {
+                _musicController.SetAudioClip(clip);
+            }
+        }
+
         public void Play()
         {
             if (_musicController == null) return;

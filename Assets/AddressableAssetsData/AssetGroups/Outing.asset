@@ -14,13 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Outing
   m_GUID: fac3ec8b0f2a76446a96bd812ba5b67f
-  m_SerializeEntries:
-  - m_GUID: 7569b131a91c6174f8639d5820d1930b
-    m_Address: Outing/UI/Result
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Outing
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
   m_SchemaSet:

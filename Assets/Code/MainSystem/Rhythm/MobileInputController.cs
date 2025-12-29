@@ -1,11 +1,19 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Reflex.Attributes;
+using System.Collections.Generic;
 
 namespace Code.MainSystem.Rhythm
 {
     public class MobileInputController : MonoBehaviour
     {
         [SerializeField] private int laneCount = 4;
+        
+        [Header("Feedback Settings")]
+        [SerializeField] private List<Image> laneImages; // Lane 0~3 Images
+        [SerializeField] private float flashAlpha = 0.5f; // 눌렀을 때의 투명도 (0.0 ~ 1.0)
+        [SerializeField] private float normalAlpha = 0.1f; // 평소 투명도
+        [SerializeField] private float fadeSpeed = 0.1f;
 
         [Inject] private JudgementSystem _judgementSystem;
 
@@ -14,10 +22,23 @@ namespace Code.MainSystem.Rhythm
         private void Start()
         {
             _laneWidth = Screen.width / (float)laneCount;
+            
+            // 초기 알파값 설정
+            foreach(var img in laneImages)
+            {
+                if(img != null) 
+                {
+                    var color = img.color;
+                    color.a = normalAlpha;
+                    img.color = color;
+                }
+            }
         }
 
         private void Update()
         {
+            // 터치 입력 처리 (New Input System의 Touchscreen 사용 권장되나, 
+            // 프로젝트 설정이 'Both'라면 기존 Input.touchCount도 동작함)
             if (Input.touchCount > 0)
             {
                 for (int i = 0; i < Input.touchCount; i++)
@@ -27,23 +48,43 @@ namespace Code.MainSystem.Rhythm
                     if (touch.phase == TouchPhase.Began)
                     {
                         int laneIndex = CalculateLaneIndex(touch.position.x);
-                        if (_judgementSystem != null)
-                        {
-                            _judgementSystem.OnInputDetected(laneIndex);
-                        }
+                        HandleInput(laneIndex);
                     }
                 }
             }
             
-            // #if UNITY_EDITOR || UNITY_STANDALONE
-            // if (_judgementSystem != null)
-            // {
-            //     if (Input.GetKeyDown(KeyCode.D)) _judgementSystem.OnInputDetected(0);
-            //     if (Input.GetKeyDown(KeyCode.F)) _judgementSystem.OnInputDetected(1);
-            //     if (Input.GetKeyDown(KeyCode.J)) _judgementSystem.OnInputDetected(2);
-            //     if (Input.GetKeyDown(KeyCode.K)) _judgementSystem.OnInputDetected(3);
-            // }
-            // #endif
+            // 에디터/키보드 입력 처리 (New Input System 방식)
+            #if UNITY_EDITOR || UNITY_STANDALONE
+            if (_judgementSystem != null && UnityEngine.InputSystem.Keyboard.current != null)
+            {
+                var kb = UnityEngine.InputSystem.Keyboard.current;
+                if (kb.dKey.wasPressedThisFrame) HandleInput(0);
+                if (kb.fKey.wasPressedThisFrame) HandleInput(1);
+                if (kb.jKey.wasPressedThisFrame) HandleInput(2);
+                if (kb.kKey.wasPressedThisFrame) HandleInput(3);
+            }
+            #endif
+        }
+
+        private void HandleInput(int laneIndex)
+        {
+            if (laneIndex < 0 || laneIndex >= laneCount) return;
+
+            // 1. 판정 요청
+            if (_judgementSystem != null)
+            {
+                _judgementSystem.OnInputDetected(laneIndex);
+            }
+
+            // 2. 시각적 피드백
+            if (laneImages != null && laneIndex < laneImages.Count && laneImages[laneIndex] != null)
+            {
+                var img = laneImages[laneIndex];
+                // 즉시 밝게
+                img.CrossFadeAlpha(flashAlpha, 0.0f, true); 
+                // 서서히 어둡게
+                img.CrossFadeAlpha(normalAlpha, fadeSpeed, true);
+            }
         }
 
         private int CalculateLaneIndex(float screenX)
