@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -20,9 +21,11 @@ namespace Code.MainSystem.Rhythm
         public int type;
     }
 
-    public static class ChartLoader
+    public class ChartLoader : MonoBehaviour
     {
-        public static List<NoteData> LoadChart(string jsonContent)
+        [Inject] private Conductor _conductor;
+
+        public List<NoteData> LoadChart(string jsonContent)
         {
             ChartJsonData chartData = JsonUtility.FromJson<ChartJsonData>(jsonContent);
             
@@ -32,9 +35,9 @@ namespace Code.MainSystem.Rhythm
                 return new List<NoteData>();
             }
 
-            if (Conductor.Instance != null && chartData.bpm > 0)
+            if (_conductor != null && chartData.bpm > 0)
             {
-                Conductor.Instance.SetBpm(chartData.bpm);
+                _conductor.SetBpm(chartData.bpm);
             }
 
             List<NoteData> notes = new List<NoteData>();
@@ -49,7 +52,7 @@ namespace Code.MainSystem.Rhythm
             return notes;
         }
 
-        public static List<NoteData> LoadTestChart()
+        public List<NoteData> LoadTestChart()
         {
             string json = @"
             {
@@ -68,6 +71,31 @@ namespace Code.MainSystem.Rhythm
               ]
             }";
             return LoadChart(json);
+        }
+
+        public List<NoteData> LoadChartFromResources(string path)
+        {
+            TextAsset textAsset = Resources.Load<TextAsset>(path);
+            if (textAsset == null)
+            {
+                Debug.LogWarning($"ChartLoader: Could not find chart at path: {path}");
+                return new List<NoteData>();
+            }
+            return LoadChart(textAsset.text);
+        }
+
+        public List<NoteData> CombineCharts(List<List<NoteData>> allCharts)
+        {
+            List<NoteData> combined = new List<NoteData>();
+            foreach (var chart in allCharts)
+            {
+                combined.AddRange(chart);
+            }
+            
+            // Sort by time to ensure correct playback order
+            combined.Sort((a, b) => a.Time.CompareTo(b.Time));
+            
+            return combined;
         }
     }
 }

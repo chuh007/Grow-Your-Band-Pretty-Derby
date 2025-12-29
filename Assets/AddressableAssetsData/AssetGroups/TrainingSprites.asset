@@ -14,31 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: TrainingSprites
   m_GUID: 2c7210149b25dd74fb4d2bc9682a3b2b
-  m_SerializeEntries:
-  - m_GUID: 550e4efbeb343734ca390779bae9fab3
-    m_Address: Sprites/Test/Faill
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - AddresableSprites
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bdd0090febc91c245880091cea98e5bd
-    m_Address: Sprites/Test/Idle
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - AddresableSprites
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c3102ae7042cc704489fecbee9c48d9a
-    m_Address: Sprites/Test/ProgressImage
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - AddresableSprites
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ca463b2e30202f041bfc14e8bda91e76
-    m_Address: Sprites/Test/Succse
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - AddresableSprites
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
   m_SchemaSet:

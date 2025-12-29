@@ -3,6 +3,7 @@ using Code.Core.Bus.GameEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -12,12 +13,20 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private GameObject startPanel;
         [SerializeField] private GameObject gameHudPanel;
         [SerializeField] private GameObject resultPanel;
+
+        [Header("In-Game HUD")]
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private TextMeshProUGUI comboText;
         
         [Header("Result UI")]
         [SerializeField] private TextMeshProUGUI finalScoreText;
         [SerializeField] private TextMeshProUGUI finalComboText;
         [SerializeField] private TextMeshProUGUI rankText; 
         
+        [Inject] private RhythmGameResultSender _resultSender;
+        
+        [Inject] private Conductor _conductor;
+
         private void Start()
         {
             if(startPanel != null) startPanel.SetActive(true);
@@ -25,11 +34,23 @@ namespace Code.MainSystem.Rhythm
             if(resultPanel != null) resultPanel.SetActive(false);
         
             Bus<RhythmGameResultEvent>.OnEvent += OnGameResultReceived;
+            Bus<ScoreUpdateEvent>.OnEvent += OnScoreUpdated;
         }
         
         private void OnDestroy()
         {
             Bus<RhythmGameResultEvent>.OnEvent -= OnGameResultReceived;
+            Bus<ScoreUpdateEvent>.OnEvent -= OnScoreUpdated;
+        }
+
+        private void OnScoreUpdated(ScoreUpdateEvent evt)
+        {
+            if (scoreText != null) scoreText.text = $"SCORE: {evt.CurrentScore}";
+            if (comboText != null) 
+            {
+                comboText.text = evt.CurrentCombo > 0 ? $"{evt.CurrentCombo}" : "";
+                // 콤보 애니메이션 등을 여기에 추가할 수 있습니다.
+            }
         }
         
         private void OnGameResultReceived(RhythmGameResultEvent evt)
@@ -54,15 +75,29 @@ namespace Code.MainSystem.Rhythm
             if(startPanel != null) startPanel.SetActive(false);
             if(gameHudPanel != null) gameHudPanel.SetActive(true);
         
-            if (Conductor.Instance != null)
+            if (_conductor != null)
             {
-                Conductor.Instance.Play();
+                _conductor.Play();
             }
         }
 
         public void OnRestartButtonClicked()
         {
+            // Simply reload the scene to retry
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void OnExitToMainButtonClicked()
+        {
+            if (_resultSender != null)
+            {
+                _resultSender.SubmitResultAndExit();
+            }
+            else
+            {
+                Debug.LogWarning("RhythmGameLoop: ResultSender is missing!");
+                SceneManager.LoadScene("MainScene");
+            }
         }
     }
 }

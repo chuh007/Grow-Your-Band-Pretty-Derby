@@ -5,13 +5,15 @@ namespace Code.MainSystem.Rhythm
     {
         public double Time;      
         public int LaneIndex;    
-        public int Type;         
+        public int Type;
+        public int MemberId;
 
-        public NoteData(double time, int laneIndex, int type = 0)
+        public NoteData(double time, int laneIndex, int type = 0, int memberId = 0)
         {
             Time = time;
             LaneIndex = laneIndex;
             Type = type;
+            MemberId = memberId;
         }
     }
 }

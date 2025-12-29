@@ -6,8 +6,6 @@ namespace Code.MainSystem.Rhythm
 {
     public class Conductor : MonoBehaviour
     {
-        public static Conductor Instance { get; private set; }
-
         [Header("Dependencies")]
         [SerializeField] private GameObject musicControllerObject;
         private IMusicController _musicController;
@@ -31,21 +29,8 @@ namespace Code.MainSystem.Rhythm
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
-
-            if (musicControllerObject != null)
-            {
-                _musicController = musicControllerObject.GetComponent<IMusicController>();
-            }
-            else
-            {
-                _musicController = GetComponent<IMusicController>();
-            }
+            _musicController = musicControllerObject != null
+                ? musicControllerObject.GetComponent<IMusicController>() : GetComponent<IMusicController>();
 
             if (_musicController == null)
             {
@@ -65,6 +50,14 @@ namespace Code.MainSystem.Rhythm
         {
             bpm = newBpm;
             RecalculateBpmTiming();
+        }
+
+        public void SetAudioClip(AudioClip clip)
+        {
+            if (_musicController != null)
+            {
+                _musicController.SetAudioClip(clip);
+            }
         }
 
         public void Play()
@@ -123,14 +116,6 @@ namespace Code.MainSystem.Rhythm
                 OnBeatPulse?.Invoke(currentBeat);
                 
                 Bus<BeatPulseEvent>.Raise(new BeatPulseEvent(currentBeat));
-            }
-        }
-        
-        private void OnDestroy()
-        {
-            if (Instance == this)
-            {
-                Instance = null;
             }
         }
     }
