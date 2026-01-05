@@ -7,12 +7,13 @@ namespace Code.MainSystem.MainScreen.Training
     public class TrainingProgressBar : MonoBehaviour
     {
         [SerializeField] private RectTransform fillBar;
+        [SerializeField] private TrainingProgressImage progressImage; 
 
         private float _duration;
         private float _elapsed;
         private bool _isPlaying;
         private Action _onComplete;
-        
+
         public async UniTask Play(float duration, Action onComplete = null)
         {
             _duration = duration;
@@ -27,10 +28,12 @@ namespace Code.MainSystem.MainScreen.Training
                 await UniTask.Yield();
                 _elapsed += Time.deltaTime;
                 float t = Mathf.Clamp01(_elapsed / _duration);
+
                 SetScaleX(t);
             }
 
             SetScaleX(1f);
+
             _isPlaying = false;
             _onComplete?.Invoke();
         }
@@ -44,6 +47,7 @@ namespace Code.MainSystem.MainScreen.Training
                 fillBar.localScale = scale;
             }
         }
+
         public void ResetBar()
         {
             _isPlaying = false;
