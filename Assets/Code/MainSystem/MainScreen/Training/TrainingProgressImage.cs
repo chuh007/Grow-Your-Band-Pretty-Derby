@@ -7,29 +7,62 @@ namespace Code.MainSystem.MainScreen.Training
     public class TrainingProgressImage : MonoBehaviour
     {
         [SerializeField] private Image progressImage;
+        [SerializeField] private float pulseScale = 0.95f;
+        [SerializeField] private float floatOffsetY = 10f;
+        [SerializeField] private float animationDuration = 0.3f;
 
-        private Vector3 initialScale;
+        private Vector3 originalScale;
+        private Vector2 originalPosition;
 
         private void Awake()
         {
             if (progressImage != null)
             {
-                initialScale = progressImage.rectTransform.localScale;
+                originalScale = progressImage.rectTransform.localScale;
+                originalPosition = progressImage.rectTransform.anchoredPosition;
             }
         }
 
         public void SetProgressImage(Sprite progressImageSprite)
         {
             progressImage.sprite = progressImageSprite;
+            PlayPulseFloatAnimation();
         }
 
-        public void SetProgress(float progress)
+        private void PlayPulseFloatAnimation()
         {
-            if (progressImage != null)
-            {
-                float scaleFactor = Mathf.Lerp(0f, 1f, progress); 
-                progressImage.transform.DOScale(scaleFactor, scaleFactor);
-            }
+            RectTransform rt = progressImage.rectTransform;
+
+            rt.DOKill();
+            rt.localScale = originalScale;
+            rt.anchoredPosition = originalPosition;
+
+            float half = animationDuration / 2f;
+
+            Sequence anim = DOTween.Sequence();
+
+            anim.Append(
+                rt.DOScale(originalScale * pulseScale, half).SetEase(Ease.OutSine)
+            );
+            anim.Join(
+                rt.DOAnchorPosY(originalPosition.y + floatOffsetY, half).SetEase(Ease.OutSine)
+            );
+
+            anim.Append(
+                rt.DOScale(originalScale, half).SetEase(Ease.InSine)
+            );
+            anim.Join(
+                rt.DOAnchorPosY(originalPosition.y, half).SetEase(Ease.InSine)
+            );
+        }
+
+
+        public void StopAnimation()
+        {
+            RectTransform rt = progressImage.rectTransform;
+            rt.DOKill();
+            rt.localScale = originalScale;
+            rt.anchoredPosition = originalPosition;
         }
     }
 }

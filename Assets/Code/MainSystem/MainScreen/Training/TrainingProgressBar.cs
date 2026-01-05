@@ -22,7 +22,6 @@ namespace Code.MainSystem.MainScreen.Training
             _onComplete = onComplete;
 
             SetScaleX(0f);
-            progressImage?.SetProgress(0f);
 
             while (_elapsed < _duration)
             {
@@ -31,11 +30,9 @@ namespace Code.MainSystem.MainScreen.Training
                 float t = Mathf.Clamp01(_elapsed / _duration);
 
                 SetScaleX(t);
-                progressImage?.SetProgress(t); 
             }
 
             SetScaleX(1f);
-            progressImage?.SetProgress(1f);
 
             _isPlaying = false;
             _onComplete?.Invoke();
@@ -56,7 +53,6 @@ namespace Code.MainSystem.MainScreen.Training
             _isPlaying = false;
             _elapsed = 0f;
             SetScaleX(0f);
-            progressImage?.SetProgress(0f); 
         }
     }
 }
