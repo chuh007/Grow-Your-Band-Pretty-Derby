@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -31,7 +32,7 @@ namespace Code.MainSystem.Turn
 
         private void Awake()
         {
-            Bus<TurnUseEvent>.OnEvent += HandleTurnUse;
+            Bus<TurnEndEvent>.OnEvent += HandleTurnUse;
             Bus<TurnReturnEvent>.OnEvent += HandleTurnReturn;
         }
 
@@ -42,13 +43,13 @@ namespace Code.MainSystem.Turn
 
         private void OnDestroy()
         {
-            Bus<TurnUseEvent>.OnEvent -= HandleTurnUse;
+            Bus<TurnEndEvent>.OnEvent -= HandleTurnUse;
             Bus<TurnReturnEvent>.OnEvent -= HandleTurnReturn;
         }
 
-        private void HandleTurnUse(TurnUseEvent evt)
+        private void HandleTurnUse(TurnEndEvent evt)
         {
-            RemainingTurn -= evt.Value;
+            RemainingTurn--;
         }
 
         private void HandleTurnReturn(TurnReturnEvent evt)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
 
@@ -103,7 +104,7 @@ namespace Code.MainSystem.MainScreen.Training
         private void HandleNextTrun()
         {
             ResetTraining();
-            Bus<TurnUseEvent>.Raise(new TurnUseEvent(1));
+            Bus<TurnEndEvent>.Raise(new TurnEndEvent());
         }
     }
 }
