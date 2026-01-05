@@ -34,27 +34,38 @@ namespace Code.MainSystem.MainScreen.Training
             RectTransform rt = progressImage.rectTransform;
 
             rt.DOKill();
-            rt.localScale = originalScale * 1.2f; 
+            rt.localScale = originalScale * 1.1f;
             rt.anchoredPosition = originalPosition;
 
             float half = animationDuration / 2f;
+            float delay = 0.05f;
 
             Sequence anim = DOTween.Sequence();
             
+            anim.AppendInterval(delay);
+
             anim.Append(
                 rt.DOScale(originalScale * 0.9f, half).SetEase(Ease.InBack)
             );
-            anim.Join(
+            anim.AppendInterval(delay);
+            anim.Append(
                 rt.DOAnchorPosY(originalPosition.y + floatOffsetY * 1.5f, half).SetEase(Ease.OutSine)
             );
-            
             anim.Append(
                 rt.DOScale(originalScale, half).SetEase(Ease.OutElastic)
             );
             anim.Join(
                 rt.DOAnchorPosY(originalPosition.y, half).SetEase(Ease.InSine)
             );
+            
+            anim.AppendInterval(0.8f);
+            float emphasizeScale = 1.1f;
+            float emphasizeTime = 1.15f;
+
+            anim.Append(rt.DOScale(emphasizeScale, emphasizeTime).SetEase(Ease.Linear));
+           
         }
+
 
 
 
