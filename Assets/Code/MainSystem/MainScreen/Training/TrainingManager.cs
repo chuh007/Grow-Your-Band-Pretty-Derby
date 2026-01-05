@@ -10,7 +10,7 @@ namespace Code.MainSystem.MainScreen.Training
 {
     public class TrainingManager : MonoBehaviour
     {
-        private HashSet<MemberType> _trainedMembers = new();
+        private Dictionary<MemberType, int> _trainedMembers = new();
         private bool _teamTrained = false;
 
         public static TrainingManager Instance { get; private set; }
@@ -48,15 +48,15 @@ namespace Code.MainSystem.MainScreen.Training
 
         public bool IsMemberTrained(MemberType member)
         {
-            return _trainedMembers.Contains(member);
+            return _trainedMembers[member].Equals(0);
         }
 
         public void MarkMemberTrained(MemberType member)
         {
-            if (_trainedMembers.Contains(member))
+            if (_trainedMembers[member].Equals(0))
                 return;
 
-            _trainedMembers.Add(member);
+            _trainedMembers[member]--;
 
             Bus<MemberTrainingStateChangedEvent>.Raise(
                 new MemberTrainingStateChangedEvent(member)
@@ -93,7 +93,7 @@ namespace Code.MainSystem.MainScreen.Training
         {
             foreach (var member in _allMemberTypes)
             {
-                if (!_trainedMembers.Contains(member))
+                if (!_trainedMembers[member].Equals(0))
                     return;
             }
             
