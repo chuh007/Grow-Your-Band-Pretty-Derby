@@ -79,8 +79,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.TrainingProgressImage
   progressImage: {fileID: 7335523930256859823}
   pulseScale: 0.85
-  floatOffsetY: 55
-  animationDuration: 0.8
+  floatOffsetY: 8
+  animationDuration: 1
 --- !u!1 &6508602426335604403
 GameObject:
   m_ObjectHideFlags: 0
