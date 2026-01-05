@@ -43,7 +43,7 @@ namespace Code.MainSystem.MainScreen.Training
                 await GameManager.Instance.LoadAddressableAsync<Sprite>(practiceData.IdleImageAddressableKey);
             var resultSprite =
                 await GameManager.Instance.LoadAddressableAsync<Sprite>(
-                    isSuccess
+                    isSuccess   
                         ? practiceData.SuccseImageAddressableKey
                         : practiceData.FaillImageAddressableKey);
             
