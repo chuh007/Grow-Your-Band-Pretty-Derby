@@ -80,7 +80,7 @@ MonoBehaviour:
   progressImage: {fileID: 7335523930256859823}
   pulseScale: 0.85
   floatOffsetY: 8
-  animationDuration: 1
+  animationDuration: 0.7
 --- !u!1 &6508602426335604403
 GameObject:
   m_ObjectHideFlags: 0
