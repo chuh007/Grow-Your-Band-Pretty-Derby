@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Code.Core.Bus;
-using Code.MainSystem.MainScreen;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Resting;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Code.MainSystem.StatSystem.UI
+namespace Code.MainSystem.MainScreen
 {
     public class RestSelectCompo : MonoBehaviour
     {
         [Header("UI")] 
         [SerializeField] private List<Button> memberButtons;
         [SerializeField] private SelectRequiredUI selectRequiredUI;
-        [SerializeField] private TrainingSequenceController trainingSequenceController;
+        [SerializeField] private RestResultController restResultController;
         [SerializeField] private HealthBar healthBar;
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
@@ -93,8 +93,8 @@ namespace Code.MainSystem.StatSystem.UI
 
             _selectedUnit.currentCondition = afterHealth;
 
-            trainingSequenceController.gameObject.SetActive(true);
-            await trainingSequenceController.PlayRestSequence(
+            restResultController.gameObject.SetActive(true);
+            await restResultController.PlayRestSequence(
                 _selectedUnit,
                 beforeHealth,
                 afterHealth

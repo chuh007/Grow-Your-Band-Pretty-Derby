@@ -5,7 +5,7 @@ using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Code.MainSystem.StatSystem.UI
+namespace Code.MainSystem.MainScreen
 {
     public class SelectRequiredUI : MonoBehaviour
     {
