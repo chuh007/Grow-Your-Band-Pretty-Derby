@@ -33,7 +33,7 @@ namespace Code.MainSystem.StatSystem.Manager
                 _memberMap[member.MemberType] = member;
 
             Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
-            Bus<RestEvent>.OnEvent += HandleRestRequested;
+            Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
             Bus<StatAllIncreaseEvent>.OnEvent += HandleAllMemberStatIncreaseRequested;
             Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatIncreaseRequested;
@@ -43,7 +43,7 @@ namespace Code.MainSystem.StatSystem.Manager
         private void OnDestroy()
         {
             Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
-            Bus<RestEvent>.OnEvent -= HandleRestRequested;
+            Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
             Bus<StatAllIncreaseEvent>.OnEvent -= HandleAllMemberStatIncreaseRequested;
             Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatIncreaseRequested;
@@ -135,7 +135,7 @@ namespace Code.MainSystem.StatSystem.Manager
             teamStat.ApplyTeamStatIncrease(value);
         }
         
-        private void HandleRestRequested(RestEvent evt)
+        private void HandleRestRequested(ConfirmRestEvent evt)
         {
             var unit = evt.Unit;
             
