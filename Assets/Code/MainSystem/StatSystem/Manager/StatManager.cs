@@ -3,7 +3,6 @@ using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
-using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.MemberStats;
 using Code.MainSystem.StatSystem.TeamStats;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -33,19 +32,25 @@ namespace Code.MainSystem.StatSystem.Manager
             foreach (var member in memberStats)
                 _memberMap[member.MemberType] = member;
 
-            Bus<PracticenEvent>.OnEvent += HandlePractice;
-            Bus<RestEvent>.OnEvent += HandleRest;
-            Bus<StatIncreaseEvent>.OnEvent += HandleStatUpgrade;
-            Bus<StatAllIncreaseEvent>.OnEvent += HandleStatAllUpgrade;
-            Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatUpgrade;
+            Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
+            Bus<RestEvent>.OnEvent += HandleRestRequested;
+            Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
+            Bus<StatAllIncreaseEvent>.OnEvent += HandleAllMemberStatIncreaseRequested;
+            Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatIncreaseRequested;
+            Bus<StatAllMemberStatIncreaseEvent>.OnEvent += HandleMemberAllStatIncreaseRequested;
         }
-
-        private void HandleRest(RestEvent evt)
+        
+        private void OnDestroy()
         {
-            Rest(evt.Unit);
+            Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
+            Bus<RestEvent>.OnEvent -= HandleRestRequested;
+            Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
+            Bus<StatAllIncreaseEvent>.OnEvent -= HandleAllMemberStatIncreaseRequested;
+            Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatIncreaseRequested;
+            Bus<StatAllMemberStatIncreaseEvent>.OnEvent -= HandleMemberAllStatIncreaseRequested;
         }
-
-        private void HandlePractice(PracticenEvent evt)
+        
+        private void HandlePracticeRequested(PracticenEvent evt)
         {
             if (evt.Type == PracticenType.Team)
             {
@@ -55,15 +60,6 @@ namespace Code.MainSystem.StatSystem.Manager
             {
                 UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
             }
-        }
-        
-        private void OnDestroy()
-        {
-            Bus<PracticenEvent>.OnEvent -= HandlePractice;
-            Bus<RestEvent>.OnEvent -= HandleRest;
-            Bus<StatIncreaseEvent>.OnEvent -= HandleStatUpgrade;
-            Bus<StatAllIncreaseEvent>.OnEvent -= HandleStatAllUpgrade;
-            Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatUpgrade;
         }
 
         #region GetStat
@@ -77,20 +73,6 @@ namespace Code.MainSystem.StatSystem.Manager
         public BaseStat GetTeamStat(StatType statType)
         {
             return teamStat?.GetTeamStat(statType);
-        }
-        
-        public IReadOnlyDictionary<MemberType, BaseStat> GetAllMemberStat(StatType statType)
-        {
-            Dictionary<MemberType, BaseStat> result = new();
-
-            foreach (var pair in _memberMap)
-            {
-                BaseStat stat = pair.Value.GetStat(statType);
-                if (stat != null)
-                    result.Add(pair.Key, stat);
-            }
-
-            return result;
         }
 
         #endregion
@@ -113,27 +95,30 @@ namespace Code.MainSystem.StatSystem.Manager
             member.ApplyStatIncrease(statType, value);
         }
         
+        private void HandleMemberAllStatIncreaseRequested(StatAllMemberStatIncreaseEvent evt)
+        {
+            var member = _memberMap.GetValueOrDefault(evt.MemberType);
+            member?.ApplyAllStatIncrease(evt.Value);
+        }
+        
         public bool PredictMemberPractice(float successRate)
         {
             return Random.Range(0f, 100f) < successRate;
         }
         
-        private void HandleStatUpgrade(StatIncreaseEvent evt)
+        private void HandleSingleStatIncreaseRequested(StatIncreaseEvent evt)
         {
             var member = _memberMap.GetValueOrDefault(evt.MemberType);
-            if (member is null)
-                return;
-            
-            member.ApplyStatIncrease(evt.StatType, evt.Value);
+            member?.ApplyStatIncrease(evt.StatType, evt.Value);
         }
         
-        private void HandleStatAllUpgrade(StatAllIncreaseEvent evt)
+        private void HandleAllMemberStatIncreaseRequested(StatAllIncreaseEvent evt)
         {
             foreach (var pair in memberStats)
                 pair.ApplyStatIncrease(evt.StatType, evt.Value);
         }
         
-        private void HandleTeamStatUpgrade(TeamStatIncreaseEvent evt)
+        private void HandleTeamStatIncreaseRequested(TeamStatIncreaseEvent evt)
         {
             teamStat.ApplyTeamStatIncrease(evt.AddValue);
         }
@@ -150,25 +135,19 @@ namespace Code.MainSystem.StatSystem.Manager
             teamStat.ApplyTeamStatIncrease(value);
         }
         
-        private void Rest(UnitDataSO unit)
+        private void HandleRestRequested(RestEvent evt)
         {
-            if (unit is null)
+            var unit = evt.Unit;
+            
+            if(unit is null)
                 return;
 
             var member = _memberMap.GetValueOrDefault(unit.memberType);
             if (member is null)
                 return;
 
-            int recoverValue = CalculateRestRecover(member);
-
-            unit.currentCondition += recoverValue;
-            unit.currentCondition = Mathf.Min(unit.currentCondition, unit.maxCondition);
-        }
-
-        private int CalculateRestRecover(AbstractStats target)
-        {
-            BaseStat mental = target.GetStat(StatType.Mental);
-            return mental == null ? 10 : 10 + (int)(mental.CurrentValue * 0.5f);
+            unit.currentCondition += 10;
+            unit.currentCondition = Mathf.Clamp(unit.currentCondition, 0, unit.maxCondition);
         }
 
         #endregion

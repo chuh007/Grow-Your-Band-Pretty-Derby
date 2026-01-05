@@ -10,9 +10,9 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private int laneCount = 4;
         
         [Header("Feedback Settings")]
-        [SerializeField] private List<Image> laneImages; // Lane 0~3 Images
-        [SerializeField] private float flashAlpha = 0.5f; // 눌렀을 때의 투명도 (0.0 ~ 1.0)
-        [SerializeField] private float normalAlpha = 0.1f; // 평소 투명도
+        [SerializeField] private List<Image> laneImages;
+        [SerializeField] private float flashAlpha = 0.8f;
+        [SerializeField] private float normalAlpha = 0.4f;
         [SerializeField] private float fadeSpeed = 0.1f;
 
         [Inject] private JudgementSystem _judgementSystem;
@@ -32,6 +32,11 @@ namespace Code.MainSystem.Rhythm
                     color.a = normalAlpha;
                     img.color = color;
                 }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                HandleInput(i);
             }
         }
 

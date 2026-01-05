@@ -52,5 +52,11 @@ namespace Code.MainSystem.StatSystem.MemberStats
             BaseStat stat = GetStat(evt.StatType);
             stat?.PlusValue(evt.AddValue);
         }
+
+        public void ApplyAllStatIncrease(float value)
+        {
+            foreach (var stat in Stats.Values)
+                stat.PlusValue((int)value);
+        }
     }
 }

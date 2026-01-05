@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Code.Core.Bus;
 using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace Code.MainSystem.StatSystem.UI
 {
@@ -12,8 +12,8 @@ namespace Code.MainSystem.StatSystem.UI
         [SerializeField] private GameObject blockMaskPanel;
         [SerializeField] private List<GameObject> passthroughPanels;
 
-        private readonly List<GameObject> _clones = new();
-        private bool _initialized;
+        private readonly List<Canvas> _addedCanvases = new();
+        private readonly List<GraphicRaycaster> _addedRaycasters = new();
 
         private void Awake()
         {
@@ -24,107 +24,54 @@ namespace Code.MainSystem.StatSystem.UI
         private void OnDestroy()
         {
             Bus<SelectRequiredEvent>.OnEvent -= HandleSelectRequired;
+            Cleanup();
         }
 
         private void HandleSelectRequired(SelectRequiredEvent evt)
         {
             blockMaskPanel.SetActive(true);
-
-            if (!_initialized)
-            {
-                CreateVisualClones();
-                _initialized = true;
-            }
-
-            SetClonesActive(true);
+            SetupPassthroughUI();
         }
 
         public void Close()
         {
             blockMaskPanel.SetActive(false);
-            SetClonesActive(false);
+            Cleanup();
         }
 
-        private void CreateVisualClones()
+        private void SetupPassthroughUI()
         {
-            foreach (var source in passthroughPanels)
+            foreach (var target in passthroughPanels)
             {
-                if (source is null)
+                if (target == null)
                     continue;
 
-                var clone = CloneVisualHierarchy(source.transform, blockMaskPanel.transform);
-                clone.name = source.name + "_Clone";
-                clone.SetActive(false);
+                var canvas = target.GetComponent<Canvas>();
+                if (canvas == null)
+                    canvas = target.AddComponent<Canvas>();
 
-                _clones.Add(clone);
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = 100;
+
+                var raycaster = target.GetComponent<GraphicRaycaster>();
+                if (raycaster == null)
+                    raycaster = target.AddComponent<GraphicRaycaster>();
+
+                _addedCanvases.Add(canvas);
+                _addedRaycasters.Add(raycaster);
             }
         }
 
-        private void SetClonesActive(bool value)
+        private void Cleanup()
         {
-            foreach (var clone in _clones)
-            {
-                clone?.SetActive(value);
-            }
-        }
+            foreach (var item in _addedRaycasters.Where(item => item != null))
+                Destroy(item);
 
-        private GameObject CloneVisualHierarchy(Transform source, Transform parent)
-        {
-            var clone = new GameObject(source.name);
-            clone.transform.SetParent(parent, false);
+            foreach (var item in _addedCanvases.Where(item => item != null))
+                Destroy(item);
 
-            CopyRectTransform(source, clone.transform);
-            CopyVisuals(source, clone);
-
-            foreach (Transform child in source)
-            {
-                CloneVisualHierarchy(child, clone.transform);
-            }
-
-            return clone;
-        }
-
-        private void CopyRectTransform(Transform source, Transform target)
-        {
-            var src = source as RectTransform;
-            var dst = target.gameObject.AddComponent<RectTransform>();
-
-            if (src is null)
-                return;
-
-            dst.anchorMin = src.anchorMin;
-            dst.anchorMax = src.anchorMax;
-            dst.pivot = src.pivot;
-            dst.anchoredPosition = src.anchoredPosition;
-            dst.sizeDelta = src.sizeDelta;
-            dst.localRotation = src.localRotation;
-            dst.localScale = src.localScale;
-        }
-
-        private void CopyVisuals(Transform source, GameObject target)
-        {
-            if (source.TryGetComponent<Image>(out var img))
-            {
-                var newImg = target.AddComponent<Image>();
-                newImg.sprite = img.sprite;
-                newImg.color = img.color;
-                newImg.material = img.material;
-                newImg.type = img.type;
-                newImg.preserveAspect = img.preserveAspect;
-                newImg.raycastTarget = false;
-            }
-
-            if (source.TryGetComponent<TextMeshProUGUI>(out var text))
-            {
-                var newText = target.AddComponent<TextMeshProUGUI>();
-                newText.text = text.text;
-                newText.font = text.font;
-                newText.fontSize = text.fontSize;
-                newText.color = text.color;
-                newText.alignment = text.alignment;
-                newText.textWrappingMode = text.textWrappingMode;
-                newText.raycastTarget = false;
-            }
+            _addedRaycasters.Clear();
+            _addedCanvases.Clear();
         }
     }
 }

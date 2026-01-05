@@ -33,13 +33,14 @@ namespace Code.MainSystem.Outing
 
         public void LoadAndDataSend()
         {
-            if (TrainingManager.Instance.IsMemberTrained(mainScreen.UnitSelector.CurrentUnit.memberType))
-                return;
+
             if (mainScreen.UnitSelector.CurrentUnit == null)
             {
                 Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
                 return;
             }
+            if (TrainingManager.Instance.IsMemberTrained(mainScreen.UnitSelector.CurrentUnit.memberType))
+                return;
             resultSender.targetMember = mainScreen.UnitSelector.CurrentUnit;
             _loadButton.SceneLoadAdditive("OutingScene");
         }

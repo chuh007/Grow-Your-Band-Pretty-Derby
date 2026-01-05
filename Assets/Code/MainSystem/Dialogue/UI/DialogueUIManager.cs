@@ -142,10 +142,10 @@ namespace Code.MainSystem.Dialogue.UI
                 _currentDisplayedImageInstance.SetActive(false);
             }
             
-            if (dialogueUIParent != null)
-            {
-                dialogueUIParent.SetActive(false);
-            }
+            // if (dialogueUIParent != null)
+            // {
+            //     dialogueUIParent.SetActive(false);
+            // }
         }
         
         private void OnUIContinueButtonPressed(UIContinueButtonPressedEvent e)
