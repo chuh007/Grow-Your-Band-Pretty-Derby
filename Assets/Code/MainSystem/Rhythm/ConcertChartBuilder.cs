@@ -2,18 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Code.MainSystem.StatSystem.Manager;
+using Cysharp.Threading.Tasks;
 
 namespace Code.MainSystem.Rhythm
 {
     public static class ConcertChartBuilder
     {
-        // 중복으로 간주할 시간 오차 (초 단위, 2ms)
         private const double MERGE_EPSILON = 0.002d;
         
-        // 채보 파일이 위치한 Resources 하위 폴더 경로
-        private const string CHART_PATH_PREFIX = "Charts/";
+        private const string CHART_KEY_FORMAT = "RhythmGame/Chart/{0}/{1}";
 
-        public static List<NoteData> Build(ChartLoader chartLoader, string songId, List<MemberType> memberRoles)
+        public static async UniTask<List<NoteData>> BuildAsync(ChartLoader chartLoader, string songId, List<MemberType> memberRoles)
         {
             List<NoteData> rawNotes = new List<NoteData>();
 
@@ -23,61 +22,44 @@ namespace Code.MainSystem.Rhythm
                 return rawNotes;
             }
 
-            // 1. 플레이어(Main) 차트 로드 (MemberId = 0)
-            // 파일명 예시: Resources/Charts/Song001_Main
-            string mainChartPath = $"{CHART_PATH_PREFIX}{songId}_Main";
-            var playerNotes = chartLoader.LoadChartFromResources(mainChartPath);
-            
-            if (playerNotes != null && playerNotes.Count > 0)
-            {
-                foreach (var note in playerNotes)
-                {
-                    note.MemberId = 0; // 0번은 항상 플레이어
-                    rawNotes.Add(note);
-                }
-                Debug.Log($"[ConcertChartBuilder] Loaded Main Chart: {mainChartPath} ({playerNotes.Count} notes)");
-            }
-            else
-            {
-                Debug.LogWarning($"[ConcertChartBuilder] Main chart not found or empty at: {mainChartPath}");
-            }
+            List<UniTask<List<NoteData>>> tasks = new List<UniTask<List<NoteData>>>();
+            List<int> memberIds = new List<int>();
 
-            // 2. 멤버별 차트 로드 (MemberId = 1 ~ N)
+            string mainKey = string.Format(CHART_KEY_FORMAT, songId, "Main");
+            tasks.Add(chartLoader.LoadChartAsync(mainKey));
+            memberIds.Add(0);
+
             for (int i = 0; i < memberRoles.Count; i++)
             {
                 MemberType role = memberRoles[i];
-                int assignedMemberId = i + 1; // 1번부터 순차 할당
+                string roleKey = string.Format(CHART_KEY_FORMAT, songId, role);
+                tasks.Add(chartLoader.LoadChartAsync(roleKey));
+                memberIds.Add(i + 1);
+            }
 
-                // 파일명 예시: Resources/Charts/Song001_Bass
-                string roleChartPath = $"{CHART_PATH_PREFIX}{songId}_{role}";
-                var memberNotes = chartLoader.LoadChartFromResources(roleChartPath);
-                
-                if (memberNotes != null && memberNotes.Count > 0)
+            var results = await UniTask.WhenAll(tasks);
+
+            for (int i = 0; i < results.Length; i++)
+            {
+                var loadedNotes = results[i];
+                int currentMemberId = memberIds[i];
+
+                if (loadedNotes != null && loadedNotes.Count > 0)
                 {
-                    foreach (var note in memberNotes)
+                    foreach (var note in loadedNotes)
                     {
-                        note.MemberId = assignedMemberId;
+                        note.MemberId = currentMemberId;
                         rawNotes.Add(note);
                     }
-                    Debug.Log($"[ConcertChartBuilder] Loaded Member {assignedMemberId} ({role}) Chart: {roleChartPath} ({memberNotes.Count} notes)");
-                }
-                else
-                {
-                    // 해당 악기 파트가 없는 경우도 있을 수 있으므로 LogWarning 대신 Log 정보로 남김
-                    Debug.Log($"[ConcertChartBuilder] No chart for {role} at: {roleChartPath}");
+                    Debug.Log($"[ConcertChartBuilder] Loaded Chart for Member {currentMemberId}: {loadedNotes.Count} notes");
                 }
             }
 
-            // 3. 중복 제거 및 정렬 로직 호출
             return ResolveOverlaps(rawNotes);
         }
 
         private static List<NoteData> ResolveOverlaps(List<NoteData> notes)
         {
-            // [정렬 중요] 
-            // 1순위: 시간(Time) 오름차순
-            // 2순위: 레인(Lane) 오름차순
-            // 3순위: MemberId 오름차순 (0번인 플레이어가 가장 앞에 오도록!)
             notes.Sort((a, b) =>
             {
                 int t = a.Time.CompareTo(b.Time);
@@ -93,7 +75,6 @@ namespace Code.MainSystem.Rhythm
 
             if (notes.Count == 0) return cleanList;
 
-            // 첫 번째 노트 추가
             cleanList.Add(notes[0]);
 
             for (int i = 1; i < notes.Count; i++)
@@ -106,9 +87,6 @@ namespace Code.MainSystem.Rhythm
 
                 if (isSameLane && isSameTime)
                 {
-                    // [중복 발생!]
-                    // 정렬 로직 덕분에 'prev'에는 MemberId가 더 낮은(우선순위가 높은) 노트가 이미 들어가 있음.
-                    // 따라서 지금 들어오려는 'current' 노트(MemberId가 더 높은 NPC 노트)를 무시.
                     continue; 
                 }
 

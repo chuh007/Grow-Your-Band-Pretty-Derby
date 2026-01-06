@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Reflex.Attributes;
+using Cysharp.Threading.Tasks;
+using Code.Core.Addressable;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -46,56 +48,35 @@ namespace Code.MainSystem.Rhythm
                 double finalTime = noteJson.time + chartData.offset; 
                 notes.Add(new NoteData(finalTime, noteJson.lane, noteJson.type));
             }
-
+            
             notes.Sort((a, b) => a.Time.CompareTo(b.Time));
 
             return notes;
         }
 
-        public List<NoteData> LoadTestChart()
+        public async UniTask<List<NoteData>> LoadChartAsync(string key)
         {
-            string json = @"
+            if (GameResourceManager.Instance == null)
             {
-              ""title"": ""Test Song"",
-              ""bpm"": 120,
-              ""offset"": 0.0,
-              ""notes"": [
-                { ""time"": 2.0, ""lane"": 0, ""type"": 0 },
-                { ""time"": 2.5, ""lane"": 1, ""type"": 0 },
-                { ""time"": 3.0, ""lane"": 2, ""type"": 0 },
-                { ""time"": 3.5, ""lane"": 3, ""type"": 0 },
-                { ""time"": 4.0, ""lane"": 3, ""type"": 0 },
-                { ""time"": 4.5, ""lane"": 2, ""type"": 0 },
-                { ""time"": 5.0, ""lane"": 1, ""type"": 0 },
-                { ""time"": 5.5, ""lane"": 0, ""type"": 0 }
-              ]
-            }";
-            return LoadChart(json);
-        }
-
-        public List<NoteData> LoadChartFromResources(string path)
-        {
-            TextAsset textAsset = Resources.Load<TextAsset>(path);
-            if (textAsset == null)
-            {
-                Debug.LogWarning($"ChartLoader: Could not find chart at path: {path}");
+                Debug.LogError("ChartLoader: GameResourceManager Instance is null!");
                 return new List<NoteData>();
             }
-            return LoadChart(textAsset.text);
-        }
 
-        public List<NoteData> CombineCharts(List<List<NoteData>> allCharts)
-        {
-            List<NoteData> combined = new List<NoteData>();
-            foreach (var chart in allCharts)
+            try
             {
-                combined.AddRange(chart);
+                TextAsset textAsset = await GameResourceManager.Instance.LoadAsync<TextAsset>(key);
+                if (textAsset == null)
+                {
+                    Debug.LogWarning($"ChartLoader: Failed to load chart asset at key: {key}");
+                    return new List<NoteData>();
+                }
+                return LoadChart(textAsset.text);
             }
-            
-            // Sort by time to ensure correct playback order
-            combined.Sort((a, b) => a.Time.CompareTo(b.Time));
-            
-            return combined;
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"ChartLoader: Exception loading chart {key}: {ex.Message}");
+                return new List<NoteData>();
+            }
         }
     }
 }

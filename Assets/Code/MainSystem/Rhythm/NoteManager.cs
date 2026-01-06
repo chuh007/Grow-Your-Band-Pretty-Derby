@@ -7,10 +7,9 @@ namespace Code.MainSystem.Rhythm
     public class NoteManager : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] private GameObject notePrefab;
         [SerializeField] private float noteSpeed = 800.0f;
         [SerializeField] private float spawnDistance = 1200.0f;
-        [SerializeField] private float hitLineYOffset = -600.0f; // 판정선의 Y 좌표 오프셋 (Lane 중심 기준)
+        [SerializeField] private float hitLineYOffset = -600.0f; 
         
         [Tooltip("Assign the Lane UI Objects (Lane_0, Lane_1, etc.) here.")]
         [SerializeField] private List<RectTransform> laneContainers; 
@@ -18,8 +17,8 @@ namespace Code.MainSystem.Rhythm
 
         [Inject] private Conductor _conductor;
         [Inject] private JudgementSystem _judgementSystem;
-        [Inject] private ChartLoader _chartLoader;
 
+        private GameObject _notePrefab;
         private Queue<NoteData> _noteQueue = new Queue<NoteData>();
         
         private List<NoteObject>[] _laneNotes;
@@ -45,6 +44,11 @@ namespace Code.MainSystem.Rhythm
             }
         }
 
+        public void SetNotePrefab(GameObject prefab)
+        {
+            _notePrefab = prefab;
+        }
+
         public void SetChart(List<NoteData> notes)
         {
             _noteQueue.Clear();
@@ -67,14 +71,13 @@ namespace Code.MainSystem.Rhythm
 
         private void HandleSongStart()
         {
-            if (_externalChartLoaded)
+            if (!_externalChartLoaded)
             {
-                Debug.Log("NoteManager: Song Started. Chart already loaded externally.");
+                Debug.LogWarning("NoteManager: Song Started but no chart loaded!");
                 return;
             }
 
-            Debug.Log("NoteManager: Song Started. Loading Chart...");
-            LoadChartData();
+            Debug.Log("NoteManager: Song Started.");
         }
 
         private void HandleSongEnd()
@@ -97,25 +100,7 @@ namespace Code.MainSystem.Rhythm
             _noteQueue.Clear();
         }
 
-        private void LoadChartData()
-        {
-            _noteQueue.Clear();
 
-            if (_chartLoader == null)
-            {
-                Debug.LogError("NoteManager: ChartLoader not injected!");
-                return;
-            }
-            
-            List<NoteData> notes = _chartLoader.LoadTestChart();
-            
-            foreach (var note in notes)
-            {
-                _noteQueue.Enqueue(note);
-            }
-            
-            Debug.Log($"NoteManager: Loaded {notes.Count} notes from ChartLoader.");
-        }
 
         private void Update()
         {
@@ -151,11 +136,9 @@ namespace Code.MainSystem.Rhythm
                 {
                     NoteObject noteObj = list[i];
                     
-                    // (남은 시간 * 속도) + 판정선 오프셋
                     float visualY = (float)((noteObj.Data.Time - currentSongTime) * noteSpeed) + hitLineYOffset;
                     noteObj.SetPosition(visualY);
 
-                    // 판정선보다 훨씬 아래로 내려갔을 때 미스 처리 (예: 오프셋보다 200픽셀 더 아래)
                     if (visualY < hitLineYOffset - 200.0f) 
                     {
                         if (_judgementSystem != null)
@@ -214,7 +197,13 @@ namespace Code.MainSystem.Rhythm
             }
             else
             {
-                GameObject go = Instantiate(notePrefab, transform);
+                if (_notePrefab == null)
+                {
+                    Debug.LogError("NoteManager: Note Prefab is not set!");
+                    return null;
+                }
+
+                GameObject go = Instantiate(_notePrefab, transform);
                 NoteObject noteObj = go.GetComponent<NoteObject>();
                 if (noteObj == null) noteObj = go.AddComponent<NoteObject>();
                 return noteObj;

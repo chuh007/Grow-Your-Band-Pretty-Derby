@@ -60,6 +60,8 @@ namespace Code.MainSystem.Rhythm
             }
         }
 
+        public void SetMusic(AudioClip clip) => SetAudioClip(clip);
+
         public void Play()
         {
             if (_musicController == null) return;
