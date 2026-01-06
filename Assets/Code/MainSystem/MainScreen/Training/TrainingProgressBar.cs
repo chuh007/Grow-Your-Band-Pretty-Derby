@@ -7,7 +7,6 @@ namespace Code.MainSystem.MainScreen.Training
     public class TrainingProgressBar : MonoBehaviour
     {
         [SerializeField] private RectTransform fillBar;
-        [SerializeField] private TrainingProgressImage progressImage; 
 
         private float _duration;
         private float _elapsed;

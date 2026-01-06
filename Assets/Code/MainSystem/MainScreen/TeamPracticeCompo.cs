@@ -1,20 +1,23 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.StatSystem.Manager;
-using Cysharp.Threading.Tasks;
+using Code.MainSystem.Rhythm;
 
 namespace Code.MainSystem.MainScreen
 {
     public class TeamPracticeCompo : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField] private Button enterTeamPracticeButton;
-        [SerializeField] private Button startPracticeButton;
+        [SerializeField] private Button enterTeamPracticeButton; 
+        [SerializeField] private Button startPracticeButton;    
         [SerializeField] private Button backButton;
+        [SerializeField] private string RhythmGameScene;
+        [SerializeField] private RhythmGameDataSenderSO rhythmGameDataSenderSO;
 
         [Header("Member Buttons")]
         [SerializeField] private List<Button> memberButtons;
@@ -22,15 +25,13 @@ namespace Code.MainSystem.MainScreen
         [Header("Button Move")]
         [SerializeField] private float liftY = 20f;
 
-        [Header("Training")]
-        [SerializeField] private TrainingSequenceController trainingSequenceController;
-
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
         private readonly Dictionary<MemberType, Vector3> _originLocalPosMap = new();
         private readonly HashSet<MemberType> _selectedMembers = new();
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
-        private bool _isTeamPracticeMode = false;
+
+        private bool _isTeamPracticeMode = false; 
 
         #region LifeCycle
 
@@ -54,6 +55,7 @@ namespace Code.MainSystem.MainScreen
 
         private void InitButtons()
         {
+            rhythmGameDataSenderSO.members.Clear();
             foreach (var btn in memberButtons)
             {
                 if (!Enum.TryParse(btn.name, out MemberType type))
@@ -134,29 +136,16 @@ namespace Code.MainSystem.MainScreen
 
         #region Start / Back
 
-        private async void OnClickStartPractice()
+        private void OnClickStartPractice()
         {
             if (!_isTeamPracticeMode) return;
             if (_selectedMembers.Count < 2) return;
-
+            
             TrainingManager.Instance.MarkMembersTrainedForTeam(_selectedMembers);
-            
-            List<UnitDataSO> selectedUnits = new();
-            foreach (var member in _selectedMembers)
-            {
-                if (_unitMap.TryGetValue(member, out var unit))
-                    selectedUnits.Add(unit);
-            }
-            
-            trainingSequenceController.gameObject.SetActive(true);
-            await trainingSequenceController.PlayTeamTrainingSequence(
-                isSuccess: true,
-                selectedUnits
-            );
-
-            ResetSelection();
-            _isTeamPracticeMode = false;
+            rhythmGameDataSenderSO.members.Add(_selectedMembers);
+            SceneManager.LoadScene(RhythmGameScene);
         }
+
 
         private void OnClickBack()
         {

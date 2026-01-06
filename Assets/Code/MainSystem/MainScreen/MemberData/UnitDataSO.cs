@@ -15,6 +15,7 @@ namespace Code.MainSystem.MainScreen.MemberData
         public List<PersonalpracticeDataSO> personalPractices;
         public float maxCondition;
         public float currentCondition;
+        public StatData TeamStat;
     }
 
 }

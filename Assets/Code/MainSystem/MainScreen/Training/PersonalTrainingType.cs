@@ -10,31 +10,49 @@ namespace Code.MainSystem.MainScreen.Training
     {
         private PersonalpracticeDataSO data;
 
-        public PersonalTrainingType(PersonalpracticeDataSO data)
+        public PersonalTrainingType(PersonalpracticeDataSO practiceData)
         {
-            this.data = data;
+            data = practiceData;
         }
 
         public string GetIdleImageKey() => data.IdleImageAddressableKey;
-        public string GetResultImageKey(bool isSuccess) => isSuccess ? data.SuccseImageAddressableKey : data.FaillImageAddressableKey;
+
+        public string GetResultImageKey(bool isSuccess)
+            => isSuccess ? data.SuccseImageAddressableKey : data.FaillImageAddressableKey;
+
         public string GetProgressImageKey() => data.ProgressImageAddresableKey;
 
-        public string GetIdlePrefabKey() => "Training/SD/Idle";
-        public string GetResultUIPrefabKey() => "Training/UI/Result";
-
-        public (string name, Sprite icon, int baseValue, int delta)
-            GetTeamStatResult(TeamStatManager teamStatManager, bool isSuccess)
+        public string GetIdlePrefabKey()
         {
-            var stat = teamStatManager.GetStat(data.practiceTeamStatType);
-            int delta = isSuccess ? Mathf.RoundToInt(data.teamStatIncrease) : 0;
+            return "Training/SD/Idle"; 
+        }
 
-            return (
-                stat.displayName,
-                stat.icon,
-                Mathf.RoundToInt(stat.currentValue),
-                delta
-            );
+        public string GetResultUIPrefabKey()
+        {
+            return "Training/UI/Result"; 
+        }
+
+        public List<(string name, Sprite icon, int baseValue, int delta)> GetStatChanges(
+            UnitDataSO unit,
+            StatManager statManager,
+            bool isSuccess)
+        {
+            StatType targetType = data.PracticeStatType;
+            var statList = new List<(string, Sprite, int, int)>();
+
+            for (int i = 0; i < unit.stats.Count && statList.Count < 4; i++)
+            {
+                var stat = unit.stats[i];
+                var memberStat = statManager.GetMemberStat(unit.memberType, stat.statType);
+
+                int delta = (isSuccess && stat.statType == targetType)
+                    ? Mathf.RoundToInt(data.statIncrease)
+                    : 0;
+
+                statList.Add((stat.statName, stat.statIcon, Mathf.RoundToInt(memberStat.CurrentValue), delta));
+            }
+
+            return statList;
         }
     }
-
 }

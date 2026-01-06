@@ -20,7 +20,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5d73634f709a7f8478c22951e12c4349, type: 2}
   - {fileID: 11400000, guid: 78995d0799f458b4ca72ae1e2e7b79a5, type: 2}
   - {fileID: 11400000, guid: f5a782b60f8633a459931a1ace35d2db, type: 2}
-  - {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}
   personalPractices:
   - {fileID: 11400000, guid: 26bf6c549897c654380fc35962e2d244, type: 2}
   - {fileID: 11400000, guid: e6ff848408928fb4bbff90f106e30585, type: 2}
@@ -28,3 +27,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dc37d876655452c459863bb7c3f726b3, type: 2}
   maxCondition: 100
   currentCondition: 100
+  TeamStat: {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}

@@ -41,6 +41,27 @@ namespace Code.MainSystem.MainScreen
             { MemberType.Piano, 3 },
             { MemberType.Vocal, 4 }
         };
+        
+        [SerializeField] private Button resetPreviewButton;
+
+        private void Awake()
+        {
+            resetPreviewButton.onClick.AddListener(ResetPreview);
+        }
+
+        public void ResetPreview()
+        {
+            _selectedPracticeIndex = -1;
+            _previewDamage = 0f;
+            
+            healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
+            
+            _statUIUpdater.UpdateAll(_currentUnit);
+            
+            HideAllArrows();
+            HideAllProbabilityTexts();
+        }
+
 
         #region Init
 

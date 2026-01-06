@@ -196,7 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7137808420387973205}
   - component: {fileID: 4506490837445481765}
-  - component: {fileID: 4446559713871736596}
+  - component: {fileID: 6784841706736200801}
   m_Layer: 5
   m_Name: ConcertIdle
   m_TagString: Untagged
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &4446559713871736596
+--- !u!114 &6784841706736200801
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -260,13 +260,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 3564722899885042621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11f5d3b039724ce9b317c0b661bec8b7, type: 3}
+  m_Script: {fileID: 11500000, guid: cf76f493c4ba40af811aa088eff017e1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.TrainingProgressImage
-  progressImage: {fileID: 0}
-  pulseScale: 0.85
-  floatOffsetY: 8
-  animationDuration: 0.7
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.TeamTrainingProgressImage
+  memberImages:
+  - memberType: 0
+    image: {fileID: 7493859798536122447}
+  - memberType: 1
+    image: {fileID: 2356978731032661083}
+  - memberType: 2
+    image: {fileID: 7189909598529923392}
+  - memberType: 4
+    image: {fileID: 3093260940689570911}
+  - memberType: 3
+    image: {fileID: 5673836773167365203}
+  pulseScale: 0.95
+  floatOffsetY: 10
+  animationDuration: 0.3
 --- !u!1 &4616304837065190516
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,7 +822,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.TrainingProgressBar
   fillBar: {fileID: 5131329533711233525}
-  progressImage: {fileID: 4446559713871736596}
 --- !u!1 &8006985747260395323
 GameObject:
   m_ObjectHideFlags: 0

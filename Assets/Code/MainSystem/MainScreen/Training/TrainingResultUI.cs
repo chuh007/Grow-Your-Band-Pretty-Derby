@@ -70,15 +70,43 @@ namespace Code.MainSystem.MainScreen.Training
 
             OnClose = onClose;
         }
+        
+        
 
         public void OnPointerClick(PointerEventData eventData)
         {
             OnClose?.Invoke();
         }
 
-        public async UniTask PlayTeamResult(Sprite idleSprite, Sprite resultSprite, Dictionary<UnitDataSO, List<(string name, Sprite icon, int baseValue, int delta)>> allStats, bool isSuccess, Action action)
+        public async UniTask PlayTeamResult(
+            Sprite idleSprite,
+            Sprite resultSprite,
+            Dictionary<UnitDataSO, List<(string name, Sprite icon, int baseValue, int delta)>> allStats,
+            bool isSuccess,
+            Action onClose)
         {
+            trainingResultImage.sprite = idleSprite;
+            healthBar.SetHealth(100, 100);
             
+            foreach (var kvp in allStats)
+            {
+                var unit = kvp.Key;
+                var statList = kvp.Value;
+                
+                var harmonyStat = statList.Find(stat => stat.name == "하모니");
+            }
+
+            await UniTask.Delay(1000);
+            trainingResultImage.sprite = resultSprite;
+            trainingResultImage.transform.DOScale(scaleFactor, scaleTime).SetEase(Ease.InSine);
+
+            resultImage.sprite = resultSprite;
+            resultImage.transform.localScale = Vector3.zero;
+            resultImage.gameObject.SetActive(true);
+            resultImage.transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack);
+
+            OnClose = onClose;
         }
+
     }
 }

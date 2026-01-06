@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Training
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5135be7f1fb1e74fbeee1b8e40317a6
+    m_Address: Concert/SD/Result
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Training
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
   m_SchemaSet:
