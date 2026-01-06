@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
+using System.Linq;
 using Code.MainSystem.StatSystem.MemberStats;
 using Code.MainSystem.StatSystem.TeamStats;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -18,20 +20,53 @@ namespace Code.MainSystem.StatSystem.Manager
     
     public class StatManager : MonoBehaviour
     {
+        [Header("Stats Data")]
         [SerializeField] private List<MemberStat> memberStats;
         [SerializeField] private TeamStat teamStat;
 
+        [Header("Settings")]
+        [SerializeField] private float restRecoveryAmount = 10f;
+
         private Dictionary<MemberType, MemberStat> _memberMap;
-
-        private async void Awake()
+        
+        private void Awake()
         {
-            _memberMap = new Dictionary<MemberType, MemberStat>();
-            
-            await teamStat.InitializeAsync();
-            
-            foreach (var member in memberStats)
-                _memberMap[member.MemberType] = member;
+            InitializeMemberMap();
+        }
+        
+        private void Start()
+        {
+            RegisterEvents();
+        }
+        
+        private void OnDestroy()
+        {
+            UnregisterEvents();
+        }
 
+        private async void InitializeMemberMap()
+        {
+            try
+            {
+                Debug.Assert(teamStat != null, "teamStat is null");
+                await teamStat.InitializeAsync();
+
+                _memberMap = new Dictionary<MemberType, MemberStat>();
+                foreach (var member in memberStats.Where(member => member != null))
+                    _memberMap.TryAdd(member.MemberType, member);
+            }
+            catch (Exception e)
+            {
+                #if UNITY_EDITOR || DEVELOPMENT_BUILD
+                Debug.LogError($"InitializeMemberMap 실패: {e}");
+                #endif
+            }
+        }
+
+        #region Event Management
+
+        private void RegisterEvents()
+        {
             Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
@@ -40,7 +75,7 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<StatAllMemberStatIncreaseEvent>.OnEvent += HandleMemberAllStatIncreaseRequested;
         }
         
-        private void OnDestroy()
+        private void UnregisterEvents()
         {
             Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
@@ -49,105 +84,84 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatIncreaseRequested;
             Bus<StatAllMemberStatIncreaseEvent>.OnEvent -= HandleMemberAllStatIncreaseRequested;
         }
-        
-        private void HandlePracticeRequested(PracticenEvent evt)
-        {
-            if (evt.Type == PracticenType.Team)
-            {
-                UpgradeTeamStat(evt.SuccessRate,evt.Value);
-            }
-            else
-            {
-                UpgradeMemberStat(evt.memberType, evt.statType, evt.SuccessRate, evt.Value);
-            }
-        }
-
-        #region GetStat
-
-        public BaseStat GetMemberStat(MemberType memberType, StatType statType)
-        {
-            var member = _memberMap.GetValueOrDefault(memberType);
-            return member?.GetStat(statType);
-        }
-
-        public BaseStat GetTeamStat(StatType statType)
-        {
-            return teamStat?.GetTeamStat(statType);
-        }
 
         #endregion
         
-        #region OperationStat
-
-        private void UpgradeMemberStat(MemberType memberType, StatType statType, float successRate, float value)
-        {
-            var member = _memberMap.GetValueOrDefault(memberType);
-            if (member is null)
-                return;
-
-            bool success = PredictMemberPractice(successRate);
-
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
-
-            if (!success) 
-                return;
-            
-            member.ApplyStatIncrease(statType, value);
-        }
-        
-        private void HandleMemberAllStatIncreaseRequested(StatAllMemberStatIncreaseEvent evt)
-        {
-            var member = _memberMap.GetValueOrDefault(evt.MemberType);
-            member?.ApplyAllStatIncrease(evt.Value);
-        }
+        #region Event Handlers & Core Logic
         
         public bool PredictMemberPractice(float successRate)
         {
             return Random.Range(0f, 100f) < successRate;
         }
-        
+
+        private void HandlePracticeRequested(PracticenEvent evt)
+        {
+            bool isSuccess = PredictMemberPractice(evt.SuccessRate);
+            
+            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
+            
+            if (!isSuccess)
+                return;
+            
+            ApplyPracticeSuccess(evt);
+        }
+
+        private void ApplyPracticeSuccess(PracticenEvent evt)
+        {
+            if (evt.Type == PracticenType.Team)
+                teamStat?.ApplyTeamStatIncrease(evt.Value);
+            else
+                if (_memberMap.TryGetValue(evt.memberType, out var member))
+                    member.ApplyStatIncrease(evt.statType, evt.Value);
+        }
+
         private void HandleSingleStatIncreaseRequested(StatIncreaseEvent evt)
         {
-            var member = _memberMap.GetValueOrDefault(evt.MemberType);
-            member?.ApplyStatIncrease(evt.StatType, evt.Value);
+            if (_memberMap.TryGetValue(evt.MemberType, out var member))
+                member.ApplyStatIncrease(evt.StatType, evt.Value);
         }
         
+        private void HandleMemberAllStatIncreaseRequested(StatAllMemberStatIncreaseEvent evt)
+        {
+            if (_memberMap.TryGetValue(evt.MemberType, out var member))
+                member.ApplyAllStatIncrease(evt.Value);
+        }
+
         private void HandleAllMemberStatIncreaseRequested(StatAllIncreaseEvent evt)
         {
-            foreach (var pair in memberStats)
-                pair.ApplyStatIncrease(evt.StatType, evt.Value);
+            foreach (var member in memberStats)
+                member?.ApplyStatIncrease(evt.StatType, evt.Value);
         }
         
         private void HandleTeamStatIncreaseRequested(TeamStatIncreaseEvent evt)
         {
-            teamStat.ApplyTeamStatIncrease(evt.AddValue);
-        }
-
-        private void UpgradeTeamStat(float successRate, float value)
-        {
-            bool success = PredictMemberPractice(successRate);
-
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(success));
-
-            if (!success)
-                return;
-
-            teamStat.ApplyTeamStatIncrease(value);
+            teamStat?.ApplyTeamStatIncrease(evt.AddValue);
         }
         
         private void HandleRestRequested(ConfirmRestEvent evt)
         {
             var unit = evt.Unit;
+            if (unit is null)
+                return;
             
-            if(unit is null)
+            if (!_memberMap.ContainsKey(unit.memberType))
                 return;
 
-            var member = _memberMap.GetValueOrDefault(unit.memberType);
-            if (member is null)
-                return;
+            unit.currentCondition = Mathf.Clamp(unit.currentCondition + restRecoveryAmount, 0, unit.maxCondition);
+        }
 
-            unit.currentCondition += 10;
-            unit.currentCondition = Mathf.Clamp(unit.currentCondition, 0, unit.maxCondition);
+        #endregion
+
+        #region GetStat
+
+        public BaseStat GetMemberStat(MemberType memberType, StatType statType)
+        {
+            return _memberMap.GetValueOrDefault(memberType)?.GetStat(statType);
+        }
+
+        public BaseStat GetTeamStat(StatType statType)
+        {
+            return teamStat?.GetTeamStat(statType);
         }
 
         #endregion

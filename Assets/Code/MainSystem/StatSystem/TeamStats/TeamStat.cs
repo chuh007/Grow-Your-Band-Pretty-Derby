@@ -14,11 +14,6 @@ namespace Code.MainSystem.StatSystem.TeamStats
 
         private bool _initialized;
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
         public async Task InitializeAsync()
         {
             if (_initialized)
