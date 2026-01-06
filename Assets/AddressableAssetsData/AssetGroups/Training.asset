@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Training
   m_GUID: a8406934bb8a8de49bc6c99ca96b78ff
   m_SerializeEntries:
+  - m_GUID: 0912861bcedda8445bb4c77b5d6ef2f5
+    m_Address: Concert/SD/Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Training
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 27018cba84565be43aa93fc329685a9d
     m_Address: Training/SD/Idle
     m_ReadOnly: 0

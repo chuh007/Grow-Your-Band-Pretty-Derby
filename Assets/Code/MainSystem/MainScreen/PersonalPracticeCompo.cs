@@ -80,9 +80,7 @@ namespace Code.MainSystem.MainScreen
             {
                 bool success = _statManager.PredictMemberPractice(_currentCondition);
 
-                trainingSequenceController.gameObject.SetActive(true);
-                await trainingSequenceController
-                    .PlayTrainingSequence(success, practice, _currentUnit);
+                
 
                
 
@@ -108,6 +106,13 @@ namespace Code.MainSystem.MainScreen
 
                 _selectedPracticeIndex = -1;
                 _statUIUpdater.UpdateAll(_currentUnit);
+                
+                trainingSequenceController.gameObject.SetActive(true);
+                var personalTrainingType = new PersonalTrainingType(practice);
+                await trainingSequenceController
+                    .PlayTrainingSequence(success, personalTrainingType, _currentUnit);
+
+
 
                 HideAllArrows();
                 HideAllProbabilityTexts();
@@ -120,7 +125,7 @@ namespace Code.MainSystem.MainScreen
 
             healthBar.PrevieMinusHealth(_previewDamage);
             _statUIUpdater.PreviewStat(_currentUnit, practice.PracticeStatType, practice.statIncrease);
-
+            
             ShowArrow(index);
             ShowProbability();
         }
