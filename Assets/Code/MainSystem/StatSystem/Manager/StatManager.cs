@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.StatSystem.Module;
 using Code.MainSystem.StatSystem.Stats;
-using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -23,6 +23,9 @@ namespace Code.MainSystem.StatSystem.Manager
         [SerializeField] private List<MemberStat> memberStats;
         [SerializeField] private TeamStat teamStat;
 
+        [Header("StatModule")]
+        [SerializeField] private StatUpgrade upgradeModule;
+
         [Header("Settings")]
         [SerializeField] private float restRecoveryAmount = 10f;
 
@@ -31,23 +34,21 @@ namespace Code.MainSystem.StatSystem.Manager
         private void Awake()
         {
             InitializeMemberMap();
-        }
-        
-        private void Start()
-        {
             RegisterEvents();
+            InitializeModule();
         }
-        
+
         private void OnDestroy()
         {
             UnregisterEvents();
         }
 
+        #region Init
+
         private async void InitializeMemberMap()
         {
             try
             {
-                Debug.Assert(teamStat != null, "teamStat is null");
                 await teamStat.InitializeAsync();
 
                 _memberMap = new Dictionary<MemberType, MemberStat>();
@@ -56,11 +57,27 @@ namespace Code.MainSystem.StatSystem.Manager
             }
             catch (Exception e)
             {
-                #if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
                 Debug.LogError($"InitializeMemberMap 실패: {e}");
-                #endif
+#endif
             }
         }
+        
+        private async void InitializeModule()
+        {
+            try
+            {
+                await upgradeModule.Initialize();
+            }
+            catch (Exception e)
+            {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                Debug.LogError($"InitializeModule 실패: {e}");
+#endif
+            }
+        }
+
+        #endregion
 
         #region Event Management
 
@@ -90,7 +107,8 @@ namespace Code.MainSystem.StatSystem.Manager
         
         public bool PredictMemberPractice(float successRate)
         {
-            return Random.Range(0f, 100f) < successRate;
+            upgradeModule.SetCondition(successRate);
+           return upgradeModule.CanUpgrade();
         }
 
         private void HandlePracticeRequested(PracticenEvent evt)
