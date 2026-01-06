@@ -40,7 +40,7 @@ MonoBehaviour:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a34f6ed0f73dacb44aafe0fcccb1605c
-    m_Address: RhythmGame/Object/Note
+    m_Address: RhythmGame/Prefab/Note
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame
@@ -52,7 +52,7 @@ MonoBehaviour:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d453ad1018d82ad41836c8b482109cfe
-    m_Address: RhythmGame/Audio/TestSong
+    m_Address: RhythmGame/Music/TestSong
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame

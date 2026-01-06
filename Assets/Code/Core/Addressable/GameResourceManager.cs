@@ -62,6 +62,8 @@ namespace Code.Core.Addressable
             _loadHandleDict.Add(key, opHandle);
             return result;
         }
+
+        public async Task<T> LoadAssetAsync<T>(string key) where T : Object => await LoadAsync<T>(key);
         
         //멀티 에셋 로더
         public async Task LoadAllAsync<T>(string lable) where T : Object

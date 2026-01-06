@@ -46,10 +46,9 @@ namespace Code.MainSystem.Rhythm
             dataSender.SongId = evt.SongId;
             dataSender.MemberIds = evt.MemberIds;
             dataSender.Difficulty = evt.Difficulty;
-            // CombinedChart is now loaded in the RhythmScene by Bootstrapper
             dataSender.IsResultDataAvailable = false;
 
-            SceneManager.LoadScene("RhythmScene");
+            SceneManager.LoadScene("Rhythm");
         }
 
         private void ProcessGameResult()

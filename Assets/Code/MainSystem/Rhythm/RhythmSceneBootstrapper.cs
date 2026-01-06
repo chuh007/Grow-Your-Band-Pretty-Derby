@@ -17,7 +17,7 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private RhythmGameDataSenderSO _dataSender;
 
         private AudioClip _loadedMusic;
-        private GameObject _loadedPrefab;
+        private GameObject _loadedNotePrefab;
 
         private async void Start()
         {
@@ -49,26 +49,29 @@ namespace Code.MainSystem.Rhythm
             string musicKey = $"RhythmGame/Music/{songId}";
             string prefabKey = "RhythmGame/Prefab/Note";
 
-            var musicTask = GameResourceManager.Instance.LoadAsync<AudioClip>(musicKey);
-            var prefabTask = GameResourceManager.Instance.LoadAsync<GameObject>(prefabKey);
-            var chartTask = ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
+            var musicLoadTask = GameResourceManager.Instance.LoadAssetAsync<AudioClip>(musicKey).AsUniTask();
+            var prefabLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(prefabKey).AsUniTask();
+            var chartLoadTask = ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
 
-            await UniTask.WhenAll(musicTask.AsUniTask(), prefabTask.AsUniTask(), chartTask);
+            var (musicClip, notePrefab, chartData) = await UniTask.WhenAll(
+                musicLoadTask, 
+                prefabLoadTask, 
+                chartLoadTask
+            );
 
-            _loadedMusic = await musicTask;
-            _loadedPrefab = await prefabTask;
-            var loadedChart = await chartTask;
-
-            if (_conductor != null)
+            if (musicClip != null) 
             {
-                _conductor.SetAudioClip(_loadedMusic); 
+                _loadedMusic = musicClip;
+                _conductor.SetMusic(musicClip);
+            }
+            
+            if (notePrefab != null)
+            {
+                _loadedNotePrefab = notePrefab;
+                _noteManager.SetNotePrefab(notePrefab);
             }
 
-            if (_noteManager != null)
-            {
-                _noteManager.SetNotePrefab(_loadedPrefab);
-                _noteManager.SetChart(loadedChart);
-            }
+            _noteManager.SetChart(chartData);
 
             if (_conductor != null)
             {
@@ -86,10 +89,10 @@ namespace Code.MainSystem.Rhythm
                     _loadedMusic = null;
                 }
                 
-                if (_loadedPrefab != null)
+                if (_loadedNotePrefab != null)
                 {
-                    GameResourceManager.Instance.Release(_loadedPrefab);
-                    _loadedPrefab = null;
+                    GameResourceManager.Instance.Release(_loadedNotePrefab);
+                    _loadedNotePrefab = null;
                 }
             }
         }
