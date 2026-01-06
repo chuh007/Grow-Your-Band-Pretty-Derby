@@ -25,6 +25,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         [Header("StatModule")]
         [SerializeField] private StatUpgrade upgradeModule;
+        [SerializeField] private EnsembleModule ensembleModule;
 
         [Header("Settings")]
         [SerializeField] private float restRecoveryAmount = 10f;
@@ -68,6 +69,7 @@ namespace Code.MainSystem.StatSystem.Manager
             try
             {
                 await upgradeModule.Initialize();
+                await ensembleModule.Initialize();
             }
             catch (Exception e)
             {
@@ -170,7 +172,29 @@ namespace Code.MainSystem.StatSystem.Manager
         #endregion
 
         #region GetStat
+        
+        public float GetEnsembleSuccessRate(List<MemberType> participantTypes)
+        {
+            var conditions = GetMemberConditions(participantTypes);
+            return ensembleModule.CalculateSuccessRate(conditions);
+        }
 
+        private List<float> GetMemberConditions(List<MemberType> memberTypes)
+        {
+            var conditions = new List<float>();
+    
+            foreach (var memberType in memberTypes)
+            {
+                if (!_memberMap.TryGetValue(memberType, out var member))
+                    continue;
+                var conditionStat = member.GetStat(StatType.Condition);
+                if (conditionStat != null)
+                    conditions.Add(conditionStat.CurrentValue);
+            }
+    
+            return conditions;
+        }
+        
         public BaseStat GetMemberStat(MemberType memberType, StatType statType)
         {
             return _memberMap.GetValueOrDefault(memberType)?.GetStat(statType);
