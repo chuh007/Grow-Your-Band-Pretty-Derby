@@ -12,7 +12,7 @@ namespace Code.MainSystem.MainScreen.Training
     {
         private Dictionary<MemberType, int> _trainedMembers = new();
         private bool _teamTrained = false;
-
+        private int _curTurnTrainingCount = 0;
         public static TrainingManager Instance { get; private set; }
 
         private readonly MemberType[] _allMemberTypes =
@@ -36,6 +36,16 @@ namespace Code.MainSystem.MainScreen.Training
                 Destroy(gameObject);
             }
         }
+
+        private void Start()
+        {
+            foreach (var type in _allMemberTypes)
+            {
+                _trainedMembers.Add(type, 1);
+            }
+        }
+        
+        public int GetCurrentTrainingCount() => _curTurnTrainingCount;
         
         public void MarkMembersTrainedForTeam(IEnumerable<MemberType> members)
         {
@@ -44,20 +54,20 @@ namespace Code.MainSystem.MainScreen.Training
                 MarkMemberTrained(member);
             }
         }
-
-
+        
         public bool IsMemberTrained(MemberType member)
         {
-            return _trainedMembers[member].Equals(0);
+            return _trainedMembers[member] == 0;
         }
 
         public void MarkMemberTrained(MemberType member)
         {
-            if (_trainedMembers[member].Equals(0))
+            if (_trainedMembers[member] == 0)
                 return;
-
+            
             _trainedMembers[member]--;
-
+            _curTurnTrainingCount++;
+            
             Bus<MemberTrainingStateChangedEvent>.Raise(
                 new MemberTrainingStateChangedEvent(member)
             );
@@ -77,7 +87,11 @@ namespace Code.MainSystem.MainScreen.Training
 
         public void ResetTraining()
         {
-            _trainedMembers.Clear();
+            _curTurnTrainingCount = 0;
+            foreach (var type in _allMemberTypes)
+            {
+                _trainedMembers[type] = 1;
+            }
             _teamTrained = false;
             
             foreach (var member in _allMemberTypes)
@@ -93,7 +107,7 @@ namespace Code.MainSystem.MainScreen.Training
         {
             foreach (var member in _allMemberTypes)
             {
-                if (!_trainedMembers[member].Equals(0))
+                if (_trainedMembers[member] != 0)
                     return;
             }
             
