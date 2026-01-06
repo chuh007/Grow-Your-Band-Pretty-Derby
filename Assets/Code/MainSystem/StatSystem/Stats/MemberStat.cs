@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using Code.Core.Bus;
-using System.Collections.Generic;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Code.MainSystem.StatSystem.MemberStats
+namespace Code.MainSystem.StatSystem.Stats
 {
     public class MemberStat : AbstractStats
     {

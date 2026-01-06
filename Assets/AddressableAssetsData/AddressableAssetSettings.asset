@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 4b4de78eb427cf14cb021559754d2590
   m_currentHash:
     serializedVersion: 2
-    Hash: 333ae9ed9314991206b2cb476224ee48
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -120,6 +120,7 @@ MonoBehaviour:
     - Outing
     - RhythmGame
     - Rest
+    - UpgradeData
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: abcdcd90432562f4fb79f7f0f6dc188b, type: 2}

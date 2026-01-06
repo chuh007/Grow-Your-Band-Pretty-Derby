@@ -1,23 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Code.Core.Bus;
+using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using Code.MainSystem.StatSystem.BaseStats;
-using Code.Core.Bus;
-using Code.MainSystem.StatSystem.Events;
 
-namespace Code.MainSystem.StatSystem.TeamStats
+namespace Code.MainSystem.StatSystem.Stats
 {
     public class TeamStat : AbstractStats
     {
         [SerializeField] private string statLabel;
 
         private bool _initialized;
-
-        protected override void Awake()
-        {
-            base.Awake();
-        }
 
         public async Task InitializeAsync()
         {
