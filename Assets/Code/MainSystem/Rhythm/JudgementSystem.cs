@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using Reflex.Attributes;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -56,6 +58,8 @@ namespace Code.MainSystem.Rhythm
             {
                 _scoreManager.RegisterResult(type, laneIndex);
             }
+
+            Bus<NoteHitEvent>.Raise(new NoteHitEvent(type, laneIndex));
         }
 
         public void HandleMiss()

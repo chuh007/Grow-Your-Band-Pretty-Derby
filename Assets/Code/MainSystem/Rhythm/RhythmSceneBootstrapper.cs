@@ -13,11 +13,13 @@ namespace Code.MainSystem.Rhythm
         [Inject] private Conductor _conductor;
         [Inject] private ScoreManager _scoreManager;
         [Inject] private ChartLoader _chartLoader;
+        [Inject] private HitFeedbackManager _hitFeedbackManager;
         
         [SerializeField] private RhythmGameDataSenderSO _dataSender;
 
         private AudioClip _loadedMusic;
         private GameObject _loadedNotePrefab;
+        private GameObject _loadedHitEffect;
 
         private async void Start()
         {
@@ -48,15 +50,18 @@ namespace Code.MainSystem.Rhythm
             string songId = _dataSender.SongId;
             string musicKey = $"RhythmGame/Music/{songId}";
             string prefabKey = "RhythmGame/Prefab/Note";
+            string vfxKey = "RhythmGame/Prefab/HitEffect";
 
             var musicLoadTask = GameResourceManager.Instance.LoadAssetAsync<AudioClip>(musicKey).AsUniTask();
             var prefabLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(prefabKey).AsUniTask();
             var chartLoadTask = ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
+            var vfxLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(vfxKey).AsUniTask();
 
-            var (musicClip, notePrefab, chartData) = await UniTask.WhenAll(
+            var (musicClip, notePrefab, chartData, hitEffect) = await UniTask.WhenAll(
                 musicLoadTask, 
                 prefabLoadTask, 
-                chartLoadTask
+                chartLoadTask,
+                vfxLoadTask
             );
 
             if (musicClip != null) 
@@ -69,6 +74,12 @@ namespace Code.MainSystem.Rhythm
             {
                 _loadedNotePrefab = notePrefab;
                 _noteManager.SetNotePrefab(notePrefab);
+            }
+            
+            if (hitEffect != null)
+            {
+                _loadedHitEffect = hitEffect;
+                _hitFeedbackManager.SetHitEffectPrefab(hitEffect);
             }
 
             _noteManager.SetChart(chartData);
@@ -93,6 +104,12 @@ namespace Code.MainSystem.Rhythm
                 {
                     GameResourceManager.Instance.Release(_loadedNotePrefab);
                     _loadedNotePrefab = null;
+                }
+
+                if (_loadedHitEffect != null)
+                {
+                    GameResourceManager.Instance.Release(_loadedHitEffect);
+                    _loadedHitEffect = null;
                 }
             }
         }

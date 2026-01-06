@@ -1,10 +1,5 @@
-using Code.Core.Bus;
-
-namespace Code.MainSystem.Rhythm
+﻿namespace Code.Core.Bus.GameEvents
 {
-    public struct SongStartEvent : IEvent { }
-    public struct SongEndEvent : IEvent { }
-    
     public struct BeatPulseEvent : IEvent 
     { 
         public int BeatNumber;
