@@ -19,7 +19,7 @@ namespace Code.MainSystem.MainScreen.Resting
             float afterHealth)
         {
             var idleSDPrefab =
-                await GameManager.Instance.LoadAddressableAsync<GameObject>("Training/SD/Idle");
+                await GameManager.Instance.LoadAddressableAsync<GameObject>("Rest/SD/Idle");
             var idleInstance = Instantiate(idleSDPrefab, sdRoot);
 
             var bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();

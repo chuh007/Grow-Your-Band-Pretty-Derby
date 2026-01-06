@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 4b4de78eb427cf14cb021559754d2590
   m_currentHash:
     serializedVersion: 2
-    Hash: f5f80ee248983ba485f2c161788b95fd
+    Hash: 333ae9ed9314991206b2cb476224ee48
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -62,6 +62,7 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 2a0ae0d7793ab764d8589486f05b4f6d, type: 2}
   - {fileID: 11400000, guid: f58aea9ff8b9069468d9b9f64ad4edce, type: 2}
+  - {fileID: 11400000, guid: 7e2857dc0c15e6d43b65cf04fbb5fc00, type: 2}
   - {fileID: 11400000, guid: bb9ab54da9283954da6148778d570c9f, type: 2}
   - {fileID: 11400000, guid: f89e8e11921302f41acf850cfbe82f43, type: 2}
   - {fileID: 11400000, guid: 4b8be9c04f96c9e42b5a454a93cd16c3, type: 2}
@@ -118,6 +119,7 @@ MonoBehaviour:
     - TeamStatData
     - Outing
     - RhythmGame
+    - Rest
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: abcdcd90432562f4fb79f7f0f6dc188b, type: 2}
