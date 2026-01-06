@@ -10,7 +10,9 @@ namespace Code.Core.Addressable
 {
     public class GameResourceManager : IDisposable
     {
-        //에셋에서 어드레서블을 이용해서 자원들을 다 로드해놓고 로드해논 자원들을 딕셔너리로 관리 로드할 때 섰던 핸들도 딕셔너리로 관리해서 나중에 해제가능하게한다.
+        private static GameResourceManager _instance;
+        public static GameResourceManager Instance => _instance ??= new GameResourceManager();
+
         private Dictionary<string, Object> _resourceDict = new();
         private Dictionary<string,AsyncOperationHandle> _loadHandleDict = new();
 
@@ -60,6 +62,8 @@ namespace Code.Core.Addressable
             _loadHandleDict.Add(key, opHandle);
             return result;
         }
+
+        public async Task<T> LoadAssetAsync<T>(string key) where T : Object => await LoadAsync<T>(key);
         
         //멀티 에셋 로더
         public async Task LoadAllAsync<T>(string lable) where T : Object
@@ -75,6 +79,32 @@ namespace Code.Core.Addressable
         }
         #endregion
         
+        
+        public void Release(Object obj)
+        {
+            if (obj == null) return;
+
+            string keyToRemove = null;
+            foreach (var pair in _resourceDict)
+            {
+                if (pair.Value == obj)
+                {
+                    keyToRemove = pair.Key;
+                    break;
+                }
+            }
+
+            if (keyToRemove != null)
+            {
+                if (_loadHandleDict.TryGetValue(keyToRemove, out var handle))
+                {
+                    Addressables.Release(handle);
+                    _loadHandleDict.Remove(keyToRemove);
+                }
+                _resourceDict.Remove(keyToRemove);
+                LoadCount--;
+            }
+        }
         
         public void Dispose()
         {

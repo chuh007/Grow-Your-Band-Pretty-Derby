@@ -15,131 +15,137 @@ MonoBehaviour:
   m_GroupName: StatData
   m_GUID: d2c067deba9f72a409827f6bb9ce69b5
   m_SerializeEntries:
-  - m_GUID: 090323a9efeff4d4ba98caa54f873725
-    m_Address: Assets/Modules/Stats/Member/Piano/Condition data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PianoStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 18b9352dc673d2a4c94ae66fb0c1abe6
-    m_Address: Assets/Modules/Stats/Member/Vocal/Vocalization data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - VocalStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1cef8e61a3dc39a4a9f43f7454226092
-    m_Address: Assets/Modules/Stats/Member/Drums/Condition data.asset
+  - m_GUID: 0a4d0778636631e4d85d0bb80a58bec5
+    m_Address: Condition data
     m_ReadOnly: 0
     m_SerializedLabels:
     - DrumsStatData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1f6885b4526d0764cbee8f780adab27d
-    m_Address: Assets/Modules/Stats/Member/Bass/Dexterity data.asset
+  - m_GUID: 0f4e6c73d3d11a240baba5418ec8c67e
+    m_Address: Dexterity data
     m_ReadOnly: 0
     m_SerializedLabels:
     - BassStatData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2405f10911ea4084d93f3e610bb61396
-    m_Address: Assets/Modules/Stats/Member/Drums/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - DrumsStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2c591cf73029b4b4cb5c88ad2f2a3963
-    m_Address: Assets/Modules/Stats/Member/Guitar/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - GuitarStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 37fcc8dcb4bb9f3449dd68f2afbe263c
-    m_Address: Assets/Modules/Stats/Member/Bass/SenseOfRhythm data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BassStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4364a7085f556b440b727fd6f9abc75d
-    m_Address: Assets/Modules/Stats/Member/Piano/StagePresence data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PianoStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4578632d21d883c499f0211dc47b413b
-    m_Address: Assets/Modules/Stats/Member/Piano/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PianoStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 48e704ab41754824cba63e613a06f8d6
-    m_Address: Assets/Modules/Stats/Member/Bass/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BassStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4cee347a750e36c4e8c97aea05cb8474
-    m_Address: Assets/Modules/Stats/Member/Vocal/Breathing data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - VocalStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 58ff9e77b9332c24988c4d9690d624b1
-    m_Address: Assets/Modules/Stats/Member/Bass/Condition data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BassStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 644443d6cff95f44cb87fa4ee3ac870c
-    m_Address: Assets/Modules/Stats/Member/Guitar/Condition data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - GuitarStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7b6e22f286dd1754396f391b1f8fa43b
-    m_Address: Assets/Modules/Stats/Member/Guitar/Endurance data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - GuitarStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 83180a4302d9aed438532dcc85899165
-    m_Address: Assets/Modules/Stats/Member/Vocal/Mental data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - VocalStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 980198409400b9944bec3f4185d355f2
-    m_Address: Assets/Modules/Stats/Member/Drums/Power data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - DrumsStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a82af34ee579aca47bf3b1ed4506f6d5
-    m_Address: Assets/Modules/Stats/Member/Drums/SenseOfRhythm  data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - DrumsStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: acf12a006a695d047a3e9b56b9288c22
-    m_Address: Assets/Modules/Stats/Member/Piano/Dexterity data.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PianoStatData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dc2f160a7327b2348bde76014b51debb
-    m_Address: Assets/Modules/Stats/Team/Harmony data.asset
+  - m_GUID: 19c37e942ee3da545adcf240f1dd8c3a
+    m_Address: Harmony data
     m_ReadOnly: 0
     m_SerializedLabels:
     - TeamStatData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e1482a76f813f1844922c35f70038bed
-    m_Address: Assets/Modules/Stats/Member/Vocal/Condition data.asset
+  - m_GUID: 24362be1c5514484eb270b1ba49b2de6
+    m_Address: Vocalization data
     m_ReadOnly: 0
     m_SerializedLabels:
     - VocalStatData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fd458ead59eb7da4abc67b538c9f2337
-    m_Address: Assets/Modules/Stats/Member/Guitar/Concentration  data.asset
+  - m_GUID: 2775ad80743c3fc419bc0ce548bbb8e1
+    m_Address: Mental data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BassStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2be84bb9437418145b7261657812a55c
+    m_Address: SenseOfRhythm  data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DrumsStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bb5bd465b3f2064eab8c984a2352724
+    m_Address: Condition data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - VocalStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ef2a76c768c0c54abdb1c03c3e3e18d
+    m_Address: Condition data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BassStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f023774db1638c409fd38e465f941c3
+    m_Address: Mental data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - VocalStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59f3a4bdf9fabb24795875537875af7c
+    m_Address: Condition data
     m_ReadOnly: 0
     m_SerializedLabels:
     - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d73634f709a7f8478c22951e12c4349
+    m_Address: Dexterity data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e0c4761b66ed8e47a70d04ee2b624f4
+    m_Address: Concentration  data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78995d0799f458b4ca72ae1e2e7b79a5
+    m_Address: Mental data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87738471ac80c2a479ed7726202dec57
+    m_Address: Upgrade data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UpgradeData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad52b3fe4143b084eb5a46068606450b
+    m_Address: Endurance data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b04123065e82cbd468d871d608864f9d
+    m_Address: Condition data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b62388c1f96c46c4a9ba257c38260bb6
+    m_Address: Mental data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GuitarStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1f94a78388f6c54fb31daeb0ed173ab
+    m_Address: Power data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DrumsStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c835a920bb606ba4d8f2365fc515b093
+    m_Address: SenseOfRhythm data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BassStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cad1a44f437a40b48add136ff3f7ff13
+    m_Address: Mental data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DrumsStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf5bb866e3a7bf843b4f7e9b3c7d1852
+    m_Address: Breathing data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - VocalStatData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5a782b60f8633a459931a1ace35d2db
+    m_Address: StagePresence data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PianoStatData
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}

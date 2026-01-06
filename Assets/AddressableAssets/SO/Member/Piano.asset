@@ -16,11 +16,11 @@ MonoBehaviour:
   memberType: 4
   spriteAddressableKey: Guitar
   stats:
-  - {fileID: 11400000, guid: 58ff9e77b9332c24988c4d9690d624b1, type: 2}
-  - {fileID: 11400000, guid: 48e704ab41754824cba63e613a06f8d6, type: 2}
-  - {fileID: 11400000, guid: acf12a006a695d047a3e9b56b9288c22, type: 2}
-  - {fileID: 11400000, guid: 4364a7085f556b440b727fd6f9abc75d, type: 2}
-  - {fileID: 11400000, guid: dc2f160a7327b2348bde76014b51debb, type: 2}
+  - {fileID: 11400000, guid: b04123065e82cbd468d871d608864f9d, type: 2}
+  - {fileID: 11400000, guid: 5d73634f709a7f8478c22951e12c4349, type: 2}
+  - {fileID: 11400000, guid: 78995d0799f458b4ca72ae1e2e7b79a5, type: 2}
+  - {fileID: 11400000, guid: f5a782b60f8633a459931a1ace35d2db, type: 2}
+  - {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}
   personalPractices:
   - {fileID: 11400000, guid: 26bf6c549897c654380fc35962e2d244, type: 2}
   - {fileID: 11400000, guid: e6ff848408928fb4bbff90f106e30585, type: 2}

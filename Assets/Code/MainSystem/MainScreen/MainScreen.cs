@@ -7,7 +7,6 @@ using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.StatSystem.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +33,7 @@ namespace Code.MainSystem.MainScreen
         [Header("Components")]
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
-        [SerializeField] private RestCompo restCompo;
+        [SerializeField] private RestSelectCompo restSelectCompo;
         [SerializeField] private StatManager statManager;
 
         public UnitSelector UnitSelector { get; private set; }
@@ -169,7 +168,6 @@ namespace Code.MainSystem.MainScreen
             if (unit == null) return;
 
             personalPracticeCompo.Init(unit, _statUIUpdater);
-            restCompo.Init(unit);
 
             charterNameText.SetText(unit.unitName);
             conditionText.SetText($"{unit.currentCondition}/{unit.maxCondition}");
@@ -183,7 +181,8 @@ namespace Code.MainSystem.MainScreen
         {
             if (string.IsNullOrEmpty(unit.spriteAddressableKey))
                 return;
-
+            
+            restSelectCompo.CacheUnits(_loadedUnits);
             var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(unit.spriteAddressableKey);
             characterIcon.sprite = sprite;
             characterIcon.color = Color.white;

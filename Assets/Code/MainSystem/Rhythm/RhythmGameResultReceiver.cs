@@ -18,8 +18,6 @@ namespace Code.MainSystem.Rhythm
         // 인터페이스로 뺄까
         [SerializeField] private RhythmGameDataSenderSO dataSender;
 
-        [SerializeField] private ChartLoader _chartLoader;
-
         private void OnEnable()
         {
             Bus<ConcertStartRequested>.OnEvent += HandleConcertStart;
@@ -28,15 +26,6 @@ namespace Code.MainSystem.Rhythm
         private void OnDisable()
         {
             Bus<ConcertStartRequested>.OnEvent -= HandleConcertStart;
-        }
-
-        private void Awake()
-        {
-            if (_chartLoader == null)
-            {
-                _chartLoader = GetComponent<ChartLoader>();
-                if (_chartLoader == null) _chartLoader = gameObject.AddComponent<ChartLoader>();
-            }
         }
 
         // 일단은 Awake에서 대부분 등록하니 Start에서. 나중에 데이터 로드하는 시점 생기면 거기서
@@ -54,43 +43,12 @@ namespace Code.MainSystem.Rhythm
 
         private void HandleConcertStart(ConcertStartRequested evt)
         {
-            List<NoteData> combinedChart = LoadAndCombineChart(evt.SongId, evt.MemberIds);
-
             dataSender.SongId = evt.SongId;
             dataSender.MemberIds = evt.MemberIds;
             dataSender.Difficulty = evt.Difficulty;
-            dataSender.CombinedChart = combinedChart;
             dataSender.IsResultDataAvailable = false;
 
-            SceneManager.LoadScene("RhythmScene");
-        }
-
-        private List<NoteData> LoadAndCombineChart(string songId, List<int> memberIds)
-        {
-            List<List<NoteData>> allCharts = new List<List<NoteData>>();
-
-            foreach (int memberId in memberIds)
-            {
-                string path = $"Charts/{songId}/{memberId}";
-                var chart = _chartLoader.LoadChartFromResources(path);
-                
-                if (chart != null && chart.Count > 0)
-                {
-                    allCharts.Add(chart);
-                }
-                else
-                {
-                    Debug.LogWarning($"Chart not found or empty for Song: {songId}, Member: {memberId} at path: {path}");
-                }
-            }
-            
-            if (allCharts.Count == 0)
-            {
-                Debug.LogWarning("No charts loaded. Returning Test Chart.");
-                return _chartLoader.LoadTestChart();
-            }
-
-            return _chartLoader.CombineCharts(allCharts);
+            SceneManager.LoadScene("Rhythm");
         }
 
         private void ProcessGameResult()

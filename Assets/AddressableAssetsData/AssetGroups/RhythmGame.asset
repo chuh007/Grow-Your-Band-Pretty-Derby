@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RhythmGame
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: RhythmGame
+  m_GUID: 840d0df9a0b0a2e49906ec70398eb5d4
+  m_SerializeEntries:
+  - m_GUID: 0e29468124457dd4aa30198d045703fd
+    m_Address: RhythmGame/Chart/TestSong/Drums
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17204396585bdab47ba538e55ef24f56
+    m_Address: RhythmGame/Chart/TestSong/Vocal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5eca24f50f4670c44b66c5e3eb028a9d
+    m_Address: RhythmGame/Chart/TestSong/Guitar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 960e28a7f3d7bb842aa237eb30cdc716
+    m_Address: RhythmGame/Chart/TestSong/Piano
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a34f6ed0f73dacb44aafe0fcccb1605c
+    m_Address: RhythmGame/Prefab/Note
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5e0c4b1323cb5f41a1bdd20b4b27be7
+    m_Address: RhythmGame/Chart/TestSong/Main
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d453ad1018d82ad41836c8b482109cfe
+    m_Address: RhythmGame/Music/TestSong
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d824c97b9f31d0346b21d2e5e2aa6ca6
+    m_Address: RhythmGame/Chart/TestSong/Bass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8fb64aad3a39c5646b3747012fd3e11e, type: 2}
+    - {fileID: 11400000, guid: 061d3982360acfd4bbbbd231195503e8, type: 2}
