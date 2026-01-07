@@ -91,8 +91,9 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<StatAllIncreaseEvent>.OnEvent += HandleAllMemberStatIncreaseRequested;
             Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatIncreaseRequested;
             Bus<StatAllMemberStatIncreaseEvent>.OnEvent += HandleMemberAllStatIncreaseRequested;
+            Bus<TeamPracticeEvent>.OnEvent += HandleTeamPracticeRequested;
         }
-        
+
         private void UnregisterEvents()
         {
             Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
@@ -101,11 +102,26 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<StatAllIncreaseEvent>.OnEvent -= HandleAllMemberStatIncreaseRequested;
             Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatIncreaseRequested;
             Bus<StatAllMemberStatIncreaseEvent>.OnEvent -= HandleMemberAllStatIncreaseRequested;
+            Bus<TeamPracticeEvent>.OnEvent -= HandleTeamPracticeRequested;
         }
 
         #endregion
         
         #region Event Handlers & Core Logic
+        
+        private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
+        {
+            if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
+                return;
+
+            bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
+            Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
+            
+            if (!isSuccess)
+                return;
+
+            teamStat?.ApplyTeamStatIncrease(10);
+        }
         
         public bool PredictMemberPractice(float successRate)
         {

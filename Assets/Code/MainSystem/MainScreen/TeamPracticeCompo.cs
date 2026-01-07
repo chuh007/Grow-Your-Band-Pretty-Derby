@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.StatSystem.Events;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -37,9 +38,21 @@ namespace Code.MainSystem.MainScreen
         private void Awake()
         {
             UpdateUI();
+            Bus<TeamPracticeResultEvent>.OnEvent += HandleTeamPracticeResult;
+        }
+
+        private void OnDestroy()
+        {
+            Bus<TeamPracticeResultEvent>.OnEvent -= HandleTeamPracticeResult;
         }
 
         #endregion
+        
+        private void HandleTeamPracticeResult(TeamPracticeResultEvent evt)
+        {
+            //evt.IsSuccess;
+            //이거 불 값으로 true, false보내고 있음
+        }
 
         #region Init
 
@@ -138,7 +151,13 @@ namespace Code.MainSystem.MainScreen
         {
             if (!_isTeamPracticeMode) return;
             if (_selectedMembers.Count < 2) return;
+            
+            List<float> memberConditions = new List<float>();
+            foreach (var member in _selectedMembers)
+                if (_unitMap.TryGetValue(member, out var unit))
+                    memberConditions.Add(unit.currentCondition);
 
+            Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent(memberConditions));
             TrainingManager.Instance.MarkMembersTrainedForTeam(_selectedMembers);
         }
 
