@@ -32,6 +32,7 @@ namespace Code.MainSystem.MainScreen
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
         private bool _isTeamPracticeMode = false;
+        private bool _issuccess;
 
         #region Unity LifeCycle
 
@@ -52,6 +53,7 @@ namespace Code.MainSystem.MainScreen
         {
             //evt.IsSuccess;
             //이거 불 값으로 true, false보내고 있음
+            _issuccess = evt.IsSuccess;
         }
 
         #region Init
