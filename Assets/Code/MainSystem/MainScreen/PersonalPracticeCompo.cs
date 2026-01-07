@@ -41,13 +41,6 @@ namespace Code.MainSystem.MainScreen
             { MemberType.Piano, 3 },
             { MemberType.Vocal, 4 }
         };
-        
-        [SerializeField] private Button resetPreviewButton;
-
-        private void Awake()
-        {
-            resetPreviewButton.onClick.AddListener(ResetPreview);
-        }
 
         public void ResetPreview()
         {
@@ -100,11 +93,7 @@ namespace Code.MainSystem.MainScreen
             if (_selectedPracticeIndex == index)
             {
                 bool success = _statManager.PredictMemberPractice(_currentCondition);
-
                 
-
-               
-
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,
                     _currentUnit.memberType,
