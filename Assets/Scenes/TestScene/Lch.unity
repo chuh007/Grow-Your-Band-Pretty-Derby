@@ -254,6 +254,18 @@ MonoBehaviour:
           m_StringArgument: Bass
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 904073744}
+        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.TeamPracticeCompo, Assembly-CSharp
+        m_MethodName: OnMemberButtonClicked
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Bass
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &19401581
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,6 +480,18 @@ MonoBehaviour:
       - m_Target: {fileID: 904073741}
         m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.MemberLoader, Assembly-CSharp
         m_MethodName: MemberBtnClicked
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Vocal
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 904073744}
+        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.TeamPracticeCompo, Assembly-CSharp
+        m_MethodName: OnMemberButtonClicked
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1389,7 +1413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4780,6 +4804,18 @@ MonoBehaviour:
           m_StringArgument: Piano
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 904073744}
+        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.TeamPracticeCompo, Assembly-CSharp
+        m_MethodName: OnMemberButtonClicked
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Piano
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &578761385
 GameObject:
   m_ObjectHideFlags: 0
@@ -5550,6 +5586,18 @@ MonoBehaviour:
           m_StringArgument: Drums
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 904073744}
+        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.TeamPracticeCompo, Assembly-CSharp
+        m_MethodName: OnMemberButtonClicked
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Drums
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &904073736
 GameObject:
   m_ObjectHideFlags: 0
@@ -5774,8 +5822,6 @@ MonoBehaviour:
   enterTeamPracticeButton: {fileID: 367378557}
   startPracticeButton: {fileID: 1458116338}
   backButton: {fileID: 546791192}
-  RhythmGameScene: Rhythm
-  rhythmGameDataSenderSO: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
   memberButtons:
   - {fileID: 14745568}
   - {fileID: 879693989}
@@ -6270,6 +6316,18 @@ MonoBehaviour:
       - m_Target: {fileID: 904073741}
         m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.MemberLoader, Assembly-CSharp
         m_MethodName: MemberBtnClicked
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Guitar
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 904073744}
+        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.TeamPracticeCompo, Assembly-CSharp
+        m_MethodName: OnMemberButtonClicked
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9722,7 +9780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.8235294}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

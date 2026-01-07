@@ -1,23 +1,23 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
+using Code.Core;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.Rhythm;
 
 namespace Code.MainSystem.MainScreen
 {
     public class TeamPracticeCompo : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField] private Button enterTeamPracticeButton; 
-        [SerializeField] private Button startPracticeButton;    
+        [SerializeField] private Button enterTeamPracticeButton;
+        [SerializeField] private Button startPracticeButton;
         [SerializeField] private Button backButton;
-        [SerializeField] private string RhythmGameScene;
-        [SerializeField] private RhythmGameDataSenderSO rhythmGameDataSenderSO;
 
         [Header("Member Buttons")]
         [SerializeField] private List<Button> memberButtons;
@@ -30,10 +30,9 @@ namespace Code.MainSystem.MainScreen
         private readonly HashSet<MemberType> _selectedMembers = new();
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
+        private bool _isTeamPracticeMode = false;
 
-        private bool _isTeamPracticeMode = false; 
-
-        #region LifeCycle
+        #region Unity LifeCycle
 
         private void Awake()
         {
@@ -48,32 +47,29 @@ namespace Code.MainSystem.MainScreen
         {
             _unitMap = new Dictionary<MemberType, UnitDataSO>();
             foreach (var unit in unitData)
+            {
                 _unitMap[unit.memberType] = unit;
+            }
 
             InitButtons();
         }
 
         private void InitButtons()
         {
-            rhythmGameDataSenderSO.members.Clear();
             foreach (var btn in memberButtons)
             {
                 if (!Enum.TryParse(btn.name, out MemberType type))
-                {
-                    Debug.LogError($"버튼 이름이 MemberType과 다름 : {btn.name}");
                     continue;
-                }
 
                 _buttonMap[type] = btn;
                 _originLocalPosMap[type] = btn.transform.localPosition;
-
-                btn.onClick.AddListener(() => OnMemberButtonClicked(type));
             }
 
             enterTeamPracticeButton.onClick.AddListener(OnEnterTeamPractice);
             startPracticeButton.onClick.AddListener(OnClickStartPractice);
             backButton.onClick.AddListener(OnClickBack);
         }
+
 
         #endregion
 
@@ -88,10 +84,13 @@ namespace Code.MainSystem.MainScreen
 
         #endregion
 
-        #region Button Logic
-
-        private void OnMemberButtonClicked(MemberType member)
+        #region Member Button Logic
+        
+        public void OnMemberButtonClicked(string memberName)
         {
+            if (!Enum.TryParse(memberName, out MemberType member))
+                return;
+
             if (!_isTeamPracticeMode)
                 return;
 
@@ -128,24 +127,20 @@ namespace Code.MainSystem.MainScreen
 
         private void UpdateUI()
         {
-            startPracticeButton.interactable =
-                _isTeamPracticeMode && _selectedMembers.Count >= 2;
+            startPracticeButton.interactable = _isTeamPracticeMode && _selectedMembers.Count >= 2;
         }
 
         #endregion
 
-        #region Start / Back
+        #region Practice Start / Back
 
         private void OnClickStartPractice()
         {
             if (!_isTeamPracticeMode) return;
             if (_selectedMembers.Count < 2) return;
-            
-            TrainingManager.Instance.MarkMembersTrainedForTeam(_selectedMembers);
-            rhythmGameDataSenderSO.members.Add(_selectedMembers);
-            SceneManager.LoadScene(RhythmGameScene);
-        }
 
+            TrainingManager.Instance.MarkMembersTrainedForTeam(_selectedMembers);
+        }
 
         private void OnClickBack()
         {
@@ -158,7 +153,9 @@ namespace Code.MainSystem.MainScreen
             foreach (var member in _selectedMembers)
             {
                 if (_buttonMap.TryGetValue(member, out var btn))
+                {
                     btn.transform.localPosition = _originLocalPosMap[member];
+                }
             }
 
             _selectedMembers.Clear();
