@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using Code.MainSystem.StatSystem.Module.Data;
@@ -44,18 +42,6 @@ namespace Code.MainSystem.StatSystem.Module
                 _ => ConditionLevel.VeryGood
             };
         }
-        
-        private ConditionLevel GetConditionLevelFromValue(float condition)
-        {
-            return condition switch
-            {
-                < 20f => ConditionLevel.VeryBad,
-                < 40f => ConditionLevel.Bad,
-                < 60f => ConditionLevel.Normal,
-                < 80f => ConditionLevel.Good,
-                _ => ConditionLevel.VeryGood
-            };
-        }
 
         /// <summary>
         /// 컨디션 레벨에 따른 성공 확률 반환
@@ -68,27 +54,6 @@ namespace Code.MainSystem.StatSystem.Module
         /// </summary>
         public bool CanUpgrade()
             => Random.Range(0f, 100f) < GetSuccessRate();
-        
-        public float GetSuccessRateByLevel(int level)
-        {
-            level = Mathf.Clamp(level, 0, 4);
-            return _upgradeData.conditionSuccessRates[level];
-        }
-        
-        public float GetEnsembleSuccessRate(List<float> memberConditions)
-        {
-            if (memberConditions == null || memberConditions.Count == 0)
-                return 0f;
-            
-            var levels = memberConditions.Select(condition => (int)GetConditionLevelFromValue(condition));
-            
-            int totalLevel = levels.Sum();
-            
-            int averageLevel = Mathf.RoundToInt((float)totalLevel / memberConditions.Count);
-            averageLevel = Mathf.Clamp(averageLevel, 0, 4);
-            
-            return _upgradeData.conditionSuccessRates[averageLevel];
-        }
 
         /// <summary>
         /// 컨디션 설정
