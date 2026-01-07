@@ -27,15 +27,11 @@ namespace Code.MainSystem.StatSystem.Module
         {
             if (memberConditions == null || memberConditions.Count == 0)
                 return 0f;
-
-            // 각 컨디션을 레벨(0~4)로 변환
-            var levels = memberConditions.Select(c => (int)GetConditionLevel(c));
             
-            // 평균 레벨 계산 (반올림)
+            var levels = memberConditions.Select(c => (int)GetConditionLevel(c));
             int avgLevel = Mathf.RoundToInt((float)levels.Sum() / memberConditions.Count);
             avgLevel = Mathf.Clamp(avgLevel, 0, 4);
             
-            // 해당 레벨의 성공률 반환
             return _upgradeData.conditionSuccessRates[avgLevel];
         }
 

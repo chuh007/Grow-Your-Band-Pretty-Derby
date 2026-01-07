@@ -119,8 +119,8 @@ namespace Code.MainSystem.StatSystem.Manager
             
             if (!isSuccess)
                 return;
-
-            teamStat?.ApplyTeamStatIncrease(10);
+            
+            //특성 시스템 완성시 스탯 올려주는 기능 필요
         }
         
         public bool PredictMemberPractice(float successRate)
@@ -188,28 +188,6 @@ namespace Code.MainSystem.StatSystem.Manager
         #endregion
 
         #region GetStat
-        
-        public float GetEnsembleSuccessRate(List<MemberType> participantTypes)
-        {
-            var conditions = GetMemberConditions(participantTypes);
-            return ensembleModule.CalculateSuccessRate(conditions);
-        }
-
-        private List<float> GetMemberConditions(List<MemberType> memberTypes)
-        {
-            var conditions = new List<float>();
-    
-            foreach (var memberType in memberTypes)
-            {
-                if (!_memberMap.TryGetValue(memberType, out var member))
-                    continue;
-                var conditionStat = member.GetStat(StatType.Condition);
-                if (conditionStat != null)
-                    conditions.Add(conditionStat.CurrentValue);
-            }
-    
-            return conditions;
-        }
         
         public BaseStat GetMemberStat(MemberType memberType, StatType statType)
         {
