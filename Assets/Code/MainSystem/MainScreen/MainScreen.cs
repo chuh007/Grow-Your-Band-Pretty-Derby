@@ -92,12 +92,12 @@ namespace Code.MainSystem.MainScreen
 
             _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
 
-            teamPracticeCompo.CacheUnits(_loadedUnits);
-
             if (_loadedUnits.Count > 0)
             {
                 SelectUnit(_loadedUnits[0]);
             }
+            
+            teamPracticeCompo.CacheUnits(_loadedUnits);
         }
 
         #endregion
@@ -142,7 +142,7 @@ namespace Code.MainSystem.MainScreen
         public void TeamButtonClicked()
         {
             teamPanel.gameObject.SetActive(true);
-            teamPracticeCompo.CacheUnits(_loadedUnits);
+           
         }
 
         public void MemberBtnClicked(string type)
