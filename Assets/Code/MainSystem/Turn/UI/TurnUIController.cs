@@ -29,16 +29,22 @@ namespace Code.MainSystem.Turn.UI
             turnChangeUIImage.rectTransform.anchoredPosition =
                 new Vector2(0, turnChangeUIImage.rectTransform.rect.height);
             
-            turnChangeUIImage.rectTransform.DOMoveY(turnChangeUIImage.rectTransform.rect.height / 2, 0.5f);
-            await UniTask.Delay(1000);
-            turnCountRectTrm.DOLocalMoveY(50, 0.35f).SetEase(Ease.OutSine)
+            // 화면 내려옴
+            turnChangeUIImage.rectTransform.
+                DOMoveY(turnChangeUIImage.rectTransform.rect.height / 2, 0.5f);
+            
+            await UniTask.Delay(1000); // 딜레이 (ms 단위)
+            turnCountRectTrm.DOLocalMoveY(50, 0.25f).SetEase(Ease.OutSine) // 달력 위로
                 .OnComplete(() =>
                 {
                     turnCountText.SetText(_turnManager.RemainingTurn.ToString());
-                    turnCountRectTrm.DOLocalMoveY(-50, 0.3f).SetEase(Ease.InSine);
+                    turnCountRectTrm.DOLocalMoveY(-50, 0.2f).SetEase(Ease.OutSine); // 달력 아래로
                 });
-            await UniTask.Delay(1000);
-            turnChangeUIImage.rectTransform.DOMoveY(-turnChangeUIImage.rectTransform.rect.height, 0.5f);
+            
+            await UniTask.Delay(1000); // 딜레이 (ms 단위)
+            // 화면 올라감
+            turnChangeUIImage.rectTransform.
+                DOMoveY(-turnChangeUIImage.rectTransform.rect.height * 0.5f, 0.5f);
         }
         
         public void TurnEnd()
