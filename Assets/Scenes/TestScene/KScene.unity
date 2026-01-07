@@ -4001,6 +4001,8 @@ MonoBehaviour:
   fillBar: {fileID: 980011610}
   damagePreviewBar: {fileID: 130720486}
   valueText: {fileID: 1415003166}
+  fillTweenDuration: 0.2
+  previewTweenDuration: 0.25
 --- !u!1 &527611600
 GameObject:
   m_ObjectHideFlags: 0
@@ -5735,6 +5737,7 @@ MonoBehaviour:
   - {fileID: 38579942}
   lesson1Text: {fileID: 481430920}
   lesson2Text: {fileID: 499302770}
+  resetPreviewButton: {fileID: 546791192}
 --- !u!114 &904073743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5771,8 +5774,7 @@ MonoBehaviour:
   enterTeamPracticeButton: {fileID: 367378557}
   startPracticeButton: {fileID: 1458116338}
   backButton: {fileID: 546791192}
-  RhythmGameScene: Rhythm
-  rhythmGameDataSenderSO: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
+  trainingSequenceController: {fileID: 1464388348}
   memberButtons:
   - {fileID: 14745568}
   - {fileID: 879693989}

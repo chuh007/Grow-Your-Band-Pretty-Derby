@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Training
   m_GUID: a8406934bb8a8de49bc6c99ca96b78ff
   m_SerializeEntries:
+  - m_GUID: 0912861bcedda8445bb4c77b5d6ef2f5
+    m_Address: Concert/SD/Idle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Training
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 27018cba84565be43aa93fc329685a9d
     m_Address: Training/SD/Idle
     m_ReadOnly: 0
@@ -23,6 +29,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7629ed5ee293a874e9be7610267b6d6d
     m_Address: Training/UI/Result
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Training
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5135be7f1fb1e74fbeee1b8e40317a6
+    m_Address: Concert/SD/Result
     m_ReadOnly: 0
     m_SerializedLabels:
     - Training

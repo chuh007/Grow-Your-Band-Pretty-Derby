@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Code.Core;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -17,36 +16,133 @@ namespace Code.MainSystem.MainScreen.Training
         private GameObject idleInstance;
         private TrainingProgressBar bar;
         private TrainingProgressImage progressImage;
+        private TeamTrainingProgressImage teamProgressImage;
 
         private GameObject resultInstance;
         private TrainingResultUI resultUI;
-
         public async UniTask PlayTrainingSequence(
             bool isSuccess,
-            PersonalpracticeDataSO practiceData,
+            ITrainingType trainingType,
             UnitDataSO unit)
+        {
+            if (trainingType is not IStatChangeProvider personalProvider)
+            {
+                Debug.LogError("TrainingType이 개인 훈련 타입이 아닙니다.");
+                return;
+            }
+
+            await SetupBar(trainingType);
+            await ShowPersonalProgress(trainingType);
+
+            var idleSprite =
+                await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetIdleImageKey());
+            var resultSprite =
+                await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetResultImageKey(isSuccess));
+
+            var statList = personalProvider.GetStatChanges(unit, statManager, isSuccess);
+
+            await EnsureResultUI();
+
+            await resultUI.Play(
+                idleSprite,
+                resultSprite,
+                statList,
+                isSuccess,
+                unit.currentCondition,
+                () =>
+                {
+                    resultInstance.SetActive(false);
+                    gameObject.SetActive(false);
+                }
+            );
+        }
+        
+        public async UniTask PlayTeamTrainingSequence(
+            bool isSuccess,
+            ITrainingType trainingType,
+            List<UnitDataSO> units)
+        {
+            if (trainingType is not ITeamStatChangeProvider teamProvider)
+            {
+                Debug.LogError("TrainingType이 팀 훈련 타입이 아닙니다.");
+                return;
+            }
+
+            await SetupBar(trainingType);
+            await ShowTeamProgress(trainingType, units);
+
+            var idleSprite =
+                await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetIdleImageKey());
+            var resultSprite =
+                await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetResultImageKey(isSuccess));
+
+            var allStats = teamProvider.GetAllStatChanges(units, statManager, isSuccess);
+
+            await EnsureResultUI();
+
+            await resultUI.PlayTeamResult(
+                idleSprite,
+                resultSprite,
+                allStats,
+                isSuccess,
+                () =>
+                {
+                    resultInstance.SetActive(false);
+                    gameObject.SetActive(false);
+                }
+            );
+        }
+
+        private async UniTask SetupBar(ITrainingType trainingType)
         {
             if (idleInstance == null)
             {
-                var idleSDPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>("Training/SD/Idle");
+                string prefabKey = trainingType.GetIdlePrefabKey(); 
+                var idleSDPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>(prefabKey);
                 idleInstance = Instantiate(idleSDPrefab, sdRoot);
                 bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();
                 progressImage = idleInstance.GetComponent<TrainingProgressImage>();
+                teamProgressImage = idleInstance.GetComponent<TeamTrainingProgressImage>();
             }
 
             idleInstance.SetActive(true);
             bar?.ResetBar();
+        }
 
-            var progressSprite =
-                await GameManager.Instance.LoadAddressableAsync<Sprite>(practiceData.ProgressImageAddresableKey);
+        
+        private async UniTask ShowPersonalProgress(ITrainingType trainingType)
+        {
+            var progressSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetProgressImageKey());
             progressImage?.SetProgressImage(progressSprite);
-            
+
             if (bar != null)
                 await bar.Play(1f);
 
             await UniTask.Delay(800);
             idleInstance.SetActive(false);
-            
+        }
+        
+        private async UniTask ShowTeamProgress(ITrainingType trainingType, List<UnitDataSO> selectedUnits)
+        {
+            var progressSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetProgressImageKey());
+
+            var selectedTypes = new HashSet<MemberType>();
+            foreach (var unit in selectedUnits)
+                selectedTypes.Add(unit.memberType);
+
+            teamProgressImage?.SetProgressImages(progressSprite, selectedTypes);
+
+            if (bar != null)
+                await bar.Play(1f);
+
+            await UniTask.Delay(800);
+            idleInstance.SetActive(false);
+        }
+
+
+
+        private async UniTask EnsureResultUI()
+        {
             if (resultInstance == null)
             {
                 var resultPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>("Training/UI/Result");
@@ -55,46 +151,6 @@ namespace Code.MainSystem.MainScreen.Training
             }
 
             resultInstance.SetActive(true);
-
-            var idleSprite =
-                await GameManager.Instance.LoadAddressableAsync<Sprite>(practiceData.IdleImageAddressableKey);
-            var resultSprite =
-                await GameManager.Instance.LoadAddressableAsync<Sprite>(
-                    isSuccess
-                        ? practiceData.SuccseImageAddressableKey
-                        : practiceData.FaillImageAddressableKey);
-
-            StatType targetType = practiceData.PracticeStatType;
-
-            var statList = new List<(string name, Sprite icon, int baseValue, int delta)>();
-            for (int i = 0; i < unit.stats.Count && statList.Count < 4; i++)
-            {
-                var stat = unit.stats[i];
-                var memberStat = statManager.GetMemberStat(unit.memberType, stat.statType);
-
-                int delta = (isSuccess && stat.statType == targetType)
-                    ? Mathf.RoundToInt(practiceData.statIncrease)
-                    : 0;
-
-                statList.Add((
-                    stat.statName,
-                    stat.statIcon,
-                    Mathf.RoundToInt(memberStat.CurrentValue),
-                    delta
-                ));
-            }
-
-            await resultUI.Play(
-                idleSprite,
-                resultSprite,
-                statList,
-                isSuccess,
-                () =>
-                {
-                    resultInstance.SetActive(false);
-                    gameObject.SetActive(false);
-                }
-            );
         }
     }
 }

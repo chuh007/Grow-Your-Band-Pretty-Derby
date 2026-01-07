@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using Code.MainSystem.StatSystem.Module.Data;
@@ -17,8 +19,8 @@ namespace Code.MainSystem.StatSystem.Module
     public class StatUpgrade : MonoBehaviour
     {
         [SerializeField] private string upgradeDataLabel;
-        [SerializeField] private float currentCondition = 60f; 
         
+        private float _currentCondition; 
         private UpgradeData _upgradeData;
 
         public async Task Initialize()
@@ -33,7 +35,19 @@ namespace Code.MainSystem.StatSystem.Module
         /// </summary>
         private ConditionLevel GetConditionLevel()
         {
-            return currentCondition switch
+            return _currentCondition switch
+            {
+                < 20f => ConditionLevel.VeryBad,
+                < 40f => ConditionLevel.Bad,
+                < 60f => ConditionLevel.Normal,
+                < 80f => ConditionLevel.Good,
+                _ => ConditionLevel.VeryGood
+            };
+        }
+        
+        private ConditionLevel GetConditionLevelFromValue(float condition)
+        {
+            return condition switch
             {
                 < 20f => ConditionLevel.VeryBad,
                 < 40f => ConditionLevel.Bad,
@@ -47,25 +61,39 @@ namespace Code.MainSystem.StatSystem.Module
         /// 컨디션 레벨에 따른 성공 확률 반환
         /// </summary>
         private float GetSuccessRate()
-        {
-            ConditionLevel level = GetConditionLevel();
-            return _upgradeData.conditionSuccessRates[(int)level];
-        }
+            => _upgradeData.conditionSuccessRates[(int)GetConditionLevel()];
 
         /// <summary>
         /// 훈련 성공 여부 판정
         /// </summary>
         public bool CanUpgrade()
+            => Random.Range(0f, 100f) < GetSuccessRate();
+        
+        public float GetSuccessRateByLevel(int level)
         {
-            float successRate = GetSuccessRate();
-            return Random.Range(0f, 100f) < successRate;
+            level = Mathf.Clamp(level, 0, 4);
+            return _upgradeData.conditionSuccessRates[level];
+        }
+        
+        public float GetEnsembleSuccessRate(List<float> memberConditions)
+        {
+            if (memberConditions == null || memberConditions.Count == 0)
+                return 0f;
+            
+            var levels = memberConditions.Select(condition => (int)GetConditionLevelFromValue(condition));
+            
+            int totalLevel = levels.Sum();
+            
+            int averageLevel = Mathf.RoundToInt((float)totalLevel / memberConditions.Count);
+            averageLevel = Mathf.Clamp(averageLevel, 0, 4);
+            
+            return _upgradeData.conditionSuccessRates[averageLevel];
         }
 
         /// <summary>
         /// 컨디션 설정
         /// </summary>
         public void SetCondition(float value)
-            => currentCondition = Mathf.Clamp(value, 0f, 100f);
-
+            => _currentCondition = Mathf.Clamp(value, 0f, 100f);
     }
 }

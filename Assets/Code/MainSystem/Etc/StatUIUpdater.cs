@@ -53,6 +53,12 @@ namespace Code.MainSystem.Etc
                 if (iconImages[i] != null)
                     iconImages[i].sprite = stat.statIcon;
             }
+
+            BaseStat teamstatData = statManager.GetTeamStat(unit.TeamStat.statType);
+            nameTexts[4].SetText(teamstatData.StatName);
+            valueTexts[4].SetText($"{teamstatData.CurrentValue} / {teamstatData.MaxValue}");
+            if (iconImages[4] != null)
+                iconImages[4].sprite = teamstatData.StatIcon;
         }
 
         public void PreviewStat(UnitDataSO unit, StatType targetType, float increase)
@@ -83,6 +89,17 @@ namespace Code.MainSystem.Etc
                 {
                     valueTexts[i].SetText($"{statData.CurrentValue} / {statData.MaxValue}");
                 }
+            }
+
+            BaseStat teamstatData = statManager.GetTeamStat(unit.TeamStat.statType);
+            
+            if (unit.TeamStat.statType == targetType)
+            {
+                valueTexts[4].SetText($"<color=green>{teamstatData.CurrentValue + increase} (+{increase})</color> / {teamstatData.MaxValue}");
+            }
+            else
+            {
+                valueTexts[4].SetText($"{teamstatData.CurrentValue} / {teamstatData.MaxValue}");
             }
         }
     }

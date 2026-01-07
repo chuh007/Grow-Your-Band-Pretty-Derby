@@ -65,11 +65,7 @@ namespace Code.MainSystem.MainScreen.Training
             anim.Append(rt.DOScale(emphasizeScale, emphasizeTime).SetEase(Ease.Linear));
            
         }
-
-
-
-
-
+        
         public void StopAnimation()
         {
             RectTransform rt = progressImage.rectTransform;

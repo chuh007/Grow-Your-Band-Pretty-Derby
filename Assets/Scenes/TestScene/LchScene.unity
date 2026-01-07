@@ -2199,11 +2199,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6573394279747229030, guid: f52af72a64e89d44b83dee5309b84957, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 167.9965
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6573394279747229030, guid: f52af72a64e89d44b83dee5309b84957, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1792.417
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6573394279747229030, guid: f52af72a64e89d44b83dee5309b84957, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2584,11 +2584,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -92.49162
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 490.01242
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5737,7 +5737,7 @@ MonoBehaviour:
   - {fileID: 38579942}
   lesson1Text: {fileID: 481430920}
   lesson2Text: {fileID: 499302770}
-  resetPreviewButton: {fileID: 266725737}
+  resetPreviewButton: {fileID: 546791192}
 --- !u!114 &904073743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5774,8 +5774,7 @@ MonoBehaviour:
   enterTeamPracticeButton: {fileID: 367378557}
   startPracticeButton: {fileID: 1458116338}
   backButton: {fileID: 546791192}
-  RhythmGameScene: Rhythm
-  rhythmGameDataSenderSO: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
+  rhythmGameScene: 
   memberButtons:
   - {fileID: 14745568}
   - {fileID: 879693989}
@@ -6657,11 +6656,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 563.0406
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 815.79486
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8749494696660624807, guid: 4c38ee978cce03b45a02526786165bac, type: 3}
       propertyPath: m_LocalPosition.z
