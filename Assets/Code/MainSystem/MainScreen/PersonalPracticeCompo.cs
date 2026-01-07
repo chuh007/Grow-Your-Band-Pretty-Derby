@@ -41,6 +41,27 @@ namespace Code.MainSystem.MainScreen
             { MemberType.Piano, 3 },
             { MemberType.Vocal, 4 }
         };
+        
+        [SerializeField] private Button resetPreviewButton;
+
+        private void Awake()
+        {
+            resetPreviewButton.onClick.AddListener(ResetPreview);
+        }
+
+        public void ResetPreview()
+        {
+            _selectedPracticeIndex = -1;
+            _previewDamage = 0f;
+            
+            healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
+            
+            _statUIUpdater.UpdateAll(_currentUnit);
+            
+            HideAllArrows();
+            HideAllProbabilityTexts();
+        }
+
 
         #region Init
 
@@ -80,9 +101,7 @@ namespace Code.MainSystem.MainScreen
             {
                 bool success = _statManager.PredictMemberPractice(_currentCondition);
 
-                trainingSequenceController.gameObject.SetActive(true);
-                await trainingSequenceController
-                    .PlayTrainingSequence(success, practice, _currentUnit);
+                
 
                
 
@@ -108,6 +127,13 @@ namespace Code.MainSystem.MainScreen
 
                 _selectedPracticeIndex = -1;
                 _statUIUpdater.UpdateAll(_currentUnit);
+                
+                trainingSequenceController.gameObject.SetActive(true);
+                var personalTrainingType = new PersonalTrainingType(practice);
+                await trainingSequenceController
+                    .PlayTrainingSequence(success, personalTrainingType, _currentUnit);
+
+
 
                 HideAllArrows();
                 HideAllProbabilityTexts();
@@ -120,7 +146,7 @@ namespace Code.MainSystem.MainScreen
 
             healthBar.PrevieMinusHealth(_previewDamage);
             _statUIUpdater.PreviewStat(_currentUnit, practice.PracticeStatType, practice.statIncrease);
-
+            
             ShowArrow(index);
             ShowProbability();
         }

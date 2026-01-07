@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.UI;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -16,6 +18,7 @@ namespace Code.MainSystem.MainScreen.Training
         [SerializeField] private List<StatBox> statBoxes;
         [SerializeField] private float scaleFactor = 1.05f;
         [SerializeField] private float scaleTime = 0.5f;
+        [SerializeField] private HealthBar healthBar;
 
         public Action OnClose;
 
@@ -24,9 +27,11 @@ namespace Code.MainSystem.MainScreen.Training
             Sprite resultSprite,
             List<(string name, Sprite icon, int baseValue, int delta)> statData,
             bool isSuccess,
+            float curCon,
             Action onClose)
         {
             trainingResultImage.sprite = idleSprite;
+            healthBar.SetHealth(100,100);
 
             resultImage.gameObject.SetActive(false); 
 
@@ -60,13 +65,48 @@ namespace Code.MainSystem.MainScreen.Training
                     statBoxes[i].Set(name, icon, baseValue, delta);
                 }
             }
+            
+            healthBar.SetHealth(curCon, 100);
 
             OnClose = onClose;
         }
+        
+        
 
         public void OnPointerClick(PointerEventData eventData)
         {
             OnClose?.Invoke();
         }
+
+        public async UniTask PlayTeamResult(
+            Sprite idleSprite,
+            Sprite resultSprite,
+            Dictionary<UnitDataSO, List<(string name, Sprite icon, int baseValue, int delta)>> allStats,
+            bool isSuccess,
+            Action onClose)
+        {
+            trainingResultImage.sprite = idleSprite;
+            healthBar.SetHealth(100, 100);
+            
+            foreach (var kvp in allStats)
+            {
+                var unit = kvp.Key;
+                var statList = kvp.Value;
+                
+                var harmonyStat = statList.Find(stat => stat.name == "하모니");
+            }
+
+            await UniTask.Delay(1000);
+            trainingResultImage.sprite = resultSprite;
+            trainingResultImage.transform.DOScale(scaleFactor, scaleTime).SetEase(Ease.InSine);
+
+            resultImage.sprite = resultSprite;
+            resultImage.transform.localScale = Vector3.zero;
+            resultImage.gameObject.SetActive(true);
+            resultImage.transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack);
+
+            OnClose = onClose;
+        }
+
     }
 }

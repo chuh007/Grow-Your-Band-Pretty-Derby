@@ -5774,7 +5774,7 @@ MonoBehaviour:
   enterTeamPracticeButton: {fileID: 367378557}
   startPracticeButton: {fileID: 1458116338}
   backButton: {fileID: 546791192}
-  trainingSequenceController: {fileID: 1464388348}
+  rhythmGameScene: 
   memberButtons:
   - {fileID: 14745568}
   - {fileID: 879693989}
