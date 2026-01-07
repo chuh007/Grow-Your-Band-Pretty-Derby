@@ -4,9 +4,9 @@ using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
-using System.Linq;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.StatSystem.Manager.SubClass;
 using Code.MainSystem.StatSystem.Module;
 using Code.MainSystem.StatSystem.Stats;
 
@@ -32,11 +32,15 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private Dictionary<MemberType, MemberStat> _memberMap;
         
+        private StatRegistry _registry;
+        private StatOperator _operator;
+        private ConditionHandler _conditionHandler;
+
         private void Awake()
         {
-            InitializeMemberMap();
+            InitializeComponents();
+            InitializeAsync();
             RegisterEvents();
-            InitializeModule();
         }
 
         private void OnDestroy()
@@ -44,37 +48,28 @@ namespace Code.MainSystem.StatSystem.Manager
             UnregisterEvents();
         }
 
-        #region Init
+        #region Initialization
 
-        private async void InitializeMemberMap()
+        private void InitializeComponents()
         {
-            try
-            {
-                await teamStat.InitializeAsync();
-
-                _memberMap = new Dictionary<MemberType, MemberStat>();
-                foreach (var member in memberStats.Where(member => member != null))
-                    _memberMap.TryAdd(member.MemberType, member);
-            }
-            catch (Exception e)
-            {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-                Debug.LogError($"InitializeMemberMap 실패: {e}");
-#endif
-            }
+            _registry = new StatRegistry(memberStats, teamStat);
+            _operator = new StatOperator(_registry);
+            _conditionHandler = new ConditionHandler(_registry, restRecoveryAmount);
         }
-        
-        private async void InitializeModule()
+
+        private async void InitializeAsync()
         {
             try
             {
+                await _registry.InitializeAsync();
+                
                 await upgradeModule.Initialize();
                 await ensembleModule.Initialize();
             }
             catch (Exception e)
             {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-                Debug.LogError($"InitializeModule 실패: {e}");
+                Debug.LogError($"StatManager 초기화 실패: {e}");
 #endif
             }
         }
@@ -106,28 +101,8 @@ namespace Code.MainSystem.StatSystem.Manager
         }
 
         #endregion
-        
-        #region Event Handlers & Core Logic
-        
-        private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
-        {
-            if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
-                return;
 
-            bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
-            Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
-            
-            if (!isSuccess)
-                return;
-            
-            //특성 시스템 완성시 스탯 올려주는 기능 필요
-        }
-        
-        public bool PredictMemberPractice(float successRate)
-        {
-            upgradeModule.SetCondition(successRate);
-           return upgradeModule.CanUpgrade();
-        }
+        #region Event Handlers
 
         private void HandlePracticeRequested(PracticenEvent evt)
         {
@@ -138,65 +113,76 @@ namespace Code.MainSystem.StatSystem.Manager
             if (!isSuccess)
                 return;
             
-            ApplyPracticeSuccess(evt);
+            // 성공 시 보상 적용
+            ApplyPracticeReward(evt);
         }
 
-        private void ApplyPracticeSuccess(PracticenEvent evt)
+        private void ApplyPracticeReward(PracticenEvent evt)
         {
             if (evt.Type == PracticenType.Team)
-                teamStat?.ApplyTeamStatIncrease(evt.Value);
+                _operator.IncreaseTeamStat(evt.Value);
             else
-                if (_memberMap.TryGetValue(evt.memberType, out var member))
-                    member.ApplyStatIncrease(evt.statType, evt.Value);
+                _operator.IncreaseMemberStat(evt.memberType, evt.statType, evt.Value);
+        }
+
+        private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
+        {
+            if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
+                return;
+            
+            bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
+            
+            Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
+            
+            if (isSuccess)
+            {
+                // TODO: 특성 시스템 완성 시 보상 추가
+            }
         }
 
         private void HandleSingleStatIncreaseRequested(StatIncreaseEvent evt)
         {
-            if (_memberMap.TryGetValue(evt.MemberType, out var member))
-                member.ApplyStatIncrease(evt.StatType, evt.Value);
+            _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, evt.Value);
         }
-        
+
         private void HandleMemberAllStatIncreaseRequested(StatAllMemberStatIncreaseEvent evt)
         {
-            if (_memberMap.TryGetValue(evt.MemberType, out var member))
-                member.ApplyAllStatIncrease(evt.Value);
+            _operator.IncreaseAllStatsForMember(evt.MemberType, evt.Value);
         }
 
         private void HandleAllMemberStatIncreaseRequested(StatAllIncreaseEvent evt)
         {
-            foreach (var member in memberStats)
-                member?.ApplyStatIncrease(evt.StatType, evt.Value);
+            _operator.IncreaseStatForAllMembers(evt.StatType, evt.Value);
         }
-        
+
         private void HandleTeamStatIncreaseRequested(TeamStatIncreaseEvent evt)
         {
-            teamStat?.ApplyTeamStatIncrease(evt.AddValue);
+            _operator.IncreaseTeamStat(evt.AddValue);
         }
-        
+
         private void HandleRestRequested(ConfirmRestEvent evt)
         {
-            var unit = evt.Unit;
-            if (unit is null)
-                return;
-            
-            if (!_memberMap.ContainsKey(unit.memberType))
-                return;
-
-            unit.currentCondition = Mathf.Clamp(unit.currentCondition + restRecoveryAmount, 0, unit.maxCondition);
+            _conditionHandler.ProcessRest(evt);
         }
 
         #endregion
 
-        #region GetStat
-        
+        #region Public API
+
         public BaseStat GetMemberStat(MemberType memberType, StatType statType)
         {
-            return _memberMap.GetValueOrDefault(memberType)?.GetStat(statType);
+            return _registry.GetMemberStat(memberType, statType);
         }
 
         public BaseStat GetTeamStat(StatType statType)
         {
-            return teamStat?.GetTeamStat(statType);
+            return _registry.GetTeamStatValue(statType);
+        }
+
+        public bool PredictMemberPractice(float successRate)
+        {
+            upgradeModule.SetCondition(successRate);
+            return upgradeModule.CanUpgrade();
         }
 
         #endregion
