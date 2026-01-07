@@ -18,7 +18,6 @@ namespace Code.MainSystem.MainScreen
         [Header("UI")]
         [SerializeField] private Button enterTeamPracticeButton;
         [SerializeField] private Button startPracticeButton;
-        [SerializeField] private Button backButton;
 
         [Header("Member Buttons")]
         [SerializeField] private List<Button> memberButtons;
@@ -51,8 +50,6 @@ namespace Code.MainSystem.MainScreen
         
         private void HandleTeamPracticeResult(TeamPracticeResultEvent evt)
         {
-            //evt.IsSuccess;
-            //이거 불 값으로 true, false보내고 있음
             _issuccess = evt.IsSuccess;
         }
 
@@ -82,7 +79,6 @@ namespace Code.MainSystem.MainScreen
 
             enterTeamPracticeButton.onClick.AddListener(OnEnterTeamPractice);
             startPracticeButton.onClick.AddListener(OnClickStartPractice);
-            backButton.onClick.AddListener(OnClickBack);
         }
 
 
@@ -163,7 +159,7 @@ namespace Code.MainSystem.MainScreen
             TrainingManager.Instance.MarkMembersTrainedForTeam(_selectedMembers);
         }
 
-        private void OnClickBack()
+        public void OnClickBack()
         {
             _isTeamPracticeMode = false;
             ResetSelection();

@@ -7,6 +7,10 @@ namespace Code.MainSystem.MainScreen.Bottom
     {
         private int currentModeIndex = 0;
         [SerializeField] private GameObject mode1Buttons;
+        [SerializeField] private GameObject mode2Buttons;
+        [SerializeField] private GameObject mode2Panel;
+        [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
+        [SerializeField] private TeamPracticeCompo teamPracticeCompo;
 
         public void SwitchMode(int modeIndex)
         {
@@ -24,6 +28,8 @@ namespace Code.MainSystem.MainScreen.Bottom
                     mode1Buttons.SetActive(true);
                     break;
                 case 2:
+                    mode2Buttons.SetActive(true);
+                    mode2Panel.SetActive(true);
                     break;
                 case 3:
                     break;
@@ -42,8 +48,12 @@ namespace Code.MainSystem.MainScreen.Bottom
             {
                 case 1:
                     mode1Buttons.SetActive(false);
+                    personalPracticeCompo.ResetPreview();
                     break;
                 case 2:
+                    mode2Panel.SetActive(false);
+                    mode2Buttons.SetActive(false);
+                    teamPracticeCompo.OnClickBack();
                     break;
                 case 3:
                     break;
