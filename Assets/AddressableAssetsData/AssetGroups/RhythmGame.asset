@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87a88288ca67ec9409a9ecee806e01c0
+    m_Address: RhythmGame/Prefab/HitEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 960e28a7f3d7bb842aa237eb30cdc716
     m_Address: RhythmGame/Chart/TestSong/Piano
     m_ReadOnly: 0
