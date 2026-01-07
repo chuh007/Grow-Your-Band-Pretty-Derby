@@ -29,11 +29,11 @@ namespace Code.MainSystem.Turn.UI
                 new Vector2(0, turnChangeUIImage.rectTransform.rect.height);
             turnChangeUIImage.rectTransform.DOMoveY(turnChangeUIImage.rectTransform.rect.height / 2, 0.5f);
             await UniTask.Delay(1000);
-            turnCountRectTrm.DOLocalMoveY(50, 0.3f)
+            turnCountRectTrm.DOLocalMoveY(50, 0.35f).SetEase(Ease.OutSine)
                 .OnComplete(() =>
                 {
                     turnCountText.SetText((_turnManager.RemainingTurn - 1).ToString());
-                    turnCountRectTrm.DOLocalMoveY(-50, 0.3f);
+                    turnCountRectTrm.DOLocalMoveY(-50, 0.3f).SetEase(Ease.InSine);
                 });
             await UniTask.Delay(1000);
             turnChangeUIImage.rectTransform.DOMoveY(-turnChangeUIImage.rectTransform.rect.height, 0.5f);
