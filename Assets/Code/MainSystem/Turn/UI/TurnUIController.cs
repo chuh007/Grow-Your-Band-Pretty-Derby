@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Code.MainSystem.Turn.UI
 {
-    public class TurnUIController : MonoBehaviour, ITurnEndComponent, ITurnStartComponent
+    public class TurnUIController : MonoBehaviour
     {
         [SerializeField] private Image turnChangeUIImage;
         [SerializeField] private RectTransform turnCountRectTrm;
@@ -31,7 +31,7 @@ namespace Code.MainSystem.Turn.UI
             
             // 화면 내려옴
             turnChangeUIImage.rectTransform.
-                DOMoveY(turnChangeUIImage.rectTransform.rect.height / 2, 0.5f);
+                DOLocalMoveY(0, 0.5f);
             
             await UniTask.Delay(1000); // 딜레이 (ms 단위)
             turnCountRectTrm.DOLocalMoveY(30, 0.1f).SetEase(Ease.InSine) // 달력 위로
@@ -44,16 +44,7 @@ namespace Code.MainSystem.Turn.UI
             await UniTask.Delay(1200); // 딜레이 (ms 단위)
             // 화면 올라감
             turnChangeUIImage.rectTransform.
-                DOMoveY(-turnChangeUIImage.rectTransform.rect.height * 0.5f, 0.5f);
-        }
-        
-        public void TurnEnd()
-        {
-        }
-
-        public void TurnStart()
-        {
-
+                DOLocalMoveY(-turnChangeUIImage.rectTransform.rect.height, 0.5f);
         }
     }
 }

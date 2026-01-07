@@ -54,6 +54,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 155885735569468487}
     m_Modifications:
+    - target: {fileID: 5734773080048187670, guid: b2682b5762eee504ebdcb0938449070e, type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6285727569414287809, guid: b2682b5762eee504ebdcb0938449070e, type: 3}
       propertyPath: m_Name
       value: TurnChangeCanvas

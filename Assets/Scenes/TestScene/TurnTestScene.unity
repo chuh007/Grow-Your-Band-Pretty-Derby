@@ -5111,11 +5111,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 611.5956
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 906.84467
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5831,8 +5831,6 @@ MonoBehaviour:
   enterTeamPracticeButton: {fileID: 367378557}
   startPracticeButton: {fileID: 1458116338}
   backButton: {fileID: 546791192}
-  RhythmGameScene: Rhythm
-  rhythmGameDataSenderSO: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
   memberButtons:
   - {fileID: 14745568}
   - {fileID: 879693989}
