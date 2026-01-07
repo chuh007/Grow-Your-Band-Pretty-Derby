@@ -4001,6 +4001,8 @@ MonoBehaviour:
   fillBar: {fileID: 980011610}
   damagePreviewBar: {fileID: 130720486}
   valueText: {fileID: 1415003166}
+  fillTweenDuration: 0.2
+  previewTweenDuration: 0.25
 --- !u!1 &527611600
 GameObject:
   m_ObjectHideFlags: 0
@@ -5701,7 +5703,7 @@ MonoBehaviour:
   - {fileID: 22590889}
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 904073744}
-  restCompo: {fileID: 904073743}
+  restSelectCompo: {fileID: 904073743}
   statManager: {fileID: 2127672356}
 --- !u!114 &904073742
 MonoBehaviour:
@@ -5735,6 +5737,7 @@ MonoBehaviour:
   - {fileID: 38579942}
   lesson1Text: {fileID: 481430920}
   lesson2Text: {fileID: 499302770}
+  resetPreviewButton: {fileID: 266725737}
 --- !u!114 &904073743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5747,6 +5750,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d1c6b802a4141a48e32766371a7294b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.UI.RestCompo
+  memberButtons:
+  - {fileID: 14745568}
+  - {fileID: 879693989}
+  - {fileID: 979288142}
+  - {fileID: 551485469}
+  - {fileID: 22590889}
+  selectRequiredUI: {fileID: 1996724990}
+  restResultController: {fileID: 1464388349}
   healthBar: {fileID: 508380102}
 --- !u!114 &904073744
 MonoBehaviour:
@@ -8604,6 +8615,7 @@ GameObject:
   - component: {fileID: 1464388345}
   - component: {fileID: 1464388344}
   - component: {fileID: 1464388348}
+  - component: {fileID: 1464388349}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -8706,6 +8718,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953f90e556c3411e909ebcb3a49f3816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.TrainingSequenceController
+  sdRoot: {fileID: 597187944}
+  uiRoot: {fileID: 1702155841}
+  statManager: {fileID: 2127672356}
+--- !u!114 &1464388349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464388343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3731b072b4474328ab06e91948ae1780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Resting.RestResultController
   sdRoot: {fileID: 597187944}
   uiRoot: {fileID: 1702155841}
   statManager: {fileID: 2127672356}
