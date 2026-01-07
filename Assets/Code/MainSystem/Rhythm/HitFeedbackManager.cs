@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 
@@ -7,26 +8,33 @@ namespace Code.MainSystem.Rhythm
     public class HitFeedbackManager : MonoBehaviour
     {
         [Header("Assets")]
-        [SerializeField] private ParticleSystem hitEffectPrefab;
         [SerializeField] private AudioClip hitSound;
         [SerializeField] private AudioSource sfxSource;
         
         [Header("Scene References")]
         [SerializeField] private Transform[] laneTransforms; 
 
-        private void Start()
+        private GameObject _hitEffectPrefab;
+        private Queue<GameObject> _effectPool = new Queue<GameObject>();
+
+        private void OnEnable()
         {
-            Bus<ScoreUpdateEvent>.OnEvent += HandleScoreUpdate;
+            Bus<NoteHitEvent>.OnEvent += HandleNoteHit;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
-            Bus<ScoreUpdateEvent>.OnEvent -= HandleScoreUpdate;
+            Bus<NoteHitEvent>.OnEvent -= HandleNoteHit;
         }
 
-        private void HandleScoreUpdate(ScoreUpdateEvent evt)
+        public void SetHitEffectPrefab(GameObject prefab)
         {
-            if (evt.LastJudgement != JudgementType.Miss)
+            _hitEffectPrefab = prefab;
+        }
+
+        private void HandleNoteHit(NoteHitEvent evt)
+        {
+            if (evt.Judgement != JudgementType.Miss)
             {
                 PlayHitSound();
                 PlayHitEffect(evt.LaneIndex);
@@ -43,14 +51,36 @@ namespace Code.MainSystem.Rhythm
 
         private void PlayHitEffect(int laneIndex)
         {
-            if (hitEffectPrefab == null) return;
+            if (_hitEffectPrefab == null) return;
             if (laneTransforms == null || laneIndex < 0 || laneIndex >= laneTransforms.Length) return;
 
             Transform targetTransform = laneTransforms[laneIndex];
-            ParticleSystem effect = Instantiate(hitEffectPrefab, targetTransform.position, Quaternion.identity);
-            effect.Play();
+            GameObject effectInstance = GetEffectInstance();
             
-            Destroy(effect.gameObject, 1.0f);
+            if (effectInstance != null)
+            {
+                effectInstance.transform.position = targetTransform.position;
+                effectInstance.transform.rotation = Quaternion.identity;
+                effectInstance.SetActive(true);
+            }
+        }
+
+        private GameObject GetEffectInstance()
+        {
+            if (_effectPool.Count > 0)
+            {
+                return _effectPool.Dequeue();
+            }
+
+            GameObject newInstance = Instantiate(_hitEffectPrefab);
+            var returner = newInstance.GetComponent<AutoReturnToPool>();
+            if (returner == null)
+            {
+                returner = newInstance.AddComponent<AutoReturnToPool>();
+            }
+            
+            returner.OnReturn = (obj) => _effectPool.Enqueue(obj);
+            return newInstance;
         }
     }
 }
