@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Code.Core;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
@@ -53,6 +55,7 @@ namespace Code.MainSystem.MainScreen.Training
                 {
                     resultInstance.SetActive(false);
                     gameObject.SetActive(false);
+                    Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
                 }
             );
         }
@@ -89,6 +92,7 @@ namespace Code.MainSystem.MainScreen.Training
                 {
                     resultInstance.SetActive(false);
                     gameObject.SetActive(false);
+
                 }
             );
         }

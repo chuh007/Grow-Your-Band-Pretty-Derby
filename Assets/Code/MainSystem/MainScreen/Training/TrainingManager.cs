@@ -4,11 +4,12 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.Turn;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Training
 {
-    public class TrainingManager : MonoBehaviour
+    public class TrainingManager : MonoBehaviour, ITurnStartComponent
     {
         private Dictionary<MemberType, int> _trainedMembers = new();
         private bool _teamTrained = false;
@@ -39,6 +40,7 @@ namespace Code.MainSystem.MainScreen.Training
 
         private void Start()
         {
+            Bus<CheckTurnEnd>.OnEvent += HandleCheckTurnEnd;
             foreach (var type in _allMemberTypes)
             {
                 _trainedMembers.Add(type, 1);
@@ -72,7 +74,6 @@ namespace Code.MainSystem.MainScreen.Training
                 new MemberTrainingStateChangedEvent(member)
             );
 
-            CheckAllMembersTrained();
         }
 
         public bool IsTeamTrained()
@@ -103,22 +104,26 @@ namespace Code.MainSystem.MainScreen.Training
         }
 
         
-        private void CheckAllMembersTrained()
+        private bool CheckAllMembersTrained()
         {
             foreach (var member in _allMemberTypes)
             {
                 if (_trainedMembers[member] != 0)
-                    return;
+                    return false;
             }
             
-            Debug.Log("모든 멤버 훈련 완료! 턴을 넘깁니다.");
-            HandleNextTrun();
+            return true;
         }
-
-        private void HandleNextTrun()
+        
+        public void TurnStart()
         {
             ResetTraining();
-            Bus<TurnEndEvent>.Raise(new TurnEndEvent());
         }
+        
+        private void HandleCheckTurnEnd(CheckTurnEnd evt)
+        {
+            if(CheckAllMembersTrained()) Bus<TurnEndEvent>.Raise(new TurnEndEvent());
+        }
+
     }
 }

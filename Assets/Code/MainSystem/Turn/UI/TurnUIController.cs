@@ -25,14 +25,16 @@ namespace Code.MainSystem.Turn.UI
 
         public async UniTask TurnChangeAnimation()
         {
+            turnCountText.SetText((_turnManager.RemainingTurn + 1).ToString());
             turnChangeUIImage.rectTransform.anchoredPosition =
                 new Vector2(0, turnChangeUIImage.rectTransform.rect.height);
+            
             turnChangeUIImage.rectTransform.DOMoveY(turnChangeUIImage.rectTransform.rect.height / 2, 0.5f);
             await UniTask.Delay(1000);
             turnCountRectTrm.DOLocalMoveY(50, 0.35f).SetEase(Ease.OutSine)
                 .OnComplete(() =>
                 {
-                    turnCountText.SetText((_turnManager.RemainingTurn - 1).ToString());
+                    turnCountText.SetText(_turnManager.RemainingTurn.ToString());
                     turnCountRectTrm.DOLocalMoveY(-50, 0.3f).SetEase(Ease.InSine);
                 });
             await UniTask.Delay(1000);
