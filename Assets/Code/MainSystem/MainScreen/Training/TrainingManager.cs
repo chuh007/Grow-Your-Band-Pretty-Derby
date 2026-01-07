@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.Turn;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Training
 {
-    public class TrainingManager : MonoBehaviour
+    public class TrainingManager : MonoBehaviour, ITurnStartComponent
     {
-        private HashSet<MemberType> _trainedMembers = new();
+        private Dictionary<MemberType, int> _trainedMembers = new();
         private bool _teamTrained = false;
-
+        private int _curTurnTrainingCount = 0;
         public static TrainingManager Instance { get; private set; }
 
         private readonly MemberType[] _allMemberTypes =
@@ -35,6 +37,17 @@ namespace Code.MainSystem.MainScreen.Training
                 Destroy(gameObject);
             }
         }
+
+        private void Start()
+        {
+            Bus<CheckTurnEnd>.OnEvent += HandleCheckTurnEnd;
+            foreach (var type in _allMemberTypes)
+            {
+                _trainedMembers.Add(type, 1);
+            }
+        }
+        
+        public int GetCurrentTrainingCount() => _curTurnTrainingCount;
         
         public void MarkMembersTrainedForTeam(IEnumerable<MemberType> members)
         {
@@ -43,25 +56,24 @@ namespace Code.MainSystem.MainScreen.Training
                 MarkMemberTrained(member);
             }
         }
-
-
+        
         public bool IsMemberTrained(MemberType member)
         {
-            return _trainedMembers.Contains(member);
+            return _trainedMembers[member] == 0;
         }
 
         public void MarkMemberTrained(MemberType member)
         {
-            if (_trainedMembers.Contains(member))
+            if (_trainedMembers[member] == 0)
                 return;
-
-            _trainedMembers.Add(member);
-
+            
+            _trainedMembers[member]--;
+            _curTurnTrainingCount++;
+            
             Bus<MemberTrainingStateChangedEvent>.Raise(
                 new MemberTrainingStateChangedEvent(member)
             );
 
-            CheckAllMembersTrained();
         }
 
         public bool IsTeamTrained()
@@ -76,7 +88,11 @@ namespace Code.MainSystem.MainScreen.Training
 
         public void ResetTraining()
         {
-            _trainedMembers.Clear();
+            _curTurnTrainingCount = 0;
+            foreach (var type in _allMemberTypes)
+            {
+                _trainedMembers[type] = 1;
+            }
             _teamTrained = false;
             
             foreach (var member in _allMemberTypes)
@@ -88,22 +104,26 @@ namespace Code.MainSystem.MainScreen.Training
         }
 
         
-        private void CheckAllMembersTrained()
+        private bool CheckAllMembersTrained()
         {
             foreach (var member in _allMemberTypes)
             {
-                if (!_trainedMembers.Contains(member))
-                    return;
+                if (_trainedMembers[member] != 0)
+                    return false;
             }
             
-            Debug.Log("모든 멤버 훈련 완료! 턴을 넘깁니다.");
-            HandleNextTrun();
+            return true;
         }
-
-        private void HandleNextTrun()
+        
+        public void TurnStart()
         {
             ResetTraining();
-            Bus<TurnUseEvent>.Raise(new TurnUseEvent(1));
         }
+        
+        private void HandleCheckTurnEnd(CheckTurnEnd evt)
+        {
+            if(CheckAllMembersTrained()) Bus<TurnEndEvent>.Raise(new TurnEndEvent());
+        }
+
     }
 }

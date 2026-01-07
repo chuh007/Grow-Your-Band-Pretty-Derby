@@ -1,12 +1,10 @@
-﻿using System;
-using Code.Core.Bus;
+﻿using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Reflex.Attributes;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Code.MainSystem.Turn
+namespace Code.MainSystem.Turn.UI
 {
     public class TurnCountUI : MonoBehaviour
     {

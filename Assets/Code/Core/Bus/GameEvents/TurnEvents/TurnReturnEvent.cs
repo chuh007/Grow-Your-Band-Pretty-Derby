@@ -1,4 +1,4 @@
-﻿namespace Code.Core.Bus.GameEvents
+﻿namespace Code.Core.Bus.GameEvents.TurnEvents
 {
     public struct TurnReturnEvent : IEvent
     {
