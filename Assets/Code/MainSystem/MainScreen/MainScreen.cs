@@ -142,6 +142,7 @@ namespace Code.MainSystem.MainScreen
         public void TeamButtonClicked()
         {
             teamPanel.gameObject.SetActive(true);
+            teamPracticeCompo.CacheUnits(_loadedUnits);
         }
 
         public void MemberBtnClicked(string type)
