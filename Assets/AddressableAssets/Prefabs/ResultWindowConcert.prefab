@@ -852,7 +852,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4402884448375076391}
-  - component: {fileID: 5485668701039254842}
+  - component: {fileID: 8086951309097080705}
   m_Layer: 5
   m_Name: ResultWindowConcert
   m_TagString: Untagged
@@ -881,7 +881,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5485668701039254842
+--- !u!114 &8086951309097080705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -890,16 +890,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7491905472274973571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52cc88b0f4de43eb9d5ffe1c4b15be81, type: 3}
+  m_Script: {fileID: 11500000, guid: 9208821efc9d4edda395ab1bce739927, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.TrainingResultUI
-  trainingResultImage: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.TeamTrainingResultUI
+  trainingResultImages:
+  - memberType: 0
+    image: {fileID: 8681296657495767540}
+  - memberType: 1
+    image: {fileID: 7944545694620520051}
+  - memberType: 2
+    image: {fileID: 2847916569508426533}
+  - memberType: 4
+    image: {fileID: 9028086930723312453}
+  - memberType: 3
+    image: {fileID: 1020395826176187532}
   resultImage: {fileID: 3615489413101615610}
-  statBoxes:
-  - {fileID: 2919597386410555506}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   scaleFactor: 1.05
   scaleTime: 0.5
 --- !u!1 &7626801045557184712

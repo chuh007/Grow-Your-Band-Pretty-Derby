@@ -1,4 +1,5 @@
-﻿using Code.Core;
+﻿using System;
+using Code.Core;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Bottom
@@ -11,6 +12,20 @@ namespace Code.MainSystem.MainScreen.Bottom
         [SerializeField] private GameObject mode2Panel;
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
+        public Action<int> ExitModeEvent;
+        public Action<int> EnterModeEvent;
+
+        private void OnEnable()
+        {
+            ExitModeEvent += ExitMode;
+            EnterModeEvent += EnterMode;
+        }
+
+        private void OnDisable()
+        {
+            ExitModeEvent -= ExitMode;
+            EnterModeEvent -= EnterMode;
+        }
 
         public void SwitchMode(int modeIndex)
         {
@@ -20,7 +35,7 @@ namespace Code.MainSystem.MainScreen.Bottom
             EnterMode(currentModeIndex);
         }
 
-        private void EnterMode(object currentMode)
+        private void EnterMode(int currentMode)
         {
             switch (currentMode)
             {
@@ -42,7 +57,7 @@ namespace Code.MainSystem.MainScreen.Bottom
             }
         }
 
-        private void ExitMode(object currentMode)
+        private void ExitMode(int currentMode)
         {
             switch (currentMode)
             {

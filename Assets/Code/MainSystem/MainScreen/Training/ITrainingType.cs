@@ -15,6 +15,16 @@ namespace Code.MainSystem.MainScreen.Training
         string GetResultUIPrefabKey();
     }
 
+    public interface ITeamTraingType
+    {
+        string GetIdleImageKey(MemberType memberType);
+        string GetResultImageKey(bool isSuccess,MemberType memberType);
+        string GetProgressImageKey(MemberType memberType);
+
+        string GetIdlePrefabKey();   
+        string GetResultUIPrefabKey();
+    }
+
 
     public interface IStatChangeProvider
     {

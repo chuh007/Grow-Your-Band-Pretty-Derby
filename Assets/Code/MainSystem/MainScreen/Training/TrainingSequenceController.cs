@@ -2,6 +2,7 @@
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TurnEvents;
+using Code.MainSystem.MainScreen.Bottom;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Code.MainSystem.MainScreen.Training
         [SerializeField] private Transform sdRoot;
         [SerializeField] private Transform uiRoot;
         [SerializeField] private StatManager statManager;
+        [SerializeField] private BottomTab bottomTab;
 
         private GameObject idleInstance;
         private TrainingProgressBar bar;
@@ -22,6 +24,7 @@ namespace Code.MainSystem.MainScreen.Training
 
         private GameObject resultInstance;
         private TrainingResultUI resultUI;
+        private TeamTrainingResultUI teamresultUI;
         public async UniTask PlayTrainingSequence(
             bool isSuccess,
             ITrainingType trainingType,
@@ -43,7 +46,7 @@ namespace Code.MainSystem.MainScreen.Training
 
             var statList = personalProvider.GetStatChanges(unit, statManager, isSuccess);
 
-            await EnsureResultUI();
+            await TraingResultUI();
 
             await resultUI.Play(
                 idleSprite,
@@ -59,10 +62,10 @@ namespace Code.MainSystem.MainScreen.Training
                 }
             );
         }
-        
+
         public async UniTask PlayTeamTrainingSequence(
             bool isSuccess,
-            ITrainingType trainingType,
+            ITeamTraingType trainingType,
             List<UnitDataSO> units)
         {
             if (trainingType is not ITeamStatChangeProvider teamProvider)
@@ -71,47 +74,66 @@ namespace Code.MainSystem.MainScreen.Training
                 return;
             }
 
-            await SetupBar(trainingType);
-            await ShowTeamProgress(trainingType, units);
+            var unitSnapshot = new List<UnitDataSO>(units);
+            var allStats = teamProvider.GetAllStatChanges(unitSnapshot, statManager, isSuccess);
 
-            var idleSprite =
-                await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetIdleImageKey());
-            var resultSprite =
-                await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetResultImageKey(isSuccess));
+            await SetupBar(trainingType, memberType: unitSnapshot[0].memberType); 
+            await ShowTeamProgress(trainingType, new List<MemberType>(unitSnapshot.ConvertAll(u => u.memberType)));
 
-            var allStats = teamProvider.GetAllStatChanges(units, statManager, isSuccess);
+            var memberResultSprites = new Dictionary<MemberType, Sprite>();
+            foreach (var unit in unitSnapshot)
+            {
+                string resultKey = trainingType.GetResultImageKey(isSuccess, unit.memberType);
+                var resultSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(resultKey);
+                memberResultSprites[unit.memberType] = resultSprite;
+            }
 
-            await EnsureResultUI();
+            await TeamTraingResultUI();
 
-            await resultUI.PlayTeamResult(
-                idleSprite,
-                resultSprite,
-                allStats,
-                isSuccess,
+            await teamresultUI.PlayTeamResult(
+                resultSprite: null, 
+                memberResultSprites,
                 () =>
                 {
                     resultInstance.SetActive(false);
                     gameObject.SetActive(false);
-
+                    bottomTab.ExitModeEvent.Invoke(2);
                 }
             );
         }
+
+
 
         private async UniTask SetupBar(ITrainingType trainingType)
         {
             if (idleInstance == null)
             {
-                string prefabKey = trainingType.GetIdlePrefabKey(); 
+                string prefabKey = trainingType.GetIdlePrefabKey();
                 var idleSDPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>(prefabKey);
                 idleInstance = Instantiate(idleSDPrefab, sdRoot);
                 bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();
                 progressImage = idleInstance.GetComponent<TrainingProgressImage>();
+            }
+
+            idleInstance.SetActive(true);
+            bar?.ResetBar();
+        }
+        
+        private async UniTask SetupBar(ITeamTraingType trainingType, MemberType memberType)
+        {
+            if (idleInstance == null)
+            {
+                string prefabKey = trainingType.GetIdlePrefabKey();
+                var idleSDPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>(prefabKey);
+                idleInstance = Instantiate(idleSDPrefab, sdRoot);
+                bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();
                 teamProgressImage = idleInstance.GetComponent<TeamTrainingProgressImage>();
             }
 
             idleInstance.SetActive(true);
             bar?.ResetBar();
         }
+
 
         
         private async UniTask ShowPersonalProgress(ITrainingType trainingType)
@@ -126,15 +148,23 @@ namespace Code.MainSystem.MainScreen.Training
             idleInstance.SetActive(false);
         }
         
-        private async UniTask ShowTeamProgress(ITrainingType trainingType, List<UnitDataSO> selectedUnits)
+        private async UniTask ShowTeamProgress(ITeamTraingType trainingType, List<MemberType> memberTypes)
         {
-            var progressSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetProgressImageKey());
+            var activeMembers = new HashSet<MemberType>();
+            Dictionary<MemberType, Sprite> memberSprites = new();
 
-            var selectedTypes = new HashSet<MemberType>();
-            foreach (var unit in selectedUnits)
-                selectedTypes.Add(unit.memberType);
+            foreach (var memberType in memberTypes)
+            {
+                string progressKey = trainingType.GetProgressImageKey(memberType);
+                var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(progressKey);
+                memberSprites[memberType] = sprite;
+                activeMembers.Add(memberType);
+            }
 
-            teamProgressImage?.SetProgressImages(progressSprite, selectedTypes);
+            foreach (var kvp in memberSprites)
+            {
+                teamProgressImage?.SetProgressImages(kvp.Value, activeMembers);
+            }
 
             if (bar != null)
                 await bar.Play(1f);
@@ -143,9 +173,22 @@ namespace Code.MainSystem.MainScreen.Training
             idleInstance.SetActive(false);
         }
 
+        
+        private async UniTask TeamTraingResultUI()
+        {
+            if (resultInstance == null)
+            {
+                var resultPrefab = await GameManager.Instance.LoadAddressableAsync<GameObject>("Concert/UI/Result");
+                resultInstance = Instantiate(resultPrefab, uiRoot);
+                teamresultUI = resultInstance.GetComponent<TeamTrainingResultUI>();
+            }
+
+            resultInstance.SetActive(true);
+        }
 
 
-        private async UniTask EnsureResultUI()
+
+        private async UniTask TraingResultUI()
         {
             if (resultInstance == null)
             {
