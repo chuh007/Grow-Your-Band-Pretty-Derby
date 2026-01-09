@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Code.MainSystem.MainScreen.Bottom;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.StatSystem.UI;
-using Cysharp.Threading.Tasks;
-using UnityEngine.EventSystems;
 
 namespace Code.MainSystem.MainScreen.Training
 {
-    public class TeamTrainingResultUI : MonoBehaviour,IPointerClickHandler
+    public class TeamTrainingResultUI : MonoBehaviour, IPointerClickHandler
     {
-        [System.Serializable]
+        [Serializable]
         public class MemberImage
         {
             public MemberType memberType;
@@ -23,63 +22,62 @@ namespace Code.MainSystem.MainScreen.Training
 
         [SerializeField] private List<MemberImage> trainingResultImages;
         [SerializeField] private Image resultImage;
+        [SerializeField] private StatBox teamStatBox;
         [SerializeField] private float scaleFactor = 1.05f;
         [SerializeField] private float scaleTime = 0.5f;
 
-        private readonly Dictionary<MemberType, Image> _memberImageDict = new();
-        private Action OnClose;
+        private readonly Dictionary<MemberType, Image> memberImageDict = new();
+        private Action onClose;
 
         private void Awake()
         {
             foreach (var m in trainingResultImages)
             {
-                if (m.image != null)
-                {
-                    _memberImageDict[m.memberType] = m.image;
-                    m.image.gameObject.SetActive(false);
-                }
+                memberImageDict[m.memberType] = m.image;
+                m.image.gameObject.SetActive(false);
             }
         }
 
         public async UniTask PlayTeamResult(
             Sprite resultSprite,
             Dictionary<MemberType, Sprite> memberResultSprites,
+            (string name, Sprite icon, int baseValue, int delta) teamStat,
+            bool isSuccess,
             Action onClose)
         {
-            foreach (var kvp in _memberImageDict)
+            foreach (var kvp in memberImageDict)
             {
-                var memberType = kvp.Key;
-                var img = kvp.Value;
-
-                if (memberResultSprites.TryGetValue(memberType, out var sprite))
+                if (memberResultSprites.TryGetValue(kvp.Key, out var sprite))
                 {
-                    img.sprite = sprite;
-                    img.gameObject.SetActive(true);
+                    kvp.Value.sprite = sprite;
+                    kvp.Value.gameObject.SetActive(true);
                 }
                 else
                 {
-                    img.gameObject.SetActive(false);
+                    kvp.Value.gameObject.SetActive(false);
                 }
             }
 
+            teamStatBox.Set(
+                teamStat.name,
+                teamStat.icon,
+                teamStat.baseValue,
+                isSuccess ? teamStat.delta : 0);
+
             await UniTask.Delay(1000);
 
-            resultImage.sprite = resultSprite;
             resultImage.transform.localScale = Vector3.zero;
             resultImage.gameObject.SetActive(true);
-            resultImage.transform.DOScale(Vector3.one * scaleFactor, scaleTime).SetEase(Ease.OutBack);
+            resultImage.transform
+                .DOScale(Vector3.one * scaleFactor, scaleTime)
+                .SetEase(Ease.OutBack);
 
-            this.OnClose = onClose;
-        }
-
-        public void Close()
-        {
-            OnClose?.Invoke();
+            this.onClose = onClose;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Close();
+            onClose?.Invoke();
         }
     }
 }

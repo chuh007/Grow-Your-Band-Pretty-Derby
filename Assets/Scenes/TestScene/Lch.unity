@@ -7989,6 +7989,7 @@ MonoBehaviour:
   sdRoot: {fileID: 597187944}
   uiRoot: {fileID: 1702155841}
   statManager: {fileID: 2127672356}
+  bottomTab: {fileID: 1334975055}
 --- !u!114 &1464388349
 MonoBehaviour:
   m_ObjectHideFlags: 0

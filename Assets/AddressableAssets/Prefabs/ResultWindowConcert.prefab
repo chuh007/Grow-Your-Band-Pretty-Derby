@@ -907,6 +907,7 @@ MonoBehaviour:
   resultImage: {fileID: 3615489413101615610}
   scaleFactor: 1.05
   scaleTime: 0.5
+  teamStatBox: {fileID: 2919597386410555506}
 --- !u!1 &7626801045557184712
 GameObject:
   m_ObjectHideFlags: 0
