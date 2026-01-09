@@ -5567,6 +5567,7 @@ MonoBehaviour:
   - {fileID: 551485469}
   - {fileID: 22590889}
   liftY: 20
+  trainingSequenceController: {fileID: 1464388348}
 --- !u!1 &939267184
 GameObject:
   m_ObjectHideFlags: 0
@@ -7988,6 +7989,7 @@ MonoBehaviour:
   sdRoot: {fileID: 597187944}
   uiRoot: {fileID: 1702155841}
   statManager: {fileID: 2127672356}
+  bottomTab: {fileID: 1334975055}
 --- !u!114 &1464388349
 MonoBehaviour:
   m_ObjectHideFlags: 0

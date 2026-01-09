@@ -1,59 +1,72 @@
 ﻿using System.Collections.Generic;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
 
-namespace Code.MainSystem.MainScreen.Training
+public class TeamTrainingType : ITeamTraingType, ITeamStatChangeProvider
 {
-    public class TeamTrainingType : ITrainingType, ITeamStatChangeProvider
+    private Dictionary<MemberType, UnitDataSO> _unitDataSOs = new Dictionary<MemberType, UnitDataSO>();
+    
+    public TeamTrainingType(List<UnitDataSO> unitDataList)
     {
-        public string GetIdleImageKey()
+        foreach (var unit in unitDataList)
         {
-            return "Concert/Image/Idle";
+            _unitDataSOs[unit.memberType] = unit;
         }
+    }
 
-        public string GetResultImageKey(bool isSuccess)
-        {
-            return isSuccess ? "Sprites/Guitar/Succse" : "Sprites/Guitar/Faill"; 
-        }
+    public string GetProgressImageKey()
+    {
+        return "Concert/Image/Progress";
+    }
 
-        public string GetProgressImageKey()
-        {
-            return "Concert/Image/Progress";
-        }
+    public string GetIdleImageKey(MemberType memberType)
+    {
+        return _unitDataSOs[memberType].TeamIdleSpriteKey;
+    }
 
-        public string GetIdlePrefabKey()
-        {
-            return "Concert/SD/Idle"; 
-        }
+    public string GetResultImageKey(bool isSuccess, MemberType memberType)
+    {
+        return isSuccess ? _unitDataSOs[memberType].TeamSuccseSpriteKey : _unitDataSOs[memberType].TeamFaillSpriteKey;
+    }
 
-        public string GetResultUIPrefabKey()
-        {
-            return "Concert/UI/Result"; 
-        }
-        
-        public Dictionary<UnitDataSO, List<(string name, Sprite icon, int baseValue, int delta)>> GetAllStatChanges(
-            List<UnitDataSO> units,
-            StatManager statManager,
-            bool isSuccess)
-        {
-            var result = new Dictionary<UnitDataSO, List<(string name, Sprite icon, int baseValue, int delta)>>();
+    public string GetProgressImageKey(MemberType memberType)
+    {
+        return _unitDataSOs[memberType].TeamProggresSpriteKey;
+    }
 
-            foreach (var unit in units)
+    public string GetIdlePrefabKey()
+    {
+        return "Concert/SD/Idle";
+    }
+
+    public string GetResultUIPrefabKey()
+    {
+        return "Concert/SD/Result";
+    }
+
+    public Dictionary<UnitDataSO, List<(string name, Sprite icon, int baseValue, int delta)>> GetAllStatChanges(
+        List<UnitDataSO> units,
+        StatManager statManager,
+        bool isSuccess)
+    {
+        var result = new Dictionary<UnitDataSO, List<(string name, Sprite icon, int baseValue, int delta)>>();
+
+        foreach (var unit in units)
+        {
+            int baseHarmony = statManager.GetTeamStat(StatType.TeamHarmony).CurrentValue;
+            int delta = isSuccess ? 5 : 0;
+
+            Sprite icon = statManager.GetTeamStat(StatType.TeamHarmony).StatIcon;
+
+            result[unit] = new List<(string, Sprite, int, int)>
             {
-                int baseHarmony = statManager.GetTeamStat(StatType.TeamHarmony).CurrentValue;
-                int delta = isSuccess ? 5 : 0;
-
-                Sprite icon = statManager.GetTeamStat(StatType.TeamHarmony).StatIcon;
-
-                result[unit] = new List<(string, Sprite, int, int)>
-                {
-                    ("하모니", icon, baseHarmony, delta)
-                };
-            }
-
-            return result;
+                ("하모니", icon, baseHarmony, delta)
+            };
         }
+
+        return result;
     }
 }
