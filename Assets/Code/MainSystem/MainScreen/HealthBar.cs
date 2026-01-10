@@ -5,6 +5,12 @@ using DG.Tweening;
 
 namespace Code.MainSystem.MainScreen
 {
+    
+    
+    /// <summary>
+    /// 컨디션 바임
+    /// </summary>
+    
     public class HealthBar : MonoBehaviour
     {
         [Header("UI Components")]
