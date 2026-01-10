@@ -9,6 +9,7 @@ using Code.MainSystem.StatSystem.Manager;
 using Reflex.Attributes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Code.MainSystem.MainScreen
@@ -17,7 +18,7 @@ namespace Code.MainSystem.MainScreen
     {
         [Header("UI")]
         [SerializeField] private HealthBar healthBar;
-        [SerializeField] private TrainingSequenceController trainingSequenceController;
+        [FormerlySerializedAs("trainingSequenceController")] [SerializeField] private PersonalTrainingSequenceController personalTrainingSequenceController;
         [SerializeField] private List<Image> arrowObjs;
         [SerializeField] private List<TextMeshProUGUI> probabilityTexts;
         [SerializeField] private List<Button> practiceButtons;
@@ -117,9 +118,9 @@ namespace Code.MainSystem.MainScreen
                 _selectedPracticeIndex = -1;
                 _statUIUpdater.UpdateAll(_currentUnit);
                 
-                trainingSequenceController.gameObject.SetActive(true);
+                personalTrainingSequenceController.gameObject.SetActive(true);
                 var personalTrainingType = new PersonalTrainingType(practice);
-                await trainingSequenceController
+                await personalTrainingSequenceController
                     .PlayTrainingSequence(success, personalTrainingType, _currentUnit);
 
 
