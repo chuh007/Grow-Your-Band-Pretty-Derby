@@ -4,9 +4,7 @@ using System.Linq;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Turn.UI;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Code.MainSystem.Turn
 {
