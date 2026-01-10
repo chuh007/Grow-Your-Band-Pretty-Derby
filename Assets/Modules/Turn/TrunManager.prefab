@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bb451aa60d477590603b291c9fbe71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Turn.TurnManager
-  maxTurn: 72
+  maxTurn: 15
   _remainingTurn: 0

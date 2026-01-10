@@ -793,17 +793,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64329276}
   m_CullTransparentMesh: 1
---- !u!114 &71878877 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 546354087240252601, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-  m_PrefabInstance: {fileID: 1776487489}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69ed86e41e8e4ce0a957f846eef9bce9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Turn.FlowManager
 --- !u!1 &77407513
 GameObject:
   m_ObjectHideFlags: 0
@@ -2521,7 +2510,7 @@ PrefabInstance:
     - target: {fileID: 7574124549963307590, guid: f52af72a64e89d44b83dee5309b84957, type: 3}
       propertyPath: 'providers.Array.data[0]'
       value: 
-      objectReference: {fileID: 71878877}
+      objectReference: {fileID: 1952333117}
     - target: {fileID: 7574124549963307590, guid: f52af72a64e89d44b83dee5309b84957, type: 3}
       propertyPath: 'providers.Array.data[1]'
       value: 
@@ -10620,6 +10609,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1931889765}
   m_CullTransparentMesh: 1
+--- !u!1001 &1952333116
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 128.74171
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1575.3394
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4004378672029198193, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: m_Name
+      value: TrunManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+--- !u!114 &1952333117 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 208271456366512651, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+  m_PrefabInstance: {fileID: 1952333116}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7bb451aa60d477590603b291c9fbe71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Turn.TurnManager
 --- !u!1 &1996724988
 GameObject:
   m_ObjectHideFlags: 0
@@ -11252,3 +11309,4 @@ SceneRoots:
   - {fileID: 249881532}
   - {fileID: 313797333}
   - {fileID: 1776487489}
+  - {fileID: 1952333116}
