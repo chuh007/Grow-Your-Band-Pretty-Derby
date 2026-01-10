@@ -48,15 +48,7 @@ namespace Code.MainSystem.MainScreen.Training
         }
         
         public int GetCurrentTrainingCount() => _curTurnTrainingCount;
-        
-        public void MarkMembersTrainedForTeam(IEnumerable<MemberType> members)
-        {
-            foreach (var member in members)
-            {
-                MarkMemberTrained(member);
-            }
-        }
-        
+
         public bool IsMemberTrained(MemberType member)
         {
             return _trainedMembers[member] == 0;
@@ -67,7 +59,7 @@ namespace Code.MainSystem.MainScreen.Training
             if (_trainedMembers[member] == 0)
                 return;
             
-            _trainedMembers[member]--;
+            _trainedMembers[member] = 0;
             _curTurnTrainingCount++;
             
             Bus<MemberTrainingStateChangedEvent>.Raise(
@@ -76,15 +68,6 @@ namespace Code.MainSystem.MainScreen.Training
 
         }
 
-        public bool IsTeamTrained()
-        {
-            return _teamTrained;
-        }
-
-        public void MarkTeamTrained()
-        {
-            _teamTrained = true;
-        }
 
         public void ResetTraining()
         {
@@ -108,7 +91,7 @@ namespace Code.MainSystem.MainScreen.Training
         {
             foreach (var member in _allMemberTypes)
             {
-                if (_trainedMembers[member] != 0)
+                if (_trainedMembers[member] > 0)
                     return false;
             }
             
@@ -122,7 +105,11 @@ namespace Code.MainSystem.MainScreen.Training
         
         private void HandleCheckTurnEnd(CheckTurnEnd evt)
         {
-            if(CheckAllMembersTrained()) Bus<TurnEndEvent>.Raise(new TurnEndEvent());
+            if (CheckAllMembersTrained())
+            {
+                Bus<TurnEndEvent>.Raise(new TurnEndEvent());
+                ResetTraining();
+            }
         }
 
     }

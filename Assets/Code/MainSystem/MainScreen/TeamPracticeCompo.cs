@@ -10,6 +10,7 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Events;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -25,8 +26,9 @@ namespace Code.MainSystem.MainScreen
         [Header("Button Move")]
         [SerializeField] private float liftY = 20f;
         
+        [FormerlySerializedAs("trainingSequenceController")]
         [Header("TrainingSequence")]
-        [SerializeField] private TrainingSequenceController trainingSequenceController;
+        [SerializeField] private TeamTrainingSequenceController personalTrainingSequenceController;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
         private readonly Dictionary<MemberType, Vector3> _originLocalPosMap = new();
@@ -158,15 +160,15 @@ namespace Code.MainSystem.MainScreen
                 memberConditions.Add(member.currentCondition);
 
             Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent(memberConditions));
-            
             foreach (var member in _selectedMembers)
             {
                 TrainingManager.Instance.MarkMemberTrained(member.memberType);
             }
-            trainingSequenceController.gameObject.SetActive(true);
-            var teamPracticeType = new TeamTrainingType(_selectedMembers);
-            await trainingSequenceController.PlayTeamTrainingSequence(_issuccess, teamPracticeType, _selectedMembers);
             
+            
+            personalTrainingSequenceController.gameObject.SetActive(true);
+            var teamPracticeType = new TeamTrainingType(_selectedMembers);
+            await personalTrainingSequenceController.PlayTeamTrainingSequence(_issuccess, teamPracticeType, _selectedMembers);
             OnClickBack();
         }
 
