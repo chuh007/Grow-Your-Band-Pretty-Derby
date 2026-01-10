@@ -254,15 +254,7 @@ namespace Code.MainSystem.MainScreen
                 }
             }
             
-            if (_selectedMembers.Count > 0)
-            {
-                var last = _selectedMembers[^1];
-                healthBar.SetHealth(last.currentCondition, last.maxCondition);
-            }
-            else
-            {
-                healthBar.SetHealth(0f, 100f); 
-            }
+            healthBar.PrevieMinusHealth(0);
 
             _selectedMembers.Clear();
             UpdateUI();
