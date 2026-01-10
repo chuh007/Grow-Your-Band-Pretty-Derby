@@ -1,4 +1,5 @@
-﻿using Code.MainSystem.TraitSystem.Data;
+﻿using System.Collections.Generic;
+using Code.MainSystem.TraitSystem.Data;
 
 namespace Code.MainSystem.TraitSystem.Contexts
 {
@@ -8,6 +9,8 @@ namespace Code.MainSystem.TraitSystem.Contexts
     public class GameContext
     {
         public CharacterTrait Owner;
+        public List<CharacterTrait> PartyMembers;
+        public bool IsTrainingSuccess;
         public int CurrentTurn;
         //필요시 다른 정보 추가 해야함
     }
