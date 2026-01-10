@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code.MainSystem.TraitSystem.Interface;
 using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.Data
@@ -23,5 +24,10 @@ namespace Code.MainSystem.TraitSystem.Data
         public ExpirationType ExpirationType;
         public List<float> Effects;
         public int Level;
+        
+        [SerializeReference]
+        public ITraitCondition Condition;
+        [SerializeReference]
+        public ITraitEffect Effect;
     }
 }
