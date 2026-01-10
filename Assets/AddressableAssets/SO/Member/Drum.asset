@@ -26,5 +26,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e38c0e0dc3d605f4bb2f1d9139be2ef4, type: 2}
   - {fileID: 11400000, guid: e85ae8ac383736a498c5bd92f6cdf678, type: 2}
   maxCondition: 100
-  currentCondition: 100
+  currentCondition: 98
   TeamStat: {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}
+  TeamIdleSpriteKey: Sprites/Guitar/Idle
+  TeamSuccseSpriteKey: Sprites/Guitar/Succse
+  TeamFaillSpriteKey: Sprites/Guitar/Faill
+  TeamProggresSpriteKey: Sprites/Guitar/Idle

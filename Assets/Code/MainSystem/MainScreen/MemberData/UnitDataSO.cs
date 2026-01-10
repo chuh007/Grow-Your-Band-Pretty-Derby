@@ -16,6 +16,10 @@ namespace Code.MainSystem.MainScreen.MemberData
         public float maxCondition;
         public float currentCondition;
         public StatData TeamStat;
+        public string TeamIdleSpriteKey;
+        public string TeamSuccseSpriteKey;
+        public string TeamFaillSpriteKey;
+        public string TeamProggresSpriteKey;
     }
 
 }

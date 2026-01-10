@@ -61,6 +61,12 @@ namespace Code.MainSystem.MainScreen
             _isOpen = true;
         }
 
+        public void Close()
+        {
+            _isOpen = false;
+            _selectedUnit = null;
+        }
+
         private void OnClickMember(MemberType type)
         {
             if (!_isOpen)

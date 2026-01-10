@@ -42,7 +42,6 @@ namespace Code.MainSystem.MainScreen.Training
             {
                 bool isActive = activeMembers.Contains(m.memberType);
                 m.image.gameObject.SetActive(isActive);
-
                 if (isActive)
                 {
                     m.image.sprite = sprite;

@@ -18,17 +18,19 @@ namespace Code.MainSystem.MainScreen
         [Header("UI")]
         [SerializeField] private Button enterTeamPracticeButton;
         [SerializeField] private Button startPracticeButton;
-        [SerializeField] private Button backButton;
 
         [Header("Member Buttons")]
         [SerializeField] private List<Button> memberButtons;
 
         [Header("Button Move")]
         [SerializeField] private float liftY = 20f;
+        
+        [Header("TrainingSequence")]
+        [SerializeField] private TrainingSequenceController trainingSequenceController;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
         private readonly Dictionary<MemberType, Vector3> _originLocalPosMap = new();
-        private readonly HashSet<MemberType> _selectedMembers = new();
+        private readonly List<UnitDataSO> _selectedMembers = new();
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
         private bool _isTeamPracticeMode = false;
@@ -51,8 +53,6 @@ namespace Code.MainSystem.MainScreen
         
         private void HandleTeamPracticeResult(TeamPracticeResultEvent evt)
         {
-            //evt.IsSuccess;
-            //이거 불 값으로 true, false보내고 있음
             _issuccess = evt.IsSuccess;
         }
 
@@ -82,7 +82,6 @@ namespace Code.MainSystem.MainScreen
 
             enterTeamPracticeButton.onClick.AddListener(OnEnterTeamPractice);
             startPracticeButton.onClick.AddListener(OnClickStartPractice);
-            backButton.onClick.AddListener(OnClickBack);
         }
 
 
@@ -112,7 +111,7 @@ namespace Code.MainSystem.MainScreen
             if (TrainingManager.Instance.IsMemberTrained(member))
                 return;
 
-            if (_selectedMembers.Contains(member))
+            if (_selectedMembers.Contains(_unitMap[member]))
                 DeactivateMember(member);
             else
                 ActivateMember(member);
@@ -122,7 +121,7 @@ namespace Code.MainSystem.MainScreen
 
         private void ActivateMember(MemberType member)
         {
-            _selectedMembers.Add(member);
+            _selectedMembers.Add(_unitMap[member]);
 
             var tr = _buttonMap[member].transform;
             tr.localPosition = _originLocalPosMap[member] + Vector3.up * liftY;
@@ -130,7 +129,7 @@ namespace Code.MainSystem.MainScreen
 
         private void DeactivateMember(MemberType member)
         {
-            _selectedMembers.Remove(member);
+            _selectedMembers.Remove(_unitMap[member]);
 
             var tr = _buttonMap[member].transform;
             tr.localPosition = _originLocalPosMap[member];
@@ -149,21 +148,30 @@ namespace Code.MainSystem.MainScreen
 
         #region Practice Start / Back
 
-        private void OnClickStartPractice()
+        private async void OnClickStartPractice()
         {
             if (!_isTeamPracticeMode) return;
             if (_selectedMembers.Count < 2) return;
             
             List<float> memberConditions = new List<float>();
             foreach (var member in _selectedMembers)
-                if (_unitMap.TryGetValue(member, out var unit))
-                    memberConditions.Add(unit.currentCondition);
+                memberConditions.Add(member.currentCondition);
 
             Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent(memberConditions));
-            TrainingManager.Instance.MarkMembersTrainedForTeam(_selectedMembers);
+            
+            foreach (var member in _selectedMembers)
+            {
+                TrainingManager.Instance.MarkMemberTrained(member.memberType);
+            }
+            trainingSequenceController.gameObject.SetActive(true);
+            var teamPracticeType = new TeamTrainingType(_selectedMembers);
+            await trainingSequenceController.PlayTeamTrainingSequence(_issuccess, teamPracticeType, _selectedMembers);
+            
+            OnClickBack();
         }
 
-        private void OnClickBack()
+
+        public void OnClickBack()
         {
             _isTeamPracticeMode = false;
             ResetSelection();
@@ -173,15 +181,16 @@ namespace Code.MainSystem.MainScreen
         {
             foreach (var member in _selectedMembers)
             {
-                if (_buttonMap.TryGetValue(member, out var btn))
+                if (_buttonMap.TryGetValue(member.memberType, out var btn))
                 {
-                    btn.transform.localPosition = _originLocalPosMap[member];
+                    btn.transform.localPosition = _originLocalPosMap[member.memberType];
                 }
             }
 
             _selectedMembers.Clear();
             UpdateUI();
         }
+
 
         #endregion
     }

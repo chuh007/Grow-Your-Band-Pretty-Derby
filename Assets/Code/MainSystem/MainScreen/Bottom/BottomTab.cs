@@ -1,4 +1,5 @@
-﻿using Code.Core;
+﻿using System;
+using Code.Core;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Bottom
@@ -7,6 +8,24 @@ namespace Code.MainSystem.MainScreen.Bottom
     {
         private int currentModeIndex = 0;
         [SerializeField] private GameObject mode1Buttons;
+        [SerializeField] private GameObject mode2Buttons;
+        [SerializeField] private GameObject mode2Panel;
+        [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
+        [SerializeField] private TeamPracticeCompo teamPracticeCompo;
+        public Action<int> ExitModeEvent;
+        public Action<int> EnterModeEvent;
+
+        private void OnEnable()
+        {
+            ExitModeEvent += ExitMode;
+            EnterModeEvent += EnterMode;
+        }
+
+        private void OnDisable()
+        {
+            ExitModeEvent -= ExitMode;
+            EnterModeEvent -= EnterMode;
+        }
 
         public void SwitchMode(int modeIndex)
         {
@@ -16,7 +35,7 @@ namespace Code.MainSystem.MainScreen.Bottom
             EnterMode(currentModeIndex);
         }
 
-        private void EnterMode(object currentMode)
+        private void EnterMode(int currentMode)
         {
             switch (currentMode)
             {
@@ -24,6 +43,8 @@ namespace Code.MainSystem.MainScreen.Bottom
                     mode1Buttons.SetActive(true);
                     break;
                 case 2:
+                    mode2Buttons.SetActive(true);
+                    mode2Panel.SetActive(true);
                     break;
                 case 3:
                     break;
@@ -36,14 +57,18 @@ namespace Code.MainSystem.MainScreen.Bottom
             }
         }
 
-        private void ExitMode(object currentMode)
+        private void ExitMode(int currentMode)
         {
             switch (currentMode)
             {
                 case 1:
                     mode1Buttons.SetActive(false);
+                    personalPracticeCompo.ResetPreview();
                     break;
                 case 2:
+                    mode2Panel.SetActive(false);
+                    mode2Buttons.SetActive(false);
+                    teamPracticeCompo.OnClickBack();
                     break;
                 case 3:
                     break;
