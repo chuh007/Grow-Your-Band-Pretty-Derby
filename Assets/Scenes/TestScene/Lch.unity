@@ -5049,10 +5049,10 @@ RectTransform:
   - {fileID: 239516707}
   m_Father: {fileID: 226362704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 86.66667, y: -40}
+  m_SizeDelta: {x: 173.33334, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &720715174
 MonoBehaviour:
@@ -5071,7 +5071,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: 220
   m_PreferredHeight: 30
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &720715175
@@ -6655,10 +6655,10 @@ RectTransform:
   - {fileID: 272521782}
   m_Father: {fileID: 226362704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 606.6667, y: -40}
+  m_SizeDelta: {x: 173.33334, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &983431145
 MonoBehaviour:
@@ -6677,7 +6677,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: 220
   m_PreferredHeight: 30
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &983431146
@@ -6866,10 +6866,10 @@ RectTransform:
   - {fileID: 1796560787}
   m_Father: {fileID: 226362704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 780.00006, y: -40}
+  m_SizeDelta: {x: 173.33334, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1064652691
 MonoBehaviour:
@@ -6888,7 +6888,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: 220
   m_PreferredHeight: 30
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &1064652692
@@ -8654,10 +8654,10 @@ RectTransform:
   - {fileID: 216293316}
   m_Father: {fileID: 226362704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 260, y: -40}
+  m_SizeDelta: {x: 173.33334, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1494463353
 MonoBehaviour:
@@ -8676,7 +8676,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: 220
   m_PreferredHeight: 30
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &1494463354
@@ -9503,10 +9503,10 @@ RectTransform:
   - {fileID: 64329277}
   m_Father: {fileID: 226362704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 953.33344, y: -40}
+  m_SizeDelta: {x: 173.33334, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1602141941
 MonoBehaviour:
@@ -9525,7 +9525,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: 220
   m_PreferredHeight: 30
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &1602141942
@@ -11156,10 +11156,10 @@ RectTransform:
   - {fileID: 2071305954}
   m_Father: {fileID: 226362704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 433.33337, y: -40}
+  m_SizeDelta: {x: 173.33334, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1860788187
 MonoBehaviour:
@@ -11178,7 +11178,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: 220
   m_PreferredHeight: 30
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
 --- !u!114 &1860788188
