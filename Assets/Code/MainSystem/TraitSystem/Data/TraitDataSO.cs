@@ -17,17 +17,20 @@ namespace Code.MainSystem.TraitSystem.Data
     [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data", order = 0)]
     public class TraitDataSO : ScriptableObject
     {
-        public string TraitID;
+        public int TraitID;
+        public string TraitName;
+
         public TraitType TraitType;
+
+        public int Level;
         public int Point;
+
         public bool IsRemove;
         public ExpirationType ExpirationType;
+
         public List<float> Effects;
-        public int Level;
-        
-        [SerializeReference]
-        public ITraitCondition Condition;
-        [SerializeReference]
-        public ITraitEffect Effect;
+
+        [SerializeReference] public ITraitCondition Condition;
+        [SerializeReference] public ITraitEffect Effect;
     }
 }
