@@ -27,17 +27,7 @@ namespace Code.MainSystem.TraitSystem.Manager
             else
             {
                 Debug.Log("포인트 한도 초과! 특성 재구성이 필요합니다.");
-                StartReconfigurationLoop(holder, newTrait);
             }
-        }
-
-        private void StartReconfigurationLoop(ITraitHolder character, TraitDataSO newTrait)
-        {
-            // 실제 환경에서는 여기서 UI 팝업을 띄워 유저의 입력을 기다려야 합니다.
-            // 유저는 '제거 불가'가 아닌 특성 중 하나를 선택합니다.
-            
-            // UI에서 제거할 특성을 선택했다고 가정 (예시 로직)
-            // CharacterTrait 내부의 리스트 조작 및 포인트 재계산 루틴이 실행됩니다.
         }
 
         /// <summary>

@@ -19,30 +19,30 @@ namespace Code.MainSystem.TraitSystem.Runtime
 
         public void OnTurnStart(GameContext context)
         {
-            if (Data.ExpirationType == ExpirationType.TurnBased)
+            if (Data.ExpirationType != ExpirationType.TurnBased)
+                return;
+            RemainingTurns--;
+            if (RemainingTurns <= 0)
             {
-                RemainingTurns--;
-                if (RemainingTurns <= 0)
-                {
-                    // 제거 로직 요청
-                }
+                // 제거 로직 요청
             }
         }
 
         public void Activate(GameContext context)
         {
-            if (IsActive) return;
-            
-            if (Data.Condition == null || Data.Condition.IsMet(context))
-            {
-                Data.Effect?.Apply(context);
-                IsActive = true;
-            }
+            if (IsActive)
+                return;
+
+            if (Data.Condition != null && !Data.Condition.IsMet(context))
+                return;
+            Data.Effect?.Apply(context);
+            IsActive = true;
         }
 
         public void Deactivate(GameContext context)
         {
-            if (!IsActive) return;
+            if (!IsActive)
+                return;
             
             Data.Effect?.Remove(context);
             IsActive = false;
