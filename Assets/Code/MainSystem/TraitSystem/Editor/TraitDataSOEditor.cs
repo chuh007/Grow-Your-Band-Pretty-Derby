@@ -140,18 +140,24 @@ namespace Code.MainSystem.TraitSystem.Editor
 
         private void DrawSerializeReferenceFields(SerializedProperty property)
         {
-            if (property.managedReferenceValue == null) 
+            if (property.managedReferenceValue == null)
                 return;
 
             EditorGUI.indentLevel++;
 
-            var iterator = property.Copy();
-            var endProperty = iterator.GetEndProperty();
+            SerializedProperty iterator = property.Copy();
+            SerializedProperty endProperty = iterator.GetEndProperty();
 
-            iterator.NextVisible(true);
+            bool enterChildren = true;
 
-            while (iterator.NextVisible(false) && !SerializedProperty.EqualContents(iterator, endProperty))
+            while (iterator.NextVisible(enterChildren))
+            {
+                if (SerializedProperty.EqualContents(iterator, endProperty))
+                    break;
+
                 EditorGUILayout.PropertyField(iterator, true);
+                enterChildren = false;
+            }
 
             EditorGUI.indentLevel--;
         }
