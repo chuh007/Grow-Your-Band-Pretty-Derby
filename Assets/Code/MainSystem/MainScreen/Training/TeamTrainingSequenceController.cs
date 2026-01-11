@@ -100,7 +100,7 @@ namespace Code.MainSystem.MainScreen.Training
                 teamProgressImage.SetProgressImages(sprite, activeMembers);
             }
 
-            await bar.Play(1f);
+            await bar.Play(2f);
             await UniTask.Delay(800);
             idleInstance.SetActive(false);
         }

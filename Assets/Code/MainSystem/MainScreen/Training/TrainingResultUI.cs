@@ -30,10 +30,11 @@ namespace Code.MainSystem.MainScreen.Training
             float curCon,
             Action onClose)
         {
-            trainingResultImage.sprite = idleSprite;
-            healthBar.SetHealth(100,100);
+            this.OnClose = onClose;
 
-            resultImage.gameObject.SetActive(false); 
+            trainingResultImage.gameObject.SetActive(false); 
+            resultImage.gameObject.SetActive(false);
+            healthBar.SetHealth(100, 100);
 
             for (int i = 0; i < statBoxes.Count; i++)
             {
@@ -43,15 +44,20 @@ namespace Code.MainSystem.MainScreen.Training
             }
 
             await UniTask.Delay(1000);
-
-            trainingResultImage.sprite = resultSprite;
-            trainingResultImage.transform.DOScale(scaleFactor, scaleTime).SetEase(Ease.InSine);
             
+            trainingResultImage.sprite = resultSprite;
+            trainingResultImage.transform.localScale = Vector3.one;
+            trainingResultImage.gameObject.SetActive(true);
+            trainingResultImage.transform.DOScale(scaleFactor, scaleTime).SetEase(Ease.InSine);
+
             resultImage.sprite = resultSprite;
             resultImage.transform.localScale = Vector3.zero;
             resultImage.gameObject.SetActive(true);
-            resultImage.transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack);
-            
+            await resultImage.transform
+                .DOScale(Vector3.one, 0.25f)
+                .SetEase(Ease.OutBack)
+                .AsyncWaitForCompletion();
+
             if (isSuccess)
             {
                 for (int i = 0; i < statBoxes.Count; i++)
@@ -61,12 +67,11 @@ namespace Code.MainSystem.MainScreen.Training
                     statBoxes[i].Set(name, icon, baseValue, delta);
                 }
             }
-            
-            healthBar.SetHealth(curCon, 100);
 
-            OnClose = onClose;
+            healthBar.SetHealth(curCon, 100);
         }
-        
+
+
         
 
         public void OnPointerClick(PointerEventData eventData)
