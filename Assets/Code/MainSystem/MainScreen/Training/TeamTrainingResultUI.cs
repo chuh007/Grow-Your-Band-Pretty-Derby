@@ -45,6 +45,25 @@ namespace Code.MainSystem.MainScreen.Training
             bool isSuccess,
             Action onClose)
         {
+            this.onClose = onClose;
+
+            foreach (var kvp in memberImageDict)
+            {
+                kvp.Value.gameObject.SetActive(false);
+            }
+
+            teamStatBox.Set(
+                teamStat.name,
+                teamStat.icon,
+                teamStat.baseValue,
+                isSuccess ? teamStat.delta : 0);
+
+            await UniTask.Delay(1000);
+
+            resultImage.sprite = resultSprite;
+            resultImage.transform.localScale = Vector3.zero;
+            resultImage.gameObject.SetActive(true);
+
             foreach (var kvp in memberImageDict)
             {
                 if (memberResultSprites.TryGetValue(kvp.Key, out var sprite))
@@ -58,22 +77,13 @@ namespace Code.MainSystem.MainScreen.Training
                 }
             }
 
-            teamStatBox.Set(
-                teamStat.name,
-                teamStat.icon,
-                teamStat.baseValue,
-                isSuccess ? teamStat.delta : 0);
-
-            await UniTask.Delay(1000);
-
-            resultImage.transform.localScale = Vector3.zero;
-            resultImage.gameObject.SetActive(true);
-            resultImage.transform
+            await resultImage.transform
                 .DOScale(Vector3.one * scaleFactor, scaleTime)
-                .SetEase(Ease.OutBack);
-
-            this.onClose = onClose;
+                .SetEase(Ease.OutBack)
+                .AsyncWaitForCompletion();
         }
+
+
 
         public void OnPointerClick(PointerEventData eventData)
         {
