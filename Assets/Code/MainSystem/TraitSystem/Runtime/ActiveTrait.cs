@@ -1,8 +1,5 @@
-﻿using System;
-using System.Data.Common;
+﻿using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Contexts;
-using Code.MainSystem.TraitSystem.Data;
-using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.Runtime
 {

@@ -6,12 +6,12 @@ namespace Code.Core.Bus.GameEvents.TraitEvents
     public struct TraitAddRequested : IEvent
     {
         public readonly MemberType MemberType;
-        public readonly TraitDataSO NewTrait;
-
-        public TraitAddRequested(MemberType memberType, TraitDataSO newTrait)
+        public readonly TraitType TraitType;
+        
+        public TraitAddRequested(MemberType memberType, TraitType traitType)
         {
             MemberType = memberType;
-            NewTrait = newTrait;
+            TraitType = traitType;
         }
     }
 }

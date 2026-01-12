@@ -1,17 +1,17 @@
-﻿using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.StatSystem.Manager;
 
 namespace Code.Core.Bus.GameEvents.TraitEvents
 {
     public struct TraitRemoveRequested : IEvent
     {
         public readonly MemberType MemberType;
-        public readonly ActiveTrait TargetTrait;
+        public readonly TraitType TraitType;
 
-        public TraitRemoveRequested(MemberType memberType, ActiveTrait targetTrait)
+        public TraitRemoveRequested(MemberType memberType, TraitType traitType)
         {
             MemberType = memberType;
-            TargetTrait = targetTrait;
+            TraitType = traitType;
         }
     }
 }

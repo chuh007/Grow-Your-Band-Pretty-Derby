@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using Code.Core.Bus;
 using Reflex.Attributes;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Code.MainSystem.TraitSystem.Manager
     public class TraitManager : MonoBehaviour
     {
         [Inject] private ITraitPointCalculator _calculator;
+        [Inject] private ITraitDatabase _database;
         
         private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
         private ITraitHolder _pendingHolder;
@@ -65,7 +67,8 @@ namespace Code.MainSystem.TraitSystem.Manager
             if (!_holders.TryGetValue(evt.MemberType, out var holder))
                 return;
 
-            TryAddTrait(holder, evt.NewTrait);
+            var data = _database.Get(evt.TraitType);
+            TryAddTrait(holder, data);
         }
 
         /// <summary>
@@ -76,7 +79,13 @@ namespace Code.MainSystem.TraitSystem.Manager
             if (!_holders.TryGetValue(evt.MemberType, out var holder))
                 return;
 
-            TryRemoveTrait(holder, evt.TargetTrait);
+            var target = holder.ActiveTraits
+                .FirstOrDefault(t => t.Data.TraitType == evt.TraitType);
+
+            if (target == null)
+                return;
+
+            TryRemoveTrait(holder, target);
         }
 
         /// <summary>

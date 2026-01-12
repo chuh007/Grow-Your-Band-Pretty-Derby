@@ -1,6 +1,7 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
+﻿using UnityEngine;
 using Reflex.Core;
-using UnityEngine;
+using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.Manager.SubClass
 {
@@ -9,6 +10,7 @@ namespace Code.MainSystem.TraitSystem.Manager.SubClass
         public void InstallBindings(ContainerBuilder builder)
         {
             builder.AddSingleton(typeof(TraitPointCalculator), typeof(ITraitPointCalculator));
+            builder.AddSingleton(typeof(TraitDatabase), typeof(ITraitDatabase));
         }
     }
 }
