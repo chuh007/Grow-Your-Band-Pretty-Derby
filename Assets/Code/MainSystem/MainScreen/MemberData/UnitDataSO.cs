@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine;
 namespace Code.MainSystem.MainScreen.MemberData
 {
     [CreateAssetMenu(fileName = "Unit", menuName = "SO/Unit/Data")]
+    
     public class UnitDataSO : ScriptableObject
     {
         public string unitName;
@@ -16,6 +18,7 @@ namespace Code.MainSystem.MainScreen.MemberData
         public float maxCondition;
         public float currentCondition;
         public StatData TeamStat;
+        public List<MemberActionData> unitActions;
         public string TeamIdleSpriteKey;
         public string TeamSuccseSpriteKey;
         public string TeamFaillSpriteKey;
