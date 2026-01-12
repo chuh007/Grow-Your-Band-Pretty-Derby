@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Runtime;
 
@@ -7,6 +8,7 @@ namespace Code.MainSystem.TraitSystem.Data
 {
     public class CharacterTrait : MonoBehaviour, ITraitHolder
     {
+        [field:SerializeField] public MemberType MemberType { get; private set; }
         [field:SerializeField] public int MaxPoints { get; private set; }
         private readonly List<ActiveTrait> _activeTraits = new();
         
