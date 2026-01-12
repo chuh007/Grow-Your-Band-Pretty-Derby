@@ -24,15 +24,14 @@ namespace Code.MainSystem.MainScreen
             public HealthBar healthBar;
         }
 
-        [Header("UI")]
-        [SerializeField] private HealthBar healthBar; // 공용 HealthBar
-        [SerializeField] private PersonalTrainingSequenceController personalTrainingSequenceController;
+        [Header("UI")] [SerializeField] private HealthBar healthBar;
+        [SerializeField] private PersonalPracticeSequencePlayer personalTrainingSequenceController;
         [SerializeField] private List<Image> arrowObjs;
         [SerializeField] private List<TextMeshProUGUI> probabilityTexts;
         [SerializeField] private List<Button> practiceButtons;
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
-        [SerializeField] private List<UnitHealthBars> unitHealthBars; // 유닛별 HealthBar
+        [SerializeField] private List<UnitHealthBars> unitHealthBars;
 
         [Inject] private StatManager _statManager;
 
@@ -56,8 +55,7 @@ namespace Code.MainSystem.MainScreen
         {
             _selectedPracticeIndex = -1;
             _previewDamage = 0f;
-
-            // 공용 및 유닛별 HealthBar 초기화
+            
             healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
 
             var unitHealth = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
@@ -141,9 +139,8 @@ namespace Code.MainSystem.MainScreen
                 _statUIUpdater.UpdateAll(_currentUnit);
                 
                 personalTrainingSequenceController.gameObject.SetActive(true);
-                var personalTrainingType = new PersonalTrainingType(practice);
                 await personalTrainingSequenceController
-                    .PlayTrainingSequence(success, personalTrainingType, _currentUnit);
+                    .Play(_currentUnit,success,practice);
                 
                 healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
 

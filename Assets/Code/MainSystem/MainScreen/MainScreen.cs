@@ -149,7 +149,6 @@ namespace Code.MainSystem.MainScreen
         {
             if (!System.Enum.TryParse(type, out MemberType memberType))
                 return;
-
             if (UnitSelector.TryGetUnit(type, out UnitDataSO unit) && unit != null)
             {
                 SelectUnit(unit);
