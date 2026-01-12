@@ -49,7 +49,7 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            Bus<StatIncreaseDecreaseEvent>.Raise(new StatIncreaseDecreaseEvent(false,dataSo.statIncrease.ToString(),conditoinSprite,"컨디션"));
+            Bus<StatIncreaseDecreaseEvent>.Raise(new StatIncreaseDecreaseEvent(false,dataSo.StaminaReduction.ToString(),conditoinSprite,"컨디션"));
         }
         
         await WaitOrSkip(1.2f);

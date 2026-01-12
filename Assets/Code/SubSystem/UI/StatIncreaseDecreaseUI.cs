@@ -46,13 +46,14 @@ namespace Code.SubSystem.UI
             root.SetActive(true);
             if (playRoutine != null)
                 StopCoroutine(playRoutine);
+            canvasGroup.alpha = 1f;
+            rect.anchoredPosition = originPos;
 
             playRoutine = StartCoroutine(Play(evt));
         }
 
         private IEnumerator Play(StatIncreaseDecreaseEvent evt)
         {
-            
             statIncreaseArrow.SetActive(evt.increase);
             statDecreaseArrow.SetActive(!evt.increase);
 
@@ -67,8 +68,8 @@ namespace Code.SubSystem.UI
             }
             statIcon.sprite = evt.statIcon;
 
-            canvasGroup.alpha = 1f;
-            rect.anchoredPosition = originPos;
+            yield return new WaitForSeconds(0.2f);
+           
 
             Vector2 targetPos = originPos + Vector2.up * (evt.increase ? moveDistance : -moveDistance);
 
