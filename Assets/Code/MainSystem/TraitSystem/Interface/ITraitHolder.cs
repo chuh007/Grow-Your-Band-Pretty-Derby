@@ -5,6 +5,7 @@ namespace Code.MainSystem.TraitSystem.Interface
 {
     public interface ITraitHolder
     {
+        int MaxPoints { get; }
         void AddTrait(TraitDataSO newTrait);
         void RemoveActiveTrait(ActiveTrait trait);
     }

@@ -7,10 +7,11 @@ namespace Code.MainSystem.TraitSystem.Data
 {
     public class CharacterTrait : MonoBehaviour, ITraitHolder
     {
-        private List<ActiveTrait> _activeTraits = new List<ActiveTrait>();
+        [field:SerializeField] public int MaxPoints { get; private set; }
+        private readonly List<ActiveTrait> _activeTraits = new();
         
         public IReadOnlyList<ActiveTrait> ActiveTraits => _activeTraits;
-
+        
         public void AddTrait(TraitDataSO data)
         {
             var newTrait = new ActiveTrait(data);
