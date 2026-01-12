@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Reflex.Attributes;
 using System.Collections.Generic;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -80,7 +82,9 @@ namespace Code.MainSystem.Rhythm
             {
                 _judgementSystem.OnInputDetected(laneIndex);
             }
-
+            
+            Bus<TouchEvent>.Raise(new TouchEvent(laneIndex));
+            
             // 2. 시각적 피드백
             if (laneImages != null && laneIndex < laneImages.Count && laneImages[laneIndex] != null)
             {

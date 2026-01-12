@@ -3,25 +3,19 @@ using System;
 
 namespace Code.MainSystem.Rhythm
 {
-    [RequireComponent(typeof(ParticleSystem))]
     public class AutoReturnToPool : MonoBehaviour
     {
-        private ParticleSystem _particleSystem;
+        [SerializeField] private ParticleSystem particleCompo;
         public Action<GameObject> OnReturn;
-
-        private void Awake()
-        {
-            _particleSystem = GetComponent<ParticleSystem>();
-        }
 
         private void OnEnable()
         {
-            _particleSystem.Play(true);
+            particleCompo.Play(true);
         }
 
         private void Update()
         {
-            if (_particleSystem.isStopped)
+            if (particleCompo.isStopped)
             {
                 OnReturn?.Invoke(gameObject);
                 gameObject.SetActive(false);
