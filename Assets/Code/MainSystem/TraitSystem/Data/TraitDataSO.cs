@@ -40,11 +40,14 @@ namespace Code.MainSystem.TraitSystem.Data
         public int Level;
         public int Point;
 
-        public bool IsRemove;
+        public bool IsRemovable;
         public ExpirationType ExpirationType;
 
         public List<float> Effects;
 
+        [TextArea] public string DescriptionCondition;
+        [TextArea] public string DescriptionEffect;
+        
         [SerializeReference] public ITraitCondition Condition;
         [SerializeReference] public ITraitEffect Effect;
     }
