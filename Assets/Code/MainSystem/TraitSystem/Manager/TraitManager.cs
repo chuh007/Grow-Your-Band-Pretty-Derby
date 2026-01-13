@@ -37,14 +37,16 @@ namespace Code.MainSystem.TraitSystem.Manager
 
         private void RegisterEvents()
         {
-            Bus<TraitAddRequested>.OnEvent += OnTraitAddRequested;
-            Bus<TraitRemoveRequested>.OnEvent += OnTraitRemoveRequested;
+            Bus<TraitAddRequested>.OnEvent += HandleTraitAddRequested;
+            Bus<TraitRemoveRequested>.OnEvent += HandleTraitRemoveRequested;
+            Bus<TraitShowRequested>.OnEvent += HandleTraitShowRequested;
         }
-        
+
         private void UnregisterEvents()
         {
-            Bus<TraitAddRequested>.OnEvent -= OnTraitAddRequested;
-            Bus<TraitRemoveRequested>.OnEvent -= OnTraitRemoveRequested;
+            Bus<TraitAddRequested>.OnEvent -= HandleTraitAddRequested;
+            Bus<TraitRemoveRequested>.OnEvent -= HandleTraitRemoveRequested;
+            Bus<TraitShowRequested>.OnEvent -= HandleTraitShowRequested;
         }
 
         #endregion
@@ -62,7 +64,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// <summary>
         /// 특성 추가 요청 처리
         /// </summary>
-        private void OnTraitAddRequested(TraitAddRequested evt)
+        private void HandleTraitAddRequested(TraitAddRequested evt)
         {
             if (!_holders.TryGetValue(evt.MemberType, out var holder))
                 return;
@@ -74,7 +76,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// <summary>
         /// 특성 제거 요청 처리
         /// </summary>
-        private void OnTraitRemoveRequested(TraitRemoveRequested evt)
+        private void HandleTraitRemoveRequested(TraitRemoveRequested evt)
         {
             if (!_holders.TryGetValue(evt.MemberType, out var holder))
                 return;
@@ -86,6 +88,17 @@ namespace Code.MainSystem.TraitSystem.Manager
                 return;
 
             TryRemoveTrait(holder, target);
+        }
+        
+        /// <summary>
+        /// 특성 보유 현황 확인 요청 처리
+        /// </summary>
+        private void HandleTraitShowRequested(TraitShowRequested evt)
+        {
+            if (!_holders.TryGetValue(evt.MemberType, out var holder))
+                return;
+            
+            ShowTraitList(holder);
         }
 
         /// <summary>
@@ -128,11 +141,20 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private bool RemoveTrait(ITraitHolder holder, ActiveTrait targetTrait)
         {
-            if (targetTrait.Data.IsRemove) 
+            if (targetTrait.Data.IsRemovable) 
                 return false;
             
             holder.RemoveActiveTrait(targetTrait);
             return true;
+        }
+
+        /// <summary>
+        /// 특성 보유 현황 확인
+        /// </summary>
+        private void ShowTraitList(ITraitHolder holder)
+        {
+            var traits = holder.ActiveTraits;
+            Bus<TraitShowResponded>.Raise(new TraitShowResponded(traits));
         }
         
         /// <summary>
