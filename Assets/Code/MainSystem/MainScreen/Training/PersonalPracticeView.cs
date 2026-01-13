@@ -21,7 +21,15 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
 
     private bool isSkipped;
 
-    public async UniTask Play(MemberActionData actionData, bool isSuccess,PersonalpracticeDataSO dataSo, float currentConditoin,StatManager statManager)
+    public async UniTask Play(
+        MemberActionData actionData,
+        bool isSuccess,
+        PersonalpracticeDataSO dataSo,
+        float currentConditoin,
+        StatManager statManager,
+        Action<int> onComplete 
+    )
+
     {
         animator.runtimeAnimatorController = actionData.animator;
         isSkipped = false;
@@ -38,7 +46,7 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
 
         if (isSuccess)
         {
-            Debug.Log("이벤트가요");
+
             BaseStat stat = statManager.GetMemberStat(actionData.memberType, dataSo.PracticeStatType);
 
             Bus<StatIncreaseDecreaseEvent>.Raise(new StatIncreaseDecreaseEvent(true,dataSo.statIncrease.ToString(),
@@ -53,6 +61,7 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
         }
         
         await WaitOrSkip(1.2f);
+        onComplete?.Invoke((int)actionData.memberType);
     }
 
     private async UniTask WaitOrSkip(float seconds)
@@ -63,6 +72,8 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
             elapsed += Time.deltaTime;
             await UniTask.Yield();
         }
+        
+        Bus<StopEvent>.Raise(new StopEvent());
     }
 
     public void OnPointerDown(PointerEventData eventData)

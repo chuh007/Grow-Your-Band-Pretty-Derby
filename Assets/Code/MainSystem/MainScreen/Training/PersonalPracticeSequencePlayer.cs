@@ -1,28 +1,34 @@
 ﻿using System;
-using Code.Core;
+using System.Collections.Generic;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
 using Reflex.Attributes;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Code.MainSystem.MainScreen.Training
 {
     public class PersonalPracticeSequencePlayer : MonoBehaviour
     {
         [SerializeField] private Transform spawnRoot;
+        [SerializeField] private PracticeResultWindow practiceResultWindow;
+
         private GameObject _instance;
         private PersonalPracticeView _view;
-        private MemberActionData _actionData;
         [Inject] private StatManager statManager;
 
-        public async UniTask Play(UnitDataSO unitData, bool isSuccess,PersonalpracticeDataSO dataSo)
-        {
+        private MemberActionData _actionData;
 
+        public async UniTask Play(
+            UnitDataSO unitData,
+            bool isSuccess,
+            PersonalpracticeDataSO dataSo,
+            float currentCondition,
+            StatData teamStatData,
+            float teamStatDelta)
+        {
             if (_instance == null)
             {
                 var prefab = await Addressables.LoadAssetAsync<GameObject>("Training/Production/PersonalPractice").Task;
@@ -35,17 +41,37 @@ namespace Code.MainSystem.MainScreen.Training
                 if (unitAction.statType == dataSo.PracticeStatType)
                 {
                     _actionData = unitAction;
+                    break;
                 }
             }
 
             _instance.SetActive(true);
 
-            await _view.Play(_actionData, isSuccess, dataSo,unitData.currentCondition,statManager);
+            await _view.Play(
+                _actionData,
+                isSuccess,
+                dataSo,
+                currentCondition,
+                statManager,
+                (statDelta) =>
+                {
+                    
+                    practiceResultWindow.Play(
+                        statManager,
+                        new List<UnitDataSO> { unitData },
+                        currentCondition,
+                        isSuccess ? dataSo.statIncrease : -dataSo.StaminaReduction,
+                        teamStatData,
+                        teamStatDelta,
+                        new Dictionary<(MemberType, StatType), int>
+                        {
+                            { (unitData.memberType, dataSo.PracticeStatType), statDelta }
+                        },
+                        isSuccess
+                    ).Forget();
+                });
 
             _instance.SetActive(false);
         }
-        
-        
-
     }
 }

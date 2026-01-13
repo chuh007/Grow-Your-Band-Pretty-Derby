@@ -39,13 +39,29 @@ namespace Code.SubSystem.UI
             root.SetActive(false);
 
             Bus<StatIncreaseDecreaseEvent>.OnEvent += HandleStatIncreaseDecrease;
+            Bus<StopEvent>.OnEvent += HandleStopEvent;
+        }
+
+        private void HandleStopEvent(StopEvent evt)
+        {
+            if (playRoutine != null)
+            {
+                StopCoroutine(playRoutine);
+                playRoutine = null;
+            }
+
+            rect.anchoredPosition = originPos;
+            canvasGroup.alpha = 0f;
+            root.SetActive(false);
         }
 
         private void HandleStatIncreaseDecrease(StatIncreaseDecreaseEvent evt)
         {
             root.SetActive(true);
+
             if (playRoutine != null)
                 StopCoroutine(playRoutine);
+
             canvasGroup.alpha = 1f;
             rect.anchoredPosition = originPos;
 
@@ -58,18 +74,10 @@ namespace Code.SubSystem.UI
             statDecreaseArrow.SetActive(!evt.increase);
 
             statText.text = evt.statName;
-            if (evt.increase)
-            {
-                statAmountText.text = "+"+evt.amount;
-            }
-            else
-            {
-                statAmountText.text = "-"+evt.amount;
-            }
+            statAmountText.text = evt.increase ? "+" + evt.amount : "-" + evt.amount;
             statIcon.sprite = evt.statIcon;
 
             yield return new WaitForSeconds(0.2f);
-           
 
             Vector2 targetPos = originPos + Vector2.up * (evt.increase ? moveDistance : -moveDistance);
 
@@ -87,11 +95,13 @@ namespace Code.SubSystem.UI
             }
 
             root.SetActive(false);
+            playRoutine = null;
         }
 
         private void OnDestroy()
         {
             Bus<StatIncreaseDecreaseEvent>.OnEvent -= HandleStatIncreaseDecrease;
+            Bus<StopEvent>.OnEvent -= HandleStopEvent;
         }
     }
 }
