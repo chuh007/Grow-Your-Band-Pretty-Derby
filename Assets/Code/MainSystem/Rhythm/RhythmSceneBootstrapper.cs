@@ -20,6 +20,7 @@ namespace Code.MainSystem.Rhythm
         private AudioClip _loadedMusic;
         private GameObject _loadedNotePrefab;
         private GameObject _loadedHitEffect;
+        private GameObject _loadedEnvPrefab;
 
         private async void Start()
         {
@@ -51,17 +52,23 @@ namespace Code.MainSystem.Rhythm
             string musicKey = $"RhythmGame/Music/{songId}";
             string prefabKey = "RhythmGame/Prefab/Note";
             string vfxKey = "RhythmGame/Prefab/HitEffect";
+            
+            string envKey = _dataSender.ConcertType == ConcertType.Live 
+                ? "RhythmGame/Environment/Live" 
+                : "RhythmGame/Environment/Busking";
 
             var musicLoadTask = GameResourceManager.Instance.LoadAssetAsync<AudioClip>(musicKey).AsUniTask();
             var prefabLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(prefabKey).AsUniTask();
             var chartLoadTask = ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
             var vfxLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(vfxKey).AsUniTask();
+            var envLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(envKey).AsUniTask();
 
-            var (musicClip, notePrefab, chartData, hitEffect) = await UniTask.WhenAll(
+            var (musicClip, notePrefab, chartData, hitEffect, envPrefab) = await UniTask.WhenAll(
                 musicLoadTask, 
                 prefabLoadTask, 
                 chartLoadTask,
-                vfxLoadTask
+                vfxLoadTask,
+                envLoadTask
             );
 
             if (musicClip != null) 
@@ -80,6 +87,12 @@ namespace Code.MainSystem.Rhythm
             {
                 _loadedHitEffect = hitEffect;
                 _hitFeedbackManager.SetHitEffectPrefab(hitEffect);
+            }
+
+            if (envPrefab != null)
+            {
+                _loadedEnvPrefab = envPrefab;
+                Instantiate(envPrefab);
             }
 
             _noteManager.SetChart(chartData);
@@ -110,6 +123,12 @@ namespace Code.MainSystem.Rhythm
                 {
                     GameResourceManager.Instance.Release(_loadedHitEffect);
                     _loadedHitEffect = null;
+                }
+
+                if (_loadedEnvPrefab != null)
+                {
+                    GameResourceManager.Instance.Release(_loadedEnvPrefab);
+                    _loadedEnvPrefab = null;
                 }
             }
         }
