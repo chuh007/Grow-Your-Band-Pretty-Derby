@@ -16,6 +16,8 @@ namespace Code.MainSystem.Rhythm
         [Inject] private HitFeedbackManager _hitFeedbackManager;
         
         [SerializeField] private RhythmGameDataSenderSO _dataSender;
+        [SerializeField] private CanvasGroup _loadingCanvasGroup;
+        [SerializeField] private float _fadeDuration = 0.5f;
 
         private AudioClip _loadedMusic;
         private GameObject _loadedNotePrefab;
@@ -24,6 +26,12 @@ namespace Code.MainSystem.Rhythm
 
         private async void Start()
         {
+            if (_loadingCanvasGroup != null)
+            {
+                _loadingCanvasGroup.alpha = 1f;
+                _loadingCanvasGroup.blocksRaycasts = true;
+            }
+
             if (_dataSender == null)
             {
                 Debug.LogWarning("Bootstrapper: RhythmGameDataSenderSO is not assigned. Running in Test Mode or Failed.");
@@ -97,14 +105,34 @@ namespace Code.MainSystem.Rhythm
 
             _noteManager.SetChart(chartData);
 
+            await FadeInGameScreen();
+
             if (_conductor != null)
             {
                 _conductor.Play();
             }
         }
 
+        private async UniTask FadeInGameScreen()
+        {
+            if (_loadingCanvasGroup == null) return;
+
+            float elapsed = 0f;
+            while (elapsed < _fadeDuration)
+            {
+                elapsed += Time.deltaTime;
+                _loadingCanvasGroup.alpha = 1f - (elapsed / _fadeDuration);
+                await UniTask.Yield();
+            }
+
+            _loadingCanvasGroup.alpha = 0f;
+            _loadingCanvasGroup.blocksRaycasts = false;
+        }
+
         private void OnDestroy()
         {
+            Screen.orientation = ScreenOrientation.Portrait;
+
             if (GameResourceManager.Instance != null)
             {
                 if (_loadedMusic != null)
