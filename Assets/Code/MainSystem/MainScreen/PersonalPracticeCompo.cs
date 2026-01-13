@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -16,17 +17,24 @@ namespace Code.MainSystem.MainScreen
 {
     public class PersonalPracticeCompo : MonoBehaviour
     {
-        [Header("UI")]
-        [SerializeField] private HealthBar healthBar;
-        [FormerlySerializedAs("trainingSequenceController")] [SerializeField] private PersonalTrainingSequenceController personalTrainingSequenceController;
+        [Serializable]
+        public class UnitHealthBars
+        {
+            public MemberType memberType;
+            public HealthBar healthBar;
+        }
+
+        [Header("UI")] [SerializeField] private HealthBar healthBar;
+        [SerializeField] private PersonalPracticeSequencePlayer personalTrainingSequenceController;
         [SerializeField] private List<Image> arrowObjs;
         [SerializeField] private List<TextMeshProUGUI> probabilityTexts;
         [SerializeField] private List<Button> practiceButtons;
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
+        [SerializeField] private List<UnitHealthBars> unitHealthBars;
 
         [Inject] private StatManager _statManager;
-        
+
         private UnitDataSO _currentUnit;
         private float _currentCondition;
         private float _previewDamage;
@@ -49,13 +57,16 @@ namespace Code.MainSystem.MainScreen
             _previewDamage = 0f;
             
             healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
-            
+
+            var unitHealth = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
+            if (unitHealth != null)
+                unitHealth.healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
+
             _statUIUpdater.UpdateAll(_currentUnit);
-            
+
             HideAllArrows();
             HideAllProbabilityTexts();
         }
-
 
         #region Init
 
@@ -66,8 +77,13 @@ namespace Code.MainSystem.MainScreen
             _currentCondition = unit.currentCondition;
 
             healthBar.SetHealth(_currentCondition, unit.maxCondition);
+
+            var unitHealth = unitHealthBars.Find(u => u.memberType == unit.memberType);
+            if (unitHealth != null)
+                unitHealth.healthBar.SetHealth(_currentCondition, unit.maxCondition);
+
             _statUIUpdater.UpdateAll(unit);
-            
+
             lesson1Text.text = unit.stats.Count > 2 ? unit.stats[2].statName : "";
             lesson2Text.text = unit.stats.Count > 3 ? unit.stats[3].statName : "";
 
@@ -94,7 +110,7 @@ namespace Code.MainSystem.MainScreen
             if (_selectedPracticeIndex == index)
             {
                 bool success = _statManager.PredictMemberPractice(_currentCondition);
-                
+
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,
                     _currentUnit.memberType,
@@ -102,7 +118,7 @@ namespace Code.MainSystem.MainScreen
                     _currentCondition,
                     success ? practice.statIncrease : 0
                 ));
-                
+
                 float realDamage = practice.StaminaReduction;
 
                 _currentCondition = Mathf.Clamp(
@@ -113,17 +129,32 @@ namespace Code.MainSystem.MainScreen
                 _currentUnit.currentCondition = _currentCondition;
                 healthBar.ApplyHealth(realDamage);
 
+                var unitHealth = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
+                if (unitHealth != null)
+                    unitHealth.healthBar.ApplyHealth(realDamage);
+
                 TrainingManager.Instance.MarkMemberTrained(_currentUnit.memberType);
 
                 _selectedPracticeIndex = -1;
                 _statUIUpdater.UpdateAll(_currentUnit);
                 
                 personalTrainingSequenceController.gameObject.SetActive(true);
-                var personalTrainingType = new PersonalTrainingType(practice);
-                await personalTrainingSequenceController
-                    .PlayTrainingSequence(success, personalTrainingType, _currentUnit);
+                await personalTrainingSequenceController.Play(
+                    _currentUnit,
+                    success,
+                    practice,
+                    _currentCondition,              
+                    _currentUnit.TeamStat,            
+                    success ? practice.statIncrease : 0 
+                );
 
 
+                
+                healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
+
+                var unitHealthReset = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
+                if (unitHealthReset != null)
+                    unitHealthReset.healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
 
                 HideAllArrows();
                 HideAllProbabilityTexts();
@@ -133,10 +164,15 @@ namespace Code.MainSystem.MainScreen
 
             _selectedPracticeIndex = index;
             _previewDamage = practice.StaminaReduction;
-
-            healthBar.PrevieMinusHealth(_previewDamage);
-            _statUIUpdater.PreviewStat(_currentUnit, practice.PracticeStatType, practice.statIncrease);
             
+            healthBar.PrevieMinusHealth(_previewDamage);
+
+            var unitHealthBar = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
+            if (unitHealthBar != null)
+                unitHealthBar.healthBar.PrevieMinusHealth(_previewDamage);
+
+            _statUIUpdater.PreviewStat(_currentUnit, practice.PracticeStatType, practice.statIncrease);
+
             ShowArrow(index);
             ShowProbability();
         }
