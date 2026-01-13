@@ -141,7 +141,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private bool RemoveTrait(ITraitHolder holder, ActiveTrait targetTrait)
         {
-            if (targetTrait.Data.IsRemove) 
+            if (targetTrait.Data.IsRemovable) 
                 return false;
             
             holder.RemoveActiveTrait(targetTrait);
