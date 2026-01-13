@@ -28,6 +28,12 @@ MonoBehaviour:
   maxCondition: 100
   currentCondition: 100
   TeamStat: {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}
+  unitActions:
+  - {fileID: 11400000, guid: 2b03542a16a30b649a2b57bf64fe1827, type: 2}
+  - {fileID: 11400000, guid: f1a4b85a561a1f848a2a31d20f1e2d7a, type: 2}
+  - {fileID: 11400000, guid: 8b601a246543508409705b8ce4fa9ec1, type: 2}
+  - {fileID: 11400000, guid: 1fa6387a19832cf46a4c50c291972bc2, type: 2}
+  - {fileID: 11400000, guid: a72d748ec652186418a70c7e4165834d, type: 2}
   TeamIdleSpriteKey: Sprites/Guitar/Idle
   TeamSuccseSpriteKey: Sprites/Guitar/Succse
   TeamFaillSpriteKey: Sprites/Guitar/Faill

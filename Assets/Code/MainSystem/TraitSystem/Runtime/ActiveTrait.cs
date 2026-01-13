@@ -1,12 +1,11 @@
-﻿using Code.MainSystem.TraitSystem.Contexts;
-using Code.MainSystem.TraitSystem.Data;
+﻿using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Contexts;
 
 namespace Code.MainSystem.TraitSystem.Runtime
 {
     public class ActiveTrait
     {
         public TraitDataSO Data { get; private set; }
-        public int RemainingTurns;
         public bool IsActive { get; private set; }
         
         public bool CanBeRemoved => !Data.IsRemove;
@@ -16,18 +15,7 @@ namespace Code.MainSystem.TraitSystem.Runtime
             Data = data;
             IsActive = false;
         }
-
-        public void OnTurnStart(GameContext context)
-        {
-            if (Data.ExpirationType != ExpirationType.TurnBased)
-                return;
-            RemainingTurns--;
-            if (RemainingTurns <= 0)
-            {
-                // 제거 로직 요청
-            }
-        }
-
+        
         public void Activate(GameContext context)
         {
             if (IsActive)
