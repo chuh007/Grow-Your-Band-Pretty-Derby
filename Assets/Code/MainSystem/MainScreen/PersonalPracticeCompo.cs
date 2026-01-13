@@ -139,8 +139,16 @@ namespace Code.MainSystem.MainScreen
                 _statUIUpdater.UpdateAll(_currentUnit);
                 
                 personalTrainingSequenceController.gameObject.SetActive(true);
-                await personalTrainingSequenceController
-                    .Play(_currentUnit,success,practice);
+                await personalTrainingSequenceController.Play(
+                    _currentUnit,
+                    success,
+                    practice,
+                    _currentCondition,              
+                    _currentUnit.TeamStat,            
+                    success ? practice.statIncrease : 0 
+                );
+
+
                 
                 healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
 
