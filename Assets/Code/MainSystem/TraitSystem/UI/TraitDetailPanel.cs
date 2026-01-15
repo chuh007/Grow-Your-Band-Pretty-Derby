@@ -55,7 +55,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
             iconImage.sprite = _currentTrait.Data.TraitIcon;
             
-            string pointText = _currentTrait.Data.Level == -1 ? "" : $"Lv.{_currentTrait.Data.Level}";
+            string pointText = _currentTrait.Data.Level == -1 ? "" : $"Lv.{_currentTrait.CurrentLevel}";
             levelPointText.SetText(pointText);
             
             descriptionText.SetText(_currentTrait.Data.DescriptionEffect);
