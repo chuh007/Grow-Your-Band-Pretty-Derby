@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.MainSystem.Etc;
+using Code.MainSystem.Rhythm.SceneTransition;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
@@ -17,6 +19,7 @@ namespace Code.MainSystem.Rhythm
     {
         // 인터페이스로 뺄까
         [SerializeField] private RhythmGameDataSenderSO dataSender;
+        [SerializeField] private SceneTransitionSenderSO transitionSender;
 
         private void OnEnable()
         {
@@ -48,7 +51,16 @@ namespace Code.MainSystem.Rhythm
             dataSender.Difficulty = evt.Difficulty;
             dataSender.IsResultDataAvailable = false;
 
-            SceneManager.LoadScene("Rhythm");
+            if (transitionSender != null)
+            {
+                transitionSender.SetTransition("Rhythm", TransitionMode.ToLandscape);
+            }
+            else
+            {
+                Debug.LogWarning("RhythmGameResultReceiver: SceneTransitionSenderSO is missing. Defaulting to direct load or inconsistent state.");
+            }
+
+            SceneManager.LoadScene("TransitionScene");
         }
 
         private void ProcessGameResult()

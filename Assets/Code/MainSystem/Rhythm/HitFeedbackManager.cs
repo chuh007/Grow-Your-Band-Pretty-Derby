@@ -13,6 +13,10 @@ namespace Code.MainSystem.Rhythm
         
         [Header("Scene References")]
         [SerializeField] private Transform[] laneTransforms; 
+        
+        [Header("Settings")]
+        [SerializeField] private Vector3 effectScale = Vector3.one;
+        [SerializeField] private float effectYOffset = 100f;
 
         private GameObject _hitEffectPrefab;
         private Queue<GameObject> _effectPool = new Queue<GameObject>();
@@ -20,12 +24,15 @@ namespace Code.MainSystem.Rhythm
         private void OnEnable()
         {
             Bus<NoteHitEvent>.OnEvent += HandleNoteHit;
+            Bus<TouchEvent>.OnEvent += HandleTouchEvent;
         }
 
         private void OnDisable()
         {
             Bus<NoteHitEvent>.OnEvent -= HandleNoteHit;
+            Bus<TouchEvent>.OnEvent -= HandleTouchEvent;
         }
+
 
         public void SetHitEffectPrefab(GameObject prefab)
         {
@@ -39,6 +46,10 @@ namespace Code.MainSystem.Rhythm
                 PlayHitSound();
                 PlayHitEffect(evt.LaneIndex);
             }
+        }
+        private void HandleTouchEvent(TouchEvent evt)
+        {
+            PlayHitEffect(evt.LaneIndex);
         }
 
         private void PlayHitSound()
@@ -59,8 +70,12 @@ namespace Code.MainSystem.Rhythm
             
             if (effectInstance != null)
             {
-                effectInstance.transform.position = targetTransform.position;
-                effectInstance.transform.rotation = Quaternion.identity;
+                effectInstance.transform.SetParent(targetTransform, false);
+
+                effectInstance.transform.localPosition = new Vector3(0, effectYOffset, 0);;
+                effectInstance.transform.localRotation = Quaternion.identity;
+                effectInstance.transform.localScale = effectScale;
+
                 effectInstance.SetActive(true);
             }
         }
