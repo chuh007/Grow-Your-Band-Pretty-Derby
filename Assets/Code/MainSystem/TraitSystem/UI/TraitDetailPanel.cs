@@ -50,23 +50,22 @@ namespace Code.MainSystem.TraitSystem.UI
 
         private void UpdateUI()
         {
-            if (_currentTrait?.Data is null)
+            if (_currentTrait == null || _currentTrait.Data is null)
                 return;
 
             iconImage.sprite = _currentTrait.Data.TraitIcon;
             
-            string pointText = _currentTrait.Data.Level == -1 ? " " : $" Lv.{_currentTrait.Data.Level}";
+            string pointText = _currentTrait.Data.Level == -1 ? "" : $"Lv.{_currentTrait.Data.Level}";
             levelPointText.SetText(pointText);
             
             descriptionText.SetText(_currentTrait.Data.DescriptionEffect);
 
-            if (removeButton is null) 
+            if (removeButton is null)
                 return;
-
-            bool canRemove =
-                _traitManager is not null &&
-                (_traitManager.GetHolder(_traitManager.CurrentMember)?.IsAdjusting ?? false) ||
-                _currentTrait.Data.IsRemovable;
+            
+            bool canRemove = _traitManager is not null && 
+                             (_traitManager.GetHolder(_traitManager.CurrentMember)?.IsAdjusting ?? false) 
+                             || _currentTrait.Data.IsRemovable;
             removeButton.interactable = canRemove;
         }
 
@@ -82,14 +81,13 @@ namespace Code.MainSystem.TraitSystem.UI
 
         private void RemoveTrait()
         {
-            Bus<TraitRemoveRequested>.Raise(
-                new TraitRemoveRequested(_traitManager.CurrentMember, _currentTrait.Type));
+            Bus<TraitRemoveRequestedUI>.Raise(new TraitRemoveRequestedUI(_currentTrait,
+                _traitManager.GetHolder(_traitManager.CurrentMember)));
         }
 
         private void RefreshTraitList()
         {
-            Bus<TraitShowRequested>.Raise(
-                new TraitShowRequested(_traitManager.CurrentMember));
+            Bus<TraitShowRequested>.Raise(new TraitShowRequested(_traitManager.CurrentMember));
         }
 
         private void Show()
@@ -107,7 +105,7 @@ namespace Code.MainSystem.TraitSystem.UI
             else
                 gameObject.SetActive(false);
         }
-
+        
         public void Close()
         {
             Hide();

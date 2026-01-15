@@ -11,7 +11,8 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private TraitContainer container;
         [SerializeField] private TraitDetailPanel detailPanel;
         [SerializeField] private TraitPointGauge pointGauge;
-        [SerializeField] private TraitOverflowPanel overflowPanel;
+        //[SerializeField] private TraitOverflowPanel overflowPanel;
+        [SerializeField] private TraitRemoveUI removeUI;
         
         private ITraitHolder _currentHolder;
         
@@ -26,12 +27,15 @@ namespace Code.MainSystem.TraitSystem.UI
             UnregisterEvents();
         }
 
+        #region Event Management
+
         private void RegisterEvents()
         {
             Bus<TraitShowResponded>.OnEvent += HandleTraitShowResponded;
             Bus<TraitShowItem>.OnEvent += HandleTraitShowItem;
             Bus<TraitOverflow>.OnEvent += HandleTraitOverflow;
             Bus<TraitAdjusted>.OnEvent += HandleTraitAdjusted;
+            Bus<TraitRemoveRequestedUI>.OnEvent += HandleTraitRemoveRequestedUI;
         }
 
         private void UnregisterEvents()
@@ -40,12 +44,16 @@ namespace Code.MainSystem.TraitSystem.UI
             Bus<TraitShowItem>.OnEvent -= HandleTraitShowItem;
             Bus<TraitOverflow>.OnEvent -= HandleTraitOverflow;
             Bus<TraitAdjusted>.OnEvent -= HandleTraitAdjusted;
+            Bus<TraitRemoveRequestedUI>.OnEvent -= HandleTraitRemoveRequestedUI;
         }
+
+        #endregion
 
         private void InitializeUI()
         {
             detailPanel?.Disable();
-            overflowPanel?.Disable();
+            //overflowPanel?.Disable();
+            removeUI?.Disable();
         }
 
         /// <summary>
@@ -70,8 +78,7 @@ namespace Code.MainSystem.TraitSystem.UI
         /// </summary>
         private void HandleTraitOverflow(TraitOverflow evt)
         {
-            Debug.Log("큰일남");
-            overflowPanel?.EnableFor(evt.CurrentPoint, evt.MaxPoint);
+            //overflowPanel?.EnableFor(evt.CurrentPoint, evt.MaxPoint);
             pointGauge?.EnableFor(evt.CurrentPoint, evt.MaxPoint);
         }
 
@@ -80,8 +87,16 @@ namespace Code.MainSystem.TraitSystem.UI
         /// </summary>
         private void HandleTraitAdjusted(TraitAdjusted evt)
         {
-            overflowPanel?.Disable();
+            //overflowPanel?.Disable();
             RefreshUI();
+        }
+
+        /// <summary>
+        /// 특성 제거 확인 UI 표시 요청 처리
+        /// </summary>
+        private void HandleTraitRemoveRequestedUI(TraitRemoveRequestedUI evt)
+        {
+            removeUI?.EnableFor(evt.Trait, evt.Holder);
         }
 
         /// <summary>
@@ -105,7 +120,8 @@ namespace Code.MainSystem.TraitSystem.UI
             container?.Disable();
             detailPanel?.Disable();
             pointGauge?.Disable();
-            overflowPanel?.Disable();
+            //overflowPanel?.Disable();
+            removeUI?.Disable();
         }
     }
 }
