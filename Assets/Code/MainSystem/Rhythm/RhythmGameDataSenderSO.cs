@@ -11,6 +11,7 @@ namespace Code.MainSystem.Rhythm
     {
         [Header("Game Input Data")]
         public string SongId;
+        public ConcertType ConcertType;
         public List<int> MemberIds;
         public int Difficulty;
         public List<NoteData> CombinedChart;
