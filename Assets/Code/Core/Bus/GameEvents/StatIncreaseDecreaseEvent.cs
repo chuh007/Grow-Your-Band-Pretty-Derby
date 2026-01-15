@@ -17,4 +17,9 @@ namespace Code.Core.Bus.GameEvents
             this.statName = statName;
         }
     }
+
+    public struct StopEvent : IEvent
+    {
+        
+    }
 }

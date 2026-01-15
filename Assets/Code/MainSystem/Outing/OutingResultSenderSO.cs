@@ -23,6 +23,6 @@ namespace Code.MainSystem.Outing
 
         [Header("Game Result Data")]
         public List<StatVariation> changeStats;
-        // TODO 얻은 스킬들 리스트
+        // TODO 얻은 스킬들 리스
     }
 }
