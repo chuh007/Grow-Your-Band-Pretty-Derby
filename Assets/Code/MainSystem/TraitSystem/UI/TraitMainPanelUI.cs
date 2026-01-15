@@ -1,10 +1,13 @@
 ﻿using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.MainScreen;
 using Code.MainSystem.StatSystem.Events;
 using TMPro;
 using UnityEngine;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
+using Reflex.Attributes;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
@@ -31,6 +34,7 @@ namespace Code.MainSystem.TraitSystem.UI
             
             label.SetText($"{parsed} 특성 UI");
             selectRequiredUI.Close();
+            Bus<TraitShowRequested>.Raise(new TraitShowRequested(parsed));
             Show();
         }
 

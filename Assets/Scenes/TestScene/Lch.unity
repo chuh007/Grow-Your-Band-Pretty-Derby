@@ -7727,15 +7727,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1148859602}
-        m_TargetAssemblyTypeName: Code.MainSystem.TraitSystem.UI.TraitMainPanelUI,
-          Assembly-CSharp
-        m_MethodName: EnableFor
+      - m_Target: {fileID: 1334975055}
+        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.Bottom.BottomTab, Assembly-CSharp
+        m_MethodName: SwitchMode
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -12432,6 +12431,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 181663926}
     - target: {fileID: 9095852624825058098, guid: ec0924e3fef082140bcc566f6445bc0e, type: 3}
+      propertyPath: controllerUI
+      value: 
+      objectReference: {fileID: 1148859603}
+    - target: {fileID: 9095852624825058098, guid: ec0924e3fef082140bcc566f6445bc0e, type: 3}
       propertyPath: selectRequiredUI
       value: 
       objectReference: {fileID: 1996724990}
@@ -12456,6 +12459,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5322a386c2774c0b9b8819cd0f0335d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.UI.TraitMainPanelUI
+--- !u!114 &1148859603 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8865752446056954621, guid: ec0924e3fef082140bcc566f6445bc0e, type: 3}
+  m_PrefabInstance: {fileID: 1148859600}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359923d9b5a94699856c1241604d0b36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.UI.TraitControllerUI
 --- !u!1 &1158313175
 GameObject:
   m_ObjectHideFlags: 0

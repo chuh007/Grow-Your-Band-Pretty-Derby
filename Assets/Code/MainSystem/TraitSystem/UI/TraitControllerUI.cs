@@ -111,7 +111,7 @@ namespace Code.MainSystem.TraitSystem.UI
         /// <summary>
         /// 전체 UI 갱신
         /// </summary>
-        private void RefreshUI()
+        public void RefreshUI()
         {
             if (_currentHolder == null)
                 return;
