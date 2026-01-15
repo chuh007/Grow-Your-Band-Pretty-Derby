@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
 using Code.Core.Bus;
-using Reflex.Attributes;
 using System.Collections.Generic;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.StatSystem.Manager;
@@ -13,26 +12,43 @@ namespace Code.MainSystem.TraitSystem.Manager
 {
     public class TraitManager : MonoBehaviour
     {
-        [Inject] private ITraitPointCalculator _calculator;
-        [Inject] private ITraitDatabase _database;
-        
-        private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
-        private ITraitHolder _pendingHolder;
-        private TraitDataSO _pendingNewTrait;
+        public MemberType CurrentMember { get; private set; }
 
-        public bool Adjusting { get; private set; }
+        private ITraitDatabase _database;
+        private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
 
         private void Awake()
         {
-            RegisterEvents();
+            InitializeDependencies();
             RegisterHolders();
+            RegisterEvents();
         }
 
         private void OnDestroy()
         {
             UnregisterEvents();
         }
-        
+
+        #region Initialization
+
+        private void InitializeDependencies()
+        {
+            _database = GetComponentInChildren<ITraitDatabase>();
+        }
+
+        /// <summary>
+        /// Scene에 있는 모든 CharacterTrait를 등록
+        /// </summary>
+        private void RegisterHolders()
+        {
+            var holders = FindObjectsByType<CharacterTrait>(FindObjectsSortMode.None);
+            
+            foreach (var holder in holders)
+                _holders.TryAdd(holder.MemberType, holder);
+        }
+
+        #endregion
+
         #region Event Management
 
         private void RegisterEvents()
@@ -51,26 +67,21 @@ namespace Code.MainSystem.TraitSystem.Manager
 
         #endregion
 
-        /// <summary>
-        /// Scene에 있는 모든 CharacterTrait를 등록
-        /// </summary>
-        private void RegisterHolders()
-        {
-            var holders = FindObjectsByType<CharacterTrait>(FindObjectsSortMode.None);
-            foreach (var holder in holders)
-                _holders[holder.MemberType] = holder;
-        }
+        #region Event Handlers
 
         /// <summary>
         /// 특성 추가 요청 처리
         /// </summary>
         private void HandleTraitAddRequested(TraitAddRequested evt)
         {
-            if (!_holders.TryGetValue(evt.MemberType, out var holder))
+            if (!TryGetHolder(evt.MemberType, out var holder))
                 return;
 
-            var data = _database.Get(evt.TraitType);
-            TryAddTrait(holder, data);
+            var traitData = _database.Get(evt.TraitType);
+            if (traitData is null)
+                return;
+
+            TryAddTrait(holder, traitData);
         }
 
         /// <summary>
@@ -78,7 +89,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private void HandleTraitRemoveRequested(TraitRemoveRequested evt)
         {
-            if (!_holders.TryGetValue(evt.MemberType, out var holder))
+            if (!TryGetHolder(evt.MemberType, out var holder))
                 return;
 
             var target = holder.ActiveTraits
@@ -89,30 +100,45 @@ namespace Code.MainSystem.TraitSystem.Manager
 
             TryRemoveTrait(holder, target);
         }
-        
+
         /// <summary>
         /// 특성 보유 현황 확인 요청 처리
         /// </summary>
         private void HandleTraitShowRequested(TraitShowRequested evt)
         {
-            if (!_holders.TryGetValue(evt.MemberType, out var holder))
+            if (!TryGetHolder(evt.MemberType, out var holder))
                 return;
-            
+
+            CurrentMember = evt.MemberType;
             ShowTraitList(holder);
         }
+
+        #endregion
+
+        #region Core Logic
 
         /// <summary>
         /// 신규 특성 습득 시도
         /// </summary>
         private void TryAddTrait(ITraitHolder holder, TraitDataSO newTrait)
         {
-            int currentTotal = _calculator.CalculateTotalPoint(holder);
-            int afterTotal = currentTotal + newTrait.Point;
+            if (holder.IsAdjusting)
+                return;
             
-            if (afterTotal <= holder.MaxPoints)
-                holder.AddTrait(newTrait);
+            if (holder.ActiveTraits.Any(t => t.Data.TraitType == newTrait.TraitType))
+                return;
+
+            holder.AddTrait(newTrait);
+            
+            if (holder.TotalPoint > holder.MaxPoints)
+            {
+                holder.BeginAdjustment(newTrait);
+                Bus<TraitOverflow>.Raise(new TraitOverflow(holder.TotalPoint, holder.MaxPoints));
+            }
             else
-                StartAdjustment(holder, newTrait);
+            {
+                ShowTraitList(holder);
+            }
         }
 
         /// <summary>
@@ -120,65 +146,67 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private void TryRemoveTrait(ITraitHolder holder, ActiveTrait targetTrait)
         {
-            if (!Adjusting || _pendingHolder != holder)
+            if (!holder.IsAdjusting && !targetTrait.Data.IsRemovable)
                 return;
 
-            if (!RemoveTrait(holder, targetTrait))
-                return;
-
-            int currentTotal = _calculator.CalculateTotalPoint(holder);
-            int afterTotal = currentTotal + _pendingNewTrait.Point;
-
-            if (afterTotal > holder.MaxPoints)
-                return;
-            
-            holder.AddTrait(_pendingNewTrait);
-            CompleteAdjustment();
-        }
-
-        /// <summary>
-        /// 특성 제거 로직
-        /// </summary>
-        private bool RemoveTrait(ITraitHolder holder, ActiveTrait targetTrait)
-        {
-            if (targetTrait.Data.IsRemovable) 
-                return false;
-            
             holder.RemoveActiveTrait(targetTrait);
-            return true;
+            
+            switch (holder.IsAdjusting)
+            {
+                case true when holder.TotalPoint <= holder.MaxPoints:
+                    holder.EndAdjustment();
+                    Bus<TraitAdjusted>.Raise(new TraitAdjusted());
+                    break;
+                case false:
+                    ShowTraitList(holder);
+                    break;
+            }
         }
 
         /// <summary>
-        /// 특성 보유 현황 확인
+        /// 특성 보유 현황 표시
         /// </summary>
         private void ShowTraitList(ITraitHolder holder)
         {
-            var traits = holder.ActiveTraits;
-            Bus<TraitShowResponded>.Raise(new TraitShowResponded(traits));
+            Bus<TraitShowResponded>.Raise(new TraitShowResponded(holder));
         }
-        
-        /// <summary>
-        /// 조정 모드 시작
-        /// </summary>
-        private void StartAdjustment(ITraitHolder holder, TraitDataSO newTrait)
+
+        #endregion
+
+        #region Helper Methods
+
+        private bool TryGetHolder(MemberType memberType, out ITraitHolder holder)
         {
-            Adjusting = true;
-            _pendingHolder = holder;
-            _pendingNewTrait = newTrait;
-            
-            int currentTotal = _calculator.CalculateTotalPoint(holder);
-            Bus<TraitOverflow>.Raise(new TraitOverflow(currentTotal + newTrait.Point, holder.MaxPoints));
+            if (_holders.TryGetValue(memberType, out holder))
+                return true;
+
+            Debug.LogError($"[TraitManager] {memberType}에 해당하는 TraitHolder를 찾을 수 없습니다.");
+            return false;
+        }
+
+        #endregion
+
+        #region Public API
+
+        /// <summary>
+        /// 특정 멤버의 특성 정보 가져오기
+        /// </summary>
+        public ITraitHolder GetHolder(MemberType memberType)
+        {
+            return _holders.GetValueOrDefault(memberType);
         }
 
         /// <summary>
-        /// 조정 완료
+        /// 특정 멤버가 특정 특성을 보유하고 있는지 확인
         /// </summary>
-        private void CompleteAdjustment()
+        public bool HasTrait(MemberType memberType, TraitType traitType)
         {
-            Adjusting = false;
-            _pendingHolder = null;
-            _pendingNewTrait = null;
-            Bus<TraitAdjusted>.Raise(new TraitAdjusted());
+            if (!_holders.TryGetValue(memberType, out var holder))
+                return false;
+
+            return holder.ActiveTraits.Any(t => t.Data.TraitType == traitType);
         }
+
+        #endregion
     }
 }
