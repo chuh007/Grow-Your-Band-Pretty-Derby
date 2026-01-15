@@ -1,5 +1,7 @@
 ﻿using System;
 using Code.Core;
+using Code.Core.Bus;
+using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Bottom
@@ -61,6 +63,7 @@ namespace Code.MainSystem.MainScreen.Bottom
                 case 4:
                     break;
                 case 5:
+                    Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
                     break;
                 case 6:
                     break;
