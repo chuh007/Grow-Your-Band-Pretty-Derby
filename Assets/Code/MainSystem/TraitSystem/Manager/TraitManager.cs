@@ -122,14 +122,30 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private void TryAddTrait(ITraitHolder holder, TraitDataSO newTrait)
         {
-            if (holder.IsAdjusting)
-                return;
+            var existingTrait = holder.ActiveTraits
+                .FirstOrDefault(t => t.Data.TraitType == newTrait.TraitType);
             
-            if (holder.ActiveTraits.Any(t => t.Data.TraitType == newTrait.TraitType))
+            if (existingTrait != null)
+            {
+                if (existingTrait.Data.Level == -1 ||
+                    existingTrait.Data.MaxLevel == -1 ||
+                    existingTrait.CurrentLevel >= existingTrait.Data.MaxLevel)
+                    return;
+
+                var prevLevel = existingTrait.CurrentLevel;
+                existingTrait.LevelUp();
+
+                Bus<TraitUpgraded>.Raise(new TraitUpgraded(CurrentMember, existingTrait, prevLevel));
+
+                ShowTraitList(holder);
+                return;
+            }
+
+            if (holder.IsAdjusting)
                 return;
 
             holder.AddTrait(newTrait);
-            
+
             if (holder.TotalPoint > holder.MaxPoints)
             {
                 holder.BeginAdjustment(newTrait);
@@ -140,7 +156,7 @@ namespace Code.MainSystem.TraitSystem.Manager
                 ShowTraitList(holder);
             }
         }
-
+        
         /// <summary>
         /// 특성 제거 시도
         /// </summary>
