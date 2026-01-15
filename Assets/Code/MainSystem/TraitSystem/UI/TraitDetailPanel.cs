@@ -10,34 +10,107 @@ using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class TraitItem : MonoBehaviour, IUIElement<ActiveTrait>
+    public class TraitDetailPanel : MonoBehaviour, IUIElement<ActiveTrait>
     {
+        [Header("Dependencies")]
         [Inject] private TraitManager _traitManager;
+        
+        [Header("UI Elements")]
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI levelPointText;
         [SerializeField] private TextMeshProUGUI descriptionText;
+        [SerializeField] private Button removeButton;
+        [SerializeField] private GameObject panel;
         
-        private ActiveTrait _currentItem;
-        
-        public void EnableFor(ActiveTrait item)
+        private ActiveTrait _currentTrait;
+
+        private void Awake()
         {
-            _currentItem = item;
-            iconImage.sprite = _currentItem.Data.TraitIcon;
-            levelPointText.SetText(_currentItem.Data.Level == -1 ? $"{_currentItem.Point}" : $"{_currentItem.Point} / {_currentItem.Data.Level}.Lv");
-            descriptionText.SetText(_currentItem.Data.DescriptionEffect);
-            gameObject.SetActive(true);
+            if (removeButton != null)
+                removeButton.onClick.AddListener(OnRemoveButtonClicked);
         }
 
-        public void RemoveTrait()
+        private void OnDestroy()
         {
-            Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_traitManager.CurrentMember, _currentItem.Type));
-            Bus<TraitShowRequested>.Raise(new TraitShowRequested(_traitManager.CurrentMember));
-            Disable();
+            if (removeButton != null)
+                removeButton.onClick.RemoveListener(OnRemoveButtonClicked);
+        }
+
+        public void EnableFor(ActiveTrait trait)
+        {
+            _currentTrait = trait;
+            UpdateUI();
+            Show();
         }
 
         public void Disable()
         {
-            gameObject.SetActive(false);
+            Hide();
+        }
+
+        private void UpdateUI()
+        {
+            if (_currentTrait?.Data is null)
+                return;
+
+            iconImage.sprite = _currentTrait.Data.TraitIcon;
+            
+            string pointText = _currentTrait.Data.Level == -1 ? " " : $" Lv.{_currentTrait.Data.Level}";
+            levelPointText.SetText(pointText);
+            
+            descriptionText.SetText(_currentTrait.Data.DescriptionEffect);
+
+            if (removeButton is null) 
+                return;
+
+            bool canRemove =
+                _traitManager is not null &&
+                (_traitManager.GetHolder(_traitManager.CurrentMember)?.IsAdjusting ?? false) ||
+                _currentTrait.Data.IsRemovable;
+            removeButton.interactable = canRemove;
+        }
+
+        private void OnRemoveButtonClicked()
+        {
+            if (_currentTrait == null || _traitManager == null)
+                return;
+
+            RemoveTrait();
+            RefreshTraitList();
+            Hide();
+        }
+
+        private void RemoveTrait()
+        {
+            Bus<TraitRemoveRequested>.Raise(
+                new TraitRemoveRequested(_traitManager.CurrentMember, _currentTrait.Type));
+        }
+
+        private void RefreshTraitList()
+        {
+            Bus<TraitShowRequested>.Raise(
+                new TraitShowRequested(_traitManager.CurrentMember));
+        }
+
+        private void Show()
+        {
+            if (panel is not null)
+                panel.SetActive(true);
+            else
+                gameObject.SetActive(true);
+        }
+
+        private void Hide()
+        {
+            if (panel != null)
+                panel.SetActive(false);
+            else
+                gameObject.SetActive(false);
+        }
+
+        public void Close()
+        {
+            Hide();
         }
     }
 }
