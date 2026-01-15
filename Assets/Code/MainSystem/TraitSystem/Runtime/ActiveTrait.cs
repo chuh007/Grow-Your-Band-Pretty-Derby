@@ -61,29 +61,5 @@ namespace Code.MainSystem.TraitSystem.Runtime
             for (int i = 0; i < CurrentEffects.Count; i++)
                 CurrentEffects[i] *= 1.1f;
         }
-        
-        public bool CheckExpiration(int currentTurn, List<string> occurredEvents)
-        {
-            switch (Data.ExpirationType)
-            {
-                case ExpirationType.TurnBased:
-                    if (RemainingTurns > 0)
-                    {
-                        RemainingTurns--;
-                        if (RemainingTurns == 0)
-                            return true;
-                    }
-                    break;
-                case ExpirationType.EventBased:
-                    if (occurredEvents.Any(evt => Data.DescriptionCondition.Contains(evt)))
-                        return true;
-                    break;
-                    
-                case ExpirationType.ConditionBased:
-                case ExpirationType.None:
-                    break;
-            }
-            return false;
-        }
     }
 }
