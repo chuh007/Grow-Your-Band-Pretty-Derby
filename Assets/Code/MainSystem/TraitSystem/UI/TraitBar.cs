@@ -21,7 +21,7 @@ namespace Code.MainSystem.TraitSystem.UI
             _currentItem = item;
             iconImage.sprite = _currentItem.Data.TraitIcon;
             nameText.SetText(_currentItem.Name);
-            levelPointText.SetText(_currentItem.Data.Level == -1 ? $"{_currentItem.Point}" : $"{_currentItem.Point} / {_currentItem.Data.Level}.Lv");
+            levelPointText.SetText(_currentItem.Data.Level == -1 ? $"{_currentItem.Point}" : $"{_currentItem.Point} / {_currentItem.CurrentLevel}.Lv");
             gameObject.SetActive(true);
         }
 
