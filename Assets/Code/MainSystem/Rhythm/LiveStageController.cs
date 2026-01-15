@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Code.MainSystem.Rhythm
 {
     public class LiveStageController : StageController
     {
+        [Header("Live UI")]
         [SerializeField] private Slider voteGauge;
+        [SerializeField] private TextMeshProUGUI voteCountText;
         [SerializeField] private Image fillImage;
         [SerializeField] private Color highlightColor = Color.yellow;
         
@@ -26,6 +29,12 @@ namespace Code.MainSystem.Rhythm
             if (voteGauge != null)
             {
                 voteGauge.value = progress;
+            }
+
+            if (voteCountText != null)
+            {
+                int currentVotes = Mathf.FloorToInt(targetScore * progress);
+                voteCountText.text = $"{currentVotes:N0}";
             }
 
             if (fillImage != null && _hasCapturedOriginalColor)

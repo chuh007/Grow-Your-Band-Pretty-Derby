@@ -19,6 +19,13 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private CanvasGroup _loadingCanvasGroup;
         [SerializeField] private float _fadeDuration = 0.5f;
 
+        // 배경
+        private const string KEY_ENV_BUSKING = "RhythmGame/Environment/Busking";
+        private const string KEY_ENV_LIVE    = "RhythmGame/Environment/Live";
+        // 노트 및 이펙트
+        private const string KEY_NOTE_BASIC  = "RhythmGame/Prefab/Note_Basic";
+        private const string KEY_VFX_HIT     = "RhythmGame/Prefab/HitEffect";
+
         private AudioClip _loadedMusic;
         private GameObject _loadedNotePrefab;
         private GameObject _loadedHitEffect;
@@ -29,6 +36,7 @@ namespace Code.MainSystem.Rhythm
             if (_loadingCanvasGroup != null)
             {
                 _loadingCanvasGroup.alpha = 1f;
+                _loadingCanvasGroup.gameObject.SetActive(true);
                 _loadingCanvasGroup.blocksRaycasts = true;
             }
 
@@ -40,6 +48,18 @@ namespace Code.MainSystem.Rhythm
 
             Debug.Log($"Bootstrapper: Initializing Session for Song {_dataSender.SongId}");
 
+            await LoadGameResources();
+
+            await FadeInGameScreen();
+
+            if (_conductor != null)
+            {
+                _conductor.Play();
+            }
+        }
+
+        private async UniTask LoadGameResources()
+        {
             List<Code.MainSystem.StatSystem.Manager.MemberType> memberRoles = new List<Code.MainSystem.StatSystem.Manager.MemberType>();
             if (_dataSender.members != null)
             {
@@ -58,17 +78,13 @@ namespace Code.MainSystem.Rhythm
 
             string songId = _dataSender.SongId;
             string musicKey = $"RhythmGame/Music/{songId}";
-            string prefabKey = "RhythmGame/Prefab/Note";
-            string vfxKey = "RhythmGame/Prefab/HitEffect";
             
-            string envKey = _dataSender.ConcertType == ConcertType.Live 
-                ? "RhythmGame/Environment/Live" 
-                : "RhythmGame/Environment/Busking";
+            string envKey = _dataSender.ConcertType == ConcertType.Live ? KEY_ENV_LIVE : KEY_ENV_BUSKING;
 
             var musicLoadTask = GameResourceManager.Instance.LoadAssetAsync<AudioClip>(musicKey).AsUniTask();
-            var prefabLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(prefabKey).AsUniTask();
+            var prefabLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(KEY_NOTE_BASIC).AsUniTask();
             var chartLoadTask = ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
-            var vfxLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(vfxKey).AsUniTask();
+            var vfxLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(KEY_VFX_HIT).AsUniTask();
             var envLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(envKey).AsUniTask();
 
             var (musicClip, notePrefab, chartData, hitEffect, envPrefab) = await UniTask.WhenAll(
@@ -104,13 +120,6 @@ namespace Code.MainSystem.Rhythm
             }
 
             _noteManager.SetChart(chartData);
-
-            await FadeInGameScreen();
-
-            if (_conductor != null)
-            {
-                _conductor.Play();
-            }
         }
 
         private async UniTask FadeInGameScreen()
@@ -121,11 +130,11 @@ namespace Code.MainSystem.Rhythm
             while (elapsed < _fadeDuration)
             {
                 elapsed += Time.deltaTime;
-                _loadingCanvasGroup.alpha = 1f - (elapsed / _fadeDuration);
+                _loadingCanvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / _fadeDuration);
                 await UniTask.Yield();
             }
 
-            _loadingCanvasGroup.alpha = 0f;
+            _loadingCanvasGroup.gameObject.SetActive(false);
             _loadingCanvasGroup.blocksRaycasts = false;
         }
 

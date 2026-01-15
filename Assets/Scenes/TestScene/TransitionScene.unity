@@ -587,8 +587,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.SceneTransition.TransitionSceneController
   _sender: {fileID: 11400000, guid: 2c4d5cbf2e4fe324f8359818cc03e848, type: 2}
-  _landscapeGuideObj: {fileID: 0}
-  _portraitGuideObj: {fileID: 0}
+  _landscapeGuideObj: {fileID: 518126538}
+  _portraitGuideObj: {fileID: 2052333718}
   _minDuration: 1
 --- !u!1 &2141254534
 GameObject:

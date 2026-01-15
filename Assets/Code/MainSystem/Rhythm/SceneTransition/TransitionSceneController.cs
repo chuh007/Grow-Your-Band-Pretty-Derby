@@ -7,15 +7,9 @@ namespace Code.MainSystem.Rhythm.SceneTransition
 {
     public class TransitionSceneController : MonoBehaviour
     {
-        [Header("Data")]
         [SerializeField] private SceneTransitionSenderSO _sender;
-
-        [Header("UI Objects")]
-        [SerializeField] private GameObject _landscapeGuideObj; // 가로 -> 세로
-        [SerializeField] private GameObject _portraitGuideObj; // 세로 -> 가로
-
-        [Header("Settings")]
-        [SerializeField] private float _minDuration = 1.0f; // 최소 대기 시간
+        [SerializeField] private GameObject _landscapeGuideObj; 
+        [SerializeField] private GameObject _portraitGuideObj;  
 
         private async void Start()
         {
@@ -26,28 +20,23 @@ namespace Code.MainSystem.Rhythm.SceneTransition
             }
 
             string nextScene = _sender.NextSceneName;
-            TransitionMode mode = _sender.Mode;
+            bool toLandscape = _sender.Mode == TransitionMode.ToLandscape;
 
-            if (mode == TransitionMode.ToLandscape)
+            if (_landscapeGuideObj) _landscapeGuideObj.SetActive(toLandscape);
+            if (_portraitGuideObj) _portraitGuideObj.SetActive(!toLandscape);
+
+            if (toLandscape)
             {
-                if (_landscapeGuideObj) _landscapeGuideObj.SetActive(true);
-                if (_portraitGuideObj) _portraitGuideObj.SetActive(false);
-                
                 Screen.orientation = ScreenOrientation.LandscapeLeft;
-                
-                await UniTask.WaitUntil(() => Screen.width > Screen.height);
+                await UniTask.WaitUntil(() => Screen.width > Screen.height); 
             }
             else
             {
-                if (_landscapeGuideObj) _landscapeGuideObj.SetActive(false);
-                if (_portraitGuideObj) _portraitGuideObj.SetActive(true);
-                
                 Screen.orientation = ScreenOrientation.Portrait;
-
-                await UniTask.WaitUntil(() => Screen.height > Screen.width);
+                await UniTask.WaitUntil(() => Screen.height > Screen.width); 
             }
 
-            await UniTask.Delay(TimeSpan.FromSeconds(_minDuration));
+            await UniTask.Delay(1000);
 
             SceneManager.LoadScene(nextScene);
         }
