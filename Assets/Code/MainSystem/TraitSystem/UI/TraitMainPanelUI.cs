@@ -9,9 +9,8 @@ using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class TraitMainPanelUI : MonoBehaviour, IUIElement<string>
+    public class TraitMainPanelUI : TraitPanelBase, IUIElement<string>
     {
-        [SerializeField] private GameObject panel;
         [SerializeField] private SelectRequiredUI selectRequiredUI;
         [SerializeField] private TextMeshProUGUI label;
         
@@ -50,16 +49,6 @@ namespace Code.MainSystem.TraitSystem.UI
         public void TraitPanelClose()
         {
             _isOpen = false;
-        }
-        
-        public void Show()
-        {
-            panel.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            panel.SetActive(false);
         }
     }
 }

@@ -2,7 +2,6 @@
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
-using UnityEngine.Serialization;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
@@ -10,7 +9,7 @@ namespace Code.MainSystem.TraitSystem.UI
     {
         [Header("UI Components")]
         [SerializeField] private TraitContainer container;
-        [FormerlySerializedAs("detailPanel")] [SerializeField] private DetailTraitPanel detailTraitPanel;
+        [SerializeField] private DetailTraitPanel detailTraitPanel;
         [SerializeField] private TraitPointGauge pointGauge;
         //[SerializeField] private TraitOverflowPanel overflowPanel;
         [SerializeField] private RemoveUI removeUI;

@@ -783,7 +783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.UI.TraitControllerUI
   container: {fileID: 4058482498314054150}
-  detailPanel: {fileID: 0}
+  detailTraitPanel: {fileID: 0}
   pointGauge: {fileID: 1684881619920242802}
   removeUI: {fileID: 0}
   upgradeCheckUI: {fileID: 0}
