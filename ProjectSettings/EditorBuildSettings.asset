@@ -20,6 +20,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestScene/Rhythm.unity
     guid: e5358a7d5c6f7a44eb6d0c372e86ba49
+  - enabled: 1
+    path: Assets/Scenes/TestScene/TransitionScene.unity
+    guid: cc0dc92a2655fa6498aaafba44f99efb
+  - enabled: 1
+    path: Assets/Scenes/TestScene/Test.unity
+    guid: 6e2001800319a4e448af86b2e66e3843
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 159d09f41d1288145840e0dfd83a6699, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
