@@ -78,48 +78,45 @@ namespace Code.MainSystem.Rhythm
 
             string songId = _dataSender.SongId;
             string musicKey = $"RhythmGame/Music/{songId}";
-            
             string envKey = _dataSender.ConcertType == ConcertType.Live ? KEY_ENV_LIVE : KEY_ENV_BUSKING;
 
-            var musicLoadTask = GameResourceManager.Instance.LoadAssetAsync<AudioClip>(musicKey).AsUniTask();
-            var prefabLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(KEY_NOTE_BASIC).AsUniTask();
-            var chartLoadTask = ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
-            var vfxLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(KEY_VFX_HIT).AsUniTask();
-            var envLoadTask = GameResourceManager.Instance.LoadAssetAsync<GameObject>(envKey).AsUniTask();
-
-            var (musicClip, notePrefab, chartData, hitEffect, envPrefab) = await UniTask.WhenAll(
-                musicLoadTask, 
-                prefabLoadTask, 
-                chartLoadTask,
-                vfxLoadTask,
-                envLoadTask
-            );
-
-            if (musicClip != null) 
-            {
-                _loadedMusic = musicClip;
-                _conductor.SetMusic(musicClip);
-            }
+            _loadedMusic = await SafeLoadAssetAsync<AudioClip>(musicKey);
+            _loadedNotePrefab = await SafeLoadAssetAsync<GameObject>(KEY_NOTE_BASIC);
             
-            if (notePrefab != null)
-            {
-                _loadedNotePrefab = notePrefab;
-                _noteManager.SetNotePrefab(notePrefab);
-            }
+            _loadedHitEffect = await SafeLoadAssetAsync<GameObject>(KEY_VFX_HIT);
+            _loadedEnvPrefab = await SafeLoadAssetAsync<GameObject>(envKey);
+
+            var chartData = await ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
+
+            if (_loadedMusic != null) _conductor.SetMusic(_loadedMusic);
+            else Debug.LogError($"[Rhythm] Music is missing: {musicKey}");
+
+            if (_loadedNotePrefab != null) _noteManager.SetNotePrefab(_loadedNotePrefab);
+            else Debug.LogError($"[Rhythm] Note Prefab is missing: {KEY_NOTE_BASIC}");
+
+            if (_loadedHitEffect != null) _hitFeedbackManager.SetHitEffectPrefab(_loadedHitEffect);
+            else Debug.LogWarning($"[Rhythm] Hit Effect is missing: {KEY_VFX_HIT}");
+
+            if (_loadedEnvPrefab != null) Instantiate(_loadedEnvPrefab);
+            else Debug.LogWarning($"[Rhythm] Environment Prefab is missing: {envKey}");
+
+            if (chartData != null) _noteManager.SetChart(chartData);
+            else Debug.LogError($"[Rhythm] Chart Data failed to build for {songId}");
+        }
+
+        private async UniTask<T> SafeLoadAssetAsync<T>(string key) where T : UnityEngine.Object
+        {
+            if (string.IsNullOrEmpty(key)) return null;
             
-            if (hitEffect != null)
+            try
             {
-                _loadedHitEffect = hitEffect;
-                _hitFeedbackManager.SetHitEffectPrefab(hitEffect);
+                return await GameResourceManager.Instance.LoadAssetAsync<T>(key).AsUniTask();
             }
-
-            if (envPrefab != null)
+            catch (System.Exception e)
             {
-                _loadedEnvPrefab = envPrefab;
-                Instantiate(envPrefab);
+                Debug.LogWarning($"[Rhythm] Failed to load asset with key: {key}. Error: {e.Message}");
+                return null;
             }
-
-            _noteManager.SetChart(chartData);
         }
 
         private async UniTask FadeInGameScreen()

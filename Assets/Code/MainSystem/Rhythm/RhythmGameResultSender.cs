@@ -40,12 +40,14 @@ namespace Code.MainSystem.Rhythm
                 Debug.LogWarning("No result data to send!");
                 if (transitionSender != null)
                 {
-                    transitionSender.SetTransition("MainScene", TransitionMode.ToPortrait);
+                    //transitionSender.SetTransition("Lobby", TransitionMode.ToPortrait);
+                    transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
                     SceneManager.LoadScene("TransitionScene");
                 }
                 else
                 {
-                    SceneManager.LoadScene("MainScene"); 
+                    //SceneManager.LoadScene("Lobby");
+                    SceneManager.LoadScene("Test");
                 }
                 return;
             }
@@ -62,12 +64,15 @@ namespace Code.MainSystem.Rhythm
 
             if (transitionSender != null)
             {
-                transitionSender.SetTransition("lch", TransitionMode.ToPortrait);
+                //transitionSender.SetTransition("Lobby", TransitionMode.ToPortrait);
+                transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
                 SceneManager.LoadScene("TransitionScene");
             }
             else
             {
-                SceneManager.LoadScene("lch");
+                Debug.Log("Fail to submit result");
+                //SceneManager.LoadScene("Lobby");
+                SceneManager.LoadScene("Test");
             }
         }
     }
