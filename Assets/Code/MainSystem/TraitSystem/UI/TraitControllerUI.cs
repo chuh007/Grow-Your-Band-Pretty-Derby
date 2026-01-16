@@ -2,6 +2,7 @@
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
@@ -9,11 +10,11 @@ namespace Code.MainSystem.TraitSystem.UI
     {
         [Header("UI Components")]
         [SerializeField] private TraitContainer container;
-        [SerializeField] private TraitDetailPanel detailPanel;
+        [FormerlySerializedAs("detailPanel")] [SerializeField] private DetailTraitPanel detailTraitPanel;
         [SerializeField] private TraitPointGauge pointGauge;
         //[SerializeField] private TraitOverflowPanel overflowPanel;
-        [SerializeField] private TraitRemoveUI removeUI;
-        [SerializeField] private TraitUpgradeCheckUI upgradeCheckUI;
+        [SerializeField] private RemoveUI removeUI;
+        [SerializeField] private UpgradeCheckUI upgradeCheckUI;
         
         private ITraitHolder _currentHolder;
         
@@ -54,7 +55,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
         private void InitializeUI()
         {
-            detailPanel?.Disable();
+            detailTraitPanel?.Disable();
             //overflowPanel?.Disable();
             removeUI?.Disable();
             upgradeCheckUI?.Disable();
@@ -74,7 +75,7 @@ namespace Code.MainSystem.TraitSystem.UI
         /// </summary>
         private void HandleTraitShowItem(TraitShowItem evt)
         {
-            detailPanel?.EnableFor(evt.Trait);
+            detailTraitPanel?.EnableFor(evt.Trait);
         }
         
         private void HandleTraitUpgraded(TraitUpgraded evt)
@@ -127,7 +128,7 @@ namespace Code.MainSystem.TraitSystem.UI
         {
             _currentHolder = null;
             container?.Disable();
-            detailPanel?.Disable();
+            detailTraitPanel?.Disable();
             pointGauge?.Disable();
             //overflowPanel?.Disable();
             removeUI?.Disable();

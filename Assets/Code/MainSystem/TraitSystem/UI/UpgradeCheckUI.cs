@@ -1,24 +1,22 @@
-﻿using System;
-using Code.Core.Bus;
-using Code.Core.Bus.GameEvents.TraitEvents;
+﻿using TMPro;
 using UnityEngine;
+using Code.Core.Bus;
 using UnityEngine.UI;
-using Code.MainSystem.TraitSystem.Runtime;
-using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Manager;
 using Reflex.Attributes;
-using TMPro;
+using Code.MainSystem.TraitSystem.Runtime;
+using Code.MainSystem.TraitSystem.Manager;
+using Code.Core.Bus.GameEvents.TraitEvents;
+using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class TraitUpgradeCheckUI : MonoBehaviour, IUIElement<ActiveTrait, int>
+    public class UpgradeCheckUI : TraitPanelBase, IUIElement<ActiveTrait, int>
     {
         [Inject] private TraitManager _traitManager;
         
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI descriptionText;
-        [SerializeField] private GameObject panel;
         [SerializeField] private Button checkButton;
 
         private void Awake()
@@ -43,16 +41,6 @@ namespace Code.MainSystem.TraitSystem.UI
         public void Disable()
         {
             Hide();
-        }
-        
-        private void Show()
-        {
-            panel.SetActive(true);
-        }
-
-        private void Hide()
-        {
-            panel.SetActive(false);
         }
     }
 }

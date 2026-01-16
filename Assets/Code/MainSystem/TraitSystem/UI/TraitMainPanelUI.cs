@@ -1,13 +1,11 @@
-﻿using Code.Core.Bus;
-using Code.Core.Bus.GameEvents.TraitEvents;
+﻿using TMPro;
+using UnityEngine;
+using Code.Core.Bus;
 using Code.MainSystem.MainScreen;
 using Code.MainSystem.StatSystem.Events;
-using TMPro;
-using UnityEngine;
 using Code.MainSystem.StatSystem.Manager;
+using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Manager;
-using Reflex.Attributes;
 
 namespace Code.MainSystem.TraitSystem.UI
 {

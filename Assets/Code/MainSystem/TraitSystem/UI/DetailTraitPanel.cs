@@ -10,7 +10,7 @@ using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class TraitDetailPanel : MonoBehaviour, IUIElement<ActiveTrait>
+    public class DetailTraitPanel : TraitPanelBase, IUIElement<ActiveTrait>
     {
         [Header("Dependencies")]
         [Inject] private TraitManager _traitManager;
@@ -20,7 +20,6 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private TextMeshProUGUI levelPointText;
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private Button removeButton;
-        [SerializeField] private GameObject panel;
         
         private ActiveTrait _currentTrait;
 
@@ -88,22 +87,6 @@ namespace Code.MainSystem.TraitSystem.UI
         private void RefreshTraitList()
         {
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(_traitManager.CurrentMember));
-        }
-
-        private void Show()
-        {
-            if (panel is not null)
-                panel.SetActive(true);
-            else
-                gameObject.SetActive(true);
-        }
-
-        private void Hide()
-        {
-            if (panel != null)
-                panel.SetActive(false);
-            else
-                gameObject.SetActive(false);
         }
         
         public void Close()

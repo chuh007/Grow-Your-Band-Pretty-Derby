@@ -10,7 +10,7 @@ using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class TraitRemoveUI : MonoBehaviour, IUIElement<ActiveTrait, ITraitHolder>
+    public class RemoveUI : TraitPanelBase, IUIElement<ActiveTrait, ITraitHolder>
     {
         [Header("Dependencies")]
         [Inject] private TraitManager _traitManager;
@@ -19,7 +19,6 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI descriptionText;
-        [SerializeField] private GameObject panel;
         [SerializeField] private Button confirmButton;
         
         private ActiveTrait _currentTrait;
@@ -49,8 +48,8 @@ namespace Code.MainSystem.TraitSystem.UI
         {
             _currentTrait = null;
             _currentHolder = null;
-            ClearUI();
             Hide();
+            ClearUI();
         }
 
         private void UpdateUI()
@@ -97,22 +96,6 @@ namespace Code.MainSystem.TraitSystem.UI
         {
             Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_traitManager.CurrentMember, _currentTrait.Type));
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(_traitManager.CurrentMember));
-        }
-
-        private void Show()
-        {
-            if (panel is not null)
-                panel.SetActive(true);
-            else
-                gameObject.SetActive(true);
-        }
-
-        private void Hide()
-        {
-            if (panel != null)
-                panel.SetActive(false);
-            else
-                gameObject.SetActive(false);
         }
 
         public void Close()
