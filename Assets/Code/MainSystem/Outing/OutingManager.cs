@@ -39,7 +39,7 @@ namespace Code.MainSystem.Outing
         {
             var resultPrefab =
                 await GameManager.Instance.LoadAddressableAsync<GameObject>("Outing/UI/Result");
-            
+            Debug.Log(resultPrefab);
             var resultInstance = Instantiate(resultPrefab, uiRoot);
             var resultUI = resultInstance.GetComponent<OutingResultUI>();
             resultUI.ShowResultUI();
@@ -53,6 +53,7 @@ namespace Code.MainSystem.Outing
         
         private void HandleDialogueEnd(DialogueEndEvent evt)
         {
+            Debug.Log("ㄴ");
             _ = PlayOutingSequence();
         }
     }

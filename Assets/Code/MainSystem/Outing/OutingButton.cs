@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.OutingEvents;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
@@ -9,21 +10,18 @@ using UnityEngine.UI;
 namespace Code.MainSystem.Outing
 {
     // 외출 버튼에 달아놓는 컴포넌트
-    [RequireComponent(typeof(SceneLoadButton))]
     public class OutingButton : MonoBehaviour
     {
-        [SerializeField] private OutingResultSenderSO resultSender;
+        [SerializeField] private OutingResultSenderSO sender;
         [SerializeField] private MainScreen.MainScreen mainScreen;
         
-        private SceneLoadButton _loadButton;
         private Button _button;
         
         private void Awake()
         {
-            _loadButton = GetComponent<SceneLoadButton>();
             _button = GetComponent<Button>();
             _button.onClick.RemoveAllListeners();
-            _button.onClick.AddListener(LoadAndDataSend);
+            _button.onClick.AddListener(UnitSelect);
         }
 
         private void OnDestroy()
@@ -31,9 +29,8 @@ namespace Code.MainSystem.Outing
             _button.onClick.RemoveAllListeners();
         }
 
-        public void LoadAndDataSend()
+        public void UnitSelect()
         {
-
             if (mainScreen.UnitSelector.CurrentUnit == null)
             {
                 Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
@@ -41,8 +38,9 @@ namespace Code.MainSystem.Outing
             }
             if (TrainingManager.Instance.IsMemberTrained(mainScreen.UnitSelector.CurrentUnit.memberType))
                 return;
-            resultSender.targetMember = mainScreen.UnitSelector.CurrentUnit;
-            _loadButton.SceneLoadAdditive("OutingScene");
+            
+            sender.targetMember = mainScreen.UnitSelector.CurrentUnit;
+            Bus<OutingUnitSelectEvent>.Raise(new OutingUnitSelectEvent(mainScreen.UnitSelector.CurrentUnit));
         }
     }
 }
