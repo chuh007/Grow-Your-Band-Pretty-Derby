@@ -39,5 +39,10 @@ namespace Code.MainSystem.Outing
             characterImage.sprite = sprite;
             rect.DOLocalMoveX(0, 0.5f);
         }
+
+        public void CloseUI()
+        {
+            rect.anchoredPosition = new Vector2(-_width, 0);
+        }
     }
 }

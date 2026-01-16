@@ -20,7 +20,6 @@ namespace Code.MainSystem.Outing
 
         public void Click()
         {
-            Debug.Log(dataController.GetMemberOutingData(sender.targetMember.memberType, outingPlace));
             sender.selectedEvent = dataController.GetMemberOutingData(sender.targetMember.memberType, outingPlace);
             _loadButton.SceneLoadAdditive("OutingScene");
         }
