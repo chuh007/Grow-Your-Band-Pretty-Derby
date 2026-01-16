@@ -1,6 +1,8 @@
 ﻿using System;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.MainSystem.Etc;
+using Code.MainSystem.Rhythm.SceneTransition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +14,7 @@ namespace Code.MainSystem.Rhythm
     public class RhythmGameResultSender : MonoBehaviour
     {
         [SerializeField] private RhythmGameDataSenderSO dataSender;
+        [SerializeField] private SceneTransitionSenderSO transitionSender;
         
         private RhythmGameResultEvent? _cachedResult;
         
@@ -35,7 +38,17 @@ namespace Code.MainSystem.Rhythm
             if (_cachedResult == null)
             {
                 Debug.LogWarning("No result data to send!");
-                SceneManager.LoadScene("MainScene"); // Fallback
+                if (transitionSender != null)
+                {
+                    //transitionSender.SetTransition("Lobby", TransitionMode.ToPortrait);
+                    transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
+                    SceneManager.LoadScene("TransitionScene");
+                }
+                else
+                {
+                    //SceneManager.LoadScene("Lobby");
+                    SceneManager.LoadScene("Test");
+                }
                 return;
             }
 
@@ -44,12 +57,23 @@ namespace Code.MainSystem.Rhythm
             // 이거 랭크가 이넘이면 편하겄는데
             // 지금은 임시로 해둔다
             dataSender.allStatUpValue = 1 + (int)(evt.FinalScore * 0.1f);
-            // Use MemberIds.Count as members list might not be populated
             int memberCount = dataSender.MemberIds != null ? dataSender.MemberIds.Count : 0;
             dataSender.harmonyStatUpValue = memberCount * (int)(evt.FinalScore * 0.1f);
             
             dataSender.IsResultDataAvailable = true;
-            SceneManager.LoadScene("lch");
+
+            if (transitionSender != null)
+            {
+                //transitionSender.SetTransition("Lobby", TransitionMode.ToPortrait);
+                transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
+                SceneManager.LoadScene("TransitionScene");
+            }
+            else
+            {
+                Debug.Log("Fail to submit result");
+                //SceneManager.LoadScene("Lobby");
+                SceneManager.LoadScene("Test");
+            }
         }
     }
 }

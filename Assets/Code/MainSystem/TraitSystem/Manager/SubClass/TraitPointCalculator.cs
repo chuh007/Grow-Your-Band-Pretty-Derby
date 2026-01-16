@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
+using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.Manager.SubClass
 {
     /// <summary>
     /// 포인트 처리 담당
     /// </summary>
-    public class TraitPointCalculator : ITraitPointCalculator
+    public class TraitPointCalculator : MonoBehaviour, ITraitPointCalculator
     {
         public int CalculateTotalPoint(ITraitHolder holder)
         {

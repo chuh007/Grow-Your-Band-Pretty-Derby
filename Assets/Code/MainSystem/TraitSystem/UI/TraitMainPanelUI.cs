@@ -1,0 +1,55 @@
+﻿using TMPro;
+using UnityEngine;
+using Code.Core.Bus;
+using Code.MainSystem.MainScreen;
+using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.StatSystem.Manager;
+using Code.Core.Bus.GameEvents.TraitEvents;
+using Code.MainSystem.TraitSystem.Interface;
+
+namespace Code.MainSystem.TraitSystem.UI
+{
+    public class TraitMainPanelUI : TraitPanelBase, IUIElement<string>
+    {
+        [SerializeField] private SelectRequiredUI selectRequiredUI;
+        [SerializeField] private TextMeshProUGUI label;
+        
+        private bool _isOpen;
+
+        private void Awake()
+        {
+            Hide();
+        }
+
+        public void EnableFor(string memberType)
+        {
+            if (!_isOpen)
+                return;
+            
+            if (!System.Enum.TryParse(memberType, out MemberType parsed))
+                return;
+
+            _isOpen = false;
+            label.SetText($"{parsed} 특성 UI");
+            selectRequiredUI.Close();
+            Bus<TraitShowRequested>.Raise(new TraitShowRequested(parsed));
+            Show();
+        }
+
+        public void Disable()
+        {
+            Hide();
+        }
+        
+        public void TraitPanelOpen()
+        {
+            Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
+            _isOpen = true;
+        }
+
+        public void TraitPanelClose()
+        {
+            _isOpen = false;
+        }
+    }
+}

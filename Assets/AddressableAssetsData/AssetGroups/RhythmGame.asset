@@ -21,8 +21,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15f90fd6208eff94a9506f65a80166c1
+    m_Address: RhythmGame/Environment/Live
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 17204396585bdab47ba538e55ef24f56
     m_Address: RhythmGame/Chart/TestSong/Vocal
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c757dc6e1f3d8242aae1b5d4791909a
+    m_Address: RhythmGame/Environment/Busking
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame
@@ -46,7 +58,7 @@ MonoBehaviour:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a34f6ed0f73dacb44aafe0fcccb1605c
-    m_Address: RhythmGame/Prefab/Note
+    m_Address: RhythmGame/Prefab/Note_Basic
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame

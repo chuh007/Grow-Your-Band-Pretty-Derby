@@ -83,7 +83,6 @@ namespace Code.MainSystem.Rhythm
 
         public void OnRestartButtonClicked()
         {
-            // Simply reload the scene to retry
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 

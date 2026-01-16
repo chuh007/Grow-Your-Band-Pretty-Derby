@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.Core.Bus.GameEvents.TraitEvents
 {
@@ -8,18 +7,11 @@ namespace Code.Core.Bus.GameEvents.TraitEvents
     /// </summary>
     public struct TraitShowResponded : IEvent
     {
-        /// <summary>
-        /// 조회된 활성 특성 목록
-        /// </summary>
-        public IReadOnlyList<ActiveTrait> ActiveTraits { get; }
+        public ITraitHolder Holder { get; }
 
-        /// <summary>
-        /// 특성 보유 현황 조회 결과 이벤트 생성자
-        /// </summary>
-        /// <param name="activeTraits">조회 대상 멤버가 현재 보유 중인 활성 특성 목록</param>
-        public TraitShowResponded(IReadOnlyList<ActiveTrait> activeTraits)
+        public TraitShowResponded(ITraitHolder holder)
         {
-            ActiveTraits = activeTraits;
+            Holder = holder;
         }
     }
 }

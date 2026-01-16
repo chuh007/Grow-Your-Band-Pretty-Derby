@@ -34,18 +34,19 @@ namespace Code.MainSystem.TraitSystem.Data
         public int TraitID;
         public TraitType TraitType;
         public string TraitName;
-
+        public Sprite TraitIcon;
+        
         public TraitEffectType traitEffectType;
 
         public int Level;
+        public int MaxLevel;
         public int Point;
 
         public bool IsRemovable;
         public ExpirationType ExpirationType;
 
         public List<float> Effects;
-
-        [TextArea] public string DescriptionCondition;
+        
         [TextArea] public string DescriptionEffect;
         
         [SerializeReference] public ITraitCondition Condition;
