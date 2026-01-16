@@ -28,7 +28,8 @@ namespace Code.MainSystem.TraitSystem.UI
             
             if (!System.Enum.TryParse(memberType, out MemberType parsed))
                 return;
-            
+
+            _isOpen = false;
             label.SetText($"{parsed} 특성 UI");
             selectRequiredUI.Close();
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(parsed));
