@@ -21,7 +21,6 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private GameObject panel;
         [SerializeField] private Button confirmButton;
-        [SerializeField] private Button cancelButton;
         
         private ActiveTrait _currentTrait;
         private ITraitHolder _currentHolder;
@@ -30,18 +29,12 @@ namespace Code.MainSystem.TraitSystem.UI
         {
             if (confirmButton != null)
                 confirmButton.onClick.AddListener(OnConfirmClicked);
-            
-            if (cancelButton != null)
-                cancelButton.onClick.AddListener(OnCancelClicked);
         }
 
         private void OnDestroy()
         {
             if (confirmButton != null)
                 confirmButton.onClick.RemoveListener(OnConfirmClicked);
-            
-            if (cancelButton != null)
-                cancelButton.onClick.RemoveListener(OnCancelClicked);
         }
 
         public void EnableFor(ActiveTrait trait, ITraitHolder holder)
