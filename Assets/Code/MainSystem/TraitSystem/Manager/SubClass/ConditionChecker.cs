@@ -1,0 +1,27 @@
+﻿using UnityEngine;
+using System.Collections.Generic;
+using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Runtime;
+using Code.MainSystem.TraitSystem.Interface;
+
+namespace Code.MainSystem.TraitSystem.Manager.SubClass
+{
+    public class ConditionChecker : MonoBehaviour
+    {
+        private readonly Dictionary<ConditionType, ITraitCondition> _conditions = new();
+    
+        public void RegisterCondition(ConditionType type, ITraitCondition condition)
+        {
+            _conditions[type] = condition;
+        }
+    
+        public bool CheckCondition(ITraitHolder holder, ActiveTrait trait)
+        {
+            if (trait.Data.conditionType == ConditionType.NoneCondition)
+                return true;
+            
+            return _conditions.TryGetValue(trait.Data.conditionType, out var condition) 
+                   && condition.IsMet(holder, trait);
+        }
+    }
+}
