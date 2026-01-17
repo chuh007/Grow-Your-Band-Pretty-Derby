@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEditor;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.TraitConditions;
+using Code.MainSystem.TraitSystem.TraitEffect;
 using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.Editor

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.TraitConditions;
+using Code.MainSystem.TraitSystem.TraitEffect;
 using UnityEngine.Serialization;
 
 namespace Code.MainSystem.TraitSystem.Data
