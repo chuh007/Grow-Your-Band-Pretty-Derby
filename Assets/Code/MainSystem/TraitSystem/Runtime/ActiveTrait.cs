@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Code.MainSystem.TraitSystem.Data;
-using Code.MainSystem.TraitSystem.Contexts;
 
 namespace Code.MainSystem.TraitSystem.Runtime
 {
@@ -28,30 +26,6 @@ namespace Code.MainSystem.TraitSystem.Runtime
             RemainingTurns = -1;
             
             CurrentEffects = new List<float>(data.Effects);
-        }
-        
-        public void Activate(GameContext context)
-        {
-            if (IsActive)
-                return;
-            
-            if (Data.Condition != null && !Data.Condition.IsMet(context))
-                return;
-            
-            Data.Effect?.Apply(context);
-            IsActive = true;
-
-            if (Data.ExpirationType == ExpirationType.TurnBased)
-                RemainingTurns = (int)CurrentEffects[1];
-        }
-
-        public void Deactivate(GameContext context)
-        {
-            if (!IsActive)
-                return;
-            
-            Data.Effect?.Remove(context);
-            IsActive = false;
         }
         
         public void LevelUp()
