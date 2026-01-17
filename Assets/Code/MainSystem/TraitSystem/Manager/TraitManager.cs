@@ -7,6 +7,7 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager.SubClass;
 
 namespace Code.MainSystem.TraitSystem.Manager
 {
@@ -15,6 +16,11 @@ namespace Code.MainSystem.TraitSystem.Manager
         public MemberType CurrentMember { get; private set; }
 
         private ITraitDatabase _database;
+        private ITraitValidator _validator;
+        private IPointCalculator _pointCalculator;
+        private TraitInteraction _interactionManager;
+        private TraitEffectApplicator _effectApplicator;
+
         private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
 
         private void Awake()
@@ -34,6 +40,10 @@ namespace Code.MainSystem.TraitSystem.Manager
         private void InitializeDependencies()
         {
             _database = GetComponentInChildren<ITraitDatabase>();
+            _validator = GetComponentInChildren<ITraitValidator>();
+            _pointCalculator = GetComponentInChildren<IPointCalculator>();
+            _interactionManager = GetComponentInChildren<TraitInteraction>();
+            _effectApplicator = GetComponentInChildren<TraitEffectApplicator>();
         }
 
         /// <summary>
@@ -80,6 +90,13 @@ namespace Code.MainSystem.TraitSystem.Manager
             var traitData = _database.Get(evt.TraitType);
             if (traitData is null)
                 return;
+            
+            var validation = _validator.CanAdd(holder, traitData);
+            if (!validation.IsValid)
+            {
+                //Bus<TraitAddFailed>.Raise(new TraitAddFailed(validation.Message));
+                return;
+            }
 
             TryAddTrait(holder, traitData);
         }
@@ -146,13 +163,20 @@ namespace Code.MainSystem.TraitSystem.Manager
 
             holder.AddTrait(newTrait);
 
-            if (holder.TotalPoint > holder.MaxPoints)
+            var newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
+        
+            if (newTotal > holder.MaxPoints)
             {
                 holder.BeginAdjustment(newTrait);
-                Bus<TraitOverflow>.Raise(new TraitOverflow(holder.TotalPoint, holder.MaxPoints));
+                Bus<TraitOverflow>.Raise(new TraitOverflow(newTotal, holder.MaxPoints));
             }
             else
             {
+                // 특성 효과 적용
+                ApplyTraitEffects(holder);
+                // 상호작용 처리
+                _interactionManager.ProcessAllInteractions(holder);
+            
                 ShowTraitList(holder);
             }
         }
@@ -193,11 +217,7 @@ namespace Code.MainSystem.TraitSystem.Manager
 
         private bool TryGetHolder(MemberType memberType, out ITraitHolder holder)
         {
-            if (_holders.TryGetValue(memberType, out holder))
-                return true;
-
-            Debug.LogError($"[TraitManager] {memberType}에 해당하는 TraitHolder를 찾을 수 없습니다.");
-            return false;
+            return _holders.TryGetValue(memberType, out holder);
         }
 
         #endregion
@@ -217,10 +237,17 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         public bool HasTrait(MemberType memberType, TraitType traitType)
         {
-            if (!_holders.TryGetValue(memberType, out var holder))
-                return false;
-
-            return holder.ActiveTraits.Any(t => t.Data.TraitType == traitType);
+            return _holders.TryGetValue(memberType, out var holder) && holder.ActiveTraits.Any(t => t.Data.TraitType == traitType);
+        }
+        
+        public void ApplyTraitEffects(ITraitHolder holder, TraitEffectType traitEffectType)
+        {
+            _effectApplicator.ApplyEffects(holder, traitEffectType);
+        }
+    
+        private void ApplyTraitEffects(ITraitHolder holder)
+        {
+            _effectApplicator.ApplyEffects(holder, TraitEffectType.Passive);
         }
 
         #endregion

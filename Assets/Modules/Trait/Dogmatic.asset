@@ -21,7 +21,7 @@ MonoBehaviour:
   MaxLevel: 10
   Point: -5
   IsRemovable: 0
-  ExpirationType: 0
+  conditionType: 0
   Effects: []
   DescriptionEffect: "\uD569\uC8FC\uC758 \uD6A8\uACFC -50%"
   Condition:
@@ -31,9 +31,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 7082446202403815497
       type: {class: TestCondition, ns: Code.MainSystem.TraitSystem.TraitConditions, asm: Assembly-CSharp}
-      data: 
     - rid: 7082446202403815498
       type: {class: TestEffect, ns: Code.MainSystem.TraitSystem.TraitEffect, asm: Assembly-CSharp}
-      data: 
