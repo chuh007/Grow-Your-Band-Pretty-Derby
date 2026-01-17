@@ -15,7 +15,12 @@ MonoBehaviour:
   type: 2
   outingEvents:
   - type: 2
-    place: 2
+    place: 0
     weight: 1
     isImportance: 0
-    dialogue: {fileID: 11400000, guid: 4359f7718cb40d349b85fee735ff466e, type: 2}
+    dialogue: {fileID: 11400000, guid: 729da69877e80d042a74fdc662708c6f, type: 2}
+  - type: 2
+    place: 0
+    weight: 10
+    isImportance: 0
+    dialogue: {fileID: 11400000, guid: 14ba74c0c6e29d945b0f1d971a53686e, type: 2}

@@ -18,7 +18,8 @@ namespace Code.MainSystem.Outing
         [SerializeField] private Button closeButton;
         
         // 포메팅용. 스텟 이름은 일반 텍스트. 증가량은 녹색
-        private static readonly string RESULT_FORMAT = "{0} <color=#00FFAC>+{1}</color>"; 
+        private static readonly string RESULT_FORMAT = "{0} <color=#00FFAC>+{1}</color>";
+        private static readonly string SKILL_RESULT_FORMAT = "<color=#00FFAC>{0}</color> 획득";
         
         public void ShowResultUI()
         {
@@ -30,6 +31,11 @@ namespace Code.MainSystem.Outing
             {
                 resultBuilder.Append(string.Format(RESULT_FORMAT, stat.targetStat.ToString(), stat.variation));
                 resultBuilder.AppendLine();
+            }
+            
+            foreach (var skill in resultSender.addedTraits)
+            {
+                resultBuilder.Append(string.Format(SKILL_RESULT_FORMAT, skill.ToString()));
             }
             resultText.SetText(resultBuilder.ToString());
         }

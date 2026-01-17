@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5834baa11b7e4df7852c768540b3796e, type: 3}
-  m_Name: BassParkDefault
+  m_Name: VocalParkDefault
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
   - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}

@@ -2,6 +2,7 @@
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.DialogueEvents;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -19,13 +20,16 @@ namespace Code.MainSystem.Outing
         private void Awake()
         {
             Bus<DialogueStatUpgradeEvent>.OnEvent += HandleDialogueStatUpgrade;
+            Bus<DialogueGetSkillEvent>.OnEvent += HandleDialogueSkillGet;
             Bus<DialogueEndEvent>.OnEvent += HandleDialogueEnd;
             resultSender.changeStats.Clear();
+            resultSender.addedTraits.Clear();
         }
 
         private void OnDestroy()
         {
             Bus<DialogueStatUpgradeEvent>.OnEvent -= HandleDialogueStatUpgrade;
+            Bus<DialogueGetSkillEvent>.OnEvent -= HandleDialogueSkillGet;
             Bus<DialogueEndEvent>.OnEvent += HandleDialogueEnd;
         }
         
@@ -49,6 +53,11 @@ namespace Code.MainSystem.Outing
         {
             resultSender.changeStats.Add
                 (new StatVariation{targetStat = evt.StatType, variation = evt.StatValue});
+        }
+        
+        private void HandleDialogueSkillGet(DialogueGetSkillEvent evt)
+        {
+            resultSender.addedTraits.Add(evt.TraitType);
         }
         
         private void HandleDialogueEnd(DialogueEndEvent evt)
