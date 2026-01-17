@@ -1,22 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Code.MainSystem.TraitSystem.Interface;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.TraitSystem.Data
 {
+    // 효과 적용 시점 정의
     public enum TraitEffectType
     {
-        Training, Performance, Etc
+        OnTurnStart,
+        OnActionSelect,
+        OnActionExecute,
+        OnActionComplete,
+        OnTurnEnd,
+        Passive // 항상 적용
     }
     
-    public enum ExpirationType
+    public enum ConditionType
     {
-        None, TurnBased, EventBased, ConditionBased
+        NoneCondition, TurnBased, EventBased, ConditionBased
     }
 
     public enum TraitType
     {
-        None,                   // 특성 없음
+        NoneTrait,                   // 특성 없음
         Telepathy,              // 이심전심
         LoneGuitarist,          // 고독한 기타리스트
         ShiningEyes,            // 반짝이는 눈
@@ -43,7 +50,7 @@ namespace Code.MainSystem.TraitSystem.Data
         public int Point;
 
         public bool IsRemovable;
-        public ExpirationType ExpirationType;
+        public ConditionType conditionType;
 
         public List<float> Effects;
         
