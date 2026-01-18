@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.TraitConditions;
 
 namespace Code.MainSystem.TraitSystem.Manager.SubClass
 {
