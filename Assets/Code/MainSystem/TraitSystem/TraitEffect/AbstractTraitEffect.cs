@@ -1,4 +1,6 @@
-﻿using Code.MainSystem.TraitSystem.Runtime;
+﻿using UnityEngine;
+using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Runtime;
 using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
@@ -6,8 +8,10 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// TraitEffect 추상 베이스 클래스
     /// </summary>
-    public abstract class TraitEffect : ITraitEffect
+    public abstract class AbstractTraitEffect : MonoBehaviour, ITraitEffect
     {
+        public TraitEffectType EffectType { get; private set; }
+        
         public void Apply(ITraitHolder holder, ActiveTrait trait)
         {
             if (!CanApply(holder, trait))
