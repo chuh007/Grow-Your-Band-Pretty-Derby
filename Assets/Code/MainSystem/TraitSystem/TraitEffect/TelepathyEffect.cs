@@ -3,21 +3,21 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class TelepathyEffect : ITraitEffect
+    public class TelepathyEffect : AbstractTraitEffect
     {
-        public void Apply(ITraitHolder holder, ActiveTrait trait)
+        public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
+        {
+            return false;
+        }
+
+        protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
             
         }
 
-        public void Remove(ITraitHolder holder, ActiveTrait trait)
+        protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
             
-        }
-
-        public bool CanApply(ITraitHolder holder, ActiveTrait trait)
-        {
-            return true;
         }
     }
 }

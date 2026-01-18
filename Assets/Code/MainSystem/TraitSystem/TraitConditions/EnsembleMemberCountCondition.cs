@@ -3,9 +3,9 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitConditions
 {
-    public class EnsembleMemberCountCondition : ITraitCondition
+    public class EnsembleMemberCountCondition : AbstractTraitCondition
     {
-        public bool IsMet(ITraitHolder holder, ActiveTrait trait)
+        protected override bool CheckCondition(ITraitHolder holder, ActiveTrait trait)
         {
             return true;
         }
