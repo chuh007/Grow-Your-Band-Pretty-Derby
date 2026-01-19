@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: RhythmGame
   m_GUID: 840d0df9a0b0a2e49906ec70398eb5d4
   m_SerializeEntries:
+  - m_GUID: 050e3cf6781768241a01af2490b5af14
+    m_Address: RhythmGame/Environment/Busking
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0e29468124457dd4aa30198d045703fd
     m_Address: RhythmGame/Chart/TestSong/Drums
     m_ReadOnly: 0
@@ -33,8 +39,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2c757dc6e1f3d8242aae1b5d4791909a
-    m_Address: RhythmGame/Environment/Busking
+  - m_GUID: 2a7fb2c3791dc4b40b4de043f221008e
+    m_Address: RhythmGame/Prefab/AudienceMember
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame

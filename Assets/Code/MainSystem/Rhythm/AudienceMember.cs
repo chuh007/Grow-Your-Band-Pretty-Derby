@@ -36,9 +36,16 @@ namespace Code.MainSystem.Rhythm
 
         public void Initialize(Sprite sprite)
         {
-            if (sprite != null) _renderer.sprite = sprite;
-            _animator.SetBool(IsWalking, false);
-            _animator.SetBool(IsCheering, false);
+            if (_renderer == null) _renderer = GetComponentInChildren<SpriteRenderer>();
+            if (_animator == null) _animator = GetComponentInChildren<Animator>();
+
+            if (sprite != null && _renderer != null) _renderer.sprite = sprite;
+            
+            if (_animator != null)
+            {
+                _animator.SetBool("WALK", false);
+                _animator.SetBool("CHEER", false);
+            }
         }
 
         public async UniTaskVoid MoveToSeatAsync(Vector3 targetPos)

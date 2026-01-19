@@ -75,9 +75,11 @@ namespace Code.MainSystem.Rhythm
             GameObject obj = Instantiate(_audiencePrefabSource, spawnPoint.position, Quaternion.identity, transform);
             var member = obj.GetComponent<AudienceMember>();
 
-            Sprite sprite = audienceSprites.Count > 0 
-                ? audienceSprites[Random.Range(0, audienceSprites.Count)] 
-                : null;
+            // Sprite sprite = audienceSprites.Count > 0 
+            //     ? audienceSprites[Random.Range(0, audienceSprites.Count)] 
+            //     : null;
+            
+            Sprite sprite = audienceSprites[0];
             
             member.Initialize(sprite);
 

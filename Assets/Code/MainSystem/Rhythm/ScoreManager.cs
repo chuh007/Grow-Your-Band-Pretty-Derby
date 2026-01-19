@@ -23,7 +23,21 @@ namespace Code.MainSystem.Rhythm
 
         private void Start()
         {
+            ResetScore();
             Bus<SongEndEvent>.OnEvent += HandleSongEnd;
+        }
+
+        public void ResetScore()
+        {
+            CurrentScore = 0;
+            CurrentCombo = 0;
+            _maxCombo = 0;
+            _perfectCount = 0;
+            _greatCount = 0;
+            _goodCount = 0;
+            _missCount = 0;
+
+            Bus<ScoreUpdateEvent>.Raise(new ScoreUpdateEvent(0, 0, JudgementType.Perfect, -1));
         }
 
         private void OnDestroy()
