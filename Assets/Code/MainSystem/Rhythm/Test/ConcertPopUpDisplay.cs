@@ -8,7 +8,7 @@ namespace Code.MainSystem.Rhythm.Test
 
 
         public void DisplayConcertPopUp()
-        {
+        { 
             concertPopUp.SetActive(true);
         }
 
