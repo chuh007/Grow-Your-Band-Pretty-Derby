@@ -10,13 +10,13 @@ namespace Code.MainSystem.TraitSystem.UI
 
         protected virtual void Show()
         {
-            _overlayUI.OnPanelOpened();
+            _overlayUI.OnPanelOpened(panel);
             panel.SetActive(true);
         }
 
         protected virtual void Hide()
         {
-            _overlayUI.OnPanelClosed();
+            _overlayUI.OnPanelClosed(panel);
             panel.SetActive(false);
         }
 

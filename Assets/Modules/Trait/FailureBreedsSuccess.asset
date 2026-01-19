@@ -21,7 +21,7 @@ MonoBehaviour:
   MaxLevel: 10
   Point: 8
   IsRemovable: 0
-  ExpirationType: 0
+  conditionType: 0
   Effects: []
   DescriptionEffect: "\uD6C8\uB828 \uC2E4\uD328 \uC2DC \u2018\uC601\uAC10\u2019\uC744
     N1 \uC5BB\uB294\uB2E4. \u2018\uC601\uAC10\u2019 \uC218\uCE58\uAC00 N2\uC774\uBA74
@@ -33,9 +33,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 7082446202403815507
       type: {class: TestCondition, ns: Code.MainSystem.TraitSystem.TraitConditions, asm: Assembly-CSharp}
-      data: 
     - rid: 7082446202403815508
       type: {class: TestEffect, ns: Code.MainSystem.TraitSystem.TraitEffect, asm: Assembly-CSharp}
-      data: 

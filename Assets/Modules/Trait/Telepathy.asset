@@ -21,7 +21,7 @@ MonoBehaviour:
   MaxLevel: 10
   Point: 5
   IsRemovable: 0
-  ExpirationType: 0
+  conditionType: 0
   Effects:
   - 50
   - 40
@@ -36,9 +36,9 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 7082446202403815501
       type: {class: TestCondition, ns: Code.MainSystem.TraitSystem.TraitConditions, asm: Assembly-CSharp}
-      data: 
     - rid: 7082446202403815502
       type: {class: TestEffect, ns: Code.MainSystem.TraitSystem.TraitEffect, asm: Assembly-CSharp}
-      data: 

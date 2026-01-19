@@ -1,165 +1,93 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using Code.MainSystem.TraitSystem.Data;
-using Code.MainSystem.TraitSystem.Interface;
 using UnityEngine;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+using Code.MainSystem.TraitSystem.Data;
 
 namespace Code.MainSystem.TraitSystem.Editor
 {
     [CustomEditor(typeof(TraitDataSO))]
     public class TraitDataSOEditor : UnityEditor.Editor
     {
-        private SerializedProperty _condition;
-        private SerializedProperty _effect;
+        [SerializeField] private VisualTreeAsset view = default;
+        
+        private TraitDataSO _targetSO;
+        private VisualElement _root;
+        private List<string> _cachedDerivedTypes;
 
-        private void OnEnable()
+        public override VisualElement CreateInspectorGUI()
         {
-            _condition = serializedObject.FindProperty("Condition");
-            _effect = serializedObject.FindProperty("Effect");
+            _targetSO = target as TraitDataSO;
+            _root = new VisualElement();
+            
+            InspectorElement.FillDefaultInspector(_root, serializedObject, this);
+            
+            view.CloneTree(_root);
+            
+            _cachedDerivedTypes = GetDerivedTypes(typeof(TraitEffect.AbstractTraitEffect));
+            
+            MakeTraitEffectDropdown();
+            MakeTraitConditionDropdown();
+            
+            _root.Q<Button>("ValidateBtn").clicked += OnValidateButtonClicked;
+            
+            return _root;
         }
 
-        public override void OnInspectorGUI()
+        private void OnValidateButtonClicked()
         {
-            serializedObject.Update();
-            
-            DrawDefaultInspector();
-
-            EditorGUILayout.Space(20);
-            EditorGUILayout.LabelField("Condition Setup", EditorStyles.boldLabel);
-            DrawConditionSection();
-
-            EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("Effect Setup", EditorStyles.boldLabel);
-            DrawEffectSection();
-
-            serializedObject.ApplyModifiedProperties();
+            bool message = _targetSO.InitializeTrait();
+            EditorUtility.DisplayDialog("Result", message ? "Success" : "Fail", "OK");
+        }
+        
+        private List<string> GetDerivedTypes(Type baseType)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assem => assem.GetTypes())
+                .Where(type => type.IsSubclassOf(baseType) && !type.IsAbstract)
+                .Select(type => type.AssemblyQualifiedName)
+                .ToList();
         }
 
-        private void DrawConditionSection()
+        private void MakeTraitEffectDropdown()
         {
-            var trait = (TraitDataSO)target;
-            
-            if (trait.Condition != null)
-            {
-                EditorGUILayout.HelpBox($"Current: {trait.Condition.GetType().Name}", MessageType.Info);
-                
-                DrawSerializeReferenceFields(_condition);
-
-                if (GUILayout.Button("Remove Condition", GUILayout.Height(25)))
-                {
-                    Undo.RecordObject(trait, "Remove Condition");
-                    trait.Condition = null;
-                    EditorUtility.SetDirty(trait);
-                }
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("No condition set (always active)", MessageType.Warning);
-            }
-            
-            if (GUILayout.Button("Add/Change Condition", GUILayout.Height(30)))
-            {
-                ShowConditionMenu(trait);
-            }
+            DropdownField dropdown = _root.Q<DropdownField>("EffectDropdown");
+            SetupDropdown(dropdown, _cachedDerivedTypes, _targetSO.effectName, 
+                newValue => _targetSO.effectName = newValue);
         }
 
-        private void DrawEffectSection()
+        private void MakeTraitConditionDropdown()
         {
-            var trait = (TraitDataSO)target;
+            DropdownField dropdown = _root.Q<DropdownField>("ConditionDropdown");
             
-            if (trait.Effect != null)
-            {
-                EditorGUILayout.HelpBox($"Current: {trait.Effect.GetType().Name}", MessageType.Info);
-                
-                DrawSerializeReferenceFields(_effect);
-
-                if (GUILayout.Button("Remove Effect", GUILayout.Height(25)))
-                {
-                    Undo.RecordObject(trait, "Remove Effect");
-                    trait.Effect = null;
-                    EditorUtility.SetDirty(trait);
-                }
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("No effect set", MessageType.Warning);
-            }
-            
-            if (GUILayout.Button("Add/Change Effect", GUILayout.Height(30)))
-                ShowEffectMenu(trait);
+            SetupDropdown(dropdown, _cachedDerivedTypes, _targetSO.conditionName, 
+                newValue => _targetSO.conditionName = newValue);
         }
-
-        private void ShowConditionMenu(TraitDataSO trait)
+        
+        private void SetupDropdown(DropdownField dropdown, List<string> choices, string currentValue, Action<string> onValueChanged)
         {
-            var menu = new GenericMenu();
+            dropdown.choices = choices;
             
-            var conditionTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => typeof(ITraitCondition).IsAssignableFrom(type)
-                               && !type.IsInterface
-                               && !type.IsAbstract);
-
-            foreach (var type in conditionTypes)
+            if (!dropdown.choices.Contains(currentValue))
             {
-                var typeName = type.Name.Replace("Condition", "");
-                menu.AddItem(new GUIContent(typeName), false, () =>
-                {
-                    Undo.RecordObject(trait, "Change Condition");
-                    trait.Condition = (ITraitCondition)Activator.CreateInstance(type);
-                    EditorUtility.SetDirty(trait);
-                });
+                currentValue = dropdown.choices.Count > 0 
+                    ? dropdown.choices.First() 
+                    : string.Empty;
+                    
+                onValueChanged(currentValue);
+                EditorUtility.SetDirty(_targetSO);
             }
 
-            menu.ShowAsContext();
-        }
-
-        private void ShowEffectMenu(TraitDataSO trait)
-        {
-            var menu = new GenericMenu();
+            dropdown.value = currentValue;
             
-            var effectTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => typeof(ITraitEffect).IsAssignableFrom(type)
-                               && !type.IsInterface
-                               && !type.IsAbstract);
-
-            foreach (var type in effectTypes)
+            dropdown.RegisterValueChangedCallback(evt =>
             {
-                var typeName = type.Name.Replace("Effect", "");
-                menu.AddItem(new GUIContent(typeName), false, () =>
-                {
-                    Undo.RecordObject(trait, "Change Effect");
-                    trait.Effect = (ITraitEffect)Activator.CreateInstance(type);
-                    EditorUtility.SetDirty(trait);
-                });
-            }
-
-            menu.ShowAsContext();
-        }
-
-        private void DrawSerializeReferenceFields(SerializedProperty property)
-        {
-            if (property.managedReferenceValue == null)
-                return;
-
-            EditorGUI.indentLevel++;
-
-            SerializedProperty iterator = property.Copy();
-            SerializedProperty endProperty = iterator.GetEndProperty();
-
-            bool enterChildren = true;
-
-            while (iterator.NextVisible(enterChildren))
-            {
-                if (SerializedProperty.EqualContents(iterator, endProperty))
-                    break;
-
-                EditorGUILayout.PropertyField(iterator, true);
-                enterChildren = false;
-            }
-
-            EditorGUI.indentLevel--;
+                onValueChanged(evt.newValue);
+                EditorUtility.SetDirty(_targetSO);
+            });
         }
     }
 }
