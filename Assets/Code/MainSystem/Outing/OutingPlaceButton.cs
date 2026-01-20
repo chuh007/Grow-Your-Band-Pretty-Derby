@@ -1,15 +1,19 @@
 ﻿using System;
+using Code.MainSystem.Dialogue;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Code.MainSystem.Outing
 {
     [RequireComponent(typeof(SceneLoadButton))]
-    public class OutingPlaceButton : MonoBehaviour
+    public class OutingPlaceButton : MonoBehaviour, IPointerEnterHandler
     {
         [SerializeField] private OutingResultSenderSO sender;
         [SerializeField] private OutingDataController dataController;
+        [SerializeField] private OutingForceController forceController;
         [SerializeField] private OutingPlace outingPlace;
-
+        
+        [SerializeField] private DialogueInformationSO defaultDialogue;
         
         private SceneLoadButton _loadButton;
 
@@ -20,8 +24,19 @@ namespace Code.MainSystem.Outing
 
         public void Click()
         {
-            sender.selectedEvent = dataController.GetMemberOutingData(sender.targetMember.memberType, outingPlace);
+            var evt = dataController.GetMemberOutingData(sender.targetMember.memberType, outingPlace);
+            sender.selectedEvent = evt;
+            if (evt == null)
+            {
+                // 기본 처리를 해야함
+                return;
+            }
             _loadButton.SceneLoadAdditive("OutingScene");
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            forceController.SetCamera(outingPlace);
         }
     }
 }

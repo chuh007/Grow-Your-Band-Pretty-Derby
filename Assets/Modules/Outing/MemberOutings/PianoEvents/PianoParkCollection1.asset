@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5834baa11b7e4df7852c768540b3796e, type: 3}
+  m_Name: PianoParkCollection1
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
+  <DialogueBackground>k__BackingField:
+  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  <DialogueDetails>k__BackingField:
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: "\uB09C \uC21C\uAC04 \uC790\uB9AC\uB97C \uBC15\uCC28\uACE0
+      \uC77C\uC5B4\uB098 \uD53C\uC544\uB178\uB85C \uD5A5\uD588\uB2E4."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: "\uADF8\uB9AC\uACE0 \uD53C\uC544\uB178\uB97C
+      \uC5F0\uC8FC\uD558\uACE0 \uC788\uB358 \uAC1C\uC790\uC2DD\uC744 \uC788\uB294
+      \uD798\uAECF \uC790\uB9AC\uC5D0\uC11C \uBC00\uCCD0\uB0C8\uB2E4. \uB0B4 \uBA38\uB9AC\uD1B5\uC744
+      \uD53C\uC544\uB178 \uAC74\uBC18 \uC704\uC5D0 \uBBF8\uCE5C \uB4EF\uC774 \uB450\uB4DC\uB838\uB2E4."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField:
+    - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: "\uC774\uC5B4\uC11C \uC67C\uD314\uC744 \uBE44\uD2C0\uACE0
+      \uAEBE\uC5B4 \uC67C\uC190\uC744 \uAC74\uBC18\uC5D0 \uC9D3\uBB49\uAC30\uB2E4.
+      \uC785\uC744 \uBC8C\uB824 \uD53C\uC544\uB178\uC758 \uBAA8\uC11C\uB9AC\uC5D0
+      \uBC15\uC558\uB2E4. \uC774\uBE68\uC774 \uBD80\uB7EC\uC9C0\uACE0 \uBF51\uD788\uBA70
+      \uD53C\uC544\uB178\uC5D0 \uBC15\uD78C\uB2E4."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField:
+    - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: "\uC628\uBAB8\uC744 \uD53C\uC544\uB178\uC5D0
+      \uBB38\uB300\uACE0 \uB0B4\uB9AC\uCE58\uACE0 \uAC08\uC544\uB0B8\uB2E4.\r\n\uC9C0\uAE08\uAECF
+      \uD53C\uC544\uB178\uC5D0\uC11C \uB4E3\uC9C0 \uBABB\uD588\uB358 \uC804\uD600
+      \uB2E4\uB978 \uC18C\uB9AC\uAC00 \uB4E4\uB824\uC628\uB2E4."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField:
+    - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}

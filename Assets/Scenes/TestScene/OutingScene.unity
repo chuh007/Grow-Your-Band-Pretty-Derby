@@ -152,11 +152,11 @@ RectTransform:
   - {fileID: 1484480040}
   m_Father: {fileID: 1522510041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: 350}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: 50}
   m_SizeDelta: {x: 400, y: 150}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &123459284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,6 +500,50 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &536720763
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 536720764}
+  - component: {fileID: 536720765}
+  m_Layer: 5
+  m_Name: NameDummy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &536720764
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536720763}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1522510041}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -300, y: 350}
+  m_SizeDelta: {x: 400, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &536720765
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536720763}
+  m_CullTransparentMesh: 1
 --- !u!1 &594969137
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,7 +735,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC218\uB9CE\uC740\uB354\uBBF8\uD14D\uC2A4\uD2B8\uC758\uD5A5\uC5F0\uC774\uAC78\uACC4\uC18D\uC801\uC73C\uBA74\uC904\uBC14\uAFC8\uC774\uB420\uAE4C\uB418\uB124\n"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0a0a26d1d17db4a4083466cb38510deb, type: 2}
   m_sharedMaterial: {fileID: -13652927414394703, guid: 0a0a26d1d17db4a4083466cb38510deb, type: 2}
@@ -800,11 +844,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1620158007}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 270, y: 300}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -100, y: 50}
   m_SizeDelta: {x: 540, y: 200}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 1}
 --- !u!1 &969281943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,7 +1099,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAE40\uAE30\uD0C0"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0a0a26d1d17db4a4083466cb38510deb, type: 2}
   m_sharedMaterial: {fileID: -13652927414394703, guid: 0a0a26d1d17db4a4083466cb38510deb, type: 2}
@@ -1166,6 +1210,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 123459283}
+  - {fileID: 536720764}
   - {fileID: 610019991}
   - {fileID: 1620158007}
   m_Father: {fileID: 1375993928}
@@ -1263,11 +1308,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1620158007}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -270, y: 300}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: 50}
   m_SizeDelta: {x: 540, y: 200}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!1 &1555156795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1604,7 +1649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.UI.DialogueUIManager
   dialogueUIParent: {fileID: 1244238674}
   dialogueBox: {fileID: 1522510040}
-  nameTag: {fileID: 123459282}
+  nameTag: {fileID: 536720763}
   backgroundImage: {fileID: 1650807111}
   characterImage: {fileID: 258138203}
   nameText: {fileID: 1484480041}

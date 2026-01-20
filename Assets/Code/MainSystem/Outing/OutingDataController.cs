@@ -25,9 +25,11 @@ namespace Code.MainSystem.Outing
         
         private void Awake()
         {
+            Bus<AddOutingEvent>.OnEvent += HandleAddOuting;
+            Bus<OutingEndEvent>.OnEvent += HandleOutingEnd;
+            
             _memberRealOuting = new Dictionary<(MemberType, OutingPlace), DialogueInformationSO>();
             _outingEvents = new Dictionary<(MemberType, OutingPlace), List<OutingEvent>>();
-            Bus<OutingEndEvent>.OnEvent += HandleOutingEnd;
 
             foreach (MemberType type in Enum.GetValues(typeof(MemberType)))
             {
@@ -45,7 +47,10 @@ namespace Code.MainSystem.Outing
                     _outingEvents[(outingEvent.type, outingEvent.place)].Add(outingEvent);
                 }
             }
-            
+        }
+
+        private void Start()
+        {
             foreach (MemberType type in Enum.GetValues(typeof(MemberType)))
             {
                 foreach (OutingPlace place in Enum.GetValues(typeof(OutingPlace)))
@@ -54,12 +59,19 @@ namespace Code.MainSystem.Outing
                 }
             }
         }
-        
+
         private void OnDestroy()
         {
             Bus<OutingEndEvent>.OnEvent -= HandleOutingEnd;
+            Bus<AddOutingEvent>.OnEvent -= HandleAddOuting;
         }
-
+        
+        private void HandleAddOuting(AddOutingEvent evt)
+        {
+            _outingEvents[(evt.Event.type, evt.Event.place)].Add(evt.Event);
+            // SetMemberOutingData(evt.Event.type, evt.Event.place);
+        }
+        
         private void HandleOutingEnd(OutingEndEvent evt)
         {
             Debug.Log("Outing End");

@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/TestScene/OutingScene.unity
     guid: d75aecf854e1a5947b5b535246fcee99
   - enabled: 1
+    path: Assets/Scenes/TestScene/OutingTestScene.unity
+    guid: ca99b7f9237f6ca4091db127a4223c13
+  - enabled: 1
     path: Assets/Scenes/TestScene/Rhythm.unity
     guid: e5358a7d5c6f7a44eb6d0c372e86ba49
   - enabled: 1

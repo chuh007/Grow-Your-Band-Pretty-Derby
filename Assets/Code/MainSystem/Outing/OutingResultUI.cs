@@ -39,7 +39,7 @@ namespace Code.MainSystem.Outing
             }
             resultText.SetText(resultBuilder.ToString());
         }
-
+        
         private void CloseOutingScene()
         {
             closeButton.onClick.RemoveAllListeners();

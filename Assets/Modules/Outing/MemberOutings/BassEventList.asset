@@ -22,5 +22,5 @@ MonoBehaviour:
   - type: 2
     place: 0
     weight: 10
-    isImportance: 0
+    isImportance: 1
     dialogue: {fileID: 11400000, guid: 14ba74c0c6e29d945b0f1d971a53686e, type: 2}
