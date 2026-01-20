@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="Container" style="flex-grow: 1;">
+        <ui:DropdownField label="Condition" name="ConditionDropdown" binding-path="conditionName" />
+        <ui:DropdownField label="Effect" name="EffectDropdown" binding-path="effectName" />
+        <ui:VisualElement name="ValidateBox" style="flex-direction: row; justify-content: space-between; margin-top: 20px;">
+            <ui:Label text="검증을 위해 Validate를 누르세요" />
+            <ui:Button text="Validate" name="ValidateBtn" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
