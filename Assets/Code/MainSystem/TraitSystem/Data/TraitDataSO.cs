@@ -65,36 +65,28 @@ namespace Code.MainSystem.TraitSystem.Data
 
         [HideInInspector] public string conditionName;
         [HideInInspector] public string effectName;
-
-        [HideInInspector] public string conditionTypeName;
-        [HideInInspector] public string effectTypeName;
-
-        private Action<AbstractTraitCondition> _traitConditionSetter;
-        private Action<AbstractTraitEffect> _traitEffectSetter;
+        
+        [NonSerialized] public Action<AbstractTraitCondition> TraitConditionSetter;
+        
+        [NonSerialized] public Action<AbstractTraitEffect> TraitEffectSetter;
 
         public bool InitializeTrait()
         {
-            return ConditionFactory() && EffectFactory();
-        }
-
-        public void ApplyCondition(AbstractTraitCondition condition)
-        {
-            _traitConditionSetter?.Invoke(condition);
-        }
-
-        public void ApplyEffect(AbstractTraitEffect effect)
-        {
-            _traitEffectSetter?.Invoke(effect);
+            bool conditionResult = ConditionFactory();
+            bool effectResult = EffectFactory();
+            
+            return conditionResult && effectResult;
         }
 
         private bool ConditionFactory()
         {
-            var parentType = typeof(AbstractTraitCondition);
-            var traitType = FindType(conditionName);
+            Type parentType = typeof(AbstractTraitCondition);
+            Type traitType = FindType(conditionName);
+            
             if (traitType == null || !parentType.IsAssignableFrom(traitType))
                 return false;
 
-            var targetField = traitType.GetField(conditionTypeName, bindingFlags);
+            FieldInfo targetField = traitType.GetField("conditionType", bindingFlags);
             if (targetField == null || targetField.FieldType != typeof(ConditionType))
                 return false;
 
@@ -103,31 +95,32 @@ namespace Code.MainSystem.TraitSystem.Data
             MemberExpression fieldAccess = Expression.Field(casted, targetField);
             ConstantExpression value = Expression.Constant(conditionType);
             BinaryExpression assign = Expression.Assign(fieldAccess, value);
-
-            _traitConditionSetter = Expression.Lambda<Action<AbstractTraitCondition>>(assign, param).Compile();
+            
+            TraitConditionSetter = Expression.Lambda<Action<AbstractTraitCondition>>(assign, param).Compile();
 
             return true;
         }
 
         private bool EffectFactory()
         {
-            var parentType = typeof(AbstractTraitEffect);
-            var traitType = FindType(effectName);
+            Type parentType = typeof(AbstractTraitEffect);
+            Type traitType = FindType(effectName);
+            
             if (traitType == null || !parentType.IsAssignableFrom(traitType))
                 return false;
 
-            var targetField = traitType.GetField(effectTypeName, bindingFlags);
+            FieldInfo targetField = traitType.GetField("effectType", bindingFlags);
             if (targetField == null || targetField.FieldType != typeof(TraitEffectType))
                 return false;
-
+            
             ParameterExpression param = Expression.Parameter(parentType, "effect");
             UnaryExpression casted = Expression.Convert(param, traitType);
             MemberExpression fieldAccess = Expression.Field(casted, targetField);
             ConstantExpression value = Expression.Constant(traitEffectType);
             BinaryExpression assign = Expression.Assign(fieldAccess, value);
-
-            _traitEffectSetter = Expression.Lambda<Action<AbstractTraitEffect>>(assign, param).Compile();
-
+            
+            TraitEffectSetter = Expression.Lambda<Action<AbstractTraitEffect>>(assign, param).Compile();
+            
             return true;
         }
 
@@ -139,7 +132,7 @@ namespace Code.MainSystem.TraitSystem.Data
             return AppDomain.CurrentDomain
                 .GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .FirstOrDefault(t => t.FullName == fullName);
+                .FirstOrDefault(t => t.FullName == fullName || t.AssemblyQualifiedName == fullName);
         }
     }
 }
