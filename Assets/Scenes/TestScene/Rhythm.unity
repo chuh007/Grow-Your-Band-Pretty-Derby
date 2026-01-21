@@ -562,6 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.Test.ScoreAutoIncreaser
   _autoPlay: 1
+  _startDelay: 3
   _interval: 0.1
   _simulateType: 0
 --- !u!4 &503101452
@@ -639,8 +640,8 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
-  orthographic: 1
+  field of view: 40
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -665,13 +666,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 532965593}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: 0.3420201, y: 0, z: 0, w: 0.9396927}
+  m_LocalPosition: {x: 0, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
 --- !u!114 &532965597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1356,67 +1357,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!1001 &708449864600738656
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 187454734017481342, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 534339454722682935, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: m_Name
-      value: Env_Busking
-      objectReference: {fileID: 0}
-    - target: {fileID: 3853702398357515897, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
-      propertyPath: targetScore
-      value: 10000
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 050e3cf6781768241a01af2490b5af14, type: 3}
 --- !u!1001 &4935207881685999598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1996,6 +1936,5 @@ SceneRoots:
   - {fileID: 532965596}
   - {fileID: 315496690}
   - {fileID: 345081631}
-  - {fileID: 708449864600738656}
   - {fileID: 1048804080}
   - {fileID: 503101452}

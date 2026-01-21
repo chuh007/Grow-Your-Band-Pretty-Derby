@@ -4,6 +4,13 @@ using Cysharp.Threading.Tasks;
 
 namespace Code.MainSystem.Rhythm
 {
+    public enum AudienceState
+    {
+        Idle,
+        Walk,
+        Cheer
+    }
+
     public class AudienceMember : MonoBehaviour
     {
         [Header("Components")]
@@ -13,25 +20,31 @@ namespace Code.MainSystem.Rhythm
         [Header("Settings")]
         [SerializeField] private float _moveSpeed = 3f;
         [SerializeField] private float _jumpPower = 0.5f;
+
+        [Header("Animation Settings")]
+        [SerializeField] private string _paramIdle = "IDLE";
+        [SerializeField] private string _paramWalk = "MOVE";
+        [SerializeField] private string _paramCheer = "CHEER";
         
-        private static readonly int IsWalking = Animator.StringToHash("WALK");
-        private static readonly int IsCheering = Animator.StringToHash("CHEER");
+        [Header("Cheer Settings")]
+        [SerializeField] private float _cheerJumpPower = 0.3f;
+        [SerializeField] private float _cheerIntervalMin = 0.5f;
+        [SerializeField] private float _cheerIntervalMax = 1.5f;
 
-        private Transform _cameraTransform;
+        private int _hashIdle;
+        private int _hashWalk;
+        private int _hashCheer;
 
-        private void Start()
+        private bool _isMoving;
+        private bool _shouldBeCheering;
+        private bool _isCheeringLoop;
+        private AudienceState _currentState;
+
+        private void Awake()
         {
-            if (Camera.main != null) _cameraTransform = Camera.main.transform;
-        }
-
-        private void LateUpdate()
-        {
-            if (_cameraTransform != null)
-            {
-                Vector3 targetPos = transform.position + _cameraTransform.rotation * Vector3.forward;
-                Vector3 targetOrientation = new Vector3(targetPos.x, transform.position.y, targetPos.z);
-                transform.LookAt(targetOrientation);
-            }
+            _hashIdle = Animator.StringToHash(_paramIdle);
+            _hashWalk = Animator.StringToHash(_paramWalk);
+            _hashCheer = Animator.StringToHash(_paramCheer);
         }
 
         public void Initialize(Sprite sprite)
@@ -39,18 +52,50 @@ namespace Code.MainSystem.Rhythm
             if (_renderer == null) _renderer = GetComponentInChildren<SpriteRenderer>();
             if (_animator == null) _animator = GetComponentInChildren<Animator>();
 
+            _hashIdle = Animator.StringToHash(_paramIdle);
+            _hashWalk = Animator.StringToHash(_paramWalk);
+            _hashCheer = Animator.StringToHash(_paramCheer);
+
             if (sprite != null && _renderer != null) _renderer.sprite = sprite;
             
-            if (_animator != null)
+            _isMoving = false;
+            _shouldBeCheering = false;
+            _currentState = AudienceState.Idle;
+            StopCheerLoop();
+            ChangeState(AudienceState.Idle);
+        }
+
+        public void ChangeState(AudienceState newState)
+        {
+            if (_animator == null) return;
+            if (_currentState == newState && _animator.GetBool(_hashIdle) == (newState == AudienceState.Idle)) 
             {
-                _animator.SetBool("WALK", false);
-                _animator.SetBool("CHEER", false);
+                // Extra check to ensure animator is in sync with our state
+                if (newState == AudienceState.Cheer && !_isCheeringLoop) StartCheerLoop().Forget();
+                return;
+            }
+
+            _currentState = newState;
+
+            _animator.SetBool(_hashIdle, newState == AudienceState.Idle);
+            _animator.SetBool(_hashWalk, newState == AudienceState.Walk);
+            _animator.SetBool(_hashCheer, newState == AudienceState.Cheer);
+
+            if (newState == AudienceState.Cheer)
+            {
+                if (!_isCheeringLoop) StartCheerLoop().Forget();
+            }
+            else
+            {
+                StopCheerLoop();
             }
         }
 
         public async UniTaskVoid MoveToSeatAsync(Vector3 targetPos)
         {
-            _animator.SetBool(IsWalking, true);
+            StopCheerLoop();
+            _isMoving = true;
+            ChangeState(AudienceState.Walk);
 
             float distance = Vector3.Distance(transform.position, targetPos);
             float duration = distance / _moveSpeed;
@@ -63,8 +108,43 @@ namespace Code.MainSystem.Rhythm
                 WaitForTween(jumpTween)
             );
 
-            _animator.SetBool(IsWalking, false);
-            _animator.SetBool(IsCheering, true);
+            _isMoving = false;
+            SetCheeringState(_shouldBeCheering);
+        }
+
+        public void SetCheeringState(bool state)
+        {
+            _shouldBeCheering = state;
+            if (_isMoving) return;
+
+            ChangeState(state ? AudienceState.Cheer : AudienceState.Idle);
+        }
+
+        private async UniTaskVoid StartCheerLoop()
+        {
+            _isCheeringLoop = true;
+
+            // Random initial delay to desync audience
+            await UniTask.Delay(System.TimeSpan.FromSeconds(Random.Range(0f, 1f)));
+
+            while (_isCheeringLoop && this != null)
+            {
+                float duration = 0.4f;
+                await transform.DOJump(transform.position, _cheerJumpPower, 1, duration)
+                               .SetEase(Ease.OutQuad)
+                               .AsyncWaitForCompletion();
+                
+                if (!_isCheeringLoop) break;
+
+                float interval = Random.Range(_cheerIntervalMin, _cheerIntervalMax);
+                await UniTask.Delay(System.TimeSpan.FromSeconds(interval));
+            }
+        }
+
+        private void StopCheerLoop()
+        {
+            _isCheeringLoop = false;
+            transform.DOKill(true); // Complete active tweens immediately so they land
         }
 
         private UniTask WaitForTween(Tween tween)

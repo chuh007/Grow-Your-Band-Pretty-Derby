@@ -82,6 +82,7 @@ namespace Code.MainSystem.Rhythm
             CurrentScore += scoreToAdd;
 
             Bus<ScoreUpdateEvent>.Raise(new ScoreUpdateEvent(CurrentScore, CurrentCombo, type, laneIndex));
+            Bus<NoteHitEvent>.Raise(new NoteHitEvent(type, laneIndex));
         }
 
         private void HandleSongEnd(SongEndEvent evt)
@@ -97,8 +98,6 @@ namespace Code.MainSystem.Rhythm
                 _goodCount, 
                 _missCount
             ));
-            
-            Debug.Log($"ScoreManager: Report sent. Score: {CurrentScore}, Rank: {rank}");
         }
 
         private string CalculateRank(int score)
