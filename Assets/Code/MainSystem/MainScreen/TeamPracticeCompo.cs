@@ -197,7 +197,7 @@ namespace Code.MainSystem.MainScreen
 
         #region Practice Start / Back
 
-        private async void OnClickStartPractice()
+        private void OnClickStartPractice()
         {
             if (!_isTeamPracticeMode) return;
             if (_selectedMembers.Count < 2) return;
@@ -213,22 +213,24 @@ namespace Code.MainSystem.MainScreen
                 float staminaReduction = teamCantionDes;
                 float newCondition = Mathf.Clamp(member.currentCondition - staminaReduction, 0, member.maxCondition);
                 member.currentCondition = newCondition;
-                
+
                 var unitHealth = unitHealthBars.Find(u => u.memberType == member.memberType);
                 if (unitHealth != null)
                 {
                     unitHealth.healthBar.ApplyHealth(staminaReduction);
                 }
-                
+
                 TrainingManager.Instance.MarkMemberTrained(member.memberType);
             }
+            
+            TeamPracticeResultCache.IsSuccess = _issuccess;
+            TeamPracticeResultCache.SelectedMembers = new List<UnitDataSO>(_selectedMembers);
 
-            personalTrainingSequenceController.gameObject.SetActive(true);
-            var teamPracticeType = new TeamTrainingType(_selectedMembers);
-            await personalTrainingSequenceController.PlayTeamTrainingSequence(_issuccess, teamPracticeType, _selectedMembers);
-
+            SceneManager.LoadScene("Ensembleproductiontest");
+            
             OnClickBack();
         }
+
 
 
 
