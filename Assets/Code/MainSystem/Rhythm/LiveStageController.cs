@@ -24,7 +24,7 @@ namespace Code.MainSystem.Rhythm
             }
         }
 
-        protected override void OnProgressUpdated(float progress)
+        protected override void OnProgressUpdated(float progress, float currentScore)
         {
             if (voteGauge != null)
             {
@@ -33,8 +33,7 @@ namespace Code.MainSystem.Rhythm
 
             if (voteCountText != null)
             {
-                int currentVotes = Mathf.FloorToInt(targetScore * progress);
-                voteCountText.text = $"{currentVotes:N0}";
+                voteCountText.text = $"{currentScore:N0}";
             }
 
             if (fillImage != null && _hasCapturedOriginalColor)
