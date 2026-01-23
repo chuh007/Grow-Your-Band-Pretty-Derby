@@ -54,3 +54,10 @@ MonoBehaviour:
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField:
     - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: 
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField:
+    - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}

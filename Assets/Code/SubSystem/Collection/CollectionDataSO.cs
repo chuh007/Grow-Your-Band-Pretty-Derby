@@ -8,6 +8,7 @@ namespace Code.SubSystem.Collection
     [CreateAssetMenu(fileName = "CollectionData", menuName = "SO/Collection/Data", order = 0)]
     public class CollectionDataSO : ScriptableObject
     {
+        public MemberType memberType; // 누구 소장품인지
         public string collectionName; // 소장품 이름
         public Sprite icon; // 소장품 이미지
         public bool haveCollection; // 이 소장품을 소유했는가?

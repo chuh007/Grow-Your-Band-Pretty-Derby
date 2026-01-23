@@ -14892,7 +14892,7 @@ Transform:
   m_GameObject: {fileID: 1517285258}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.3, y: -10.7, z: -10}
+  m_LocalPosition: {x: -9.2, y: 4.8, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21127,6 +21127,7 @@ MonoBehaviour:
   dataController: {fileID: 1102172483}
   forceController: {fileID: 7525582521362298731}
   outingPlace: 1
+  defaultDialogue: {fileID: 11400000, guid: 33734901a607ee94987643ce4a286db4, type: 2}
 --- !u!114 &281913252835648478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22164,6 +22165,7 @@ MonoBehaviour:
   dataController: {fileID: 1102172483}
   forceController: {fileID: 7525582521362298731}
   outingPlace: 0
+  defaultDialogue: {fileID: 11400000, guid: b0355ab948b94f7459b5e329360ff424, type: 2}
 --- !u!114 &1842904375987147943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22295,6 +22297,7 @@ MonoBehaviour:
   dataController: {fileID: 1102172483}
   forceController: {fileID: 7525582521362298731}
   outingPlace: 4
+  defaultDialogue: {fileID: 11400000, guid: 204c5f746e00cb04ea7140da84b748a1, type: 2}
 --- !u!224 &2036909853165129610
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22406,6 +22409,7 @@ MonoBehaviour:
   dataController: {fileID: 1102172483}
   forceController: {fileID: 7525582521362298731}
   outingPlace: 3
+  defaultDialogue: {fileID: 11400000, guid: 6976695161f2dec4d98af3323d3fe449, type: 2}
 --- !u!114 &2510333117085229351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22832,7 +22836,7 @@ Transform:
   m_GameObject: {fileID: 4568521430430012070}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.3, y: -10.7, z: -10}
+  m_LocalPosition: {x: -9.2, y: 4.8, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24686,6 +24690,7 @@ MonoBehaviour:
   dataController: {fileID: 1102172483}
   forceController: {fileID: 7525582521362298731}
   outingPlace: 2
+  defaultDialogue: {fileID: 11400000, guid: d910c91697feba1428a1ca966feeaaed, type: 2}
 --- !u!114 &8743253104253969103
 MonoBehaviour:
   m_ObjectHideFlags: 0

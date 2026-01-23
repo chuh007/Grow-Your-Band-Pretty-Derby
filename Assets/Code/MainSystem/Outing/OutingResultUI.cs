@@ -2,6 +2,7 @@
 using System.Text;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.OutingEvents;
+using Code.MainSystem.StatSystem.BaseStats;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -25,18 +26,36 @@ namespace Code.MainSystem.Outing
         {
             closeButton.onClick.RemoveAllListeners();
             closeButton.onClick.AddListener(CloseOutingScene);
+
             StringBuilder resultBuilder = new StringBuilder();
-            resultBuilder.Append("결과\n");
+            
+
+            var aggregatedStats = new Dictionary<StatType, int>();
+
             foreach (var stat in resultSender.changeStats)
             {
-                resultBuilder.Append(string.Format(RESULT_FORMAT, stat.targetStat.ToString(), stat.variation));
+                if (aggregatedStats.ContainsKey(stat.targetStat))
+                {
+                    aggregatedStats[stat.targetStat] += stat.variation;
+                }
+                else
+                {
+                    aggregatedStats[stat.targetStat] = stat.variation;
+                }
+            }
+
+            foreach (var entry in aggregatedStats)
+            {
+                resultBuilder.Append(string.Format(RESULT_FORMAT, entry.Key.ToString(), entry.Value));
                 resultBuilder.AppendLine();
             }
-            
+
+            // 특성(Traits) 출력 부분은 기존과 동일
             foreach (var skill in resultSender.addedTraits)
             {
                 resultBuilder.Append(string.Format(SKILL_RESULT_FORMAT, skill.ToString()));
             }
+
             resultText.SetText(resultBuilder.ToString());
         }
         

@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99ee98dee41b4605ad3ec40965a2032f, type: 3}
-  m_Name: PainoData
+  m_Name: PainoData2
   m_EditorClassIdentifier: Assembly-CSharp::Code.SubSystem.Collection.CollectionDataSO
-  collectionName: "\uD53C\uC544\uB178 \uC870\uAC01"
-  icon: {fileID: 1208040086343421634, guid: 5520ac3433a986143a323543b8041c7e, type: 3}
+  memberType: 4
+  collectionName: "\uCCB4\uB974\uB2C8 100"
+  icon: {fileID: 21300000, guid: ca463b2e30202f041bfc14e8bda91e76, type: 3}
   haveCollection: 1
   level: 1
   star: 5
   plusEvents:
   - type: 4
-    place: 3
-    weight: 99
+    place: 0
+    weight: 10
     isImportance: 0
     dialogue: {fileID: 11400000, guid: f8c77317dce0a544291e5f2e1a29705b, type: 2}

@@ -16,7 +16,7 @@ namespace Code.MainSystem.Outing
         [SerializeField] private DialogueInformationSO defaultDialogue;
         
         private SceneLoadButton _loadButton;
-
+        
         private void Awake()
         {
             _loadButton = GetComponent<SceneLoadButton>();
@@ -28,8 +28,7 @@ namespace Code.MainSystem.Outing
             sender.selectedEvent = evt;
             if (evt == null)
             {
-                // 기본 처리를 해야함
-                return;
+                sender.selectedEvent = defaultDialogue;
             }
             _loadButton.SceneLoadAdditive("OutingScene");
         }

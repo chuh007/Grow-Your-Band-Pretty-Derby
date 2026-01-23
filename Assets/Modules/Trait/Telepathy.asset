@@ -29,16 +29,8 @@ MonoBehaviour:
     \uD569\uC8FC\uC758 \uD6A8\uACFC +N1%, \n\uB098\uBA38\uC9C0 \uD55C\uBA85\uC758
     \uBA64\uBC84\uB3C4 \u2018\uC774\uC2EC\uC804\uC2EC\u2019\uC744 \uBCF4\uC720\uD55C
     \uACBD\uC6B0 +(N1*N2)%\uB85C \uBCC0\uACBD"
-  Condition:
-    rid: 7082446202403815501
-  Effect:
-    rid: 7082446202403815502
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7082446202403815501
-      type: {class: TestCondition, ns: Code.MainSystem.TraitSystem.TraitConditions, asm: Assembly-CSharp}
-    - rid: 7082446202403815502
-      type: {class: TestEffect, ns: Code.MainSystem.TraitSystem.TraitEffect, asm: Assembly-CSharp}
+  bindingFlags: 52
+  conditionName: 
+  effectName: 
+  conditionTypeName: 
+  effectTypeName: 

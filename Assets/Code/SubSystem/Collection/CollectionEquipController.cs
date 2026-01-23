@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Code.Core.Bus;
-using Code.Core.Bus.GameEvents.CollectionEvents;
+using Code.Core.Bus.GameEvents;
+using Code.MainSystem.StatSystem.Manager;
+using Code.SubSystem.Collection.UI;
 using UnityEngine;
 
 namespace Code.SubSystem.Collection
@@ -11,38 +13,40 @@ namespace Code.SubSystem.Collection
     public class CollectionEquipController : MonoBehaviour
     {
         public int MaxEquipCount { get; private set; } = 5;
-        
         [SerializeField] private EquipCollectionListSO equipCollection;
+        [SerializeField] private CellInitializer cellInitializer;
+        [SerializeField] private GameObject collectionUI;
         
-        private List<CollectionDataSO> _collections;
-
+        private Dictionary<MemberType, CollectionDataSO> _collections;
+        
         private void Awake()
         {
-            _collections = new List<CollectionDataSO>();
+            _collections = new Dictionary<MemberType, CollectionDataSO>();
             Bus<EquipCollectionEvent>.OnEvent += HandleEquipEvent;
-            Bus<UnEquipCollectionEvent>.OnEvent += HandleUnEquipEvent;
         }
-        
+
         private void OnDestroy()
         {
             Bus<EquipCollectionEvent>.OnEvent -= HandleEquipEvent;
-            Bus<UnEquipCollectionEvent>.OnEvent -= HandleUnEquipEvent;
         }
 
-        public bool CanEquipCollection(CollectionDataSO collection)
-            => MaxEquipCount >= _collections.Count && !_collections.Contains(collection);
-
-        public bool CanUnEquipCollection(CollectionDataSO collection)
-            => _collections.Contains(collection);
-        
         private void HandleEquipEvent(EquipCollectionEvent evt)
         {
-            _collections.Add(evt.Collection);
+            collectionUI.SetActive(false);
         }
-        
-        private void HandleUnEquipEvent(UnEquipCollectionEvent evt)
+
+        public void SaveEquipCollection()
         {
-            _collections.Remove(evt.Collection);
+            _collections.Clear();
+            foreach (var collection in _collections.Values)
+            {
+                equipCollection.collections.Add(collection);
+            }
+        }
+
+        public void CollectionEquipOpen()
+        {
+            collectionUI.SetActive(true);
         }
     }
 }
