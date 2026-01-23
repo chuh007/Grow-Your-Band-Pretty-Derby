@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.MainSystem.StatSystem.Manager;
@@ -13,11 +14,14 @@ namespace Code.SubSystem.Collection
     public class CollectionEquipController : MonoBehaviour
     {
         public int MaxEquipCount { get; private set; } = 5;
+        [SerializeField] private CollectionDatabaseSO collectionDatabase;
         [SerializeField] private EquipCollectionListSO equipCollection;
         [SerializeField] private CellInitializer cellInitializer;
         [SerializeField] private GameObject collectionUI;
         
         private Dictionary<MemberType, CollectionDataSO> _collections;
+        
+        private Action<CollectionDataSO> _current;
         
         private void Awake()
         {
@@ -30,11 +34,6 @@ namespace Code.SubSystem.Collection
             Bus<EquipCollectionEvent>.OnEvent -= HandleEquipEvent;
         }
 
-        private void HandleEquipEvent(EquipCollectionEvent evt)
-        {
-            collectionUI.SetActive(false);
-        }
-
         public void SaveEquipCollection()
         {
             _collections.Clear();
@@ -44,9 +43,18 @@ namespace Code.SubSystem.Collection
             }
         }
 
-        public void CollectionEquipOpen()
+        public void CollectionEquipOpen(Action<CollectionDataSO> callback)
         {
             collectionUI.SetActive(true);
+            _current = callback;
+            
+        }
+        
+        private void HandleEquipEvent(EquipCollectionEvent evt)
+        {
+            collectionUI.SetActive(false);
+            equipCollection.collections.Add(evt.CollectionData);
+            _current?.Invoke(evt.CollectionData);
         }
     }
 }
