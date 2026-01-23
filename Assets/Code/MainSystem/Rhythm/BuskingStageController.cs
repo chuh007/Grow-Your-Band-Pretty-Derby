@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using Code.Core.Addressable;
 using Cysharp.Threading.Tasks;
-using UnityEngine.Serialization;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.MainSystem.StatSystem.Manager;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -19,6 +19,10 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private List<Sprite> audienceSprites;
         
         private const string KEY_AUDIENCE_PREFAB = "RhythmGame/Prefab/AudienceMember";
+
+        [Header("Band Members")]
+        [SerializeField] private List<Transform> _performerSpawnPoints;
+        private List<BandMemberController> _performers = new List<BandMemberController>();
 
         [Header("Settings")]
         [SerializeField] private int _maxAudienceCount = 20;
@@ -45,6 +49,72 @@ namespace Code.MainSystem.Rhythm
         private int _totalCount;
         
         private int[] _pointOccupancy;
+
+        public async UniTask InitializeStage(List<MemberType> members)
+        {
+            if (members == null) 
+            {
+                Debug.LogError("[BuskingStage] InitializeStage called with NULL member list.");
+                return;
+            }
+
+            Debug.Log($"[BuskingStage] InitializeStage Started. Members: {members.Count}, SpawnPoints: {(_performerSpawnPoints != null ? _performerSpawnPoints.Count : 0)}");
+
+            if (_performerSpawnPoints == null || _performerSpawnPoints.Count == 0)
+            {
+                Debug.LogError("[BuskingStage] CRITICAL: Performer Spawn Points are missing or empty! Band members cannot be spawned. Check the inspector.");
+                return;
+            }
+
+            foreach(var p in _performers) 
+            { 
+                if(p != null) Destroy(p.gameObject); 
+            }
+            _performers.Clear();
+
+            for (int i = 0; i < members.Count; i++)
+            {
+                if (i >= _performerSpawnPoints.Count) 
+                {
+                    Debug.LogWarning($"[BuskingStage] Not enough spawn points! Member {i} skipped.");
+                    break;
+                }
+
+                MemberType memberType = members[i];
+                string key = $"RhythmGame/Prefab/Member/{memberType}";
+                
+                try 
+                {
+                    Debug.Log($"[BuskingStage] Loading Addressable: {key}");
+                    GameObject prefab = await GameResourceManager.Instance.LoadAssetAsync<GameObject>(key);
+                    if (prefab != null)
+                    {
+                        Transform point = _performerSpawnPoints[i];
+                        GameObject obj = Instantiate(prefab, point.position, point.rotation, transform);
+                        
+                        BandMemberController performer = obj.GetComponent<BandMemberController>();
+                        if (performer != null)
+                        {
+                            performer.Initialize(i + 1);
+                            _performers.Add(performer);
+                            Debug.Log($"[BuskingStage] Spawned {memberType} at index {i}");
+                        }
+                        else
+                        {
+                            Debug.LogError($"[BuskingStage] Prefab loaded but BandMemberController component missing on {memberType}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"[BuskingStage] Failed to load prefab for {memberType} (Key: {key}) - returned null");
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"[BuskingStage] Failed to load member {memberType}: {e.Message}");
+                }
+            }
+        }
 
         protected override void OnEnable()
         {
@@ -93,6 +163,18 @@ namespace Code.MainSystem.Rhythm
             {
                 _currentCombo++;
                 _hitCount++;
+            }
+
+            if (_performers != null)
+            {
+                foreach (var performer in _performers)
+                {
+                    if (performer.TrackIndex == evt.TrackIndex)
+                    {
+                        performer.ReactToJudgement(evt.Judgement);
+                        break;
+                    }
+                }
             }
 
             UpdateAudienceReaction();

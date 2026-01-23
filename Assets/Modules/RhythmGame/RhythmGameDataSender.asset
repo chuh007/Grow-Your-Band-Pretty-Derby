@@ -15,7 +15,7 @@ MonoBehaviour:
   SongId: TestSong
   ConcertType: 0
   MemberIds: 
-  Difficulty: 0
+  Difficulty: 1
   CombinedChart: []
   IsResultDataAvailable: 0
   allStatUpValue: 0

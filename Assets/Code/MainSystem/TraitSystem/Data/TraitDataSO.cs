@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,16 +29,16 @@ namespace Code.MainSystem.TraitSystem.Data
 
     public enum TraitType
     {
-        NoneTrait,              // 특성 없음
-        Telepathy,              // 이심전심
-        LoneGuitarist,          // 고독한 기타리스트
-        ShiningEyes,            // 반짝이는 눈
-        FailureBreedsSuccess,   // 실패는 성공의 어머니
-        HonedTechnique,         // 단련기술
-        Injury,                 // 부상
-        Overzealous,            // 지나친 열정
-        Dogmatic,               // 독선적
-        Entertainer             // 만담가
+        NoneTrait,              
+        Telepathy,              
+        LoneGuitarist,          
+        ShiningEyes,            
+        FailureBreedsSuccess,   
+        HonedTechnique,         
+        Injury,                 
+        Overzealous,            
+        Dogmatic,               
+        Entertainer             
     }
 
     [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data", order = 0)]
