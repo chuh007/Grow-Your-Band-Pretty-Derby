@@ -15,8 +15,9 @@ namespace Code.MainSystem.MainScreen.Training
         [SerializeField] private Sprite test;
         [SerializeField] private Sprite test2;
 
-        [Header("Comment Page")]
-        [SerializeField] private GameObject statPage;
+        [Header("Comment Page")] [SerializeField]
+        private GameObject statPage;
+
         [SerializeField] private RectTransform statPageRect;
         [SerializeField] private GameObject commentPageGO;
         [SerializeField] private PracticeCommentPage commentPage;
@@ -35,11 +36,15 @@ namespace Code.MainSystem.MainScreen.Training
             StatData teamStat,
             float teamStatDelta,
             Dictionary<(MemberType memberType, StatType statType), int> statDeltaDict,
-            bool hadAnyStatChanged)
+            bool hadAnyStatChanged,
+            PersonalpracticeDataSO practiceData
+        )
         {
             gameObject.SetActive(true);
             statPage.SetActive(true);
-            commentPageGO.SetActive(false); 
+            commentPageGO.SetActive(false);
+
+            statPageRect.anchoredPosition = Vector2.zero;
 
             List<StatChangeResult> results = new();
 
@@ -52,7 +57,6 @@ namespace Code.MainSystem.MainScreen.Training
                 {
                     BaseStat baseStat = statManager.GetMemberStat(unit.memberType, stat.statType);
                     statDeltaDict.TryGetValue((unit.memberType, stat.statType), out int delta);
-
                     results.Add(new StatChangeResult(stat.statName, test2, test, baseStat.CurrentValue, delta));
                 }
             }
@@ -60,53 +64,15 @@ namespace Code.MainSystem.MainScreen.Training
             await statUI.ShowStats(results);
 
             var tcs = new UniTaskCompletionSource();
-
             statPageRect.DOAnchorPosX(-1920f, 0.65f)
-                .SetEase(Ease.OutBack)         
+                .SetEase(Ease.OutBack)
                 .OnComplete(() => tcs.TrySetResult());
-
             await tcs.Task;
 
             statPage.SetActive(false);
-            commentPageGO.SetActive(true); 
+            commentPageGO.SetActive(true);
 
-            var commentList = new List<CommentData>();
-
-            foreach (var unit in allUnits)
-            {
-                List<StatChangeInfo> unitStatChanges = new();
-
-                foreach (var stat in unit.stats)
-                {
-                    if (!statDeltaDict.TryGetValue((unit.memberType, stat.statType), out int delta) || delta == 0)
-                        continue;
-
-                    BaseStat baseStat = statManager.GetMemberStat(unit.memberType, stat.statType);
-
-                    var statInfo = new StatChangeInfo(stat.statName, delta, test);
-                    unitStatChanges.Add(statInfo);
-                }
-
-                if (hadAnyStatChanged)
-                {
-                    commentList.Add(new CommentData(
-                        $"{unit.memberType}의 연습 결과",
-                        $"{unit.memberType}의 능력치가 향상되었습니다.",
-                        unitStatChanges
-                    ));
-                }
-            }
-
-            if (!hadAnyStatChanged)
-            {
-                commentList.Add(new CommentData(
-                    "변화 없음",
-                    "이번 연습에서는 능력치 변화가 없습니다.",
-                    new List<StatChangeInfo>()
-                ));
-            }
-
-            await commentPage.ShowComments(commentList);
+            await CommentManager.instance.ShowAllComments();
         }
     }
 }
