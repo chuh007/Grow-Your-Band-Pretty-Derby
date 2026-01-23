@@ -25,16 +25,8 @@ MonoBehaviour:
   Effects: []
   DescriptionEffect: "\uAC1C\uC778 \uD6C8\uB828\uC758 \uCCB4\uB825 \uC0C1\uC2B9 \uD6A8\uC728
     +N1%"
-  Condition:
-    rid: 7082446202403815509
-  Effect:
-    rid: 7082446202403815510
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7082446202403815509
-      type: {class: TestCondition, ns: Code.MainSystem.TraitSystem.TraitConditions, asm: Assembly-CSharp}
-    - rid: 7082446202403815510
-      type: {class: TestEffect, ns: Code.MainSystem.TraitSystem.TraitEffect, asm: Assembly-CSharp}
+  bindingFlags: 52
+  conditionName: 
+  effectName: 
+  conditionTypeName: 
+  effectTypeName: 

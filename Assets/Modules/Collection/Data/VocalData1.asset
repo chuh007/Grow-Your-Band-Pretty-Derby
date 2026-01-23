@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ee98dee41b4605ad3ec40965a2032f, type: 3}
+  m_Name: VocalData1
+  m_EditorClassIdentifier: Assembly-CSharp::Code.SubSystem.Collection.CollectionDataSO
+  memberType: 3
+  collectionName: "\uB9C8\uC774\uD06C \uCEE4\uBC84"
+  icon: {fileID: 21300000, guid: bdd0090febc91c245880091cea98e5bd, type: 3}
+  haveCollection: 1
+  level: 1
+  star: 5
+  plusEvents:
+  - type: 3
+    place: 2
+    weight: 10
+    isImportance: 0
+    dialogue: {fileID: 11400000, guid: f8c77317dce0a544291e5f2e1a29705b, type: 2}

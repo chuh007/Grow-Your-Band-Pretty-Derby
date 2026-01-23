@@ -24,16 +24,8 @@ MonoBehaviour:
   conditionType: 0
   Effects: []
   DescriptionEffect: "\uD569\uC8FC\uC758 \uD6A8\uACFC -50%"
-  Condition:
-    rid: 7082446202403815497
-  Effect:
-    rid: 7082446202403815498
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7082446202403815497
-      type: {class: TestCondition, ns: Code.MainSystem.TraitSystem.TraitConditions, asm: Assembly-CSharp}
-    - rid: 7082446202403815498
-      type: {class: TestEffect, ns: Code.MainSystem.TraitSystem.TraitEffect, asm: Assembly-CSharp}
+  bindingFlags: 52
+  conditionName: 
+  effectName: 
+  conditionTypeName: 
+  effectTypeName: 

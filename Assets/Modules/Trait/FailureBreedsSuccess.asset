@@ -26,16 +26,8 @@ MonoBehaviour:
   DescriptionEffect: "\uD6C8\uB828 \uC2E4\uD328 \uC2DC \u2018\uC601\uAC10\u2019\uC744
     N1 \uC5BB\uB294\uB2E4. \u2018\uC601\uAC10\u2019 \uC218\uCE58\uAC00 N2\uC774\uBA74
     \uB2E4\uC74C \uD6C8\uB828\uC758 \uC131\uACF5\uB960\uC774 100%\uB85C \uACE0\uC815."
-  Condition:
-    rid: 7082446202403815507
-  Effect:
-    rid: 7082446202403815508
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7082446202403815507
-      type: {class: TestCondition, ns: Code.MainSystem.TraitSystem.TraitConditions, asm: Assembly-CSharp}
-    - rid: 7082446202403815508
-      type: {class: TestEffect, ns: Code.MainSystem.TraitSystem.TraitEffect, asm: Assembly-CSharp}
+  bindingFlags: 52
+  conditionName: 
+  effectName: 
+  conditionTypeName: 
+  effectTypeName: 
