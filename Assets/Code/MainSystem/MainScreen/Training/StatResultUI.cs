@@ -10,6 +10,11 @@ namespace Code.MainSystem.MainScreen.Training
 
         public async UniTask ShowStats(List<StatChangeResult> statResults)
         {
+            foreach (var item in resultItems)
+            {
+                item.ResetUI();
+            }
+            
             for (int i = 0; i < resultItems.Count && i < statResults.Count; i++)
             {
                 var ui = resultItems[i];
@@ -20,6 +25,7 @@ namespace Code.MainSystem.MainScreen.Training
                 await UniTask.Delay(200);
             }
         }
+
     }
 
 }
