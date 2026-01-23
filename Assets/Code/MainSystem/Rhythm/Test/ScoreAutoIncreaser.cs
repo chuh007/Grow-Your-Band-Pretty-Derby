@@ -16,6 +16,24 @@ namespace Code.MainSystem.Rhythm.Test
 
         private bool _isPlaying = false;
 
+        private void Update()
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE
+            if (UnityEngine.InputSystem.Keyboard.current != null)
+            {
+                var kb = UnityEngine.InputSystem.Keyboard.current;
+                if (kb.mKey.wasPressedThisFrame)
+                {
+                    if (_scoreManager != null)
+                    {
+                        Debug.Log("[ScoreAutoIncreaser] Manual Miss Triggered by M Key");
+                        _scoreManager.RegisterResult(JudgementType.Miss, -1);
+                    }
+                }
+            }
+#endif
+        }
+
         private void Start()
         {
             if (_autoPlay)

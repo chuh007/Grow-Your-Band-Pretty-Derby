@@ -143,7 +143,7 @@ namespace Code.MainSystem.Rhythm
                     {
                         if (_judgementSystem != null)
                         {
-                            _judgementSystem.HandleMiss();
+                            _judgementSystem.HandleMiss(noteObj);
                         }
                         
                         ReturnToPool(noteObj);

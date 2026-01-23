@@ -60,6 +60,8 @@ namespace Code.MainSystem.Rhythm
 
         private async UniTask LoadGameResources()
         {
+            Debug.Log($"[Bootstrapper] _dataSender.members is {(_dataSender.members == null ? "NULL" : "NOT NULL")}, Count: {(_dataSender.members != null ? _dataSender.members.Count : 0)}");
+
             List<Code.MainSystem.StatSystem.Manager.MemberType> memberRoles = new List<Code.MainSystem.StatSystem.Manager.MemberType>();
             if (_dataSender.members != null)
             {
@@ -70,11 +72,18 @@ namespace Code.MainSystem.Rhythm
                         foreach (var type in memberGroup)
                         {
                             memberRoles.Add(type);
+                            Debug.Log($"[Bootstrapper] Added Member: {type}");
                             break;
                         }
                     }
+                    else
+                    {
+                         Debug.LogWarning("[Bootstrapper] Found a NULL memberGroup in _dataSender.members");
+                    }
                 }
             }
+            
+            Debug.Log($"[Bootstrapper] Final memberRoles count: {memberRoles.Count}");
 
             string songId = _dataSender.SongId;
             string musicKey = $"RhythmGame/Music/{songId}";
@@ -97,7 +106,21 @@ namespace Code.MainSystem.Rhythm
             if (_loadedHitEffect != null) _hitFeedbackManager.SetHitEffectPrefab(_loadedHitEffect);
             else Debug.LogWarning($"[Rhythm] Hit Effect is missing: {KEY_VFX_HIT}");
 
-            if (_loadedEnvPrefab != null) Instantiate(_loadedEnvPrefab);
+            if (_loadedEnvPrefab != null)
+            {
+                GameObject envObj = Instantiate(_loadedEnvPrefab);
+                var stageController = envObj.GetComponentInChildren<BuskingStageController>();
+                
+                if (stageController != null)
+                {
+                    Debug.Log($"[Bootstrapper] Found BuskingStageController. Initializing with {memberRoles.Count} members.");
+                    await stageController.InitializeStage(memberRoles);
+                }
+                else
+                {
+                    Debug.LogError("[Bootstrapper] BuskingStageController component NOT found on instantiated environment!");
+                }
+            }
             else Debug.LogWarning($"[Rhythm] Environment Prefab is missing: {envKey}");
 
             if (chartData != null) _noteManager.SetChart(chartData);

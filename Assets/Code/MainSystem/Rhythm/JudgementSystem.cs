@@ -59,15 +59,20 @@ namespace Code.MainSystem.Rhythm
                 _scoreManager.RegisterResult(type, laneIndex);
             }
 
-            Bus<NoteHitEvent>.Raise(new NoteHitEvent(type, laneIndex));
+            Bus<NoteHitEvent>.Raise(new NoteHitEvent(type, laneIndex, note.Data.MemberId));
         }
 
-        public void HandleMiss()
+        public void HandleMiss(NoteObject note = null)
         {
+            int laneIndex = note != null ? note.Data.LaneIndex : -1;
+            int trackIndex = note != null ? note.Data.MemberId : 0;
+
             if (_scoreManager != null)
             {
-                _scoreManager.RegisterResult(JudgementType.Miss, -1);
+                _scoreManager.RegisterResult(JudgementType.Miss, laneIndex);
             }
+
+            Bus<NoteHitEvent>.Raise(new NoteHitEvent(JudgementType.Miss, laneIndex, trackIndex));
         }
     }
 }

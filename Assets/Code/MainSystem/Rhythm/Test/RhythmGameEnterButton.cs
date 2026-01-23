@@ -14,7 +14,7 @@ namespace Code.MainSystem.Rhythm.Test
 
         [Header("Test Settings")]
         [SerializeField] private string _songId = "Song_01";
-        [SerializeField] private ConcertType _concertType = ConcertType.Live;
+        [SerializeField] private ConcertType _concertType = ConcertType.Busking;
         [SerializeField] private int _difficulty = 1;
         [SerializeField] private string _rhythmSceneName = "Rhythm";
         [SerializeField] private string _transitionSceneName = "TransitionScene";
