@@ -18,12 +18,9 @@ namespace Code.MainSystem.MainScreen.Training
         {
             public MemberType memberType;
             public GameObject characterObject;
-            public AnimationClip successClip;
-            public AnimationClip failClip;
-            public AnimationClip specialClip;
         }
 
-        [Header("Member Object Bindings")]
+        [Header("Member Bindings")]
         public List<MemberObjectBinding> memberObjects;
 
         [Header("Result UI")]
@@ -31,63 +28,69 @@ namespace Code.MainSystem.MainScreen.Training
 
         private void Start()
         {
-            ApplyBindings();
+            ApplyTimelineBindings();
             director.stopped += OnTimelineEnd;
             director.Play();
             //resultUI.SetActive(false);
         }
 
-        private void ApplyBindings()
+        private void ApplyTimelineBindings()
         {
             var selected = TeamPracticeResultCache.SelectedMembers;
-            bool isSuccess = TeamPracticeResultCache.IsSuccess;
             
-            foreach (var track in timelineAsset.GetOutputTracks())
+            foreach (var binding in memberObjects)
             {
-                foreach (var binding in memberObjects)
+                binding.characterObject.SetActive(false);
+            }
+            
+            foreach (var unit in selected)
+            {
+                var binding = memberObjects.Find(b => b.memberType == unit.memberType);
+                if (binding == null) continue;
+
+                binding.characterObject.SetActive(true);
+
+                var track = FindTrackByName(binding.memberType.ToString());
+                if (track != null)
                 {
-                    if (track.name != binding.memberType.ToString())
-                        continue;
-
-                    var unit = selected.Find(m => m.memberType == binding.memberType);
-                    if (unit == null)
-                    {
-                        binding.characterObject.SetActive(false);
-                        continue;
-                    }
-
-                    binding.characterObject.SetActive(true);
                     director.SetGenericBinding(track, binding.characterObject);
-                    
-                    foreach (var clip in track.GetClips())
-                    {
-                        if (HasSpecialTrait(unit))
-                        {
-                            clip.asset = TimelineClipFromClip(binding.specialClip);
-                        }
-                        else
-                        {
-                            clip.asset = TimelineClipFromClip(isSuccess ? binding.successClip : binding.failClip);
-                        }
-                    }
                 }
             }
         }
-
-        private bool HasSpecialTrait(UnitDataSO unit)
+        
+        private TrackAsset FindTrackByName(string name)
         {
-            //return unit.traits.Contains("TeamSuccessBoost");
-            return false;
+            foreach (var track in timelineAsset.GetOutputTracks())
+            {
+                if (track.name == name)
+                    return track;
+            }
+            return null;
         }
 
-        private AnimationPlayableAsset TimelineClipFromClip(AnimationClip clip)
-        {
-            return new AnimationPlayableAsset { clip = clip };
-        }
 
         private void OnTimelineEnd(PlayableDirector director)
         {
+            foreach (var binding in memberObjects)
+            {
+                if (!binding.characterObject.activeInHierarchy) continue;
+
+                var animator = binding.characterObject.GetComponent<Animator>();
+                if (animator == null) continue;
+
+                string animName = GetResultAnimationName(binding.memberType);
+                animator.Play(animName, 0, 0f);
+            }
+
             //resultUI.SetActive(true);
+        }
+
+        private string GetResultAnimationName(MemberType member)
+        {
+            var unit = TeamPracticeResultCache.SelectedMembers.Find(m => m.memberType == member);
+            if (unit == null) return "Idle";
+
+            return TeamPracticeResultCache.IsSuccess ? "Succse" : "Faill";
         }
 
         public void OnClickReturnToMain()
