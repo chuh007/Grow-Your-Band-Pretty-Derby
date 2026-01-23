@@ -49,6 +49,10 @@ namespace Code.MainSystem.Rhythm
                     foreach (var note in loadedNotes)
                     {
                         note.MemberId = currentMemberId;
+                        
+                        note.SequenceLength = 7;
+                        note.BeatIndex = 6;
+                        
                         rawNotes.Add(note);
                     }
                     Debug.Log($"[ConcertChartBuilder] Loaded Chart for Member {currentMemberId}: {loadedNotes.Count} notes");

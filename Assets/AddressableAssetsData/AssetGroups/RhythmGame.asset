@@ -63,6 +63,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 663168032161e4640b0ae296554ae2bb
+    m_Address: RhythmGame/Prefab/Note_Basic
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6889fa86fdcbaec49977ce790fe02c8f
     m_Address: RhythmGame/Prefab/Member/Guitar
     m_ReadOnly: 0
@@ -83,12 +88,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 960e28a7f3d7bb842aa237eb30cdc716
     m_Address: RhythmGame/Chart/TestSong/Piano
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - RhythmGame
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a34f6ed0f73dacb44aafe0fcccb1605c
-    m_Address: RhythmGame/Prefab/Note_Basic
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame

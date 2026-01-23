@@ -1,6 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
+using Reflex.Attributes;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents; 
+using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.StatSystem.BaseStats;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -16,10 +20,16 @@ namespace Code.MainSystem.Rhythm
         private int _missCount;
 
         [Header("Score Config")]
-        [SerializeField] private int perfectScore = 100;
-        [SerializeField] private int greatScore = 80;
-        [SerializeField] private int goodScore = 50;
+        [SerializeField] private int basePerfectScore = 100;
+        [SerializeField] private int baseGreatScore = 80;
+        [SerializeField] private int baseGoodScore = 50;
         [SerializeField] private int comboBonus = 10;
+        
+        [Header("Part Data")]
+        [SerializeField] private List<PartDataSO> partDataList;
+
+        [Inject] private StatManager _statManager;
+        [Inject] private FeverManager _feverManager; 
 
         private void Start()
         {
@@ -45,25 +55,25 @@ namespace Code.MainSystem.Rhythm
             Bus<SongEndEvent>.OnEvent -= HandleSongEnd;
         }
 
-        public void RegisterResult(JudgementType type, int laneIndex = -1)
+        public void RegisterResult(JudgementType type, int laneIndex, int memberId)
         {
-            int scoreToAdd = 0;
+            float baseScore = 0;
 
             switch (type)
             {
                 case JudgementType.Perfect:
                     _perfectCount++;
-                    scoreToAdd = perfectScore;
+                    baseScore = basePerfectScore;
                     CurrentCombo++;
                     break;
                 case JudgementType.Great:
                     _greatCount++;
-                    scoreToAdd = greatScore;
+                    baseScore = baseGreatScore;
                     CurrentCombo++;
                     break;
                 case JudgementType.Good:
                     _goodCount++;
-                    scoreToAdd = goodScore;
+                    baseScore = baseGoodScore;
                     CurrentCombo++;
                     break;
                 case JudgementType.Miss:
@@ -74,12 +84,26 @@ namespace Code.MainSystem.Rhythm
 
             if (CurrentCombo > _maxCombo) _maxCombo = CurrentCombo;
 
-            if (type != JudgementType.Miss && CurrentCombo > 1)
+            float partMult = 1.0f;
+            if (partDataList != null && memberId >= 0 && memberId < partDataList.Count)
             {
-                scoreToAdd += (CurrentCombo * comboBonus);
+                if (partDataList[memberId] != null)
+                    partMult = partDataList[memberId].ScoreMultiplier;
             }
 
-            CurrentScore += scoreToAdd;
+            float statMult = 1.0f;
+            
+            float feverMult = (_feverManager != null && _feverManager.IsFeverActive) ? 1.5f : 1.0f;
+
+            float finalScoreAdded = 0;
+            
+            if (type != JudgementType.Miss)
+            {
+                float comboBonusVal = (CurrentCombo > 1) ? (CurrentCombo * comboBonus) : 0;
+                finalScoreAdded = (baseScore + comboBonusVal) * partMult * statMult * feverMult;
+            }
+
+            CurrentScore += (int)finalScoreAdded;
 
             Bus<ScoreUpdateEvent>.Raise(new ScoreUpdateEvent(CurrentScore, CurrentCombo, type, laneIndex));
         }

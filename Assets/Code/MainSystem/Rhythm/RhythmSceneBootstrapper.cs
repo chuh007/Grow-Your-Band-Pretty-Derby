@@ -9,20 +9,19 @@ namespace Code.MainSystem.Rhythm
     public class RhythmSceneBootstrapper : MonoBehaviour
     {
         [Header("Scene References")]
-        [Inject] private NoteManager _noteManager;
+        [Inject] private RhythmLineController _lineController;
         [Inject] private Conductor _conductor;
         [Inject] private ScoreManager _scoreManager;
         [Inject] private ChartLoader _chartLoader;
         [Inject] private HitFeedbackManager _hitFeedbackManager;
+        [Inject] private JudgementSystem _judgementSystem; 
         
         [SerializeField] private RhythmGameDataSenderSO _dataSender;
         [SerializeField] private CanvasGroup _loadingCanvasGroup;
         [SerializeField] private float _fadeDuration = 0.5f;
 
-        // 배경
         private const string KEY_ENV_BUSKING = "RhythmGame/Environment/Busking";
         private const string KEY_ENV_LIVE    = "RhythmGame/Environment/Live";
-        // 노트 및 이펙트
         private const string KEY_NOTE_BASIC  = "RhythmGame/Prefab/Note_Basic";
         private const string KEY_VFX_HIT     = "RhythmGame/Prefab/HitEffect";
 
@@ -100,7 +99,18 @@ namespace Code.MainSystem.Rhythm
             if (_loadedMusic != null) _conductor.SetMusic(_loadedMusic);
             else Debug.LogError($"[Rhythm] Music is missing: {musicKey}");
 
-            if (_loadedNotePrefab != null) _noteManager.SetNotePrefab(_loadedNotePrefab);
+            if (_loadedNotePrefab != null) 
+            {
+                var pulseComp = _loadedNotePrefab.GetComponent<RhythmPulse>();
+                if (pulseComp != null)
+                {
+                    _lineController.SetPulsePrefab(pulseComp);
+                }
+                else
+                {
+                    Debug.LogError($"[Rhythm] Loaded Note Prefab does not have RhythmPulse component: {KEY_NOTE_BASIC}");
+                }
+            }
             else Debug.LogError($"[Rhythm] Note Prefab is missing: {KEY_NOTE_BASIC}");
 
             if (_loadedHitEffect != null) _hitFeedbackManager.SetHitEffectPrefab(_loadedHitEffect);
@@ -123,7 +133,7 @@ namespace Code.MainSystem.Rhythm
             }
             else Debug.LogWarning($"[Rhythm] Environment Prefab is missing: {envKey}");
 
-            if (chartData != null) _noteManager.SetChart(chartData);
+            if (chartData != null) _lineController.SetChart(chartData);
             else Debug.LogError($"[Rhythm] Chart Data failed to build for {songId}");
         }
 

@@ -122,7 +122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6186393197909277062}
-  - component: {fileID: 4064693264862034094}
+  - component: {fileID: 1560843689154437556}
   m_Layer: 0
   m_Name: Performer_Bass
   m_TagString: Untagged
@@ -146,7 +146,7 @@ Transform:
   - {fileID: 9152866177254033229}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4064693264862034094
+--- !u!114 &1560843689154437556
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,12 +155,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7061195906995651594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28eeb6e65a814f06922e86b5c4f9f6c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c814970287f4d21ac5cbcc6c6dbefe0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.StagePerformer
-  _animator: {fileID: 520148536371994514}
-  _spriteRenderer: {fileID: 8030557294724591177}
-  _assignedTrackIndex: 2
-  _paramIdle: IDLE
-  _paramHit: HIT
-  _paramMiss: MISS
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.BandMemberController
+  animator: {fileID: 520148536371994514}

@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using Code.Core.Addressable;
 using Cysharp.Threading.Tasks;
-using UnityEngine.Serialization;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.MainSystem.StatSystem.Manager;
@@ -23,7 +22,7 @@ namespace Code.MainSystem.Rhythm
 
         [Header("Band Members")]
         [SerializeField] private List<Transform> _performerSpawnPoints;
-        private List<StagePerformer> _performers = new List<StagePerformer>();
+        private List<BandMemberController> _performers = new List<BandMemberController>();
 
         [Header("Settings")]
         [SerializeField] private int _maxAudienceCount = 20;
@@ -55,15 +54,15 @@ namespace Code.MainSystem.Rhythm
         {
             if (members == null) 
             {
-                UnityEngine.Debug.LogError("[BuskingStage] InitializeStage called with NULL member list.");
+                Debug.LogError("[BuskingStage] InitializeStage called with NULL member list.");
                 return;
             }
 
-            UnityEngine.Debug.Log($"[BuskingStage] InitializeStage Started. Members: {members.Count}, SpawnPoints: {(_performerSpawnPoints != null ? _performerSpawnPoints.Count : 0)}");
+            Debug.Log($"[BuskingStage] InitializeStage Started. Members: {members.Count}, SpawnPoints: {(_performerSpawnPoints != null ? _performerSpawnPoints.Count : 0)}");
 
             if (_performerSpawnPoints == null || _performerSpawnPoints.Count == 0)
             {
-                UnityEngine.Debug.LogError("[BuskingStage] CRITICAL: Performer Spawn Points are missing or empty! Band members cannot be spawned. Check the inspector.");
+                Debug.LogError("[BuskingStage] CRITICAL: Performer Spawn Points are missing or empty! Band members cannot be spawned. Check the inspector.");
                 return;
             }
 
@@ -77,7 +76,7 @@ namespace Code.MainSystem.Rhythm
             {
                 if (i >= _performerSpawnPoints.Count) 
                 {
-                    UnityEngine.Debug.LogWarning($"[BuskingStage] Not enough spawn points! Member {i} skipped.");
+                    Debug.LogWarning($"[BuskingStage] Not enough spawn points! Member {i} skipped.");
                     break;
                 }
 
@@ -86,33 +85,33 @@ namespace Code.MainSystem.Rhythm
                 
                 try 
                 {
-                    UnityEngine.Debug.Log($"[BuskingStage] Loading Addressable: {key}");
+                    Debug.Log($"[BuskingStage] Loading Addressable: {key}");
                     GameObject prefab = await GameResourceManager.Instance.LoadAssetAsync<GameObject>(key);
                     if (prefab != null)
                     {
                         Transform point = _performerSpawnPoints[i];
                         GameObject obj = Instantiate(prefab, point.position, point.rotation, transform);
                         
-                        StagePerformer performer = obj.GetComponent<StagePerformer>();
+                        BandMemberController performer = obj.GetComponent<BandMemberController>();
                         if (performer != null)
                         {
                             performer.Initialize(i + 1);
                             _performers.Add(performer);
-                            UnityEngine.Debug.Log($"[BuskingStage] Spawned {memberType} at index {i}");
+                            Debug.Log($"[BuskingStage] Spawned {memberType} at index {i}");
                         }
                         else
                         {
-                            UnityEngine.Debug.LogError($"[BuskingStage] Prefab loaded but StagePerformer component missing on {memberType}");
+                            Debug.LogError($"[BuskingStage] Prefab loaded but BandMemberController component missing on {memberType}");
                         }
                     }
                     else
                     {
-                        UnityEngine.Debug.LogError($"[BuskingStage] Failed to load prefab for {memberType} (Key: {key}) - returned null");
+                        Debug.LogError($"[BuskingStage] Failed to load prefab for {memberType} (Key: {key}) - returned null");
                     }
                 }
                 catch (System.Exception e)
                 {
-                    UnityEngine.Debug.LogWarning($"[BuskingStage] Failed to load member {memberType}: {e.Message}");
+                    Debug.LogWarning($"[BuskingStage] Failed to load member {memberType}: {e.Message}");
                 }
             }
         }

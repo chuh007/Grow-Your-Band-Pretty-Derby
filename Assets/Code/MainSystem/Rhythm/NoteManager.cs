@@ -100,8 +100,6 @@ namespace Code.MainSystem.Rhythm
             _noteQueue.Clear();
         }
 
-
-
         private void Update()
         {
             if (_conductor == null) return;
@@ -143,7 +141,7 @@ namespace Code.MainSystem.Rhythm
                     {
                         if (_judgementSystem != null)
                         {
-                            _judgementSystem.HandleMiss(noteObj);
+                            _judgementSystem.HandleMiss(noteObj.Data);
                         }
                         
                         ReturnToPool(noteObj);

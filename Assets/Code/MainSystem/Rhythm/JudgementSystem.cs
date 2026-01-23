@@ -9,70 +9,73 @@ namespace Code.MainSystem.Rhythm
     public class JudgementSystem : MonoBehaviour
     {
         [Header("Dependencies")]
-        [Inject] private NoteManager noteManager;
+        [Inject] private RhythmLineController _lineController;
         [Inject] private ScoreManager _scoreManager;
         [Inject] private Conductor _conductor;
 
-        [Header("Timing Windows (Seconds +/-)")]
+        [Header("Base Timing Windows (Seconds +/-)")]
         [SerializeField] private double perfectWindow = 0.050; 
         [SerializeField] private double greatWindow = 0.100;   
         [SerializeField] private double goodWindow = 0.150;    
 
+        private PartDataSO _currentPartData;
+
+        public void SetPartData(PartDataSO partData)
+        {
+            _currentPartData = partData;
+        }
+
         public void OnInputDetected(int laneIndex)
         {
-            if (noteManager == null || _conductor == null) return;
+            if (_lineController == null || _conductor == null) return;
 
-            NoteObject targetNote = noteManager.GetNearestNote(laneIndex);
+            double songTime = _conductor.SongPosition;
+            double compensatedTime = songTime + _conductor.InputOffset;
+
+            NoteData targetNote = _lineController.GetNearestNote(compensatedTime);
             
             if (targetNote == null) return;
 
-            double songTime = _conductor.SongPosition;
-            double noteTime = targetNote.Data.Time;
+            double diff = Math.Abs(targetNote.Time - compensatedTime);
+            
+            float difficultyMult = _currentPartData != null ? _currentPartData.JudgementDifficulty : 1.0f;
 
-            double compensatedTime = songTime + _conductor.InputOffset;
-
-            double diff = Math.Abs(noteTime - compensatedTime);
-
-            if (diff <= perfectWindow)
+            if (diff <= perfectWindow * difficultyMult)
             {
                 HandleHit(targetNote, JudgementType.Perfect);
             }
-            else if (diff <= greatWindow)
+            else if (diff <= greatWindow * difficultyMult)
             {
                 HandleHit(targetNote, JudgementType.Great);
             }
-            else if (diff <= goodWindow)
+            else if (diff <= goodWindow * difficultyMult)
             {
                 HandleHit(targetNote, JudgementType.Good);
             }
         }
 
-        private void HandleHit(NoteObject note, JudgementType type)
+        private void HandleHit(NoteData note, JudgementType type)
         {
-            Debug.Log($"<color=cyan>{type}</color> on Lane {note.Data.LaneIndex}");
+            Debug.Log($"<color=cyan>{type}</color> Diff: {Math.Abs(note.Time - _conductor.SongPosition):F3}");
             
-            int laneIndex = note.Data.LaneIndex;
-            noteManager.DespawnNote(note);
+            _lineController.RemoveNote(note);
 
             if (_scoreManager != null)
             {
-                _scoreManager.RegisterResult(type, laneIndex);
+                _scoreManager.RegisterResult(type, note.LaneIndex, note.MemberId);
             }
 
-            Bus<NoteHitEvent>.Raise(new NoteHitEvent(type, laneIndex, note.Data.MemberId));
+            Bus<NoteHitEvent>.Raise(new NoteHitEvent(type, note.LaneIndex, note.MemberId));
         }
 
-        public void HandleMiss(NoteObject note = null)
+        public void HandleMiss(NoteData note)
         {
-            int laneIndex = note != null ? note.Data.LaneIndex : -1;
-            int trackIndex = note != null ? note.Data.MemberId : 0;
-
             if (_scoreManager != null)
             {
-                _scoreManager.RegisterResult(JudgementType.Miss, laneIndex);
+                _scoreManager.RegisterResult(JudgementType.Miss, note.LaneIndex, note.MemberId);
             }
 
-            Bus<NoteHitEvent>.Raise(new NoteHitEvent(JudgementType.Miss, laneIndex, trackIndex));
+            Bus<NoteHitEvent>.Raise(new NoteHitEvent(JudgementType.Miss, note.LaneIndex, note.MemberId));
         }
     }
 }
