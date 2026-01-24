@@ -3,6 +3,8 @@ using Reflex.Attributes;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Code.Core.Addressable;
+using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.StatSystem.BaseStats;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -14,7 +16,8 @@ namespace Code.MainSystem.Rhythm
         [Inject] private ScoreManager _scoreManager;
         [Inject] private ChartLoader _chartLoader;
         [Inject] private HitFeedbackManager _hitFeedbackManager;
-        [Inject] private JudgementSystem _judgementSystem; 
+        [Inject] private JudgementSystem _judgementSystem;
+        [Inject] private FeverManager _feverManager; 
         
         [SerializeField] private RhythmGameDataSenderSO _dataSender;
         [SerializeField] private CanvasGroup _loadingCanvasGroup;
@@ -29,9 +32,16 @@ namespace Code.MainSystem.Rhythm
         private GameObject _loadedNotePrefab;
         private GameObject _loadedHitEffect;
         private GameObject _loadedEnvPrefab;
+        
+        private StatManager _statManager;
 
         private async void Start()
         {
+            Time.timeScale = 1.0f;
+            
+            _statManager = FindAnyObjectByType<StatManager>();
+            if (_statManager == null) Debug.LogWarning("[Bootstrapper] StatManager not found. Stats will not affect gameplay.");
+
             if (_loadingCanvasGroup != null)
             {
                 _loadingCanvasGroup.alpha = 1f;
@@ -49,6 +59,8 @@ namespace Code.MainSystem.Rhythm
 
             await LoadGameResources();
 
+            ApplyStatsToManagers();
+
             await FadeInGameScreen();
 
             if (_conductor != null)
@@ -57,29 +69,88 @@ namespace Code.MainSystem.Rhythm
             }
         }
 
+        private void ApplyStatsToManagers()
+        {
+            if (_statManager == null || _dataSender.members == null) return;
+
+            if (_feverManager != null)
+            {
+                var teamStat = _statManager.GetTeamStat(StatType.TeamHarmony);
+                float bonus = teamStat != null ? teamStat.CurrentValue * 0.1f : 0f;
+                _feverManager.SetStatBonusDuration(bonus);
+            }
+
+            List<MemberType> flatMembers = new List<MemberType>();
+            
+            int memberIdCounter = 1;
+            
+             _scoreManager.SetMemberStatMultiplier(0, 1.0f);
+
+            foreach (var group in _dataSender.members)
+            {
+                if (group == null || group.Members == null) continue;
+                foreach (var memberType in group.Members)
+                {
+                    StatType targetStat = GetStatTypeForMember(memberType);
+                    var statObj = _statManager.GetMemberStat(memberType, targetStat);
+                    
+                    float multiplier = 1.0f;
+                    if (statObj != null)
+                    {
+                        multiplier = 1.0f + (statObj.CurrentValue * 0.001f);
+                    }
+                    
+                    _scoreManager.SetMemberStatMultiplier(memberIdCounter, multiplier);
+                    memberIdCounter++;
+                    
+                    break; 
+                }
+            }
+        }
+
+        private StatType GetStatTypeForMember(MemberType type)
+        {
+            switch (type)
+            {
+                case MemberType.Guitar: return StatType.GuitarConcentration;
+                case MemberType.Bass: return StatType.BassSenseOfRhythm;
+                case MemberType.Drums: return StatType.DrumsSenseOfRhythm;
+                case MemberType.Piano: return StatType.PianoDexterity;
+                case MemberType.Vocal: return StatType.VocalVocalization;
+                default: return StatType.Condition;
+            }
+        }
+
         private async UniTask LoadGameResources()
         {
             Debug.Log($"[Bootstrapper] _dataSender.members is {(_dataSender.members == null ? "NULL" : "NOT NULL")}, Count: {(_dataSender.members != null ? _dataSender.members.Count : 0)}");
 
             List<Code.MainSystem.StatSystem.Manager.MemberType> memberRoles = new List<Code.MainSystem.StatSystem.Manager.MemberType>();
-            if (_dataSender.members != null)
+            if (_dataSender.members != null && _dataSender.members.Count > 0)
             {
                 foreach (var memberGroup in _dataSender.members)
                 {
-                    if (memberGroup != null)
+                    if (memberGroup != null && memberGroup.Members != null)
                     {
-                        foreach (var type in memberGroup)
+                        foreach (var type in memberGroup.Members)
                         {
                             memberRoles.Add(type);
                             Debug.Log($"[Bootstrapper] Added Member: {type}");
                             break;
                         }
                     }
-                    else
-                    {
-                         Debug.LogWarning("[Bootstrapper] Found a NULL memberGroup in _dataSender.members");
-                    }
                 }
+            }
+
+            // Fallback: 데이터가 없으면 기본 5인조 구성으로 강제 설정
+            if (memberRoles.Count == 0)
+            {
+                Debug.LogWarning("[Bootstrapper] No members found in DataSender. Using Default Full Band Setup.");
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Vocal);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Guitar);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Bass);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Drums);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Piano);
             }
             
             Debug.Log($"[Bootstrapper] Final memberRoles count: {memberRoles.Count}");

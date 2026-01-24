@@ -28,6 +28,8 @@ namespace Code.MainSystem.Rhythm
         private int _lastBeat = 0;
         private bool _isPlaying = false;
 
+        public bool IsPlaying => _isPlaying;
+
         private void Awake()
         {
             _musicController = musicControllerObject != null

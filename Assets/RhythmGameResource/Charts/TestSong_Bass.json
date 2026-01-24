@@ -1,11 +1,8 @@
 {
   "title": "Test Song (Bass)",
-  "bpm": 120,
+  "bpm": 60,
   "offset": 0.0,
   "notes": [
-    { "time": 2.0, "lane": 3, "type": 0 },
-    { "time": 4.0, "lane": 3, "type": 0 },
-    { "time": 6.0, "lane": 3, "type": 0 },
     { "time": 8.0, "lane": 3, "type": 0 }
   ]
 }

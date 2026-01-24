@@ -48,7 +48,17 @@ namespace Code.MainSystem.Rhythm
 
             if (t >= 1.0f)
             {
-                transform.position = _endPos;
+                // 약간 더 진행해서 자연스럽게 사라지게 함 (오버슈트 허용)
+                // 만약 너무 많이 지났으면 비활성화
+                if (currentSongTime > _targetTime + 0.2f)
+                {
+                    gameObject.SetActive(false); // 컨트롤러가 풀로 회수하도록
+                }
+                else
+                {
+                    // 1.0 넘어도 계속 이동 (Start -> End 방향으로)
+                    transform.position = Vector3.LerpUnclamped(_startPos, _endPos, t);
+                }
             }
             else
             {
@@ -62,7 +72,7 @@ namespace Code.MainSystem.Rhythm
 
             if (_isHitPulse)
             {
-                transform.localScale = Vector3.one * 1.5f;
+                transform.localScale = Vector3.one * 2.5f;
                 _visualImage.color = new Color(1f, 1f, 1f, 1f); 
                 if (_canvasGroup) _canvasGroup.alpha = 1f;
             }
