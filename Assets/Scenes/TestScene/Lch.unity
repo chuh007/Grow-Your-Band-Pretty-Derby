@@ -9485,7 +9485,6 @@ MonoBehaviour:
   - {fileID: 551485469}
   - {fileID: 22590889}
   liftY: 20
-  personalTrainingSequenceController: {fileID: 0}
   unitHealthBars:
   - memberType: 0
     healthBar: {fileID: 1843474472}
@@ -9497,8 +9496,8 @@ MonoBehaviour:
     healthBar: {fileID: 1608846404}
   - memberType: 3
     healthBar: {fileID: 449017420}
-  healthBar: {fileID: 508380102}
-  teamCantionDes: 5
+  teamHealthBar: {fileID: 508380102}
+  teamConditionCost: 5
 --- !u!1 &936532600
 GameObject:
   m_ObjectHideFlags: 0

@@ -5018,6 +5018,8 @@ MonoBehaviour:
   statPageRect: {fileID: 1109383760}
   commentPageGO: {fileID: 1599410385}
   commentPage: {fileID: 1599410386}
+  statIcon: {fileID: 21300000, guid: 550e4efbeb343734ca390779bae9fab3, type: 3}
+  gradeIcon: {fileID: 21300000, guid: ca463b2e30202f041bfc14e8bda91e76, type: 3}
 --- !u!1 &1113629424
 GameObject:
   m_ObjectHideFlags: 0

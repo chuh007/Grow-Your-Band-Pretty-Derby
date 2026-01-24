@@ -2,7 +2,6 @@
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
-using Reflex.Attributes;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -27,7 +26,6 @@ namespace Code.MainSystem.MainScreen.Training
 
         [Header("Result Window")]
         public TeamPracticeResultWindow resultWindow;
-        [Inject]private StatManager statManager;
 
         private void Start()
         {
@@ -41,9 +39,7 @@ namespace Code.MainSystem.MainScreen.Training
             var selected = TeamPracticeResultCache.SelectedMembers;
 
             foreach (var binding in memberObjects)
-            {
                 binding.characterObject.SetActive(false);
-            }
 
             foreach (var unit in selected)
             {
@@ -53,19 +49,16 @@ namespace Code.MainSystem.MainScreen.Training
                 binding.characterObject.SetActive(true);
                 var track = FindTrackByName(binding.memberType.ToString());
                 if (track != null)
-                {
                     director.SetGenericBinding(track, binding.characterObject);
-                }
             }
         }
 
         private TrackAsset FindTrackByName(string name)
         {
             foreach (var track in timelineAsset.GetOutputTracks())
-            {
                 if (track.name == name)
                     return track;
-            }
+
             return null;
         }
 
@@ -81,16 +74,12 @@ namespace Code.MainSystem.MainScreen.Training
                 string animName = GetResultAnimationName(binding.memberType);
                 animator.Play(animName, 0, 0f);
             }
-            
-            await UniTask.Delay(1000); 
 
-            await resultWindow.PlayForTeam(
-                statManager,
-                TeamPracticeResultCache.SelectedMembers,
-                TeamPracticeResultCache.StatDeltaDict
-            );
+            await UniTask.Delay(1000);
+
+            await resultWindow.PlayForTeam();
+
         }
-
 
         private string GetResultAnimationName(MemberType member)
         {
