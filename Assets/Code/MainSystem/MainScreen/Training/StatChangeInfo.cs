@@ -18,8 +18,6 @@ namespace Code.MainSystem.MainScreen.Training
         }
     }
     
-
-    
     [System.Serializable]
     public class CommentData
     {
@@ -27,11 +25,21 @@ namespace Code.MainSystem.MainScreen.Training
         public string content;
         public List<StatChangeInfo> statChanges;
 
-        public CommentData(string title, string content, List<StatChangeInfo> statChanges)
+        public Sprite icon;
+        public bool isPositive;
+
+        public string thoughts;
+
+        public CommentData(string title, string content, List<StatChangeInfo> statChanges, Sprite icon = null, bool isPositive = true, string thoughts = "")
         {
             this.title = title;
             this.content = content;
             this.statChanges = statChanges;
+            this.icon = icon;
+            this.isPositive = isPositive;
+            this.thoughts = thoughts;
         }
     }
+
+
 }

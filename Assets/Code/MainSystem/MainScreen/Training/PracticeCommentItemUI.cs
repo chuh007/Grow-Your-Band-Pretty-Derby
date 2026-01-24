@@ -1,6 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace Code.MainSystem.MainScreen.Training
 {
@@ -8,29 +8,26 @@ namespace Code.MainSystem.MainScreen.Training
     {
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI contentText;
-        [SerializeField] private Transform statChangeRoot;
-        [SerializeField] private GameObject statChangeItemPrefab;
+        [SerializeField] private TextMeshProUGUI thoughtsText;
+        [SerializeField] private List<StatUpDownComment> statChangeItems;
 
         public void Setup(CommentData data)
         {
             titleText.text = data.title;
             contentText.text = data.content;
+            thoughtsText.text = string.IsNullOrEmpty(data.thoughts) ? "" : data.thoughts;
 
-            foreach (Transform child in statChangeRoot)
-                Destroy(child.gameObject);
-
-            foreach (var stat in data.statChanges)
+            for (int i = 0; i < statChangeItems.Count; i++)
             {
-                var go = Instantiate(statChangeItemPrefab, statChangeRoot);
-
-                var icon = go.transform.Find("Icon")?.GetComponent<Image>();
-                var value = go.transform.Find("Value")?.GetComponent<TextMeshProUGUI>();
-
-                if (icon != null && stat.icon != null)
-                    icon.sprite = stat.icon;
-
-                if (value != null)
-                    value.text = $"{stat.statName}: {(stat.delta >= 0 ? "+" : "")}{stat.delta}";
+                if (i < data.statChanges.Count)
+                {
+                    statChangeItems[i].gameObject.SetActive(true);
+                    statChangeItems[i].Setup(data.statChanges[i]);
+                }
+                else
+                {
+                    statChangeItems[i].gameObject.SetActive(false);
+                }
             }
         }
     }

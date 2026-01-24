@@ -46,6 +46,9 @@ namespace Code.MainSystem.MainScreen.Training
             }
 
             _instance.SetActive(true);
+            var tcs = new UniTaskCompletionSource();
+
+            int receivedDelta = 0;
 
             await _view.Play(
                 _actionData,
@@ -53,25 +56,33 @@ namespace Code.MainSystem.MainScreen.Training
                 dataSo,
                 currentCondition,
                 statManager,
+                unitData.name,
                 (statDelta) =>
                 {
-                    
-                    practiceResultWindow.Play(
-                        statManager,
-                        new List<UnitDataSO> { unitData },
-                        currentCondition,
-                        isSuccess ? dataSo.statIncrease : -dataSo.StaminaReduction,
-                        teamStatData,
-                        teamStatDelta,
-                        new Dictionary<(MemberType, StatType), int>
-                        {
-                            { (unitData.memberType, dataSo.PracticeStatType), statDelta }
-                        },
-                        isSuccess
-                    ).Forget();
+                    receivedDelta = statDelta;
+                    tcs.TrySetResult(); 
                 });
+
+            await tcs.Task; 
+            _view.gameObject.SetActive(false);
+            await practiceResultWindow.Play(
+                statManager,
+                new List<UnitDataSO> { unitData },
+                currentCondition,
+                isSuccess ? dataSo.statIncrease : -dataSo.StaminaReduction,
+                teamStatData,
+                teamStatDelta,
+                new Dictionary<(MemberType, StatType), int>
+                {
+                    { (unitData.memberType, dataSo.PracticeStatType), receivedDelta }
+                },
+                isSuccess,
+                dataSo 
+            );
+
 
             _instance.SetActive(false);
         }
+
     }
 }

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: RhythmGameDataSender
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.RhythmGameDataSenderSO
   SongId: TestSong
-  ConcertType: 1
+  ConcertType: 0
   MemberIds: 
-  Difficulty: 0
+  Difficulty: 1
   CombinedChart: []
   IsResultDataAvailable: 0
   allStatUpValue: 0

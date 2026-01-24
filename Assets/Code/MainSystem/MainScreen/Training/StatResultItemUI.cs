@@ -26,6 +26,25 @@ namespace Code.MainSystem.MainScreen.Training
             if (valueText != null)
                 valueText.text = "";
         }
+        
+        public void ResetUI()
+        {
+            if (statNameText != null)
+                statNameText.text = "";
+
+            if (valueText != null)
+                valueText.text = "";
+            
+            if (leftIcon != null)
+                leftIcon.sprite = null;
+
+            if (rightIcon != null)
+                rightIcon.sprite = null;
+            
+            if (gaugeFill != null)
+                gaugeFill.localScale = new Vector3(0f, 1f, 1f);
+        }
+
 
         public async UniTask AnimateToValue(Sprite left, float currentValue, float duration = 0.5f)
         {

@@ -3,13 +3,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
-using Reflex.Attributes;
-using UnityEditor.Animations;
 
 public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
 {
@@ -25,11 +25,11 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
         MemberActionData actionData,
         bool isSuccess,
         PersonalpracticeDataSO dataSo,
-        float currentConditoin,
+        float currentCondition,
         StatManager statManager,
-        Action<int> onComplete 
+        string name,
+        Action<int> onComplete
     )
-
     {
         animator.runtimeAnimatorController = actionData.animator;
         isSkipped = false;
@@ -38,28 +38,67 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
         animator.Play(actionData.startAnimationName);
 
         await WaitOrSkip(1.0f);
-        
+
         succesImage.SetActive(isSuccess);
         failImage.SetActive(!isSuccess);
-        
         animator.Play(isSuccess ? "Success" : "Fail");
 
         if (isSuccess)
         {
-
             BaseStat stat = statManager.GetMemberStat(actionData.memberType, dataSo.PracticeStatType);
-
-            Bus<StatIncreaseDecreaseEvent>.Raise(new StatIncreaseDecreaseEvent(true,dataSo.statIncrease.ToString(),
-                stat.StatIcon,stat.StatName));
-            await WaitOrSkip(1.0f);
-            Bus<StatIncreaseDecreaseEvent>.Raise(new StatIncreaseDecreaseEvent(false,dataSo.statIncrease.ToString(),conditoinSprite,"컨디션"));
+            var commentData = dataSo.PersonalsuccessComment;
             
+            var statChanges = new List<StatChangeInfo>
+            {
+                new StatChangeInfo(string.Empty, (int)dataSo.statIncrease, stat.StatIcon),
+                new StatChangeInfo(string.Empty, -(int)dataSo.StaminaReduction, conditoinSprite)
+            };
+
+            var comment = new CommentData(
+                $"{name}의 훈련일지",
+                commentData.comment,
+                statChanges,
+                commentData.icon,
+                true,
+                commentData.thoughts
+            );
+
+            CommentManager.instance.AddComment(comment, name);
+            
+            Bus<StatIncreaseDecreaseEvent>.Raise(
+                new StatIncreaseDecreaseEvent(true, dataSo.statIncrease.ToString(), stat.StatIcon, stat.StatName)
+            );
+            await WaitOrSkip(1.0f);
+
+            Bus<StatIncreaseDecreaseEvent>.Raise(
+                new StatIncreaseDecreaseEvent(false, dataSo.StaminaReduction.ToString(), conditoinSprite, "컨디션")
+            );
         }
         else
         {
-            Bus<StatIncreaseDecreaseEvent>.Raise(new StatIncreaseDecreaseEvent(false,dataSo.StaminaReduction.ToString(),conditoinSprite,"컨디션"));
+            var commentData = dataSo.PersonalfaillComment;
+
+            var statChanges = new List<StatChangeInfo>
+            {
+                new StatChangeInfo(string.Empty, -(int)dataSo.StaminaReduction, conditoinSprite)
+            };
+
+            var comment = new CommentData(
+                $"{name}의 훈련일지",
+                commentData.comment,
+                statChanges,
+                commentData.icon,
+                false,
+                commentData.thoughts
+            );
+
+            CommentManager.instance.AddComment(comment, name);
+
+            Bus<StatIncreaseDecreaseEvent>.Raise(
+                new StatIncreaseDecreaseEvent(false, dataSo.StaminaReduction.ToString(), conditoinSprite, "컨디션")
+            );
         }
-        
+
         await WaitOrSkip(1.2f);
         onComplete?.Invoke((int)actionData.memberType);
     }
@@ -72,7 +111,7 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
             elapsed += Time.deltaTime;
             await UniTask.Yield();
         }
-        
+
         Bus<StopEvent>.Raise(new StopEvent());
     }
 

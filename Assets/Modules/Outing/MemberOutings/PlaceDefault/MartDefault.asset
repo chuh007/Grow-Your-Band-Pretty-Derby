@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5834baa11b7e4df7852c768540b3796e, type: 3}
+  m_Name: MartDefault
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
+  <DialogueBackground>k__BackingField:
+  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  <DialogueDetails>k__BackingField:
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: "\uB9C8\uD2B8\uB97C \uCC3E\uC558\uB2E4."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: "\uC990\uAC70\uC6B4 \uC1FC\uD551 \uC2DC\uAC04\uC744
+      \uC990\uACBC\uB2E4."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField:
+    - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}
+  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <DialogueDetail>k__BackingField: 
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField:
+    - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}

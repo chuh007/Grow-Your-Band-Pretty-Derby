@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.MainSystem.Dialogue;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.TraitSystem.Data;
 using UnityEngine;
 
 namespace Code.MainSystem.Outing
@@ -23,6 +24,6 @@ namespace Code.MainSystem.Outing
 
         [Header("Game Result Data")]
         public List<StatVariation> changeStats;
-        // TODO 얻은 스킬들 리스
+        public List<TraitType> addedTraits;
     }
 }

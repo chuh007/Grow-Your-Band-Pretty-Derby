@@ -21,9 +21,9 @@ namespace Code.MainSystem.Rhythm
         private void OnScoreUpdated(ScoreUpdateEvent evt)
         {
             float progress = Mathf.Clamp01(evt.CurrentScore / targetScore);
-            OnProgressUpdated(progress);
+            OnProgressUpdated(progress, evt.CurrentScore);
         }
 
-        protected abstract void OnProgressUpdated(float progress);
+        protected abstract void OnProgressUpdated(float progress, float currentScore);
     }
 }
