@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
+using Cysharp.Threading.Tasks;
+using Reflex.Attributes;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -23,33 +25,32 @@ namespace Code.MainSystem.MainScreen.Training
         [Header("Member Bindings")]
         public List<MemberObjectBinding> memberObjects;
 
-        [Header("Result UI")]
-        public GameObject resultUI;
+        [Header("Result Window")]
+        public TeamPracticeResultWindow resultWindow;
+        [Inject]private StatManager statManager;
 
         private void Start()
         {
             ApplyTimelineBindings();
             director.stopped += OnTimelineEnd;
             director.Play();
-            //resultUI.SetActive(false);
         }
 
         private void ApplyTimelineBindings()
         {
             var selected = TeamPracticeResultCache.SelectedMembers;
-            
+
             foreach (var binding in memberObjects)
             {
                 binding.characterObject.SetActive(false);
             }
-            
+
             foreach (var unit in selected)
             {
                 var binding = memberObjects.Find(b => b.memberType == unit.memberType);
                 if (binding == null) continue;
 
                 binding.characterObject.SetActive(true);
-
                 var track = FindTrackByName(binding.memberType.ToString());
                 if (track != null)
                 {
@@ -57,7 +58,7 @@ namespace Code.MainSystem.MainScreen.Training
                 }
             }
         }
-        
+
         private TrackAsset FindTrackByName(string name)
         {
             foreach (var track in timelineAsset.GetOutputTracks())
@@ -68,8 +69,7 @@ namespace Code.MainSystem.MainScreen.Training
             return null;
         }
 
-
-        private void OnTimelineEnd(PlayableDirector director)
+        private async void OnTimelineEnd(PlayableDirector director)
         {
             foreach (var binding in memberObjects)
             {
@@ -81,9 +81,16 @@ namespace Code.MainSystem.MainScreen.Training
                 string animName = GetResultAnimationName(binding.memberType);
                 animator.Play(animName, 0, 0f);
             }
+            
+            await UniTask.Delay(1000); 
 
-            //resultUI.SetActive(true);
+            await resultWindow.PlayForTeam(
+                statManager,
+                TeamPracticeResultCache.SelectedMembers,
+                TeamPracticeResultCache.StatDeltaDict
+            );
         }
+
 
         private string GetResultAnimationName(MemberType member)
         {
