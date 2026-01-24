@@ -28,13 +28,28 @@ namespace Code.MainSystem.Rhythm
         [Header("Part Data")]
         [SerializeField] private List<PartDataSO> partDataList;
 
-        [Inject] private StatManager _statManager;
         [Inject] private FeverManager _feverManager; 
+
+        // StatManager 의존성 제거, 대신 배율 값을 저장
+        private Dictionary<int, float> _memberStatMultipliers = new Dictionary<int, float>();
 
         private void Start()
         {
             ResetScore();
             Bus<SongEndEvent>.OnEvent += HandleSongEnd;
+        }
+        
+        // Bootstrapper가 호출하여 스탯 배율 설정
+        public void SetMemberStatMultiplier(int memberId, float multiplier)
+        {
+            if (_memberStatMultipliers.ContainsKey(memberId))
+            {
+                _memberStatMultipliers[memberId] = multiplier;
+            }
+            else
+            {
+                _memberStatMultipliers.Add(memberId, multiplier);
+            }
         }
 
         public void ResetScore()
@@ -91,7 +106,12 @@ namespace Code.MainSystem.Rhythm
                     partMult = partDataList[memberId].ScoreMultiplier;
             }
 
+            // 미리 설정된 스탯 배율 사용
             float statMult = 1.0f;
+            if (_memberStatMultipliers.TryGetValue(memberId, out float mult))
+            {
+                statMult = mult;
+            }
             
             float feverMult = (_feverManager != null && _feverManager.IsFeverActive) ? 1.5f : 1.0f;
 

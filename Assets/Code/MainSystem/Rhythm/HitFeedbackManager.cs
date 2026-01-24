@@ -72,7 +72,8 @@ namespace Code.MainSystem.Rhythm
             {
                 effectInstance.transform.SetParent(targetTransform, false);
 
-                effectInstance.transform.localPosition = new Vector3(0, effectYOffset, 0);;
+                // UI 앞으로
+                effectInstance.transform.localPosition = new Vector3(0, effectYOffset, -500f);
                 effectInstance.transform.localRotation = Quaternion.identity;
                 effectInstance.transform.localScale = effectScale;
 

@@ -2,8 +2,6 @@ using UnityEngine;
 using Reflex.Attributes;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
-using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.StatSystem.BaseStats;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -15,13 +13,21 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private int maxFeverGauge = 1000;
         [SerializeField] private float baseFeverDuration = 10.0f;
 
-        [Inject] private StatManager _statManager;
+        // StatManager 의존성 제거
 
         private int _currentGauge = 0;
         private bool _isFeverActive = false;
         private float _feverTimer = 0f;
+        
+        private float _statBonusDuration = 0f;
 
         public bool IsFeverActive => _isFeverActive;
+        
+        // Bootstrapper가 호출하여 보너스 시간 설정
+        public void SetStatBonusDuration(float duration)
+        {
+            _statBonusDuration = duration;
+        }
 
         private void Start()
         {
@@ -69,12 +75,8 @@ namespace Code.MainSystem.Rhythm
             _isFeverActive = true;
             _currentGauge = 0;
             
-            float bonus = 0f;
-            if (_statManager != null)
-            {
-            }
-
-            _feverTimer = baseFeverDuration + bonus;
+            // 미리 주입받은 보너스 사용
+            _feverTimer = baseFeverDuration + _statBonusDuration;
             
             Debug.Log($"<color=orange>FEVER MODE ACTIVATED!</color> Duration: {_feverTimer:F1}s");
         }

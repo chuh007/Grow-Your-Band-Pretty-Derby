@@ -42,7 +42,20 @@ namespace Code.MainSystem.Rhythm
             {
                 _conductor.OnSongStart += HandleSongStart;
                 _conductor.OnSongEnd += HandleSongEnd;
+
+                // 이미 재생 중이라면(이벤트를 놓쳤을 경우 대비) 바로 핸들러 호출
+                if (_conductor.IsPlaying)
+                {
+                    HandleSongStart();
+                }
             }
+            else
+            {
+                Debug.LogError("[RhythmLineController] Conductor is missing!");
+            }
+            
+            // 초기 설정 확인 로그
+            Debug.Log($"[RhythmLineController] Initialized. StartPoint: {(startPoint != null ? startPoint.name : "NULL")}, EndPoint: {(endPoint != null ? endPoint.name : "NULL")}, PulseContainer: {(pulseContainer != null ? pulseContainer.name : "NULL")}");
         }
 
         private void OnDestroy()
@@ -57,6 +70,7 @@ namespace Code.MainSystem.Rhythm
         public void SetPulsePrefab(RhythmPulse prefab)
         {
             pulsePrefab = prefab;
+            Debug.Log($"[RhythmLineController] Pulse Prefab Set: {(prefab != null ? prefab.name : "NULL")}");
         }
 
         public void SetChart(List<NoteData> notes)
@@ -71,18 +85,20 @@ namespace Code.MainSystem.Rhythm
             {
                 _chartQueue.Enqueue(note);
             }
-            Debug.Log($"RhythmLineController: Chart Set. {notes.Count} notes.");
+            Debug.Log($"[RhythmLineController] Chart Set. Total Notes: {notes.Count}. First Note Time: {(notes.Count > 0 ? notes[0].Time : 0)}");
         }
 
         private void HandleSongStart()
         {
             _isPlaying = true;
+            Debug.Log("[RhythmLineController] Song Started. Playing...");
         }
 
         private void HandleSongEnd()
         {
             _isPlaying = false;
             ClearAll();
+            Debug.Log("[RhythmLineController] Song Ended.");
         }
 
         private void ClearAll()
@@ -103,6 +119,9 @@ namespace Code.MainSystem.Rhythm
             double songTime = _conductor.SongPosition;
             double secPerBeat = _conductor.SecPerBeat;
             double travelDuration = travelBeats * secPerBeat;
+            
+            // 디버그용: 시간이 잘 흐르는지 가끔 체크
+            // if (Time.frameCount % 300 == 0) Debug.Log($"[RhythmLineController] Time: {songTime:F2}, Queue: {_chartQueue.Count}, ActiveSeq: {_activeSequences.Count}");
 
             while (_chartQueue.Count > 0)
             {
@@ -123,6 +142,7 @@ namespace Code.MainSystem.Rhythm
                     });
                     
                     _activeHitNotes.AddLast(nextNote);
+                    Debug.Log($"[RhythmLineController] Started Sequence for Note at {nextNote.Time:F2}. SpawnThreshold: {spawnThreshold:F2}");
                 }
                 else
                 {
@@ -153,18 +173,35 @@ namespace Code.MainSystem.Rhythm
             }
 
             ProcessMissedNotes(songTime);
+            
+            // 비활성화된 펄스(Miss나 Hit로 인해 꺼진 것들)를 풀로 회수
+            for (int i = _activePulses.Count - 1; i >= 0; i--)
+            {
+                var pulse = _activePulses[i];
+                if (!pulse.gameObject.activeSelf)
+                {
+                    ReturnToPool(pulse);
+                    _activePulses.RemoveAt(i);
+                }
+            }
         }
 
         private void SpawnPulse(NoteData data, double targetTime, double spawnTime, bool isHit)
         {
             RhythmPulse pulse = GetFromPool();
-            if (pulse == null) return;
+            if (pulse == null) 
+            {
+                Debug.LogWarning("[RhythmLineController] Failed to spawn pulse: Pool empty or Prefab null.");
+                return;
+            }
 
             Vector3 sPos = startPoint != null ? startPoint.position : Vector3.zero;
             Vector3 ePos = endPoint != null ? endPoint.position : Vector3.zero;
 
             pulse.Initialize(_conductor, sPos, ePos, spawnTime, targetTime, isHit);
             _activePulses.Add(pulse);
+            
+            // Debug.Log($"[RhythmLineController] Spawned Pulse. Hit? {isHit}. Pos: {sPos} -> {ePos}");
         }
 
         private void ProcessMissedNotes(double songTime)
@@ -182,6 +219,7 @@ namespace Code.MainSystem.Rhythm
                         _judgementSystem.HandleMiss(note);
                     }
                     _activeHitNotes.Remove(node);
+                    Debug.Log($"[RhythmLineController] Missed Note at {note.Time:F2}");
                 }
                 
                 node = nextNode;
