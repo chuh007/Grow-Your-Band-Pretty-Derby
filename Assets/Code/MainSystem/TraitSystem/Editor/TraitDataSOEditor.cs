@@ -16,7 +16,8 @@ namespace Code.MainSystem.TraitSystem.Editor
         
         private TraitDataSO _targetSO;
         private VisualElement _root;
-        private List<string> _cachedDerivedTypes;
+        private List<string> _cachedEffectTypes;
+        private List<string> _cachedConditionTypes;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -27,7 +28,9 @@ namespace Code.MainSystem.TraitSystem.Editor
             
             view.CloneTree(_root);
             
-            _cachedDerivedTypes = GetDerivedTypes(typeof(TraitEffect.AbstractTraitEffect));
+            // Effect와 Condition을 각각 분리해서 캐싱
+            _cachedEffectTypes = GetDerivedTypes(typeof(TraitEffect.AbstractTraitEffect));
+            _cachedConditionTypes = GetDerivedTypes(typeof(TraitConditions.AbstractTraitCondition));
             
             MakeTraitEffectDropdown();
             MakeTraitConditionDropdown();
@@ -55,7 +58,7 @@ namespace Code.MainSystem.TraitSystem.Editor
         private void MakeTraitEffectDropdown()
         {
             DropdownField dropdown = _root.Q<DropdownField>("EffectDropdown");
-            SetupDropdown(dropdown, _cachedDerivedTypes, _targetSO.effectName, 
+            SetupDropdown(dropdown, _cachedEffectTypes, _targetSO.effectName, 
                 newValue => _targetSO.effectName = newValue);
         }
 
@@ -63,7 +66,7 @@ namespace Code.MainSystem.TraitSystem.Editor
         {
             DropdownField dropdown = _root.Q<DropdownField>("ConditionDropdown");
             
-            SetupDropdown(dropdown, _cachedDerivedTypes, _targetSO.conditionName, 
+            SetupDropdown(dropdown, _cachedConditionTypes, _targetSO.conditionName, 
                 newValue => _targetSO.conditionName = newValue);
         }
         

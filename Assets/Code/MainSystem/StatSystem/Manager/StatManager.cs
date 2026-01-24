@@ -19,6 +19,8 @@ namespace Code.MainSystem.StatSystem.Manager
     
     public class StatManager : MonoBehaviour
     {
+        public static StatManager Instance { get; private set; }
+        
         [Header("Stats Data")]
         [SerializeField] private List<MemberStat> memberStats;
         [SerializeField] private TeamStat teamStat;
@@ -38,6 +40,15 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
             InitializeComponents();
             InitializeAsync();
             RegisterEvents();

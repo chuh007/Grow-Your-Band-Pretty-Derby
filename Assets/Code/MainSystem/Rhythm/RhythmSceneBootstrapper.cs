@@ -3,26 +3,28 @@ using Reflex.Attributes;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Code.Core.Addressable;
+using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.StatSystem.BaseStats;
 
 namespace Code.MainSystem.Rhythm
 {
     public class RhythmSceneBootstrapper : MonoBehaviour
     {
         [Header("Scene References")]
-        [Inject] private NoteManager _noteManager;
+        [Inject] private RhythmLineController _lineController;
         [Inject] private Conductor _conductor;
         [Inject] private ScoreManager _scoreManager;
         [Inject] private ChartLoader _chartLoader;
         [Inject] private HitFeedbackManager _hitFeedbackManager;
+        [Inject] private JudgementSystem _judgementSystem;
+        [Inject] private FeverManager _feverManager; 
         
         [SerializeField] private RhythmGameDataSenderSO _dataSender;
         [SerializeField] private CanvasGroup _loadingCanvasGroup;
         [SerializeField] private float _fadeDuration = 0.5f;
 
-        // 배경
         private const string KEY_ENV_BUSKING = "RhythmGame/Environment/Busking";
         private const string KEY_ENV_LIVE    = "RhythmGame/Environment/Live";
-        // 노트 및 이펙트
         private const string KEY_NOTE_BASIC  = "RhythmGame/Prefab/Note_Basic";
         private const string KEY_VFX_HIT     = "RhythmGame/Prefab/HitEffect";
 
@@ -30,9 +32,16 @@ namespace Code.MainSystem.Rhythm
         private GameObject _loadedNotePrefab;
         private GameObject _loadedHitEffect;
         private GameObject _loadedEnvPrefab;
+        
+        private StatManager _statManager;
 
         private async void Start()
         {
+            Time.timeScale = 1.0f;
+            
+            _statManager = FindAnyObjectByType<StatManager>();
+            if (_statManager == null) Debug.LogWarning("[Bootstrapper] StatManager not found. Stats will not affect gameplay.");
+
             if (_loadingCanvasGroup != null)
             {
                 _loadingCanvasGroup.alpha = 1f;
@@ -50,6 +59,8 @@ namespace Code.MainSystem.Rhythm
 
             await LoadGameResources();
 
+            ApplyStatsToManagers();
+
             await FadeInGameScreen();
 
             if (_conductor != null)
@@ -58,23 +69,91 @@ namespace Code.MainSystem.Rhythm
             }
         }
 
+        private void ApplyStatsToManagers()
+        {
+            if (_statManager == null || _dataSender.members == null) return;
+
+            if (_feverManager != null)
+            {
+                var teamStat = _statManager.GetTeamStat(StatType.TeamHarmony);
+                float bonus = teamStat != null ? teamStat.CurrentValue * 0.1f : 0f;
+                _feverManager.SetStatBonusDuration(bonus);
+            }
+
+            List<MemberType> flatMembers = new List<MemberType>();
+            
+            int memberIdCounter = 1;
+            
+             _scoreManager.SetMemberStatMultiplier(0, 1.0f);
+
+            foreach (var group in _dataSender.members)
+            {
+                if (group == null || group.Members == null) continue;
+                foreach (var memberType in group.Members)
+                {
+                    StatType targetStat = GetStatTypeForMember(memberType);
+                    var statObj = _statManager.GetMemberStat(memberType, targetStat);
+                    
+                    float multiplier = 1.0f;
+                    if (statObj != null)
+                    {
+                        multiplier = 1.0f + (statObj.CurrentValue * 0.001f);
+                    }
+                    
+                    _scoreManager.SetMemberStatMultiplier(memberIdCounter, multiplier);
+                    memberIdCounter++;
+                    
+                    break; 
+                }
+            }
+        }
+
+        private StatType GetStatTypeForMember(MemberType type)
+        {
+            switch (type)
+            {
+                case MemberType.Guitar: return StatType.GuitarConcentration;
+                case MemberType.Bass: return StatType.BassSenseOfRhythm;
+                case MemberType.Drums: return StatType.DrumsSenseOfRhythm;
+                case MemberType.Piano: return StatType.PianoDexterity;
+                case MemberType.Vocal: return StatType.VocalVocalization;
+                default: return StatType.Condition;
+            }
+        }
+
         private async UniTask LoadGameResources()
         {
+            Debug.Log($"[Bootstrapper] _dataSender.members is {(_dataSender.members == null ? "NULL" : "NOT NULL")}, Count: {(_dataSender.members != null ? _dataSender.members.Count : 0)}");
+
             List<Code.MainSystem.StatSystem.Manager.MemberType> memberRoles = new List<Code.MainSystem.StatSystem.Manager.MemberType>();
-            if (_dataSender.members != null)
+            if (_dataSender.members != null && _dataSender.members.Count > 0)
             {
                 foreach (var memberGroup in _dataSender.members)
                 {
-                    if (memberGroup != null)
+                    if (memberGroup != null && memberGroup.Members != null)
                     {
-                        foreach (var type in memberGroup)
+                        foreach (var type in memberGroup.Members)
                         {
                             memberRoles.Add(type);
+                            Debug.Log($"[Bootstrapper] Added Member: {type}");
                             break;
                         }
                     }
                 }
             }
+
+            // Fallback: 데이터가 없으면 기본 5인조 구성으로 강제 설정
+            if (memberRoles.Count == 0)
+            {
+                Debug.LogWarning("[Bootstrapper] No members found in DataSender. Using Default Full Band Setup.");
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Vocal);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Guitar);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Bass);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Drums);
+                memberRoles.Add(Code.MainSystem.StatSystem.Manager.MemberType.Piano);
+            }
+            
+            Debug.Log($"[Bootstrapper] Final memberRoles count: {memberRoles.Count}");
 
             string songId = _dataSender.SongId;
             string musicKey = $"RhythmGame/Music/{songId}";
@@ -91,16 +170,41 @@ namespace Code.MainSystem.Rhythm
             if (_loadedMusic != null) _conductor.SetMusic(_loadedMusic);
             else Debug.LogError($"[Rhythm] Music is missing: {musicKey}");
 
-            if (_loadedNotePrefab != null) _noteManager.SetNotePrefab(_loadedNotePrefab);
+            if (_loadedNotePrefab != null) 
+            {
+                var pulseComp = _loadedNotePrefab.GetComponent<RhythmPulse>();
+                if (pulseComp != null)
+                {
+                    _lineController.SetPulsePrefab(pulseComp);
+                }
+                else
+                {
+                    Debug.LogError($"[Rhythm] Loaded Note Prefab does not have RhythmPulse component: {KEY_NOTE_BASIC}");
+                }
+            }
             else Debug.LogError($"[Rhythm] Note Prefab is missing: {KEY_NOTE_BASIC}");
 
             if (_loadedHitEffect != null) _hitFeedbackManager.SetHitEffectPrefab(_loadedHitEffect);
             else Debug.LogWarning($"[Rhythm] Hit Effect is missing: {KEY_VFX_HIT}");
 
-            if (_loadedEnvPrefab != null) Instantiate(_loadedEnvPrefab);
+            if (_loadedEnvPrefab != null)
+            {
+                GameObject envObj = Instantiate(_loadedEnvPrefab);
+                var stageController = envObj.GetComponentInChildren<BuskingStageController>();
+                
+                if (stageController != null)
+                {
+                    Debug.Log($"[Bootstrapper] Found BuskingStageController. Initializing with {memberRoles.Count} members.");
+                    await stageController.InitializeStage(memberRoles);
+                }
+                else
+                {
+                    Debug.LogError("[Bootstrapper] BuskingStageController component NOT found on instantiated environment!");
+                }
+            }
             else Debug.LogWarning($"[Rhythm] Environment Prefab is missing: {envKey}");
 
-            if (chartData != null) _noteManager.SetChart(chartData);
+            if (chartData != null) _lineController.SetChart(chartData);
             else Debug.LogError($"[Rhythm] Chart Data failed to build for {songId}");
         }
 

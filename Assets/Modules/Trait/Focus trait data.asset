@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
+  m_Name: Focus trait data
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
+  TraitID: 1002
+  TraitType: 1
+  TraitName: "\uC9D1\uC911\uB825"
+  TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
+  traitEffectType: 0
+  Level: 1
+  MaxLevel: 10
+  Point: 10
+  IsRemovable: 0
+  conditionType: 1
+  Effects: []
+  DescriptionEffect: "\uC721\uC131 \uD30C\uD2B8\uC5D0\uC11C\uB294 \uD6C8\uB828 \uC2E4\uD328
+    \uD655\uB960 \uAC10\uC18C\uB098 \uCEE8\uB514\uC158 \uD558\uB77D \uAC10\uC18C
+    \uD6A8\uACFC\uB97C \uC8FC\uACE0,\r\n\uB9AC\uB4EC\uAC8C\uC784 \uD30C\uD2B8\uC5D0\uC11C\uB294
+    \uD310\uC815 \uBC94\uC704\uB97C \uB113\uD788\uAC70\uB098 Miss\uAC00 Good\uC73C\uB85C
+    \uCC98\uB9AC\uB418\uB294 \uBCF4\uC815 \uD6A8\uACFC\uB97C \uC90C"
+  bindingFlags: 52
+  conditionName: Code.MainSystem.TraitSystem.TraitConditions.EnsembleMemberCountCondition,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  effectName: Code.MainSystem.TraitSystem.TraitEffect.FocusEffect, Assembly-CSharp,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

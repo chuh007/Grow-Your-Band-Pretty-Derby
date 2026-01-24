@@ -39,8 +39,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c95628a9a639b04ababeccf4c98ae7a
+    m_Address: RhythmGame/Prefab/Member/Piano
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2a7fb2c3791dc4b40b4de043f221008e
     m_Address: RhythmGame/Prefab/AudienceMember
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3846454295006004999ed13cd54ecce1
+    m_Address: RhythmGame/Prefab/Member/Bass
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame
@@ -51,8 +63,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 663168032161e4640b0ae296554ae2bb
+    m_Address: RhythmGame/Prefab/Note_Basic
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6889fa86fdcbaec49977ce790fe02c8f
+    m_Address: RhythmGame/Prefab/Member/Guitar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 87a88288ca67ec9409a9ecee806e01c0
     m_Address: RhythmGame/Prefab/HitEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88f65bec633c73440a598499cf1256ec
+    m_Address: RhythmGame/Prefab/Member/Vocal
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame
@@ -63,14 +93,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a34f6ed0f73dacb44aafe0fcccb1605c
-    m_Address: RhythmGame/Prefab/Note_Basic
+  - m_GUID: b5e0c4b1323cb5f41a1bdd20b4b27be7
+    m_Address: RhythmGame/Chart/TestSong/Main
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b5e0c4b1323cb5f41a1bdd20b4b27be7
-    m_Address: RhythmGame/Chart/TestSong/Main
+  - m_GUID: d373effdc21389f4e922fd8655d04c0d
+    m_Address: RhythmGame/Prefab/Member/Drums
     m_ReadOnly: 0
     m_SerializedLabels:
     - RhythmGame
