@@ -31,5 +31,5 @@ MonoBehaviour:
   bindingFlags: 52
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.EnsembleMemberCountCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.TelepathyEffect, Assembly-CSharp,
+  effectName: Code.MainSystem.TraitSystem.TraitEffect.AttentionGainEffect, Assembly-CSharp,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
