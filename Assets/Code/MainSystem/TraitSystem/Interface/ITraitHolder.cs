@@ -14,8 +14,7 @@ namespace Code.MainSystem.TraitSystem.Interface
         void EndAdjustment();
         
         bool IsAdjusting { get; }
-        TraitDataSO PendingTrait { get; }
-        
+
         void AddTrait(TraitDataSO newTrait);
         void RemoveActiveTrait(ActiveTrait trait);
     }
