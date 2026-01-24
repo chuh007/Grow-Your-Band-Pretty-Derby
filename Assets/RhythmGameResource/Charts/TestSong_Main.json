@@ -1,13 +1,6 @@
 {
   "title": "Test Song (Main)",
-  "bpm": 120,
+  "bpm": 60,
   "offset": 0.0,
-  "notes": [
-    { "time": 4.0, "lane": 0, "type": 0 },
-    { "time": 8.0, "lane": 0, "type": 0 },
-    { "time": 12.0, "lane": 0, "type": 0 },
-    { "time": 16.0, "lane": 0, "type": 0 },
-    { "time": 20.0, "lane": 0, "type": 0 },
-    { "time": 24.0, "lane": 0, "type": 0 }
-  ]
+  "notes": []
 }
