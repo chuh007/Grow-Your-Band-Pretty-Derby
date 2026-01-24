@@ -249,6 +249,12 @@ namespace Code.MainSystem.TraitSystem.Manager
         {
             _effectApplicator.ApplyEffects(holder, TraitEffectType.Passive);
         }
+        
+        public IReadOnlyList<TraitGroupStatus> GetTeamGroupStatus()
+        {
+            var groupManager = GetComponentInChildren<TraitGroupManager>();
+            return groupManager.BuildGroupStatus(_holders);
+        }
 
         #endregion
     }

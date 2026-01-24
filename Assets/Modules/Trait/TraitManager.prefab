@@ -177,15 +177,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDatabase
   traits:
-  - {fileID: 11400000, guid: dde9b00b336fcad49937e678acda8837, type: 2}
-  - {fileID: 11400000, guid: eb98da4bff245244d887741e62f1ffa1, type: 2}
-  - {fileID: 11400000, guid: 21eeffa4e2151bb4eaad1a55cb5934de, type: 2}
-  - {fileID: 11400000, guid: e0416f60983023b4cb5acfefe49f9ffe, type: 2}
-  - {fileID: 11400000, guid: 74890687eb2de0849b4924662f5aba5a, type: 2}
-  - {fileID: 11400000, guid: fb7725b6c19992446856594d700fd541, type: 2}
-  - {fileID: 11400000, guid: 7d66516b254410f47a72ac495271b4f2, type: 2}
-  - {fileID: 11400000, guid: 90f6e458467015949a1b0795ea3a1f8a, type: 2}
-  - {fileID: 11400000, guid: d9f2627e00462e142b829fc0d22d3599, type: 2}
+  - {fileID: 11400000, guid: 4810b742bd6e10d41bd1dc57f4856954, type: 2}
+  - {fileID: 11400000, guid: 452c844e9c6155a4a87b49126fbe43dc, type: 2}
+  - {fileID: 11400000, guid: d26b7679b88f5814b8951c688b174a78, type: 2}
+  - {fileID: 11400000, guid: 1d4d5d31d2aee1748ae6634c5a93a1ac, type: 2}
+  - {fileID: 11400000, guid: bce770db155beea429f4c1ca32d2f192, type: 2}
 --- !u!1 &7551168508848186664
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +226,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24a9c9623ac44518181ecbc752ac33b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Manager.SubClass.TraitInteraction
+--- !u!1 &7653326892030752971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 77855229438766953}
+  - component: {fileID: 8418418461065030925}
+  m_Layer: 0
+  m_Name: TraitGroupManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &77855229438766953
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7653326892030752971}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7174086074461526105}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8418418461065030925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7653326892030752971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3730d21dfd4cdeb0b95444288f6c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Manager.TraitGroupManager
+  groupDataList:
+  - {fileID: 11400000, guid: 565d81f18b354a4449790ae907822cfb, type: 2}
 --- !u!1 &7662850566613809110
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,6 +308,7 @@ Transform:
   - {fileID: 7063433486215225995}
   - {fileID: 5478000864848882374}
   - {fileID: 5892712501321110677}
+  - {fileID: 77855229438766953}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &942952918677608669

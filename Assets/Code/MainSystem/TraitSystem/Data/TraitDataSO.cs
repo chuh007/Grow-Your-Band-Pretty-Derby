@@ -1,11 +1,11 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+using UnityEngine;
 using System.Reflection;
-using Code.MainSystem.TraitSystem.TraitConditions;
+using System.Linq.Expressions;
+using System.Collections.Generic;
 using Code.MainSystem.TraitSystem.TraitEffect;
+using Code.MainSystem.TraitSystem.TraitConditions;
 
 namespace Code.MainSystem.TraitSystem.Data
 {
@@ -29,16 +29,21 @@ namespace Code.MainSystem.TraitSystem.Data
 
     public enum TraitType
     {
-        NoneTrait,              // 특성 없음
-        Telepathy,              // 이심전심
-        LoneGuitarist,          // 고독한 기타리스트
-        ShiningEyes,            // 반짝이는 눈
-        FailureBreedsSuccess,   // 실패는 성공의 어머니
-        HonedTechnique,         // 단련기술
-        Injury,                 // 부상
-        Overzealous,            // 지나친 열정
-        Dogmatic,               // 독선적
-        Entertainer             // 만담가
+        // NoneTrait,              // 특성 없음
+        // Telepathy,              // 이심전심
+        // LoneGuitarist,          // 고독한 기타리스트
+        // ShiningEyes,            // 반짝이는 눈
+        // FailureBreedsSuccess,   // 실패는 성공의 어머니
+        // HonedTechnique,         // 단련기술
+        // Injury,                 // 부상
+        // Overzealous,            // 지나친 열정
+        // Dogmatic,               // 독선적
+        // Entertainer,            // 만담가
+        Synergy,                // 시너지
+        Focus,                  // 집중력
+        HighlightBoost,         // 하이라이트 강화
+        AttentionGain,          // 주목도 상승
+        BreathControl,          // 호흡 조절
     }
 
     [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data", order = 0)]
@@ -65,36 +70,28 @@ namespace Code.MainSystem.TraitSystem.Data
 
         [HideInInspector] public string conditionName;
         [HideInInspector] public string effectName;
-
-        [HideInInspector] public string conditionTypeName;
-        [HideInInspector] public string effectTypeName;
-
-        private Action<AbstractTraitCondition> _traitConditionSetter;
-        private Action<AbstractTraitEffect> _traitEffectSetter;
+        
+        [NonSerialized] public Action<AbstractTraitCondition> TraitConditionSetter;
+        
+        [NonSerialized] public Action<AbstractTraitEffect> TraitEffectSetter;
 
         public bool InitializeTrait()
         {
-            return ConditionFactory() && EffectFactory();
-        }
-
-        public void ApplyCondition(AbstractTraitCondition condition)
-        {
-            _traitConditionSetter?.Invoke(condition);
-        }
-
-        public void ApplyEffect(AbstractTraitEffect effect)
-        {
-            _traitEffectSetter?.Invoke(effect);
+            bool conditionResult = ConditionFactory();
+            bool effectResult = EffectFactory();
+            
+            return conditionResult && effectResult;
         }
 
         private bool ConditionFactory()
         {
-            var parentType = typeof(AbstractTraitCondition);
-            var traitType = FindType(conditionName);
+            Type parentType = typeof(AbstractTraitCondition);
+            Type traitType = FindType(conditionName);
+            
             if (traitType == null || !parentType.IsAssignableFrom(traitType))
                 return false;
 
-            var targetField = traitType.GetField(conditionTypeName, bindingFlags);
+            FieldInfo targetField = traitType.GetField("conditionType", bindingFlags);
             if (targetField == null || targetField.FieldType != typeof(ConditionType))
                 return false;
 
@@ -103,31 +100,32 @@ namespace Code.MainSystem.TraitSystem.Data
             MemberExpression fieldAccess = Expression.Field(casted, targetField);
             ConstantExpression value = Expression.Constant(conditionType);
             BinaryExpression assign = Expression.Assign(fieldAccess, value);
-
-            _traitConditionSetter = Expression.Lambda<Action<AbstractTraitCondition>>(assign, param).Compile();
+            
+            TraitConditionSetter = Expression.Lambda<Action<AbstractTraitCondition>>(assign, param).Compile();
 
             return true;
         }
 
         private bool EffectFactory()
         {
-            var parentType = typeof(AbstractTraitEffect);
-            var traitType = FindType(effectName);
+            Type parentType = typeof(AbstractTraitEffect);
+            Type traitType = FindType(effectName);
+            
             if (traitType == null || !parentType.IsAssignableFrom(traitType))
                 return false;
 
-            var targetField = traitType.GetField(effectTypeName, bindingFlags);
+            FieldInfo targetField = traitType.GetField("effectType", bindingFlags);
             if (targetField == null || targetField.FieldType != typeof(TraitEffectType))
                 return false;
-
+            
             ParameterExpression param = Expression.Parameter(parentType, "effect");
             UnaryExpression casted = Expression.Convert(param, traitType);
             MemberExpression fieldAccess = Expression.Field(casted, targetField);
             ConstantExpression value = Expression.Constant(traitEffectType);
             BinaryExpression assign = Expression.Assign(fieldAccess, value);
-
-            _traitEffectSetter = Expression.Lambda<Action<AbstractTraitEffect>>(assign, param).Compile();
-
+            
+            TraitEffectSetter = Expression.Lambda<Action<AbstractTraitEffect>>(assign, param).Compile();
+            
             return true;
         }
 
@@ -139,7 +137,7 @@ namespace Code.MainSystem.TraitSystem.Data
             return AppDomain.CurrentDomain
                 .GetAssemblies()
                 .SelectMany(a => a.GetTypes())
-                .FirstOrDefault(t => t.FullName == fullName);
+                .FirstOrDefault(t => t.FullName == fullName || t.AssemblyQualifiedName == fullName);
         }
     }
 }

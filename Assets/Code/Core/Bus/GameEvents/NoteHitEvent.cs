@@ -6,6 +6,13 @@ namespace Code.Core.Bus.GameEvents
     {
         public JudgementType Judgement;
         public int LaneIndex;
-        public NoteHitEvent(JudgementType type, int lane) { Judgement = type; LaneIndex = lane; }
+        public int TrackIndex;
+
+        public NoteHitEvent(JudgementType type, int lane, int trackIndex = 0) 
+        { 
+            Judgement = type; 
+            LaneIndex = lane; 
+            TrackIndex = trackIndex;
+        }
     }
 }

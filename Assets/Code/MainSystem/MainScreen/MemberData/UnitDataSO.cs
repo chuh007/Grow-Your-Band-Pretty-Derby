@@ -19,10 +19,17 @@ namespace Code.MainSystem.MainScreen.MemberData
         public float currentCondition;
         public StatData TeamStat;
         public List<MemberActionData> unitActions;
+        
+
+        #region 지워야할것
+
         public string TeamIdleSpriteKey;
         public string TeamSuccseSpriteKey;
         public string TeamFaillSpriteKey;
         public string TeamProggresSpriteKey;
+
+        #endregion
+      
     }
 
 }
