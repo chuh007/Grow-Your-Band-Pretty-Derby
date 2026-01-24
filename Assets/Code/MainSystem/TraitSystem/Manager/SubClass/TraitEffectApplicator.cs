@@ -8,7 +8,7 @@ namespace Code.MainSystem.TraitSystem.Manager.SubClass
 {
     public class TraitEffectApplicator : MonoBehaviour
     {
-        private readonly Dictionary<TraitEffectType, ITraitEffect> _effects = new();
+        private readonly Dictionary<TraitEffectType, AbstractTraitEffect> _effects = new();
         private ConditionChecker _conditionChecker; 
     
         private void Awake()
@@ -16,7 +16,7 @@ namespace Code.MainSystem.TraitSystem.Manager.SubClass
             _conditionChecker = GetComponent<ConditionChecker>();
         }
     
-        public void RegisterEffect(TraitEffectType type, ITraitEffect effect)
+        public void RegisterEffect(TraitEffectType type, AbstractTraitEffect effect)
         {
             _effects[type] = effect;
         }

@@ -10,7 +10,10 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// </summary>
     public abstract class AbstractTraitEffect : MonoBehaviour, ITraitEffect
     {
-        public TraitEffectType EffectType { get; private set; }
+        // Expression Tree에서 접근할 수 있도록 protected로 변경
+        [SerializeField] protected TraitEffectType effectType;
+
+        public TraitEffectType EffectType => effectType;
         
         public void Apply(ITraitHolder holder, ActiveTrait trait)
         {

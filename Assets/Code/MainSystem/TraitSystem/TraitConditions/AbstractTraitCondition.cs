@@ -10,7 +10,10 @@ namespace Code.MainSystem.TraitSystem.TraitConditions
     /// </summary>
     public abstract class AbstractTraitCondition : MonoBehaviour, ITraitCondition
     {
-        public ConditionType ConditionType { get; private set; }
+        // Expression Tree에서 접근할 수 있도록 protected로 변경
+        [SerializeField] protected ConditionType conditionType;
+
+        public ConditionType ConditionType => conditionType;
 
         public bool IsMet(ITraitHolder holder, ActiveTrait trait)
         {

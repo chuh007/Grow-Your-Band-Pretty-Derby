@@ -9,9 +9,9 @@ namespace Code.MainSystem.TraitSystem.Manager.SubClass
 {
     public class ConditionChecker : MonoBehaviour
     {
-        private readonly Dictionary<ConditionType, ITraitCondition> _conditions = new();
+        private readonly Dictionary<ConditionType, AbstractTraitCondition> _conditions = new();
     
-        public void RegisterCondition(ConditionType type, ITraitCondition condition)
+        public void RegisterCondition(ConditionType type, AbstractTraitCondition condition)
         {
             _conditions[type] = condition;
         }
