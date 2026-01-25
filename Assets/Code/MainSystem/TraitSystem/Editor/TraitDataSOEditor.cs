@@ -28,24 +28,15 @@ namespace Code.MainSystem.TraitSystem.Editor
             
             view.CloneTree(_root);
             
-            // Effect와 Condition을 각각 분리해서 캐싱
             _cachedEffectTypes = GetDerivedTypes(typeof(TraitEffect.AbstractTraitEffect));
             _cachedConditionTypes = GetDerivedTypes(typeof(TraitConditions.AbstractTraitCondition));
             
             MakeTraitEffectDropdown();
             MakeTraitConditionDropdown();
             
-            _root.Q<Button>("ValidateBtn").clicked += OnValidateButtonClicked;
-            
             return _root;
         }
 
-        private void OnValidateButtonClicked()
-        {
-            bool message = _targetSO.InitializeTrait();
-            EditorUtility.DisplayDialog("Result", message ? "Success" : "Fail", "OK");
-        }
-        
         private List<string> GetDerivedTypes(Type baseType)
         {
             return AppDomain.CurrentDomain.GetAssemblies()

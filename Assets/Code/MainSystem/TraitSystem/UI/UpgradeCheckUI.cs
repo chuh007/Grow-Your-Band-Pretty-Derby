@@ -32,7 +32,7 @@ namespace Code.MainSystem.TraitSystem.UI
         public void EnableFor(ActiveTrait trait, int prevLevel)
         {
             iconImage.sprite = trait.Data.TraitIcon;
-            nameText.SetText(trait.Name);
+            nameText.SetText(trait.Data.TraitName);
             descriptionText.SetText($"Lv.{prevLevel} -> Lv.{trait.CurrentLevel}\n특성이 강화되었습니다.");
             Bus<TraitShowResponded>.Raise(new TraitShowResponded(_traitManager.GetHolder(_traitManager.CurrentMember)));
             Show();
