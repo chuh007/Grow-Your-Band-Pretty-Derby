@@ -1,4 +1,5 @@
 ﻿using System;
+using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -15,24 +16,20 @@ namespace Code.SubSystem.Collection.UI
         
         [SerializeField] GridLayoutGroup grid;
         
-        private void Start()
-        {
-            SetSize(collectionDatabase.collections.Count);
-        }
-        
-        private void OnEnable()
-        {
-            RefreshCells();
-        }
-        
-        public void RefreshCells()
+        public void RefreshCells(MemberType memberType)
         {
             CollectionCell[] cells = spawnParent.GetComponentsInChildren<CollectionCell>();
             
-            foreach (var cell in cells)
+            for (int i = 0; i < cells.Length; i++)
             {
-                bool isEquipped = equipCollection.collections.Contains(cell.GetCollectionData());
-                cell.UpdateEquipState(!isEquipped);
+                CollectionDataSO data = null;
+                if (i < collectionDatabase.collections[memberType].Count)
+                    data = collectionDatabase.collections[memberType][i];
+                
+                cells[i].SetCollectionData(data,
+                    !equipCollection.collections.Contains(data));
+                
+                bool isEquipped = equipCollection.collections.Contains(cells[i].GetCollectionData());
             }
         }
         
@@ -42,13 +39,6 @@ namespace Code.SubSystem.Collection.UI
             for (int i = 0; i < rowCount * grid.constraintCount; i++)
             {
                 GameObject cell = Instantiate(cellPrefab, spawnParent.transform);
-                if (i < count)
-                {
-                    CollectionDataSO data = collectionDatabase.collections[i];
-                    cell.GetComponent<CollectionCell>()
-                        .SetCollectionData(data,
-                            !equipCollection.collections.Contains(data));
-                }
             }
         }
     }

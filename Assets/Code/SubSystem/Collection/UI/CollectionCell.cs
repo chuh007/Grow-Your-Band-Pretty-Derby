@@ -29,6 +29,16 @@ namespace Code.SubSystem.Collection.UI
         
         public void SetCollectionData(CollectionDataSO collectionData, bool canEquip = true)
         {
+            if (collectionData == null)
+            {
+                _collectionData = collectionData;
+                icon.sprite = null;
+                levelText.text = string.Empty;
+                nameText.text = string.Empty;
+                UpdateEquipState(false);
+                return;
+            }
+            
             _collectionData = collectionData;
             icon.sprite = collectionData.icon;
             levelText.text = collectionData.level.ToString();
@@ -52,6 +62,7 @@ namespace Code.SubSystem.Collection.UI
         
         public void Equip()
         {
+            if (_collectionData == null) return;
             Bus<EquipCollectionEvent>.Raise(new EquipCollectionEvent(_collectionData));
         }
     }

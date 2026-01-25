@@ -13,7 +13,6 @@ namespace Code.SubSystem.Collection
     // 일단 중복장착 불가능하게.
     public class CollectionEquipController : MonoBehaviour
     {
-        public int MaxEquipCount { get; private set; } = 5;
         [SerializeField] private CollectionDatabaseSO collectionDatabase;
         [SerializeField] private EquipCollectionListSO equipCollection;
         [SerializeField] private CellInitializer cellInitializer;
@@ -27,6 +26,8 @@ namespace Code.SubSystem.Collection
         {
             _collections = new Dictionary<MemberType, CollectionDataSO>();
             Bus<EquipCollectionEvent>.OnEvent += HandleEquipEvent;
+            collectionDatabase.SetCollections();
+            cellInitializer.SetSize(20);
         }
 
         private void OnDestroy()
@@ -43,11 +44,11 @@ namespace Code.SubSystem.Collection
             }
         }
 
-        public void CollectionEquipOpen(Action<CollectionDataSO> callback)
+        public void CollectionEquipOpen(Action<CollectionDataSO> callback, MemberType type)
         {
             collectionUI.SetActive(true);
+            cellInitializer.RefreshCells(type);
             _current = callback;
-            
         }
         
         private void HandleEquipEvent(EquipCollectionEvent evt)

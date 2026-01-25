@@ -21,7 +21,7 @@ namespace Code.SubSystem.Collection.UI
         
         public void Click()
         {
-            controller.CollectionEquipOpen(OnCollectionSelected);
+            controller.CollectionEquipOpen(OnCollectionSelected, memberType);
         }
 
         private void OnCollectionSelected(CollectionDataSO collection)
