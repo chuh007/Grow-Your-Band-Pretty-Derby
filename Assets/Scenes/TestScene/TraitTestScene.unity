@@ -1923,8 +1923,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 3
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!4 &593377151
 Transform:
   m_ObjectHideFlags: 0
@@ -4664,8 +4664,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 4
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!4 &1480136825
 Transform:
   m_ObjectHideFlags: 0
@@ -5440,8 +5440,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 1
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!4 &1738776282
 Transform:
   m_ObjectHideFlags: 0
@@ -6076,8 +6076,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 0
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!4 &2009716989
 Transform:
   m_ObjectHideFlags: 0
@@ -6122,8 +6122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 2
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!4 &2070045530
 Transform:
   m_ObjectHideFlags: 0
@@ -6652,14 +6652,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TraitManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8418418461065030925, guid: 0690ce8a9cc96c94dae8b619ef61c876, type: 3}
-      propertyPath: groupDataList.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8418418461065030925, guid: 0690ce8a9cc96c94dae8b619ef61c876, type: 3}
-      propertyPath: 'groupDataList.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: e855e6d6b755fb548a4aa8e505976244, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

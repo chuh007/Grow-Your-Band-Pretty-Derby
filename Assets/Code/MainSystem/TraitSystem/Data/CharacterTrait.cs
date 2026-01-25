@@ -11,31 +11,36 @@ namespace Code.MainSystem.TraitSystem.Data
 {
     public class CharacterTrait : MonoBehaviour, ITraitHolder, IModifierProvider
     {
-        [field:SerializeField] public MemberType MemberType { get; private set; }
-        [field:SerializeField] public int MaxPoints { get; private set; }
-        
-        public int TotalPoint { get; private set; }
-
-        public bool IsAdjusting { get; private set; }
-        public TraitDataSO PendingTrait { get; private set; }
-
-        public IReadOnlyList<ActiveTrait> ActiveTraits => _activeTraits;
+        [SerializeField] private MemberType memberType;
+        [SerializeField] private int maxPoints;
+    
+        public MemberType MemberType => memberType;
         
         private readonly List<ActiveTrait> _activeTraits = new();
         private readonly List<object> _modifiers = new();
 
+        public int TotalPoint => _activeTraits.Sum(t => t.Data.Point);
+        public int MaxPoints => maxPoints;
+        public IReadOnlyList<ActiveTrait> ActiveTraits => _activeTraits;
+        public bool IsAdjusting { get; private set; }
+        public TraitDataSO PendingTrait { get; private set; }
+
         public void AddTrait(TraitDataSO data)
         {
-            var newTrait = new ActiveTrait(data);
-            TotalPoint += newTrait.Point;
+            if (data is null)
+                return;
+            
+            var newTrait = new ActiveTrait(data, this.transform);
             _activeTraits.Add(newTrait);
         }
-        
+
         public void RemoveActiveTrait(ActiveTrait trait)
         {
-            TotalPoint -= trait.Point;
-            if (_activeTraits.Contains(trait))
-                _activeTraits.Remove(trait);
+            if (trait == null)
+                return;
+        
+            if (_activeTraits.Remove(trait))
+                trait.Dispose();
         }
         
         public void BeginAdjustment(TraitDataSO pendingTrait)

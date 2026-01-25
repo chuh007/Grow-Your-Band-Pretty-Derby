@@ -12,26 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: BreathControl trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitID: 1005
+  TraitID: 1004
   TraitType: 4
   TraitName: "\uD638\uD761 \uC870\uC808"
   TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
   traitEffectType: 1
-  Level: 1
   MaxLevel: 10
   Point: 10
   IsRemovable: 0
   conditionType: 1
   Effects:
-  - 1
-  - 1
-  - 1
-  DescriptionEffect: "\uC721\uC131 \uD30C\uD2B8\uC5D0\uC11C\uB294 \uCEE8\uB514\uC158
-    \uBCC0\uD654 \uD3ED\uC744 \uC904\uC5EC\uC8FC\uACE0, \uB9AC\uB4EC \uAC8C\uC784\uC5D0\uC11C\uB294
-    \uBBF8\uC2A4 \uC774\uD6C4 \uD53C\uBC84 \uD0C0\uC784\uC73C\uB85C \uAC00\uB294\uB370
-    \uD544\uC694\uD55C \uC785\uB825 \uC218\uB97C \uC18C\uD3ED \uAC10\uC18C"
-  bindingFlags: 52
-  conditionName: Code.MainSystem.TraitSystem.TraitConditions.EnsembleMemberCountCondition,
+  - 67
+  - 67
+  DescriptionEffect: "\uC721\uC131: \uCEE8\uB514\uC158 \uBCC0\uD654 \uD3ED {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
+    \uAC8C\uC784: \uBBF8\uC2A4 \uC774\uD6C4 \uD53C\uBC84 \uD0C0\uC784 \uD544\uC694
+    \uC785\uB825 {1} \uAC10\uC18C"
+  conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   effectName: Code.MainSystem.TraitSystem.TraitEffect.BreathControlEffect, Assembly-CSharp,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
