@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -12,31 +13,40 @@ namespace Code.MainSystem.Rhythm
         [SerializeField] private AudioSource sfxSource;
         
         [Header("Scene References")]
-        [SerializeField] private Transform[] laneTransforms; 
+        [SerializeField] private Transform hitEffectAnchor; 
         
         [Header("Settings")]
         [SerializeField] private Vector3 effectScale = Vector3.one;
-        [SerializeField] private float effectYOffset = 100f;
+        [SerializeField] private float effectYOffset = 1.0f;
 
         private GameObject _hitEffectPrefab;
         private Queue<GameObject> _effectPool = new Queue<GameObject>();
+        private int _lastEffectFrame = -1;
+
+        private void Awake()
+        {
+            if (hitEffectAnchor == null)
+            {
+                Debug.LogWarning("[HitFeedbackManager] hitEffectAnchor is not assigned! Using self as fallback.");
+                hitEffectAnchor = this.transform;
+            }
+        }
 
         private void OnEnable()
         {
             Bus<NoteHitEvent>.OnEvent += HandleNoteHit;
-            Bus<TouchEvent>.OnEvent += HandleTouchEvent;
         }
 
         private void OnDisable()
         {
             Bus<NoteHitEvent>.OnEvent -= HandleNoteHit;
-            Bus<TouchEvent>.OnEvent -= HandleTouchEvent;
         }
 
 
         public void SetHitEffectPrefab(GameObject prefab)
         {
             _hitEffectPrefab = prefab;
+            Debug.Log($"[HitFeedbackManager] Prefab set: {(_hitEffectPrefab != null ? _hitEffectPrefab.name : "NULL")}");
         }
 
         private void HandleNoteHit(NoteHitEvent evt)
@@ -44,12 +54,8 @@ namespace Code.MainSystem.Rhythm
             if (evt.Judgement != JudgementType.Miss)
             {
                 PlayHitSound();
-                PlayHitEffect(evt.LaneIndex);
+                PlayHitEffect();
             }
-        }
-        private void HandleTouchEvent(TouchEvent evt)
-        {
-            PlayHitEffect(evt.LaneIndex);
         }
 
         private void PlayHitSound()
@@ -60,20 +66,23 @@ namespace Code.MainSystem.Rhythm
             }
         }
 
-        private void PlayHitEffect(int laneIndex)
+        private void PlayHitEffect()
         {
-            if (_hitEffectPrefab == null) return;
-            if (laneTransforms == null || laneIndex < 0 || laneIndex >= laneTransforms.Length) return;
+            if (Time.frameCount == _lastEffectFrame) return;
+            _lastEffectFrame = Time.frameCount;
 
-            Transform targetTransform = laneTransforms[laneIndex];
+            if (_hitEffectPrefab == null || hitEffectAnchor == null) return;
+
             GameObject effectInstance = GetEffectInstance();
             
             if (effectInstance != null)
             {
-                effectInstance.transform.SetParent(targetTransform, false);
+                if (effectInstance.transform.parent != hitEffectAnchor)
+                {
+                    effectInstance.transform.SetParent(hitEffectAnchor, false);
+                }
 
-                // UI 앞으로
-                effectInstance.transform.localPosition = new Vector3(0, effectYOffset, -500f);
+                effectInstance.transform.localPosition = new Vector3(0, effectYOffset, -10f);
                 effectInstance.transform.localRotation = Quaternion.identity;
                 effectInstance.transform.localScale = effectScale;
 
@@ -88,7 +97,7 @@ namespace Code.MainSystem.Rhythm
                 return _effectPool.Dequeue();
             }
 
-            GameObject newInstance = Instantiate(_hitEffectPrefab);
+            GameObject newInstance = Instantiate(_hitEffectPrefab, hitEffectAnchor);
             var returner = newInstance.GetComponent<AutoReturnToPool>();
             if (returner == null)
             {
