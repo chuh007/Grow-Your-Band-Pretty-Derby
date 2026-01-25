@@ -4,8 +4,6 @@ using UnityEngine;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
-using Code.MainSystem.TraitSystem.TraitEffect;
-using Code.MainSystem.TraitSystem.TraitConditions;
 
 namespace Code.MainSystem.TraitSystem.Data
 {
@@ -39,105 +37,75 @@ namespace Code.MainSystem.TraitSystem.Data
         // Overzealous,            // 지나친 열정
         // Dogmatic,               // 독선적
         // Entertainer,            // 만담가
-        Synergy,                // 시너지
         Focus,                  // 집중력
         HighlightBoost,         // 하이라이트 강화
         AttentionGain,          // 주목도 상승
         BreathControl,          // 호흡 조절
     }
 
-    [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data", order = 0)]
+    [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data")]
     public class TraitDataSO : ScriptableObject
     {
         public int TraitID;
         public TraitType TraitType;
         public string TraitName;
         public Sprite TraitIcon;
-
         public TraitEffectType traitEffectType;
-
-        public int Level;
         public int MaxLevel;
         public int Point;
-
-        public bool IsRemovable;
+        public bool IsRemovable = true;
         public ConditionType conditionType;
-
-        public List<float> Effects;
+        public List<float> Effects = new();
         [TextArea] public string DescriptionEffect;
-
-        public BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
         [HideInInspector] public string conditionName;
         [HideInInspector] public string effectName;
-        
-        [NonSerialized] public Action<AbstractTraitCondition> TraitConditionSetter;
-        
-        [NonSerialized] public Action<AbstractTraitEffect> TraitEffectSetter;
 
-        public bool InitializeTrait()
+        public Action<MonoBehaviour> TraitConditionSetter { get; private set; }
+        public Action<MonoBehaviour> TraitEffectSetter { get; private set; }
+
+        private static readonly Dictionary<string, Type> TypeCache = new();
+
+        public void InitializeTrait()
         {
-            bool conditionResult = ConditionFactory();
-            bool effectResult = EffectFactory();
-            
-            return conditionResult && effectResult;
+            TraitConditionSetter = CreateSetter(conditionName, "conditionType", conditionType);
+            TraitEffectSetter = CreateSetter(effectName, "effectType", traitEffectType);
         }
 
-        private bool ConditionFactory()
+        private Action<MonoBehaviour> CreateSetter<TEnum>(string typeName, string fieldName, TEnum value)
         {
-            Type parentType = typeof(AbstractTraitCondition);
-            Type traitType = FindType(conditionName);
-            
-            if (traitType == null || !parentType.IsAssignableFrom(traitType))
-                return false;
+            Type targetType = FindType(typeName);
+            if (targetType == null)
+                return null;
 
-            FieldInfo targetField = traitType.GetField("conditionType", bindingFlags);
-            if (targetField == null || targetField.FieldType != typeof(ConditionType))
-                return false;
+            FieldInfo field = targetType.GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (field == null) 
+                return null;
 
-            ParameterExpression param = Expression.Parameter(parentType, "condition");
-            UnaryExpression casted = Expression.Convert(param, traitType);
-            MemberExpression fieldAccess = Expression.Field(casted, targetField);
-            ConstantExpression value = Expression.Constant(conditionType);
-            BinaryExpression assign = Expression.Assign(fieldAccess, value);
-            
-            TraitConditionSetter = Expression.Lambda<Action<AbstractTraitCondition>>(assign, param).Compile();
+            ParameterExpression param = Expression.Parameter(typeof(MonoBehaviour), "obj");
+            UnaryExpression casted = Expression.Convert(param, targetType);
+            MemberExpression fieldAccess = Expression.Field(casted, field);
+            BinaryExpression assign = Expression.Assign(fieldAccess, Expression.Constant(value));
 
-            return true;
-        }
-
-        private bool EffectFactory()
-        {
-            Type parentType = typeof(AbstractTraitEffect);
-            Type traitType = FindType(effectName);
-            
-            if (traitType == null || !parentType.IsAssignableFrom(traitType))
-                return false;
-
-            FieldInfo targetField = traitType.GetField("effectType", bindingFlags);
-            if (targetField == null || targetField.FieldType != typeof(TraitEffectType))
-                return false;
-            
-            ParameterExpression param = Expression.Parameter(parentType, "effect");
-            UnaryExpression casted = Expression.Convert(param, traitType);
-            MemberExpression fieldAccess = Expression.Field(casted, targetField);
-            ConstantExpression value = Expression.Constant(traitEffectType);
-            BinaryExpression assign = Expression.Assign(fieldAccess, value);
-            
-            TraitEffectSetter = Expression.Lambda<Action<AbstractTraitEffect>>(assign, param).Compile();
-            
-            return true;
+            return Expression.Lambda<Action<MonoBehaviour>>(assign, param).Compile();
         }
 
         private static Type FindType(string fullName)
         {
-            if (string.IsNullOrEmpty(fullName))
+            if (string.IsNullOrEmpty(fullName)) 
                 return null;
+            
+            if (TypeCache.TryGetValue(fullName, out var type)) 
+                return type;
 
-            return AppDomain.CurrentDomain
-                .GetAssemblies()
+            type = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())
                 .FirstOrDefault(t => t.FullName == fullName || t.AssemblyQualifiedName == fullName);
+
+            if (type != null) 
+                TypeCache[fullName] = type;
+            
+            return type;
         }
     }
 }

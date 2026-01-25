@@ -326,13 +326,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.HitFeedbackManager
   hitSound: {fileID: 0}
   sfxSource: {fileID: 1414561081}
-  laneTransforms:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  hitEffectAnchor: {fileID: 7902028183241146706}
   effectScale: {x: 500, y: 500, z: 500}
-  effectYOffset: 100
+  effectYOffset: 0
 --- !u!1 &315496687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1782,6 +1778,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e87e94b592164294a9572419e6c569de, type: 3}
+--- !u!224 &7902028183241146706 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8902622286379465023, guid: e87e94b592164294a9572419e6c569de, type: 3}
+  m_PrefabInstance: {fileID: 7902028183241146705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

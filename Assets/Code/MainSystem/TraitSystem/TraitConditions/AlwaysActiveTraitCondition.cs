@@ -3,7 +3,7 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitConditions
 {
-    public class EnsembleMemberCountCondition : AbstractTraitCondition
+    public sealed class AlwaysActiveTraitCondition : AbstractTraitCondition
     {
         protected override bool CheckCondition(ITraitHolder holder, ActiveTrait trait)
         {

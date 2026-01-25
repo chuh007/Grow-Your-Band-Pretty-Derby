@@ -144,8 +144,7 @@ namespace Code.MainSystem.TraitSystem.Manager
             
             if (existingTrait != null)
             {
-                if (existingTrait.Data.Level == -1 ||
-                    existingTrait.Data.MaxLevel == -1 ||
+                if (existingTrait.Data.MaxLevel == -1 ||
                     existingTrait.CurrentLevel >= existingTrait.Data.MaxLevel)
                     return;
 

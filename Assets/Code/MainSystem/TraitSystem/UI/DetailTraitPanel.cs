@@ -49,22 +49,22 @@ namespace Code.MainSystem.TraitSystem.UI
 
         private void UpdateUI()
         {
-            if (_currentTrait == null || _currentTrait.Data is null)
+            if (_currentTrait?.Data is null)
                 return;
 
             iconImage.sprite = _currentTrait.Data.TraitIcon;
             
-            string pointText = _currentTrait.Data.Level == -1 ? "" : $"Lv.{_currentTrait.CurrentLevel}";
+            string pointText = _currentTrait.Data.MaxLevel == -1 ? "" : $"Lv.{_currentTrait.CurrentLevel}";
             levelPointText.SetText(pointText);
             
-            descriptionText.SetText(_currentTrait.Data.DescriptionEffect);
+            descriptionText.SetText(_currentTrait.GetFormattedDescription());
 
             if (removeButton is null)
                 return;
             
-            bool canRemove = _traitManager is not null && 
-                             (_traitManager.GetHolder(_traitManager.CurrentMember)?.IsAdjusting ?? false) 
-                             || _currentTrait.Data.IsRemovable;
+            bool canRemove = _traitManager is not null
+                && (_traitManager.GetHolder(_traitManager.CurrentMember)?.IsAdjusting ?? false) 
+                || _currentTrait.Data.IsRemovable;
             removeButton.interactable = canRemove;
         }
 
