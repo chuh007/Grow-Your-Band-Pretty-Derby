@@ -448,14 +448,13 @@ Transform:
   - {fileID: 195290423}
   - {fileID: 1072854231}
   - {fileID: 977576425}
-  - {fileID: 1198126256}
   - {fileID: 2130563990}
   - {fileID: 2075442084}
   - {fileID: 1414561082}
   - {fileID: 1407034677}
   - {fileID: 297412848}
   - {fileID: 911445936}
-  - {fileID: 1927466744}
+  - {fileID: 651154844}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &393144569
@@ -507,7 +506,6 @@ MonoBehaviour:
   - {fileID: 195290424}
   - {fileID: 1072854232}
   - {fileID: 977576426}
-  - {fileID: 1198126257}
   - {fileID: 2075442085}
   - {fileID: 1633792241}
   - {fileID: 297412849}
@@ -717,6 +715,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &651154843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 651154844}
+  m_Layer: 0
+  m_Name: StatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &651154844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 651154843}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 345081631}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &872812871 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2212283054152720708, guid: e87e94b592164294a9572419e6c569de, type: 3}
@@ -776,7 +805,6 @@ MonoBehaviour:
   pointsPerPerfect: 10
   maxFeverGauge: 1000
   baseFeverDuration: 10
-  _statManager: {fileID: 0}
 --- !u!1 &912719126 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4767156834630188141, guid: e87e94b592164294a9572419e6c569de, type: 3}
@@ -917,66 +945,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cd7119513cce5384ebdc73b25abff6ac, type: 2}
   - {fileID: 11400000, guid: 54d9a29804aea814e8bb975138a5ac31, type: 2}
   - {fileID: 11400000, guid: 4fa9193357d1f934c841d95a14b861ea, type: 2}
-  _statManager: {fileID: 0}
-  _feverManager: {fileID: 0}
 --- !u!224 &1112506283 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 829562436114590034, guid: 17bec6364a704d340949a00d092d1d03, type: 3}
   m_PrefabInstance: {fileID: 4935207881685999598}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1198126255
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1198126256}
-  - component: {fileID: 1198126257}
-  m_Layer: 0
-  m_Name: NoteManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1198126256
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198126255}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 345081631}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1198126257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198126255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6ddc5f5c8aa54f48974e84974ce1567, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.NoteManager
-  noteSpeed: 800
-  spawnDistance: 1200
-  hitLineYOffset: -600
-  laneContainers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  laneCount: 4
 --- !u!1 &1407034676
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,55 +1210,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 751131610638460624, guid: e87e94b592164294a9572419e6c569de, type: 3}
   m_PrefabInstance: {fileID: 7902028183241146705}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1927466743
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1927466744}
-  - component: {fileID: 1927466745}
-  m_Layer: 0
-  m_Name: StatManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1927466744
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1927466743}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 345081631}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1927466745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1927466743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2b65a2e1f2a4cc8b4d75cf61334ebd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.Manager.StatManager
-  memberStats: []
-  teamStat: {fileID: 0}
-  upgradeModule: {fileID: 0}
-  ensembleModule: {fileID: 0}
-  restRecoveryAmount: 10
 --- !u!1 &1981468411 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7192247280656500814, guid: e87e94b592164294a9572419e6c569de, type: 3}
@@ -1391,11 +1315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.MobileInputController
   laneCount: 4
-  laneImages:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  laneImages: []
   flashAlpha: 0.8
   normalAlpha: 0.4
   fadeSpeed: 0.1

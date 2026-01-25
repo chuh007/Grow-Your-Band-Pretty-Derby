@@ -50,6 +50,15 @@ namespace Code.MainSystem.Rhythm
             dataSender.MemberIds = evt.MemberIds;
             dataSender.Difficulty = evt.Difficulty;
             dataSender.IsResultDataAvailable = false;
+            
+            dataSender.members = new List<MemberGroup>
+            {
+                new MemberGroup { Members = new List<MemberType> { MemberType.Vocal } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Guitar } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Bass } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Drums } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Piano } }
+            };
 
             if (transitionSender != null)
             {
@@ -101,7 +110,7 @@ namespace Code.MainSystem.Rhythm
             #endregion
 
             // SO니까 초기화하기
-            if (dataSender.members != null) dataSender.members.Clear();
+            // if (dataSender.members != null) dataSender.members.Clear();
             dataSender.allStatUpValue = 0;
             dataSender.harmonyStatUpValue = 0;
         }

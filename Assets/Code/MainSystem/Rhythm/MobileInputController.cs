@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using Reflex.Attributes;
 using System.Collections.Generic;
 using Code.Core.Bus;
@@ -25,7 +26,6 @@ namespace Code.MainSystem.Rhythm
         {
             _laneWidth = Screen.width / (float)laneCount;
             
-            // 초기 알파값 설정
             foreach(var img in laneImages)
             {
                 if(img != null) 
@@ -35,64 +35,48 @@ namespace Code.MainSystem.Rhythm
                     img.color = color;
                 }
             }
-
-            for (int i = 0; i < 4; i++)
-            {
-                HandleInput(i);
-            }
         }
 
         private void Update()
         {
-            // 터치 입력 처리 (New Input System의 Touchscreen 사용 권장되나, 
-            // 프로젝트 설정이 'Both'라면 기존 Input.touchCount도 동작함)
-            if (Input.touchCount > 0)
+            if (Touchscreen.current != null)
             {
-                for (int i = 0; i < Input.touchCount; i++)
+                foreach (var touch in Touchscreen.current.touches)
                 {
-                    Touch touch = Input.GetTouch(i);
-
-                    if (touch.phase == TouchPhase.Began)
+                    if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
                     {
-                        int laneIndex = CalculateLaneIndex(touch.position.x);
+                        Vector2 pos = touch.position.ReadValue();
+                        int laneIndex = CalculateLaneIndex(pos.x);
                         HandleInput(laneIndex);
                     }
                 }
             }
-            
-            // 에디터/키보드 입력 처리 (New Input System 방식)
-            #if UNITY_EDITOR || UNITY_STANDALONE
-            if (_judgementSystem != null && UnityEngine.InputSystem.Keyboard.current != null)
+
+            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
             {
-                var kb = UnityEngine.InputSystem.Keyboard.current;
-                if (kb.dKey.wasPressedThisFrame) HandleInput(0);
-                if (kb.fKey.wasPressedThisFrame) HandleInput(1);
-                if (kb.jKey.wasPressedThisFrame) HandleInput(2);
-                if (kb.kKey.wasPressedThisFrame) HandleInput(3);
+                HandleInput(0);
             }
-            #endif
         }
 
         private void HandleInput(int laneIndex)
         {
-            if (laneIndex < 0 || laneIndex >= laneCount) return;
-
-            // 1. 판정 요청
+            // 리듬 닥터 스타일: 어떤 키/터치 입력이든 메인 라인(0번) 판정 시도
             if (_judgementSystem != null)
             {
-                _judgementSystem.OnInputDetected(laneIndex);
+                _judgementSystem.OnInputDetected(0);
             }
             
-            Bus<TouchEvent>.Raise(new TouchEvent(laneIndex));
-            
-            // 2. 시각적 피드백
-            if (laneImages != null && laneIndex < laneImages.Count && laneImages[laneIndex] != null)
+            // 시각적 피드백과 이벤트는 입력된 위치 그대로 전달 (UI 연출용)
+            if (laneIndex >= 0 && laneIndex < laneCount)
             {
-                var img = laneImages[laneIndex];
-                // 즉시 밝게
-                img.CrossFadeAlpha(flashAlpha, 0.0f, true); 
-                // 서서히 어둡게
-                img.CrossFadeAlpha(normalAlpha, fadeSpeed, true);
+                Bus<TouchEvent>.Raise(new TouchEvent(laneIndex));
+                
+                if (laneImages != null && laneIndex < laneImages.Count && laneImages[laneIndex] != null)
+                {
+                    var img = laneImages[laneIndex];
+                    img.CrossFadeAlpha(flashAlpha, 0.0f, true); 
+                    img.CrossFadeAlpha(normalAlpha, fadeSpeed, true);
+                }
             }
         }
 

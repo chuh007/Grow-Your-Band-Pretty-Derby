@@ -13,7 +13,7 @@ namespace Code.MainSystem.Rhythm.Test
         [SerializeField] private SceneTransitionSenderSO _transitionSender;
 
         [Header("Test Settings")]
-        [SerializeField] private string _songId = "Song_01";
+        [SerializeField] private string _songId = "TestSong";
         [SerializeField] private ConcertType _concertType = ConcertType.Busking;
         [SerializeField] private int _difficulty = 1;
         [SerializeField] private string _rhythmSceneName = "Rhythm";
@@ -32,14 +32,14 @@ namespace Code.MainSystem.Rhythm.Test
             _dataSender.Difficulty = _difficulty;
             _dataSender.IsResultDataAvailable = false;
             
-            _dataSender.members = new List<IEnumerable<MemberType>>
+            _dataSender.MemberIds = new List<int> { 1, 2, 3, 4, 5 };
+            _dataSender.members = new List<MemberGroup>
             {
-                new List<MemberType> { MemberType.Vocal },
-                new List<MemberType> { MemberType.Guitar },
-                new List<MemberType> { MemberType.Bass },
-                new List<MemberType> { MemberType.Drums },
-                new List<MemberType> { MemberType.Piano }
-                
+                new MemberGroup { Members = new List<MemberType> { MemberType.Vocal } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Guitar } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Bass } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Drums } },
+                new MemberGroup { Members = new List<MemberType> { MemberType.Piano } }
             };
 
             _transitionSender.SetTransition(_rhythmSceneName, TransitionMode.ToLandscape);
