@@ -1,5 +1,7 @@
 ﻿using System;
+using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Code.SubSystem.Collection.UI
@@ -7,30 +9,36 @@ namespace Code.SubSystem.Collection.UI
     public class CellInitializer : MonoBehaviour
     {
         [SerializeField] private CollectionDatabaseSO collectionDatabase;
+        [SerializeField] private EquipCollectionListSO equipCollection;
 
         [SerializeField] private GameObject spawnParent;
         [SerializeField] private GameObject cellPrefab;
         
-        private GridLayoutGroup _grid;
+        [SerializeField] GridLayoutGroup grid;
         
-        private void Awake()
+        public void RefreshCells(MemberType memberType)
         {
-            _grid = GetComponent<GridLayoutGroup>();
+            CollectionCell[] cells = spawnParent.GetComponentsInChildren<CollectionCell>();
+            
+            for (int i = 0; i < cells.Length; i++)
+            {
+                CollectionDataSO data = null;
+                if (i < collectionDatabase.collections[memberType].Count)
+                    data = collectionDatabase.collections[memberType][i];
+                
+                cells[i].SetCollectionData(data,
+                    !equipCollection.collections.Contains(data));
+                
+                bool isEquipped = equipCollection.collections.Contains(cells[i].GetCollectionData());
+            }
         }
-
-        private void Start()
-        {
-            SetSize(collectionDatabase.collections.Count);
-        }
-
+        
         public void SetSize(int count)
         {
-            int rowCount = (count - 1) / _grid.constraintCount + 1;
-            for (int i = 0; i < rowCount * _grid.constraintCount; i++)
+            int rowCount = (count - 1) / grid.constraintCount + 1;
+            for (int i = 0; i < rowCount * grid.constraintCount; i++)
             {
                 GameObject cell = Instantiate(cellPrefab, spawnParent.transform);
-                if (i < count)
-                    cell.GetComponent<CollectionCell>().SetCollectionData(collectionDatabase.collections[i]);
             }
         }
     }

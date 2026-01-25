@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37c5704353040e2a90e2d363f372755, type: 3}
   m_Name: CollectionDatabase
   m_EditorClassIdentifier: Assembly-CSharp::Code.SubSystem.Collection.CollectionDatabaseSO
-  collections:
-  - {fileID: 11400000, guid: f16ef24a039f20145863232a917c1cdb, type: 2}
+  BassDataList: []
+  GuitarDataList:
   - {fileID: 11400000, guid: be504b3ac44712248a55feebfea594d5, type: 2}
+  DrumsDataList:
+  - {fileID: 11400000, guid: f16ef24a039f20145863232a917c1cdb, type: 2}
+  PianoDataList:
   - {fileID: 11400000, guid: a37776716f2e4e547be81f28d1ae2d66, type: 2}
   - {fileID: 11400000, guid: 701dfe7e2fe222849a0bf4260283c748, type: 2}
+  VocalDataList:
   - {fileID: 11400000, guid: b0d575a750c4c9747802a671f262949e, type: 2}

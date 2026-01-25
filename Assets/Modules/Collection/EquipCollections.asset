@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80cf4cbb0924439bacadc8c4e1ba9d91, type: 3}
   m_Name: EquipCollections
   m_EditorClassIdentifier: Assembly-CSharp::Code.SubSystem.Collection.EquipCollectionListSO
-  collections:
-  - {fileID: 11400000, guid: a37776716f2e4e547be81f28d1ae2d66, type: 2}
+  collections: []
