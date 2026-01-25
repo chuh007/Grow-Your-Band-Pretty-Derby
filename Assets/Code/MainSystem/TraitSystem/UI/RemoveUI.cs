@@ -58,9 +58,9 @@ namespace Code.MainSystem.TraitSystem.UI
                 return;
 
             iconImage.sprite = _currentTrait.Data.TraitIcon;
-            nameText.SetText($"{_currentTrait.Name}");
+            nameText.SetText($"{_currentTrait.Data.TraitName}");
             
-            int afterPoint = _currentHolder.TotalPoint - _currentTrait.Point;
+            int afterPoint = _currentHolder.TotalPoint - _currentTrait.Data.Point;
             string pointInfo = "삭제 후 특성 포인트\n " +
                                $"{_currentHolder.TotalPoint} / {_currentHolder.MaxPoints} ->  {afterPoint} / {_currentHolder.MaxPoints}";
             descriptionText.SetText(pointInfo);
@@ -94,7 +94,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
         private void RemoveTrait()
         {
-            Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_traitManager.CurrentMember, _currentTrait.Type));
+            Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_traitManager.CurrentMember, _currentTrait.Data.TraitType));
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(_traitManager.CurrentMember));
         }
 

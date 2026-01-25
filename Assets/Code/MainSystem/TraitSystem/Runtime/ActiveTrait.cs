@@ -1,101 +1,103 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.TraitConditions;
 using Code.MainSystem.TraitSystem.TraitEffect;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Code.MainSystem.TraitSystem.Runtime
 {
     public class ActiveTrait
     {
         public TraitDataSO Data { get; private set; }
-
         public AbstractTraitEffect TraitEffect { get; private set; }
         public AbstractTraitCondition TraitCondition { get; private set; }
-        
         public int CurrentLevel { get; private set; }
-        public bool IsActive { get; private set; }
-        public int RemainingTurns { get; private set; }
-        
         public List<float> CurrentEffects { get; private set; }
-        
-        public int Point => Data.Point;
-        public string Name => Data.TraitName;
-        public TraitType Type => Data.TraitType;
-        
-        public ActiveTrait(TraitDataSO data, int initialLevel = 1)
+
+        public ActiveTrait(TraitDataSO data, Transform parent, int initialLevel = 1)
         {
             Data = data;
             CurrentLevel = initialLevel;
-            IsActive = false;
-            RemainingTurns = -1;
             CurrentEffects = new List<float>(data.Effects);
             
-            // 런타임에 Effect와 Condition 인스턴스 생성
-            CreateEffectInstance();
-            CreateConditionInstance();
+            if (Data.TraitEffectSetter == null) Data.InitializeTrait();
+
+            CreateComponents(parent);
         }
-        
-        private void CreateEffectInstance()
+
+        private void CreateComponents(Transform parent)
         {
-            if (string.IsNullOrEmpty(Data.effectName))
-            {
-                Debug.LogWarning($"Trait {Data.TraitName} has no effect name");
-                return;
-            }
-
-            var effectType = System.Type.GetType(Data.effectName);
-            if (effectType == null)
-            {
-                Debug.LogError($"Cannot find effect type: {Data.effectName}");
-                return;
-            }
-
-            // GameObject를 생성하고 컴포넌트 추가
-            var go = new GameObject($"{Data.TraitName}_Effect");
-            go.hideFlags = HideFlags.HideInHierarchy;
+            var go = new GameObject($"[Trait_{Data.TraitName}]");
+            go.transform.SetParent(parent);
             
-            TraitEffect = go.AddComponent(effectType) as AbstractTraitEffect;
-            
-            if (TraitEffect != null && Data.TraitEffectSetter != null)
+            if (!string.IsNullOrEmpty(Data.effectName))
             {
-                Data.TraitEffectSetter.Invoke(TraitEffect);
+                var type = Type.GetType(Data.effectName);
+                if (type != null)
+                {
+                    TraitEffect = go.AddComponent(type) as AbstractTraitEffect;
+                    Data.TraitEffectSetter?.Invoke(TraitEffect);
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(Data.conditionName))
+            {
+                var type = Type.GetType(Data.conditionName);
+                if (type != null)
+                {
+                    TraitCondition = go.AddComponent(type) as AbstractTraitCondition;
+                    Data.TraitConditionSetter?.Invoke(TraitCondition);
+                }
             }
         }
-        
-        private void CreateConditionInstance()
-        {
-            if (string.IsNullOrEmpty(Data.conditionName))
-            {
-                Debug.LogWarning($"Trait {Data.TraitName} has no condition name");
-                return;
-            }
 
-            var conditionType = System.Type.GetType(Data.conditionName);
-            if (conditionType == null)
-            {
-                Debug.LogError($"Cannot find condition type: {Data.conditionName}");
-                return;
-            }
-
-            // GameObject를 생성하고 컴포넌트 추가
-            var go = new GameObject($"{Data.TraitName}_Condition");
-            go.hideFlags = HideFlags.HideInHierarchy;
-            
-            TraitCondition = go.AddComponent(conditionType) as AbstractTraitCondition;
-            
-            if (TraitCondition != null && Data.TraitConditionSetter != null)
-            {
-                Data.TraitConditionSetter.Invoke(TraitCondition);
-            }
-        }
-        
         public void LevelUp()
         {
+            if (CurrentLevel >= Data.MaxLevel) return;
+        
             CurrentLevel++;
-            
+            // 매직 넘버(1.1f)보다는 데이터 기반 증가가 좋지만, 현재 구조 유지 시:
             for (int i = 0; i < CurrentEffects.Count; i++)
                 CurrentEffects[i] *= 1.1f;
+        }
+
+        public void Dispose()
+        {
+            if (TraitEffect != null)
+                Object.Destroy(TraitEffect.gameObject);
+        }
+        
+        public string GetFormattedDescription()
+        {
+            if (Data is null || string.IsNullOrEmpty(Data.DescriptionEffect))
+                return string.Empty;
+
+            if (CurrentEffects == null || CurrentEffects.Count == 0)
+                return Data.DescriptionEffect;
+
+            var args = CurrentEffects
+                .Select(FormatValue)
+                .Cast<object>()
+                .ToArray();
+
+            try
+            {
+                return string.Format(Data.DescriptionEffect, args);
+            }
+            catch (FormatException)
+            {
+                return Data.DescriptionEffect;
+            }
+        }
+
+        private string FormatValue(float value)
+        {
+            return Math.Abs(value) < 1f ? 
+                (value * 100f).ToString("0.#", CultureInfo.InvariantCulture) : value.ToString("0.#", CultureInfo.InvariantCulture);
         }
     }
 }
