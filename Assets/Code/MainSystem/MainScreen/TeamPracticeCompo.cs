@@ -148,9 +148,14 @@ namespace Code.MainSystem.MainScreen
         private void OnClickStartPractice()
         {
             if (_selectedMembers.Count < 2) return;
-
+            
+            Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent());
+            
+            float totalConditionBefore = 0f;
+            
             foreach (var unit in _selectedMembers)
             {
+                totalConditionBefore += unit.currentCondition;
                 unit.currentCondition = Mathf.Clamp(unit.currentCondition - teamConditionCost, 0, unit.maxCondition);
 
                 var bar = unitHealthBars.Find(b => b.memberType == unit.memberType);
@@ -160,15 +165,25 @@ namespace Code.MainSystem.MainScreen
                 TrainingManager.Instance.MarkMemberTrained(unit.memberType);
             }
             
+            float avgConditionBefore = totalConditionBefore / _selectedMembers.Count;
+            float avgConditionAfter = avgConditionBefore - teamConditionCost;
+            
             TeamPracticeResultCache.IsSuccess = _wasSuccess;
             TeamPracticeResultCache.SelectedMembers = new List<UnitDataSO>(_selectedMembers);
             TeamPracticeResultCache.StatDeltaDict = new Dictionary<(MemberType, StatType), int>();
+            
+            var firstUnit = _selectedMembers[0];
+            TeamPracticeResultCache.TeamStat = firstUnit.TeamStat;
+            TeamPracticeResultCache.TeamStatDelta = _wasSuccess ? UnityEngine.Random.Range(1, 5) : 0;
+            
+            TeamPracticeResultCache.TeamConditionCurrent = avgConditionAfter;
+            TeamPracticeResultCache.TeamConditionDelta = -teamConditionCost;
 
             foreach (var unit in _selectedMembers)
             {
                 foreach (var stat in unit.stats)
                 {
-                    int delta = UnityEngine.Random.Range(0, 5); 
+                    int delta = _wasSuccess ? UnityEngine.Random.Range(1, 5) : 0;
                     var key = (unit.memberType, stat.statType);
                     TeamPracticeResultCache.StatDeltaDict[key] = delta;
                 }

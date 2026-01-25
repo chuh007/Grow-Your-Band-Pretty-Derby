@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -25,7 +26,10 @@ namespace Code.MainSystem.MainScreen.Training
         public List<MemberObjectBinding> memberObjects;
 
         [Header("Result Window")]
-        public TeamPracticeResultWindow resultWindow;
+        public PracticeResultWindow resultWindow;
+
+        [Header("Icons")]
+        [SerializeField] private Sprite conditionSprite;
 
         private void Start()
         {
@@ -77,8 +81,91 @@ namespace Code.MainSystem.MainScreen.Training
 
             await UniTask.Delay(1000);
 
-            await resultWindow.PlayForTeam();
+            foreach (var unit in TeamPracticeResultCache.SelectedMembers)
+            {
+                AddCommentForMember(unit);
+                await ShowResultForMember(unit);
+            }
+            
+            Debug.Log("[TeamPracticeCutsceneController] 모든 결과 확인 완료, 메인 씬으로 이동");
+            await UniTask.Delay(500); 
+            SceneManager.LoadScene("Lch");
+        }
 
+        private void AddCommentForMember(UnitDataSO unit)
+        {
+            bool isSuccess = TeamPracticeResultCache.IsSuccess;
+            var commentDataSO = isSuccess ? unit.teamSuccessComment : unit.teamFailComment;
+
+            if (commentDataSO == null)
+            {
+                Debug.LogWarning($"Team practice comment data is missing for {unit.memberType}");
+                return;
+            }
+            var statChanges = new List<StatChangeInfo>();
+            
+            float conditionDelta = TeamPracticeResultCache.TeamConditionDelta;
+            statChanges.Add(new StatChangeInfo("컨디션", Mathf.RoundToInt(conditionDelta), conditionSprite));
+            
+            if (isSuccess && TeamPracticeResultCache.TeamStat != null)
+            {
+                float teamStatDelta = TeamPracticeResultCache.TeamStatDelta;
+                statChanges.Add(new StatChangeInfo(
+                    TeamPracticeResultCache.TeamStat.statName, 
+                    Mathf.RoundToInt(teamStatDelta), 
+                    TeamPracticeResultCache.TeamStat.statIcon
+                ));
+            }
+            
+            foreach (var stat in unit.stats)
+            {
+                var key = (unit.memberType, stat.statType);
+                if (TeamPracticeResultCache.StatDeltaDict.TryGetValue(key, out int delta) && delta > 0)
+                {
+                    BaseStat baseStat = StatManager.Instance.GetMemberStat(unit.memberType, stat.statType);
+                    if (baseStat != null)
+                    {
+                        statChanges.Add(new StatChangeInfo(stat.statName, delta, baseStat.StatIcon));
+                    }
+                }
+            }
+            var comment = new CommentData(
+                $"{unit.unitName}의 팀 훈련일지",
+                commentDataSO.comment,
+                statChanges,
+                commentDataSO.icon,
+                isSuccess,
+                commentDataSO.thoughts,
+                unit.unitName 
+            );
+
+            CommentManager.instance.AddComment(comment); 
+        }
+
+        private async UniTask ShowResultForMember(UnitDataSO unit)
+        {
+            var statDeltaDict = new Dictionary<(MemberType, StatType), int>();
+            
+            foreach (var stat in unit.stats)
+            {
+                var key = (unit.memberType, stat.statType);
+                if (TeamPracticeResultCache.StatDeltaDict.TryGetValue(key, out int delta))
+                {
+                    statDeltaDict[key] = delta;
+                }
+            }
+            
+            await resultWindow.Play(
+                StatManager.Instance,
+                new List<UnitDataSO> { unit },
+                TeamPracticeResultCache.TeamConditionCurrent,
+                TeamPracticeResultCache.TeamConditionDelta,
+                TeamPracticeResultCache.TeamStat,
+                TeamPracticeResultCache.TeamStatDelta,
+                statDeltaDict,
+                TeamPracticeResultCache.IsSuccess,
+                null
+            );
         }
 
         private string GetResultAnimationName(MemberType member)

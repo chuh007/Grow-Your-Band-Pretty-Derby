@@ -11,14 +11,12 @@ namespace Code.MainSystem.MainScreen.Training
         [SerializeField] private PracticeCommentPage commentPage;
 
         private readonly List<CommentData> _pendingComments = new();
-        private string _name;
 
         private void Awake()
         {
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -26,17 +24,46 @@ namespace Code.MainSystem.MainScreen.Training
             }
         }
 
-        public void AddComment(CommentData data,string name)
+        public void AddComment(CommentData data) 
         {
             _pendingComments.Add(data);
-            _name = name;
         }
 
         public async UniTask ShowAllComments()
         {
             if (_pendingComments.Count == 0) return;
+            
+            if (commentPage == null || !commentPage.gameObject.scene.isLoaded)
+            {
+                commentPage = FindObjectOfType<PracticeCommentPage>();
+            }
 
-            await commentPage.ShowComments(_pendingComments,_name);
+            if (commentPage == null)
+            {
+                Debug.LogError("현재 씬에서 PracticeCommentPage를 찾을 수 없습니다!");
+                return;
+            }
+            
+            var groupedByMember = new Dictionary<string, List<CommentData>>();
+            
+            foreach (var comment in _pendingComments)
+            {
+                string key = string.IsNullOrEmpty(comment.memberName) ? "Unknown" : comment.memberName;
+                
+                if (!groupedByMember.ContainsKey(key))
+                {
+                    groupedByMember[key] = new List<CommentData>();
+                }
+                groupedByMember[key].Add(comment);
+            }
+            
+            foreach (var kvp in groupedByMember)
+            {
+                await commentPage.ShowComments(kvp.Value, kvp.Key);
+                
+            }
+
+            commentPage.gameObject.SetActive(false); 
             _pendingComments.Clear();
         }
     }
