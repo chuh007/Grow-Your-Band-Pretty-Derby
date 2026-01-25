@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Code.MainSystem.Outing
 {
@@ -12,6 +13,20 @@ namespace Code.MainSystem.Outing
         [SerializeField] private CinemachineCamera camera3;
         [SerializeField] private CinemachineCamera camera4;
         [SerializeField] private CinemachineCamera camera5;
+        
+        [Header("Icon")]
+        [SerializeField] private SpriteRenderer parkIcon;
+        [SerializeField] private SpriteRenderer martIcon;
+        [SerializeField] private SpriteRenderer pcIcon;
+        [SerializeField] private SpriteRenderer cafeIcon;
+        [SerializeField] private SpriteRenderer marketIcon;
+        
+        [Header("Icon Image")]
+        [SerializeField] private Sprite parkImage;
+        [SerializeField] private Sprite martImage;
+        [SerializeField] private Sprite pcImage;
+        [SerializeField] private Sprite cafeImage;
+        [SerializeField] private Sprite marketImage;
         
         private List<CinemachineCamera> _cameras;
         
