@@ -20,6 +20,9 @@ namespace Code.MainSystem.MainScreen.MemberData
         public StatData TeamStat;
         public List<MemberActionData> unitActions;
         
+        [Header("Team Practice Comments")]
+        public TeamPracticeCommentDataSO teamSuccessComment;
+        public TeamPracticeCommentDataSO teamFailComment;
 
         #region 지워야할것
 
@@ -29,7 +32,5 @@ namespace Code.MainSystem.MainScreen.MemberData
         public string TeamProggresSpriteKey;
 
         #endregion
-      
     }
-
 }

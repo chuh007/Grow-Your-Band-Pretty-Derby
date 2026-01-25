@@ -34,6 +34,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d2f2818e93c5f6341a02ef16865a5556, type: 2}
   - {fileID: 11400000, guid: f7f7784cb51edaf40b07eead141334fd, type: 2}
   - {fileID: 11400000, guid: faecc33e5fdd804409afb7d9810fc858, type: 2}
+  teamSuccessComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
+  teamFailComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}
   TeamIdleSpriteKey: Sprites/Guitar/Idle
   TeamSuccseSpriteKey: Sprites/Guitar/Succse
   TeamFaillSpriteKey: Sprites/Guitar/Faill

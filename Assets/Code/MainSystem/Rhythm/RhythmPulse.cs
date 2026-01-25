@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace Code.MainSystem.Rhythm
 {
@@ -13,6 +14,7 @@ namespace Code.MainSystem.Rhythm
         private double _spawnTime;
         private double _targetTime;
         private double _duration;
+        private int _fixedSteps;
         
         private Conductor _conductor;
         private bool _isInitialized = false;
@@ -21,7 +23,7 @@ namespace Code.MainSystem.Rhythm
         public double TargetTime => _targetTime;
         public bool IsHitPulse => _isHitPulse;
 
-        public void Initialize(Conductor conductor, Vector3 start, Vector3 end, double spawnTime, double targetTime, bool isHitPulse)
+        public void Initialize(Conductor conductor, Vector3 start, Vector3 end, double spawnTime, double targetTime, bool isHitPulse, int steps)
         {
             _conductor = conductor;
             _startPos = start;
@@ -30,6 +32,7 @@ namespace Code.MainSystem.Rhythm
             _targetTime = targetTime;
             _duration = targetTime - spawnTime;
             _isHitPulse = isHitPulse;
+            _fixedSteps = Mathf.Max(1, steps);
             
             transform.position = _startPos;
             UpdateVisuals();
@@ -43,26 +46,35 @@ namespace Code.MainSystem.Rhythm
             if (!_isInitialized || _conductor == null) return;
 
             double currentSongTime = _conductor.SongPosition;
+            double secPerBeat = _conductor.SecPerBeat;
             
             float t = (float)((currentSongTime - _spawnTime) / _duration);
 
             if (t >= 1.0f)
             {
-                // 약간 더 진행해서 자연스럽게 사라지게 함 (오버슈트 허용)
-                // 만약 너무 많이 지났으면 비활성화
                 if (currentSongTime > _targetTime + 0.2f)
                 {
-                    gameObject.SetActive(false); // 컨트롤러가 풀로 회수하도록
+                    gameObject.SetActive(false); 
                 }
                 else
                 {
-                    // 1.0 넘어도 계속 이동 (Start -> End 방향으로)
-                    transform.position = Vector3.LerpUnclamped(_startPos, _endPos, t);
+                    transform.position = _endPos;
                 }
             }
             else
             {
-                transform.position = Vector3.Lerp(_startPos, _endPos, t);
+                int steps = _fixedSteps;
+
+                float totalProgress = t * steps; 
+                int currentStepIndex = Mathf.FloorToInt(totalProgress);
+                float stepProgress = totalProgress - currentStepIndex;
+
+                float easedStepProgress = DOVirtual.EasedValue(0f, 1f, stepProgress, Ease.InExpo);
+
+                // 최종 위치 비율 재계산
+                float finalT = (currentStepIndex + easedStepProgress) / steps;
+
+                transform.position = Vector3.LerpUnclamped(_startPos, _endPos, finalT);
             }
         }
 

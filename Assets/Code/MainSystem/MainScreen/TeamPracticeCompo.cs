@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Code.Core;
-using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
 using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Training;
+using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
-using UnityEngine.Serialization;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -22,7 +21,7 @@ namespace Code.MainSystem.MainScreen
             public MemberType memberType;
             public HealthBar healthBar;
         }
-        
+
         [Header("UI")]
         [SerializeField] private Button enterTeamPracticeButton;
         [SerializeField] private Button startPracticeButton;
@@ -32,52 +31,44 @@ namespace Code.MainSystem.MainScreen
 
         [Header("Button Move")]
         [SerializeField] private float liftY = 20f;
-        
-        [Header("TrainingSequence")]
-        [SerializeField] private TeamTrainingSequenceController personalTrainingSequenceController;
-        
-        [SerializeField] private List<UnitHealthBars> unitHealthBars;
-        [SerializeField] private HealthBar healthBar;
 
-        [SerializeField] private float teamCantionDes = 5f;
+        [Header("Health Bars")]
+        [SerializeField] private List<UnitHealthBars> unitHealthBars;
+        [SerializeField] private HealthBar teamHealthBar;
+
+        [Header("Practice Settings")]
+        [SerializeField] private float teamConditionCost = 5f;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
-        private readonly Dictionary<MemberType, Vector3> _originLocalPosMap = new();
+        private readonly Dictionary<MemberType, Vector3> _originalPosMap = new();
         private readonly List<UnitDataSO> _selectedMembers = new();
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
         private bool _isTeamPracticeMode = false;
-        private bool _issuccess;
-
-        #region Unity LifeCycle
+        private bool _wasSuccess;
 
         private void Awake()
         {
-            UpdateUI();
-            Bus<TeamPracticeResultEvent>.OnEvent += HandleTeamPracticeResult;
+            Bus<TeamPracticeResultEvent>.OnEvent += OnPracticeResult;
+            enterTeamPracticeButton.onClick.AddListener(OnEnterTeamPractice);
+            startPracticeButton.onClick.AddListener(OnClickStartPractice);
         }
 
         private void OnDestroy()
         {
-            Bus<TeamPracticeResultEvent>.OnEvent -= HandleTeamPracticeResult;
+            Bus<TeamPracticeResultEvent>.OnEvent -= OnPracticeResult;
         }
 
-        #endregion
-        
-        private void HandleTeamPracticeResult(TeamPracticeResultEvent evt)
+        private void OnPracticeResult(TeamPracticeResultEvent evt)
         {
-            _issuccess = evt.IsSuccess;
+            _wasSuccess = evt.IsSuccess;
         }
 
-        #region Init
-
-        public void CacheUnits(List<UnitDataSO> unitData)
+        public void CacheUnits(List<UnitDataSO> units)
         {
             _unitMap = new Dictionary<MemberType, UnitDataSO>();
-            foreach (var unit in unitData)
-            {
+            foreach (var unit in units)
                 _unitMap[unit.memberType] = unit;
-            }
 
             InitButtons();
             InitHealthBars();
@@ -87,32 +78,22 @@ namespace Code.MainSystem.MainScreen
         {
             foreach (var btn in memberButtons)
             {
-                if (!Enum.TryParse(btn.name, out MemberType type))
-                    continue;
-
-                _buttonMap[type] = btn;
-                _originLocalPosMap[type] = btn.transform.localPosition;
-            }
-
-            enterTeamPracticeButton.onClick.AddListener(OnEnterTeamPractice);
-            startPracticeButton.onClick.AddListener(OnClickStartPractice);
-        }
-        
-        private void InitHealthBars()
-        {
-            foreach (var unitBar in unitHealthBars)
-            {
-                if (_unitMap.TryGetValue(unitBar.memberType, out var unit))
+                if (Enum.TryParse(btn.name, out MemberType type))
                 {
-                    unitBar.healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
+                    _buttonMap[type] = btn;
+                    _originalPosMap[type] = btn.transform.localPosition;
                 }
             }
         }
 
-
-        #endregion
-
-        #region Team Practice Mode
+        private void InitHealthBars()
+        {
+            foreach (var bar in unitHealthBars)
+            {
+                if (_unitMap.TryGetValue(bar.memberType, out var unit))
+                    bar.healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
+            }
+        }
 
         private void OnEnterTeamPractice()
         {
@@ -121,22 +102,13 @@ namespace Code.MainSystem.MainScreen
             UpdateUI();
         }
 
-        #endregion
-
-        #region Member Button Logic
-        
-        public void OnMemberButtonClicked(string memberName)
+        public void OnMemberButtonClicked(string name)
         {
-            if (!Enum.TryParse(memberName, out MemberType member))
-                return;
+            if (!Enum.TryParse(name, out MemberType member)) return;
+            if (!_isTeamPracticeMode || TrainingManager.Instance.IsMemberTrained(member)) return;
 
-            if (!_isTeamPracticeMode)
-                return;
-
-            if (TrainingManager.Instance.IsMemberTrained(member))
-                return;
-
-            if (_selectedMembers.Contains(_unitMap[member]))
+            var unit = _unitMap[member];
+            if (_selectedMembers.Contains(unit))
                 DeactivateMember(member);
             else
                 ActivateMember(member);
@@ -146,91 +118,79 @@ namespace Code.MainSystem.MainScreen
 
         private void ActivateMember(MemberType member)
         {
-            _selectedMembers.Add(_unitMap[member]);
-
-            var tr = _buttonMap[member].transform;
-            tr.localPosition = _originLocalPosMap[member] + Vector3.up * liftY;
-
             var unit = _unitMap[member];
-            var unitHealth = unitHealthBars.Find(u => u.memberType == member);
-            if (unitHealth != null)
-            {
-                unitHealth.healthBar.PrevieMinusHealth(teamCantionDes);
-            }
-            
-            healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
-            healthBar.PrevieMinusHealth(teamCantionDes);
+            _selectedMembers.Add(unit);
+
+            _buttonMap[member].transform.localPosition = _originalPosMap[member] + Vector3.up * liftY;
+
+            var bar = unitHealthBars.Find(b => b.memberType == member);
+            if (bar != null)
+                bar.healthBar.PrevieMinusHealth(teamConditionCost);
+
+            teamHealthBar.SetHealth(unit.currentCondition, unit.maxCondition);
+            teamHealthBar.PrevieMinusHealth(teamConditionCost);
         }
-
-
 
         private void DeactivateMember(MemberType member)
         {
-            _selectedMembers.Remove(_unitMap[member]);
+            var unit = _unitMap[member];
+            _selectedMembers.Remove(unit);
 
-            var tr = _buttonMap[member].transform;
-            tr.localPosition = _originLocalPosMap[member];
+            _buttonMap[member].transform.localPosition = _originalPosMap[member];
 
-            if (_unitMap.TryGetValue(member, out var unit))
-            {
-                var unitHealth = unitHealthBars.Find(u => u.memberType == member);
-                if (unitHealth != null)
-                {
-                    unitHealth.healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
-                }
+            var bar = unitHealthBars.Find(b => b.memberType == member);
+            if (bar != null)
+                bar.healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
 
-                healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
-            }
+            teamHealthBar.SetHealth(unit.currentCondition, unit.maxCondition);
         }
 
-
-        #endregion
-
-        #region UI
-
-        private void UpdateUI()
+        private void OnClickStartPractice()
         {
-            startPracticeButton.interactable = _isTeamPracticeMode && _selectedMembers.Count >= 2;
-        }
-
-        #endregion
-
-        #region Practice Start / Back
-
-        private async void OnClickStartPractice()
-        {
-            if (!_isTeamPracticeMode) return;
             if (_selectedMembers.Count < 2) return;
-
-            List<float> memberConditions = new List<float>();
-            foreach (var member in _selectedMembers)
-                memberConditions.Add(member.currentCondition);
-
-            Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent(memberConditions));
-
-            foreach (var member in _selectedMembers)
+            
+            Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent());
+            
+            float totalConditionBefore = 0f;
+            
+            foreach (var unit in _selectedMembers)
             {
-                float staminaReduction = teamCantionDes;
-                float newCondition = Mathf.Clamp(member.currentCondition - staminaReduction, 0, member.maxCondition);
-                member.currentCondition = newCondition;
-                
-                var unitHealth = unitHealthBars.Find(u => u.memberType == member.memberType);
-                if (unitHealth != null)
+                totalConditionBefore += unit.currentCondition;
+                unit.currentCondition = Mathf.Clamp(unit.currentCondition - teamConditionCost, 0, unit.maxCondition);
+
+                var bar = unitHealthBars.Find(b => b.memberType == unit.memberType);
+                if (bar != null)
+                    bar.healthBar.ApplyHealth(teamConditionCost);
+
+                TrainingManager.Instance.MarkMemberTrained(unit.memberType);
+            }
+            
+            float avgConditionBefore = totalConditionBefore / _selectedMembers.Count;
+            float avgConditionAfter = avgConditionBefore - teamConditionCost;
+            
+            TeamPracticeResultCache.IsSuccess = _wasSuccess;
+            TeamPracticeResultCache.SelectedMembers = new List<UnitDataSO>(_selectedMembers);
+            TeamPracticeResultCache.StatDeltaDict = new Dictionary<(MemberType, StatType), int>();
+            
+            var firstUnit = _selectedMembers[0];
+            TeamPracticeResultCache.TeamStat = firstUnit.TeamStat;
+            TeamPracticeResultCache.TeamStatDelta = _wasSuccess ? UnityEngine.Random.Range(1, 5) : 0;
+            
+            TeamPracticeResultCache.TeamConditionCurrent = avgConditionAfter;
+            TeamPracticeResultCache.TeamConditionDelta = -teamConditionCost;
+
+            foreach (var unit in _selectedMembers)
+            {
+                foreach (var stat in unit.stats)
                 {
-                    unitHealth.healthBar.ApplyHealth(staminaReduction);
+                    int delta = _wasSuccess ? UnityEngine.Random.Range(1, 5) : 0;
+                    var key = (unit.memberType, stat.statType);
+                    TeamPracticeResultCache.StatDeltaDict[key] = delta;
                 }
-                
-                TrainingManager.Instance.MarkMemberTrained(member.memberType);
             }
 
-            personalTrainingSequenceController.gameObject.SetActive(true);
-            var teamPracticeType = new TeamTrainingType(_selectedMembers);
-            await personalTrainingSequenceController.PlayTeamTrainingSequence(_issuccess, teamPracticeType, _selectedMembers);
-
-            OnClickBack();
+            SceneManager.LoadScene("Ensembleproductiontest");
         }
-
-
 
         public void OnClickBack()
         {
@@ -243,25 +203,21 @@ namespace Code.MainSystem.MainScreen
             foreach (var member in _selectedMembers)
             {
                 if (_buttonMap.TryGetValue(member.memberType, out var btn))
-                {
-                    btn.transform.localPosition = _originLocalPosMap[member.memberType];
-                }
+                    btn.transform.localPosition = _originalPosMap[member.memberType];
 
-                var unitHealth = unitHealthBars.Find(u => u.memberType == member.memberType);
-                if (unitHealth != null)
-                {
-                    unitHealth.healthBar.SetHealth(member.currentCondition, member.maxCondition);
-                }
+                var bar = unitHealthBars.Find(b => b.memberType == member.memberType);
+                if (bar != null)
+                    bar.healthBar.SetHealth(member.currentCondition, member.maxCondition);
             }
-            
-            healthBar.PrevieMinusHealth(0);
 
+            teamHealthBar.PrevieMinusHealth(0);
             _selectedMembers.Clear();
             UpdateUI();
         }
 
-
-
-        #endregion
+        private void UpdateUI()
+        {
+            startPracticeButton.interactable = _isTeamPracticeMode && _selectedMembers.Count >= 2;
+        }
     }
 }
