@@ -24,13 +24,14 @@ namespace Code.MainSystem.MainScreen.Training
         public string title;
         public string content;
         public List<StatChangeInfo> statChanges;
-
         public Sprite icon;
         public bool isPositive;
-
         public string thoughts;
+        public string memberName;
 
-        public CommentData(string title, string content, List<StatChangeInfo> statChanges, Sprite icon = null, bool isPositive = true, string thoughts = "")
+        public CommentData(string title, string content, List<StatChangeInfo> statChanges, 
+            Sprite icon = null, bool isPositive = true, string thoughts = "", 
+            string memberName = "") 
         {
             this.title = title;
             this.content = content;
@@ -38,6 +39,7 @@ namespace Code.MainSystem.MainScreen.Training
             this.icon = icon;
             this.isPositive = isPositive;
             this.thoughts = thoughts;
+            this.memberName = memberName; 
         }
     }
 

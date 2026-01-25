@@ -60,10 +60,11 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
                 statChanges,
                 commentData.icon,
                 true,
-                commentData.thoughts
+                commentData.thoughts,
+                name 
             );
 
-            CommentManager.instance.AddComment(comment, name);
+            CommentManager.instance.AddComment(comment); 
             
             Bus<StatIncreaseDecreaseEvent>.Raise(
                 new StatIncreaseDecreaseEvent(true, dataSo.statIncrease.ToString(), stat.StatIcon, stat.StatName)
@@ -89,11 +90,11 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
                 statChanges,
                 commentData.icon,
                 false,
-                commentData.thoughts
+                commentData.thoughts,
+                name 
             );
 
-            CommentManager.instance.AddComment(comment, name);
-
+            CommentManager.instance.AddComment(comment); 
             Bus<StatIncreaseDecreaseEvent>.Raise(
                 new StatIncreaseDecreaseEvent(false, dataSo.StaminaReduction.ToString(), conditoinSprite, "컨디션")
             );
