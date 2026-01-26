@@ -9,9 +9,6 @@ using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.Rhythm.Core
 {
-    /// <summary>
-    /// 리듬 게임에서 메인 씬으로 전송시 사용
-    /// </summary>
     public class RhythmGameResultSender : MonoBehaviour
     {
         [SerializeField] private RhythmGameDataSenderSO dataSender;
@@ -41,13 +38,11 @@ namespace Code.MainSystem.Rhythm.Core
                 Debug.LogWarning("No result data to send!");
                 if (transitionSender != null)
                 {
-                    //transitionSender.SetTransition("Lobby", TransitionMode.ToPortrait);
                     transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
                     SceneManager.LoadScene("TransitionScene");
                 }
                 else
                 {
-                    //SceneManager.LoadScene("Lobby");
                     SceneManager.LoadScene("Test");
                 }
                 return;
@@ -55,24 +50,20 @@ namespace Code.MainSystem.Rhythm.Core
 
             var evt = _cachedResult.Value;
 
-            // 이거 랭크가 이넘이면 편하겄는데
-            // 지금은 임시로 해둔다
             dataSender.allStatUpValue = 1 + (int)(evt.FinalScore * 0.1f);
-            int memberCount = dataSender.MemberIds != null ? dataSender.MemberIds.Count : 0;
+            int memberCount = dataSender.memberIds != null ? dataSender.memberIds.Count : 0;
             dataSender.harmonyStatUpValue = memberCount * (int)(evt.FinalScore * 0.1f);
             
-            dataSender.IsResultDataAvailable = true;
+            dataSender.isResultDataAvailable = true;
 
             if (transitionSender != null)
             {
-                //transitionSender.SetTransition("Lobby", TransitionMode.ToPortrait);
                 transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
                 SceneManager.LoadScene("TransitionScene");
             }
             else
             {
                 Debug.Log("Fail to submit result");
-                //SceneManager.LoadScene("Lobby");
                 SceneManager.LoadScene("Test");
             }
         }

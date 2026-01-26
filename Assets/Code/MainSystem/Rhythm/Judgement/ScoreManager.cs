@@ -33,7 +33,6 @@ namespace Code.MainSystem.Rhythm.Judgement
 
         [Inject] private FeverManager _feverManager; 
 
-        // StatManager 의존성 제거, 대신 배율 값을 저장
         private Dictionary<int, float> _memberStatMultipliers = new Dictionary<int, float>();
 
         private void Start()
@@ -42,7 +41,6 @@ namespace Code.MainSystem.Rhythm.Judgement
             Bus<SongEndEvent>.OnEvent += HandleSongEnd;
         }
         
-        // Bootstrapper가 호출하여 스탯 배율 설정
         public void SetMemberStatMultiplier(int memberId, float multiplier)
         {
             if (_memberStatMultipliers.ContainsKey(memberId))
@@ -106,10 +104,9 @@ namespace Code.MainSystem.Rhythm.Judgement
             if (partDataList != null && memberId >= 0 && memberId < partDataList.Count)
             {
                 if (partDataList[memberId] != null)
-                    partMult = partDataList[memberId].ScoreMultiplier;
+                    partMult = partDataList[memberId].scoreMultiplier;
             }
 
-            // 미리 설정된 스탯 배율 사용
             float statMult = 1.0f;
             if (_memberStatMultipliers.TryGetValue(memberId, out float mult))
             {

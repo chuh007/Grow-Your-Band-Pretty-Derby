@@ -62,7 +62,7 @@ namespace Code.MainSystem.Rhythm.Core
                 return; 
             }
 
-            Debug.Log($"Bootstrapper: Initializing Session for Song {_dataSender.SongId}");
+            Debug.Log($"Bootstrapper: Initializing Session for Song {_dataSender.songId}");
 
             await LoadGameResources();
 
@@ -149,7 +149,6 @@ namespace Code.MainSystem.Rhythm.Core
                 }
             }
 
-            // Fallback: 데이터가 없으면 기본 5인조 구성으로 강제 설정
             if (memberRoles.Count == 0)
             {
                 Debug.LogWarning("[Bootstrapper] No members found in DataSender. Using Default Full Band Setup.");
@@ -162,14 +161,21 @@ namespace Code.MainSystem.Rhythm.Core
             
             Debug.Log($"[Bootstrapper] Final memberRoles count: {memberRoles.Count}");
 
-            string songId = _dataSender.SongId;
-            string musicKey = $"RhythmGame/Music/{songId}";
-            string envKey = _dataSender.ConcertType == ConcertType.Live ? KEY_ENV_LIVE : KEY_ENV_BUSKING;
+            string songId = _dataSender.songId;
+            
+            if (string.IsNullOrEmpty(songId))
+            {
+                Debug.LogError("[Bootstrapper] Song ID is missing in DataSender! Aborting resource load.");
+                return;
+            }
+
+            string musicKey = string.Format(RhythmGameConsts.MusicPathFormat, songId);
+            string envKey = _dataSender.concertType == ConcertType.Live ? RhythmGameConsts.EnvLive : RhythmGameConsts.EnvBusking;
 
             _loadedMusic = await SafeLoadAssetAsync<AudioClip>(musicKey);
-            _loadedNotePrefab = await SafeLoadAssetAsync<GameObject>(KEY_NOTE_BASIC);
+            _loadedNotePrefab = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.NoteBasic);
             
-            _loadedHitEffect = await SafeLoadAssetAsync<GameObject>(KEY_VFX_HIT);
+            _loadedHitEffect = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.VfxHit);
             _loadedEnvPrefab = await SafeLoadAssetAsync<GameObject>(envKey);
 
             var chartData = await ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
@@ -186,13 +192,13 @@ namespace Code.MainSystem.Rhythm.Core
                 }
                 else
                 {
-                    Debug.LogError($"[Rhythm] Loaded Note Prefab does not have RhythmPulse component: {KEY_NOTE_BASIC}");
+                    Debug.LogError($"[Rhythm] Loaded Note Prefab does not have RhythmPulse component: {RhythmGameConsts.NoteBasic}");
                 }
             }
-            else Debug.LogError($"[Rhythm] Note Prefab is missing: {KEY_NOTE_BASIC}");
+            else Debug.LogError($"[Rhythm] Note Prefab is missing: {RhythmGameConsts.NoteBasic}");
 
             if (_loadedHitEffect != null) _hitFeedbackManager.SetHitEffectPrefab(_loadedHitEffect);
-            else Debug.LogWarning($"[Rhythm] Hit Effect is missing: {KEY_VFX_HIT}");
+            else Debug.LogWarning($"[Rhythm] Hit Effect is missing: {RhythmGameConsts.VfxHit}");
 
             if (_loadedEnvPrefab != null)
             {

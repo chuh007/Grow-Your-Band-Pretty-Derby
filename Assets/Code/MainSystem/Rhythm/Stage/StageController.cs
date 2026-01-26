@@ -1,6 +1,5 @@
 using UnityEngine;
 using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 
 namespace Code.MainSystem.Rhythm.Stage

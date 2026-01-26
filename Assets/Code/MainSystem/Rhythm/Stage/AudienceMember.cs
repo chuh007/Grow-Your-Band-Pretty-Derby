@@ -1,8 +1,8 @@
-using UnityEngine;
-using DG.Tweening;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using UnityEngine;
 
-namespace Code.MainSystem.Rhythm
+namespace Code.MainSystem.Rhythm.Stage
 {
     public enum AudienceState
     {
@@ -14,22 +14,22 @@ namespace Code.MainSystem.Rhythm
     public class AudienceMember : MonoBehaviour
     {
         [Header("Components")]
-        [SerializeField] private SpriteRenderer _renderer;
-        [SerializeField] private Animator _animator;
+        [SerializeField] private SpriteRenderer renderer;
+        [SerializeField] private Animator animator;
 
         [Header("Settings")]
-        [SerializeField] private float _moveSpeed = 3f;
-        [SerializeField] private float _jumpPower = 0.5f;
+        [SerializeField] private float moveSpeed = 3f;
+        [SerializeField] private float jumpPower = 0.5f;
 
         [Header("Animation Settings")]
-        [SerializeField] private string _paramIdle = "IDLE";
-        [SerializeField] private string _paramWalk = "MOVE";
-        [SerializeField] private string _paramCheer = "CHEER";
+        [SerializeField] private string paramIdle = "IDLE";
+        [SerializeField] private string paramWalk = "MOVE";
+        [SerializeField] private string paramCheer = "CHEER";
         
         [Header("Cheer Settings")]
-        [SerializeField] private float _cheerJumpPower = 0.3f;
-        [SerializeField] private float _cheerIntervalMin = 0.5f;
-        [SerializeField] private float _cheerIntervalMax = 1.5f;
+        [SerializeField] private float cheerJumpPower = 0.3f;
+        [SerializeField] private float cheerIntervalMin = 0.5f;
+        [SerializeField] private float cheerIntervalMax = 1.5f;
 
         private int _hashIdle;
         private int _hashWalk;
@@ -42,21 +42,21 @@ namespace Code.MainSystem.Rhythm
 
         private void Awake()
         {
-            _hashIdle = Animator.StringToHash(_paramIdle);
-            _hashWalk = Animator.StringToHash(_paramWalk);
-            _hashCheer = Animator.StringToHash(_paramCheer);
+            _hashIdle = Animator.StringToHash(paramIdle);
+            _hashWalk = Animator.StringToHash(paramWalk);
+            _hashCheer = Animator.StringToHash(paramCheer);
         }
 
         public void Initialize(Sprite sprite)
         {
-            if (_renderer == null) _renderer = GetComponentInChildren<SpriteRenderer>();
-            if (_animator == null) _animator = GetComponentInChildren<Animator>();
+            if (renderer == null) renderer = GetComponentInChildren<SpriteRenderer>();
+            if (animator == null) animator = GetComponentInChildren<Animator>();
 
-            _hashIdle = Animator.StringToHash(_paramIdle);
-            _hashWalk = Animator.StringToHash(_paramWalk);
-            _hashCheer = Animator.StringToHash(_paramCheer);
+            _hashIdle = Animator.StringToHash(paramIdle);
+            _hashWalk = Animator.StringToHash(paramWalk);
+            _hashCheer = Animator.StringToHash(paramCheer);
 
-            if (sprite != null && _renderer != null) _renderer.sprite = sprite;
+            if (sprite != null && renderer != null) renderer.sprite = sprite;
             
             _isMoving = false;
             _shouldBeCheering = false;
@@ -67,23 +67,22 @@ namespace Code.MainSystem.Rhythm
 
         public void ChangeState(AudienceState newState)
         {
-            if (_animator == null) return;
-            if (_currentState == newState && _animator.GetBool(_hashIdle) == (newState == AudienceState.Idle)) 
+            if (animator == null) return;
+            if (_currentState == newState && animator.GetBool(_hashIdle) == (newState == AudienceState.Idle)) 
             {
-                // Extra check to ensure animator is in sync with our state
-                if (newState == AudienceState.Cheer && !_isCheeringLoop) StartCheerLoop().Forget();
+                if (newState == AudienceState.Cheer && !_isCheeringLoop) StartCheerLoop(this.GetCancellationTokenOnDestroy()).Forget();
                 return;
             }
 
             _currentState = newState;
 
-            _animator.SetBool(_hashIdle, newState == AudienceState.Idle);
-            _animator.SetBool(_hashWalk, newState == AudienceState.Walk);
-            _animator.SetBool(_hashCheer, newState == AudienceState.Cheer);
+            animator.SetBool(_hashIdle, newState == AudienceState.Idle);
+            animator.SetBool(_hashWalk, newState == AudienceState.Walk);
+            animator.SetBool(_hashCheer, newState == AudienceState.Cheer);
 
             if (newState == AudienceState.Cheer)
             {
-                if (!_isCheeringLoop) StartCheerLoop().Forget();
+                if (!_isCheeringLoop) StartCheerLoop(this.GetCancellationTokenOnDestroy()).Forget();
             }
             else
             {
@@ -93,19 +92,20 @@ namespace Code.MainSystem.Rhythm
 
         public async UniTaskVoid MoveToSeatAsync(Vector3 targetPos)
         {
+            var token = this.GetCancellationTokenOnDestroy();
             StopCheerLoop();
             _isMoving = true;
             ChangeState(AudienceState.Walk);
 
             float distance = Vector3.Distance(transform.position, targetPos);
-            float duration = distance / _moveSpeed;
+            float duration = distance / moveSpeed;
 
             var moveTween = transform.DOMove(targetPos, duration).SetEase(Ease.Linear);
-            var jumpTween = transform.DOJump(targetPos, _jumpPower, (int)(distance * 2), duration);
+            var jumpTween = transform.DOJump(targetPos, jumpPower, (int)(distance * 2), duration);
 
             await UniTask.WhenAll(
-                WaitForTween(moveTween),
-                WaitForTween(jumpTween)
+                WaitForTween(moveTween, token),
+                WaitForTween(jumpTween, token)
             );
 
             _isMoving = false;
@@ -120,39 +120,35 @@ namespace Code.MainSystem.Rhythm
             ChangeState(state ? AudienceState.Cheer : AudienceState.Idle);
         }
 
-        private async UniTaskVoid StartCheerLoop()
+        private async UniTaskVoid StartCheerLoop(System.Threading.CancellationToken token)
         {
             _isCheeringLoop = true;
 
-            // Random initial delay to desync audience
-            await UniTask.Delay(System.TimeSpan.FromSeconds(Random.Range(0f, 1f)));
+            await UniTask.Delay(System.TimeSpan.FromSeconds(Random.Range(0f, 1f)), cancellationToken: token);
 
             while (_isCheeringLoop && this != null)
             {
                 float duration = 0.4f;
-                await transform.DOJump(transform.position, _cheerJumpPower, 1, duration)
+                await transform.DOJump(transform.position, cheerJumpPower, 1, duration)
                                .SetEase(Ease.OutQuad)
-                               .AsyncWaitForCompletion();
+                               .AsyncWaitForCompletion().AsUniTask().AttachExternalCancellation(token);
                 
                 if (!_isCheeringLoop) break;
 
-                float interval = Random.Range(_cheerIntervalMin, _cheerIntervalMax);
-                await UniTask.Delay(System.TimeSpan.FromSeconds(interval));
+                float interval = Random.Range(cheerIntervalMin, cheerIntervalMax);
+                await UniTask.Delay(System.TimeSpan.FromSeconds(interval), cancellationToken: token);
             }
         }
 
         private void StopCheerLoop()
         {
             _isCheeringLoop = false;
-            transform.DOKill(true); // Complete active tweens immediately so they land
+            transform.DOKill(true); 
         }
 
-        private UniTask WaitForTween(Tween tween)
+        private UniTask WaitForTween(Tween tween, System.Threading.CancellationToken token)
         {
-            var tcs = new UniTaskCompletionSource();
-            tween.OnComplete(() => tcs.TrySetResult())
-                 .OnKill(() => tcs.TrySetResult());
-            return tcs.Task;
+            return tween.AsyncWaitForCompletion().AsUniTask().AttachExternalCancellation(token);
         }
     }
 }

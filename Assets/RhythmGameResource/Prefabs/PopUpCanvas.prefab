@@ -621,7 +621,6 @@ GameObject:
   - component: {fileID: 6227861175984838763}
   - component: {fileID: 5611285236171613382}
   - component: {fileID: 8919108766362653625}
-  - component: {fileID: 5991761991752768639}
   m_Layer: 5
   m_Name: LiveStartButton
   m_TagString: Untagged
@@ -730,39 +729,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5611285236171613382}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5991761991752768639}
-        m_TargetAssemblyTypeName: Code.MainSystem.Rhythm.Test.RhythmGameEnterButton,
-          Assembly-CSharp
-        m_MethodName: EnterRhythmGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &5991761991752768639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8146732718350359451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40f6d9be75845f743aed8ca6d4f895bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.Test.RhythmGameEnterButton
-  _dataSender: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
-  _transitionSender: {fileID: 11400000, guid: 2c4d5cbf2e4fe324f8359818cc03e848, type: 2}
-  _songId: TestSong
-  _concertType: 1
-  _difficulty: 1
-  _rhythmSceneName: Rhythm
-  _transitionSceneName: TransitionScene
+      m_Calls: []
 --- !u!1 &8858178378564518618
 GameObject:
   m_ObjectHideFlags: 0

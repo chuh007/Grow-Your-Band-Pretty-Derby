@@ -43,7 +43,7 @@ namespace Code.MainSystem.Rhythm.Judgement
 
             double diff = Math.Abs(targetNote.Time - compensatedTime);
             
-            float difficultyMult = _currentPartData != null ? _currentPartData.JudgementDifficulty : 1.0f;
+            float difficultyMult = _currentPartData != null ? _currentPartData.judgementDifficulty : 1.0f;
 
             if (diff <= perfectWindow * difficultyMult)
             {

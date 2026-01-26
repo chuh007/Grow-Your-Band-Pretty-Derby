@@ -19,8 +19,8 @@ namespace Code.MainSystem.Rhythm.SceneTransition
                 return;
             }
 
-            string nextScene = _sender.NextSceneName;
-            bool toLandscape = _sender.Mode == TransitionMode.ToLandscape;
+            string nextScene = _sender.nextSceneName;
+            bool toLandscape = _sender.mode == TransitionMode.ToLandscape;
 
             if (_landscapeGuideObj) _landscapeGuideObj.SetActive(toLandscape);
             if (_portraitGuideObj) _portraitGuideObj.SetActive(!toLandscape);

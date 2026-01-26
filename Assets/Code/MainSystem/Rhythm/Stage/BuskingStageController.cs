@@ -16,31 +16,29 @@ namespace Code.MainSystem.Rhythm.Stage
         [Header("Points")]
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private List<Transform> standPoints;
-        [SerializeField] private Transform _stageTransform;
+        [SerializeField] private Transform stageTransform;
 
         [Header("Data")]
         [SerializeField] private List<Sprite> audienceSprites;
         
-        private const string KEY_AUDIENCE_PREFAB = "RhythmGame/Prefab/AudienceMember";
-
         [Header("Band Members")]
-        [SerializeField] private List<Transform> _performerSpawnPoints;
+        [SerializeField] private List<Transform> performerSpawnPoints;
         private List<BandMemberController> _performers = new List<BandMemberController>();
 
         [Header("Settings")]
-        [SerializeField] private int _maxAudienceCount = 20;
-        [SerializeField] private int _millisecondsDelay = 500;
-        [SerializeField] private float _positionRandomness = 5.0f;
-        [SerializeField] private int _comboThreshold = 5;
-        [SerializeField] private int _scorePerAudience = 10000;
-        [SerializeField] private int _pointCapacity = 5;
-        [SerializeField] private float _personalSpaceRadius = 0.8f;
-        [SerializeField] private int _spawnAttempts = 15;
+        [SerializeField] private int maxAudienceCount = 20;
+        [SerializeField] private int millisecondsDelay = 500;
+        [SerializeField] private float positionRandomness = 5.0f;
+        [SerializeField] private int comboThreshold = 5;
+        [SerializeField] private int scorePerAudience = 10000;
+        [SerializeField] private int pointCapacity = 5;
+        [SerializeField] private float personalSpaceRadius = 0.8f;
+        [SerializeField] private int spawnAttempts = 15;
 
         [Header("Collision Settings")]
-        [SerializeField] private LayerMask _obstacleLayer;
-        [SerializeField] private float _collisionCheckRadius = 0.4f;
-        [SerializeField] private int _maxSpawnAttempts = 10;
+        [SerializeField] private LayerMask obstacleLayer;
+        [SerializeField] private float collisionCheckRadius = 0.4f;
+        [SerializeField] private int maxSpawnAttempts = 10;
         
         private GameObject _audiencePrefabSource;
         private List<AudienceMember> _activeAudience = new List<AudienceMember>();
@@ -61,9 +59,9 @@ namespace Code.MainSystem.Rhythm.Stage
                 return;
             }
 
-            Debug.Log($"[BuskingStage] InitializeStage Started. Members: {members.Count}, SpawnPoints: {(_performerSpawnPoints != null ? _performerSpawnPoints.Count : 0)}");
+            Debug.Log($"[BuskingStage] InitializeStage Started. Members: {members.Count}, SpawnPoints: {(performerSpawnPoints != null ? performerSpawnPoints.Count : 0)}");
 
-            if (_performerSpawnPoints == null || _performerSpawnPoints.Count == 0)
+            if (performerSpawnPoints == null || performerSpawnPoints.Count == 0)
             {
                 Debug.LogError("[BuskingStage] CRITICAL: Performer Spawn Points are missing or empty! Band members cannot be spawned. Check the inspector.");
                 return;
@@ -77,14 +75,14 @@ namespace Code.MainSystem.Rhythm.Stage
 
             for (int i = 0; i < members.Count; i++)
             {
-                if (i >= _performerSpawnPoints.Count) 
+                if (i >= performerSpawnPoints.Count) 
                 {
                     Debug.LogWarning($"[BuskingStage] Not enough spawn points! Member {i} skipped.");
                     break;
                 }
 
                 MemberType memberType = members[i];
-                string key = $"RhythmGame/Prefab/Member/{memberType}";
+                string key = string.Format(RhythmGameConsts.MemberPrefabFormat, memberType);
                 
                 try 
                 {
@@ -92,7 +90,7 @@ namespace Code.MainSystem.Rhythm.Stage
                     GameObject prefab = await GameResourceManager.Instance.LoadAssetAsync<GameObject>(key);
                     if (prefab != null)
                     {
-                        Transform point = _performerSpawnPoints[i];
+                        Transform point = performerSpawnPoints[i];
                         GameObject obj = Instantiate(prefab, point.position, point.rotation, transform);
                         
                         BandMemberController performer = obj.GetComponent<BandMemberController>();
@@ -140,13 +138,13 @@ namespace Code.MainSystem.Rhythm.Stage
 
         private async UniTaskVoid LoadAudiencePrefab()
         {
-            _audiencePrefabSource = await GameResourceManager.Instance.LoadAssetAsync<GameObject>(KEY_AUDIENCE_PREFAB);
+            _audiencePrefabSource = await GameResourceManager.Instance.LoadAssetAsync<GameObject>(RhythmGameConsts.AudiencePrefab);
         }
 
         protected override void OnProgressUpdated(float progress, float currentScore)
         {
-            int targetCount = Mathf.FloorToInt(currentScore / _scorePerAudience);
-            targetCount = Mathf.Min(targetCount, _maxAudienceCount);
+            int targetCount = Mathf.FloorToInt(currentScore / scorePerAudience);
+            targetCount = Mathf.Min(targetCount, maxAudienceCount);
 
             if (targetCount > _currentAudienceCount && !_isSpawning)
             {
@@ -187,7 +185,7 @@ namespace Code.MainSystem.Rhythm.Stage
         {
             if (_activeAudience.Count == 0) return;
 
-            float comboFactor = Mathf.Clamp01((float)_currentCombo / _comboThreshold);
+            float comboFactor = Mathf.Clamp01((float)_currentCombo / comboThreshold);
             float currentAccuracy = _totalCount > 0 ? (float)_hitCount / _totalCount : 0f;
             float targetHype = currentAccuracy * comboFactor;
             
@@ -213,7 +211,7 @@ namespace Code.MainSystem.Rhythm.Stage
                 SpawnSingleAudience(_currentAudienceCount);
                 _currentAudienceCount++;
 
-                await UniTask.Delay(_millisecondsDelay);
+                await UniTask.Delay(millisecondsDelay);
             }
 
             _isSpawning = false;
@@ -239,13 +237,13 @@ namespace Code.MainSystem.Rhythm.Stage
             Vector3 finalDestination = targetStandPoint.position;
             bool validPositionFound = false;
 
-            for (int i = 0; i < _maxSpawnAttempts; i++)
+            for (int i = 0; i < maxSpawnAttempts; i++)
             {
-                Vector2 randomCircle = Random.insideUnitCircle * _positionRandomness;
+                Vector2 randomCircle = Random.insideUnitCircle * positionRandomness;
                 Vector3 randomOffset = new Vector3(randomCircle.x, 0f, randomCircle.y);
                 Vector3 candidatePos = targetStandPoint.position + randomOffset;
 
-                if (!Physics.CheckSphere(candidatePos, _collisionCheckRadius, _obstacleLayer))
+                if (!Physics.CheckSphere(candidatePos, collisionCheckRadius, obstacleLayer))
                 {
                     finalDestination = candidatePos;
                     validPositionFound = true;
@@ -271,7 +269,7 @@ namespace Code.MainSystem.Rhythm.Stage
 
             for (int i = 0; i < standPoints.Count; i++)
             {
-                if (_pointOccupancy[i] < _pointCapacity)
+                if (_pointOccupancy[i] < pointCapacity)
                 {
                     if (_pointOccupancy[i] < minOccupancy)
                     {

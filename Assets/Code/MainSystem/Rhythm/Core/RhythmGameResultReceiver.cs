@@ -13,12 +13,8 @@ using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.Rhythm.Core
 {
-    /// <summary>
-    /// 리듬 게임이 전송한 데이터 읽어옴 & 게임 시작 처리
-    /// </summary>
     public class RhythmGameResultReceiver : MonoBehaviour
     {
-        // 인터페이스로 뺄까
         [SerializeField] private RhythmGameDataSenderSO dataSender;
         [SerializeField] private SceneTransitionSenderSO transitionSender;
 
@@ -32,25 +28,23 @@ namespace Code.MainSystem.Rhythm.Core
             Bus<ConcertStartRequested>.OnEvent -= HandleConcertStart;
         }
 
-        // 일단은 Awake에서 대부분 등록하니 Start에서. 나중에 데이터 로드하는 시점 생기면 거기서
-        // 올스텟 조금 상승. 하모니 상승
         private void Start()
         {
             Debug.Assert(dataSender != null, "RhythmGameDataSenderSO is missing");
 
-            if (dataSender.IsResultDataAvailable)
+            if (dataSender.isResultDataAvailable)
             {
                 ProcessGameResult();
-                dataSender.IsResultDataAvailable = false;
+                dataSender.isResultDataAvailable = false;
             }
         }
 
         private void HandleConcertStart(ConcertStartRequested evt)
         {
-            dataSender.SongId = evt.SongId;
-            dataSender.MemberIds = evt.MemberIds;
-            dataSender.Difficulty = evt.Difficulty;
-            dataSender.IsResultDataAvailable = false;
+            dataSender.songId = evt.SongId;
+            dataSender.memberIds = evt.MemberIds;
+            dataSender.difficulty = evt.Difficulty;
+            dataSender.isResultDataAvailable = false;
             
             dataSender.members = new List<MemberGroup>
             {
@@ -77,8 +71,6 @@ namespace Code.MainSystem.Rhythm.Core
         {
             Bus<TeamStatValueChangedEvent>.Raise(new TeamStatValueChangedEvent
                 (StatType.TeamHarmony, dataSender.harmonyStatUpValue));
-
-            #region 올스텟 올리기
 
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
                 (MemberType.Guitar, StatType.GuitarEndurance, dataSender.allStatUpValue));
@@ -108,10 +100,6 @@ namespace Code.MainSystem.Rhythm.Core
                     ((MemberType)i, StatType.Mental, dataSender.allStatUpValue));
             }
 
-            #endregion
-
-            // SO니까 초기화하기
-            // if (dataSender.members != null) dataSender.members.Clear();
             dataSender.allStatUpValue = 0;
             dataSender.harmonyStatUpValue = 0;
         }

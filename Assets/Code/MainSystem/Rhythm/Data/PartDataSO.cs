@@ -14,13 +14,13 @@ namespace Code.MainSystem.Rhythm.Data
     [CreateAssetMenu(fileName = "PartData", menuName = "RhythmGame/PartData")]
     public class PartDataSO : ScriptableObject
     {
-        public PartType PartType;
+        public PartType partType;
         
-        public float JudgementDifficulty = 1.0f; 
+        public float judgementDifficulty = 1.0f; 
         
-        public float ScoreMultiplier = 1.0f;
+        public float scoreMultiplier = 1.0f;
 
-        public FeverBonusType FeverBonusType;
+        public FeverBonusType feverBonusType;
     }
 
     public enum FeverBonusType

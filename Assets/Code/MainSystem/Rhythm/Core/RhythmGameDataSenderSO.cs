@@ -18,16 +18,16 @@ namespace Code.MainSystem.Rhythm.Core
     public class RhythmGameDataSenderSO : ScriptableObject
     {
         [Header("Game Input Data")]
-        public string SongId;
-        public ConcertType ConcertType;
-        public List<int> MemberIds;
-        public int Difficulty;
-        public List<NoteData> CombinedChart;
+        public string songId;
+        public ConcertType concertType;
+        public List<int> memberIds;
+        public int difficulty;
+        public List<NoteData> combinedChart;
         
         public List<MemberGroup> members = new List<MemberGroup>();
         
         [Header("Game Result Data")]
-        public bool IsResultDataAvailable;
+        public bool isResultDataAvailable;
         public int allStatUpValue;
         public int harmonyStatUpValue;
         

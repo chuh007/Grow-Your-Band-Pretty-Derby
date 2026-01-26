@@ -102,12 +102,14 @@ namespace Code.MainSystem.Rhythm.UI
 
             GameObject newInstance = Instantiate(_hitEffectPrefab, hitEffectAnchor);
             var returner = newInstance.GetComponent<AutoReturnToPool>();
+            
             if (returner == null)
             {
+                Debug.LogError($"[HitFeedbackManager] AutoReturnToPool component missing on {_hitEffectPrefab.name}. Please attach it in Editor.");
                 returner = newInstance.AddComponent<AutoReturnToPool>();
             }
             
-            returner.OnReturn = (obj) => _effectPool.Enqueue(obj);
+            returner.onReturn = (obj) => _effectPool.Enqueue(obj);
             return newInstance;
         }
     }
