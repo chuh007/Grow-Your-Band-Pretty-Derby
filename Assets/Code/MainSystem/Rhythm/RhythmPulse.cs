@@ -84,13 +84,13 @@ namespace Code.MainSystem.Rhythm
 
             if (_isHitPulse)
             {
-                transform.localScale = Vector3.one * 2.5f;
+                transform.localScale = Vector3.one * 1.5f;
                 _visualImage.color = new Color(1f, 1f, 1f, 1f); 
                 if (_canvasGroup) _canvasGroup.alpha = 1f;
             }
             else
             {
-                transform.localScale = Vector3.one * 0.8f;
+                transform.localScale = Vector3.one * 0.6f;
                 _visualImage.color = new Color(1f, 1f, 1f, 0.5f);
                 if (_canvasGroup) _canvasGroup.alpha = 0.5f;
             }
