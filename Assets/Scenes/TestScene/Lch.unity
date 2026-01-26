@@ -884,8 +884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 3
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &64329276
 GameObject:
   m_ObjectHideFlags: 0
@@ -4825,8 +4825,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 2
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &409703439
 GameObject:
   m_ObjectHideFlags: 0
@@ -7196,8 +7196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 1
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &605969506
 GameObject:
   m_ObjectHideFlags: 0
@@ -9343,7 +9343,6 @@ MonoBehaviour:
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 904073744}
   restSelectCompo: {fileID: 904073743}
-  statManager: {fileID: 2127672356}
 --- !u!114 &904073742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9442,6 +9441,7 @@ MonoBehaviour:
     healthBar: {fileID: 449017420}
   teamHealthBar: {fileID: 508380102}
   teamConditionCost: 5
+  mainScreen: {fileID: 904073741}
 --- !u!1 &936532600
 GameObject:
   m_ObjectHideFlags: 0
@@ -10186,8 +10186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 4
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &979288137
 GameObject:
   m_ObjectHideFlags: 0
@@ -20815,8 +20815,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 0
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &1918431719
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
@@ -10,6 +11,8 @@ using Code.MainSystem.StatSystem.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -34,7 +37,6 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
         [SerializeField] private RestSelectCompo restSelectCompo;
-        [SerializeField] private StatManager statManager;
 
         public UnitSelector UnitSelector { get; private set; }
 
@@ -42,6 +44,8 @@ namespace Code.MainSystem.MainScreen
         private List<UnitDataSO> _loadedUnits;
         
         private readonly Dictionary<MemberType, Button> _memberButtonMap = new();
+        
+        private static bool _returnedFromTeamPractice = false;
 
         #region Unity LifeCycle
 
@@ -50,6 +54,10 @@ namespace Code.MainSystem.MainScreen
             CacheMemberButtons();
             await LoadUnitsAsync();
             RefreshAllMemberButtons();
+            if (_returnedFromTeamPractice)
+            {
+                await CheckTeamPracticeReturn();
+            }
         }
 
         private void OnEnable()
@@ -89,8 +97,13 @@ namespace Code.MainSystem.MainScreen
 
             UnitSelector = new UnitSelector();
             UnitSelector.Init(_loadedUnits);
+            
+            while (StatManager.Instance != null && !StatManager.Instance.IsInitialized)
+            {
+                await Task.Yield();
+            }
 
-            _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, statManager);
+            _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, StatManager.Instance);
 
             if (_loadedUnits.Count > 0)
             {
@@ -98,6 +111,21 @@ namespace Code.MainSystem.MainScreen
             }
             
             teamPracticeCompo.CacheUnits(_loadedUnits);
+        }
+        
+        private async UniTask CheckTeamPracticeReturn()
+        {
+            await UniTask.Delay(100);
+            
+            if (CommentManager.instance != null)
+            {
+                await CommentManager.instance.ShowAllComments();
+            }
+            
+            await UniTask.Yield();
+
+            _returnedFromTeamPractice = false;
+            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
 
         #endregion
@@ -189,5 +217,10 @@ namespace Code.MainSystem.MainScreen
         }
 
         #endregion
+        
+        public void SetReturnedFromTeamPractice()
+        {
+            _returnedFromTeamPractice = true;
+        }
     }
 }

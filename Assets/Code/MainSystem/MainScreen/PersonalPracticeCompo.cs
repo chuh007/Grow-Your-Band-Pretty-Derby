@@ -33,7 +33,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private TextMeshProUGUI lesson2Text;
         [SerializeField] private List<UnitHealthBars> unitHealthBars;
 
-        [Inject] private StatManager _statManager;
+        private readonly StatManager _statManager = StatManager.Instance;
 
         private UnitDataSO _currentUnit;
         private float _currentCondition;

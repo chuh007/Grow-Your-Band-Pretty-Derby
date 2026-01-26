@@ -33,6 +33,8 @@ namespace Code.MainSystem.StatSystem.Manager
         [SerializeField] private float restRecoveryAmount = 10f;
 
         private Dictionary<MemberType, MemberStat> _memberMap;
+        private bool _isInitialized = false;
+        public bool IsInitialized => _isInitialized;
         
         private StatRegistry _registry;
         private StatOperator _operator;
@@ -76,6 +78,7 @@ namespace Code.MainSystem.StatSystem.Manager
                 
                 await upgradeModule.Initialize();
                 await ensembleModule.Initialize();
+                _isInitialized = true; 
             }
             catch (Exception e)
             {
