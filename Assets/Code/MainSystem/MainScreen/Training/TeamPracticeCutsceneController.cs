@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code.Core;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
@@ -133,13 +134,14 @@ namespace Code.MainSystem.MainScreen.Training
                 $"{unit.unitName}의 팀 훈련일지",
                 commentDataSO.comment,
                 statChanges,
+                PracticenType.Personal,
                 commentDataSO.icon,
                 isSuccess,
                 commentDataSO.thoughts,
                 unit.unitName 
             );
 
-            CommentManager.instance.AddComment(comment); 
+            CommentManager.instance.AddComment(comment,true); 
         }
 
         private async UniTask ShowResultForMember(UnitDataSO unit)
