@@ -21,8 +21,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 78995d0799f458b4ca72ae1e2e7b79a5, type: 2}
   - {fileID: 11400000, guid: f5a782b60f8633a459931a1ace35d2db, type: 2}
   personalPractices:
-  - {fileID: 11400000, guid: 26bf6c549897c654380fc35962e2d244, type: 2}
-  - {fileID: 11400000, guid: e6ff848408928fb4bbff90f106e30585, type: 2}
+  - {fileID: 11400000, guid: 25d7c0dc380d22f4abeedc9ffb99bd58, type: 2}
+  - {fileID: 11400000, guid: ea4fe08a175220e46a4f96798c6f4cc4, type: 2}
   - {fileID: 11400000, guid: 06dca3d9cc098504abd0e15769e524a1, type: 2}
   - {fileID: 11400000, guid: dc37d876655452c459863bb7c3f726b3, type: 2}
   maxCondition: 100

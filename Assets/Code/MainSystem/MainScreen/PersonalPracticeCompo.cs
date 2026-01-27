@@ -32,9 +32,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
         [SerializeField] private List<UnitHealthBars> unitHealthBars;
-
-        private readonly StatManager _statManager = StatManager.Instance;
-
+        
         private UnitDataSO _currentUnit;
         private float _currentCondition;
         private float _previewDamage;
@@ -109,7 +107,7 @@ namespace Code.MainSystem.MainScreen
 
             if (_selectedPracticeIndex == index)
             {
-                bool success = _statManager.PredictMemberPractice(_currentCondition);
+                bool success = StatManager.Instance.PredictMemberPractice(_currentCondition);
 
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,

@@ -51,7 +51,7 @@ namespace Code.MainSystem.Rhythm.Core
             var evt = _cachedResult.Value;
 
             dataSender.allStatUpValue = 1 + (int)(evt.FinalScore * 0.1f);
-            int memberCount = dataSender.memberIds != null ? dataSender.memberIds.Count : 0;
+            int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
             dataSender.harmonyStatUpValue = memberCount * (int)(evt.FinalScore * 0.1f);
             
             dataSender.isResultDataAvailable = true;

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61ed57a6d426704c8c39aabb2d717c0, type: 3}
   m_Name: SceneTransitionSender
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.SceneTransition.SceneTransitionSenderSO
-  NextSceneName: 
-  Mode: 0
+  nextSceneName: 
+  mode: 0
+  keepAliveDataSender: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
