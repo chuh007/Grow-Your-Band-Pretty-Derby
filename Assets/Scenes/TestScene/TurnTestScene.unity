@@ -884,8 +884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 3
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &64329276
 GameObject:
   m_ObjectHideFlags: 0
@@ -4825,8 +4825,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 2
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &409703439
 GameObject:
   m_ObjectHideFlags: 0
@@ -7195,8 +7195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 1
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &605969506
 GameObject:
   m_ObjectHideFlags: 0
@@ -10186,8 +10186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 4
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &979288137
 GameObject:
   m_ObjectHideFlags: 0
@@ -15070,11 +15070,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.2
+      value: -6.5
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.8
+      value: -14
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
@@ -19090,11 +19090,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 352.70877
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 633.9352
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
       propertyPath: m_LocalPosition.z
@@ -19128,6 +19128,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 546354087240252601, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
+      propertyPath: flowSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 79cab9437db7d75499fbc71842a55342, type: 2}
+    - target: {fileID: 546354087240252601, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
+      propertyPath: turnManager
+      value: 
+      objectReference: {fileID: 1952333117}
     - target: {fileID: 1943141726124254728, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
       propertyPath: m_Name
       value: FlowManager
@@ -20827,8 +20835,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 0
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &1918431719
 GameObject:
   m_ObjectHideFlags: 0
@@ -21294,13 +21302,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 208271456366512651, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
+      propertyPath: flowSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 79cab9437db7d75499fbc71842a55342, type: 2}
     - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 128.74171
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1575.3394
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 441360048386220852, guid: 0d81724b5b030f545b2a6148d15379a5, type: 3}
       propertyPath: m_LocalPosition.z

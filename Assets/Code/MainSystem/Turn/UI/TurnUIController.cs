@@ -32,7 +32,7 @@ namespace Code.MainSystem.Turn.UI
         private int _currentDayDisplayCount = 0;
         private bool _isAnimating = false;
         
-        private static readonly string RESULT_FORMAT = "다믕 목표까지 {0}일"; 
+        private static readonly string RESULT_FORMAT = "다음 목표까지 {0}일"; 
         
         private void Start()
         {
@@ -42,7 +42,10 @@ namespace Code.MainSystem.Turn.UI
 
         private void InitUI()
         {
-            foreach (var day in _spawnedDays) if(day != null) Destroy(day.gameObject);
+            foreach (var day in _spawnedDays)
+            {
+                if(day != null) Destroy(day.gameObject);
+            }
             _spawnedDays.Clear();
             _currentDayDisplayCount = 0; 
             

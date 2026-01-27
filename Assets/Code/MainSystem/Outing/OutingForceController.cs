@@ -38,6 +38,12 @@ namespace Code.MainSystem.Outing
             _cameras.Add(camera3);
             _cameras.Add(camera4);
             _cameras.Add(camera5);
+            
+            parkIcon.sprite = parkImage;
+            martIcon.sprite = martImage;
+            pcIcon.sprite = pcImage;
+            cafeIcon.sprite = cafeImage;
+            marketIcon.sprite = marketImage;
         }
 
         public void SetCamera(OutingPlace outingPlace)
