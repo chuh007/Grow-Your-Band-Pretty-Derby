@@ -4,17 +4,20 @@ using Code.MainSystem.TraitSystem.Runtime;
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     /// <summary>
-    /// 집중력 특성
+    /// 지나친 열정 특성
     /// </summary>
-    public class FocusEffect : AbstractTraitEffect, IPercentageModifier<ISuccessRateStat>, IJudgmentCorrection
+    public class OverzealousEffect : AbstractTraitEffect, IActionPointBonus, IPercentageModifier<IConditionStat>
     {
+        public float Chance { get; private set; }
+        public int Amount { get; private set; }
         public float Percentage { get; private set; }
-        public bool CorrectMissToGood => true;
 
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
-            Percentage = N1(trait);
+            Chance = N1(trait);
+            Amount = (int)N2(trait);
+            Percentage = N3(trait);
         }
     }
 }

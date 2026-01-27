@@ -20,7 +20,6 @@ MonoBehaviour:
   MaxLevel: 10
   Point: 5
   IsRemovable: 1
-  conditionType: 2
   Effects:
   - 50
   - 4
@@ -30,5 +29,5 @@ MonoBehaviour:
     \uACBD\uC6B0 +{0} * {1}%\uB85C \uBCC0\uACBD"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.HeartToHeartEffect, Assembly-CSharp,
+  effectName: Code.MainSystem.TraitSystem.TraitEffect.TelepathyEffect, Assembly-CSharp,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

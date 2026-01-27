@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 독선적 효과
     /// </summary>
-    public class DogmaticEffect : AbstractTraitEffect, IPercentageModifier
+    public class DogmaticEffect : AbstractTraitEffect, IPercentageModifier<IEnsembleStat>
     {
         public float Percentage { get; private set; }
 
@@ -14,22 +14,6 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         {
             base.Initialize(trait);
             Percentage = N1(trait);
-        }
-
-        public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
-        {
-            return true;
-        }
-
-        protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            (holder as IModifierProvider)?.RegisterModifier(this);
-        }
-
-        protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            (holder as IModifierProvider)?.UnregisterModifier(this);
-            Percentage = 0f;
         }
     }
 }
