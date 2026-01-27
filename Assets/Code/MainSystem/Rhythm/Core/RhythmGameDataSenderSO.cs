@@ -20,8 +20,6 @@ namespace Code.MainSystem.Rhythm.Core
         [Header("Game Input Data")]
         public string songId;
         public ConcertType concertType;
-        public List<int> memberIds;
-        public int difficulty;
         public List<NoteData> combinedChart;
         
         public List<MemberGroup> members = new List<MemberGroup>();

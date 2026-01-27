@@ -6,14 +6,10 @@ namespace Code.Core.Bus.GameEvents.RhythmEvents
     public struct ConcertStartRequested : IEvent
     {
         public string SongId;
-        public List<int> MemberIds;
-        public int Difficulty;
 
-        public ConcertStartRequested(string songId, List<int> memberIds, int difficulty)
+        public ConcertStartRequested(string songId)
         {
             SongId = songId;
-            MemberIds = memberIds;
-            Difficulty = difficulty;
         }
     }
 }
