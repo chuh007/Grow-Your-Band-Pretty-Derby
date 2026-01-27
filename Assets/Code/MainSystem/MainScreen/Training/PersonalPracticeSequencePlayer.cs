@@ -17,7 +17,6 @@ namespace Code.MainSystem.MainScreen.Training
 
         private GameObject _instance;
         private PersonalPracticeView _view;
-        private readonly StatManager statManager = StatManager.Instance;
 
         private MemberActionData _actionData;
 
@@ -55,7 +54,7 @@ namespace Code.MainSystem.MainScreen.Training
                 isSuccess,
                 dataSo,
                 currentCondition,
-                statManager,
+                StatManager.Instance,
                 unitData.name,
                 (statDelta) =>
                 {
@@ -65,24 +64,30 @@ namespace Code.MainSystem.MainScreen.Training
 
             await tcs.Task; 
             _view.gameObject.SetActive(false);
+            
+            BaseStat personalStat = StatManager.Instance.GetMemberStat(unitData.memberType, dataSo.PracticeStatType);
+            float personalStatCurrentValue = personalStat != null ? personalStat.CurrentValue : 0;
+            
+            float conditionDelta = -dataSo.StaminaReduction;
+
+
             await practiceResultWindow.Play(
-                statManager,
+                StatManager.Instance,
                 new List<UnitDataSO> { unitData },
-                currentCondition,
-                isSuccess ? dataSo.statIncrease : -dataSo.StaminaReduction,
-                teamStatData,
-                teamStatDelta,
+                currentCondition,              
+                conditionDelta,              
+                teamStatData,                 
+                personalStatCurrentValue,     
+                teamStatDelta,                 
                 new Dictionary<(MemberType, StatType), int>
                 {
-                    { (unitData.memberType, dataSo.PracticeStatType), receivedDelta }
+                    { (unitData.memberType, dataSo.PracticeStatType), receivedDelta } 
                 },
                 isSuccess,
                 dataSo 
             );
 
-
             _instance.SetActive(false);
         }
-
     }
 }
