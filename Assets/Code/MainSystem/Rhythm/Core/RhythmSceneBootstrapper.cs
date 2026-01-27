@@ -62,7 +62,8 @@ namespace Code.MainSystem.Rhythm.Core
                 return; 
             }
 
-            Debug.Log($"Bootstrapper: Initializing Session for Song {_dataSender.songId}");
+            Debug.Log($"Bootstrapper: DataSender (InstanceID: {_dataSender.GetInstanceID()})");
+            Debug.Log($"Bootstrapper: Initializing Session for Song '{_dataSender.songId}'");
 
             await LoadGameResources();
 

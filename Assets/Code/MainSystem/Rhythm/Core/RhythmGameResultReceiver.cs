@@ -42,8 +42,6 @@ namespace Code.MainSystem.Rhythm.Core
         private void HandleConcertStart(ConcertStartRequested evt)
         {
             dataSender.songId = evt.SongId;
-            dataSender.memberIds = evt.MemberIds;
-            dataSender.difficulty = evt.Difficulty;
             dataSender.isResultDataAvailable = false;
             
             dataSender.members = new List<MemberGroup>
