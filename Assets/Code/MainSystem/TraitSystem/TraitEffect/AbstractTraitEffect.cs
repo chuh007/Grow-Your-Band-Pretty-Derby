@@ -16,7 +16,10 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         /// <summary>
         /// 이 Effect를 적용할 수 있는지 확인
         /// </summary>
-        public abstract bool CanApply(ITraitHolder holder, ActiveTrait trait);
+        public virtual bool CanApply(ITraitHolder holder, ActiveTrait trait)
+        {
+            return true;
+        }
         
         /// <summary>
         /// Effect 적용
@@ -37,10 +40,16 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
             RemoveEffect(holder, trait);
         }
         
-        protected abstract void ApplyEffect(ITraitHolder holder, ActiveTrait trait);
-        protected abstract void RemoveEffect(ITraitHolder holder, ActiveTrait trait);
+        protected virtual void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
+        {
+            holder.RegisterModifier(this);
+        }
+
+        protected virtual void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
+        {
+            holder.UnregisterModifier(this);
+        }
         
-        // 헬퍼 메서드들
         protected float N1(ActiveTrait trait) => trait.CurrentEffects.ElementAtOrDefault(0);
         protected float N2(ActiveTrait trait) => trait.CurrentEffects.ElementAtOrDefault(1);
         protected float N3(ActiveTrait trait) => trait.CurrentEffects.ElementAtOrDefault(2);
