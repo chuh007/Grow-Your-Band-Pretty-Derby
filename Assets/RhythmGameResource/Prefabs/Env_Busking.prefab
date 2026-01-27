@@ -53,28 +53,28 @@ MonoBehaviour:
   - {fileID: 6798153899787044336}
   - {fileID: 3914060570291559334}
   - {fileID: 8700239935559194874}
-  _stageTransform: {fileID: 8051374709623332482}
+  stageTransform: {fileID: 8051374709623332482}
   audienceSprites:
   - {fileID: 21300000, guid: 3aa8bb72e976c5c4bbe8f41513c4df8f, type: 3}
-  _performerSpawnPoints:
+  performerSpawnPoints:
   - {fileID: 4557178564629347852}
   - {fileID: 4016964319822516852}
   - {fileID: 719797273832681276}
   - {fileID: 785752612789819118}
   - {fileID: 1562605034309656920}
-  _maxAudienceCount: 20
-  _millisecondsDelay: 200
-  _positionRandomness: 5
-  _comboThreshold: 2
-  _scorePerAudience: 2500
-  _pointCapacity: 5
-  _personalSpaceRadius: 0.8
-  _spawnAttempts: 15
-  _obstacleLayer:
+  maxAudienceCount: 20
+  millisecondsDelay: 500
+  positionRandomness: 5
+  comboThreshold: 5
+  scorePerAudience: 10000
+  pointCapacity: 5
+  personalSpaceRadius: 0.8
+  spawnAttempts: 15
+  obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  _collisionCheckRadius: 0.4
-  _maxSpawnAttempts: 10
+  collisionCheckRadius: 0.4
+  maxSpawnAttempts: 10
 --- !u!1 &537396641882899456
 GameObject:
   m_ObjectHideFlags: 0

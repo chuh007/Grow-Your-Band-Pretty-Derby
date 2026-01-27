@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.MainSystem.MainScreen.MemberData;
@@ -58,12 +59,14 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
                 $"{name}의 훈련일지",
                 commentData.comment,
                 statChanges,
+                PracticenType.Personal,
                 commentData.icon,
                 true,
-                commentData.thoughts
+                commentData.thoughts,
+                name 
             );
 
-            CommentManager.instance.AddComment(comment, name);
+            CommentManager.instance.AddComment(comment); 
             
             Bus<StatIncreaseDecreaseEvent>.Raise(
                 new StatIncreaseDecreaseEvent(true, dataSo.statIncrease.ToString(), stat.StatIcon, stat.StatName)
@@ -87,13 +90,14 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
                 $"{name}의 훈련일지",
                 commentData.comment,
                 statChanges,
+                PracticenType.Personal,
                 commentData.icon,
                 false,
-                commentData.thoughts
+                commentData.thoughts,
+                name 
             );
 
-            CommentManager.instance.AddComment(comment, name);
-
+            CommentManager.instance.AddComment(comment); 
             Bus<StatIncreaseDecreaseEvent>.Raise(
                 new StatIncreaseDecreaseEvent(false, dataSo.StaminaReduction.ToString(), conditoinSprite, "컨디션")
             );

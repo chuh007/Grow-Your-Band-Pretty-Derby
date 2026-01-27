@@ -884,8 +884,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 3
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &64329276
 GameObject:
   m_ObjectHideFlags: 0
@@ -4238,63 +4238,6 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!1001 &313797333
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 356647837981711463, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_Name
-      value: OutingResultReceiver
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -92.49162
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 490.01242
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5218978669115547629, guid: f188dfb66f89498428c095770791ea09, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f188dfb66f89498428c095770791ea09, type: 3}
 --- !u!1 &334145589
 GameObject:
   m_ObjectHideFlags: 0
@@ -4882,8 +4825,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 2
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &409703439
 GameObject:
   m_ObjectHideFlags: 0
@@ -5961,6 +5904,7 @@ MonoBehaviour:
   statPageRect: {fileID: 500154537}
   commentPageGO: {fileID: 2038329954}
   commentPage: {fileID: 2038329956}
+  titleText: {fileID: 1027460157}
 --- !u!1 &505128701
 GameObject:
   m_ObjectHideFlags: 0
@@ -7252,8 +7196,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 1
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &605969506
 GameObject:
   m_ObjectHideFlags: 0
@@ -9399,7 +9343,6 @@ MonoBehaviour:
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 904073744}
   restSelectCompo: {fileID: 904073743}
-  statManager: {fileID: 2127672356}
 --- !u!114 &904073742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9485,7 +9428,6 @@ MonoBehaviour:
   - {fileID: 551485469}
   - {fileID: 22590889}
   liftY: 20
-  personalTrainingSequenceController: {fileID: 0}
   unitHealthBars:
   - memberType: 0
     healthBar: {fileID: 1843474472}
@@ -9497,8 +9439,9 @@ MonoBehaviour:
     healthBar: {fileID: 1608846404}
   - memberType: 3
     healthBar: {fileID: 449017420}
-  healthBar: {fileID: 508380102}
-  teamCantionDes: 5
+  teamHealthBar: {fileID: 508380102}
+  teamConditionCost: 5
+  mainScreen: {fileID: 904073741}
 --- !u!1 &936532600
 GameObject:
   m_ObjectHideFlags: 0
@@ -10243,8 +10186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 4
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &979288137
 GameObject:
   m_ObjectHideFlags: 0
@@ -13944,17 +13887,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1303794389}
   m_CullTransparentMesh: 1
---- !u!114 &1334958972 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2458095661151708282, guid: f188dfb66f89498428c095770791ea09, type: 3}
-  m_PrefabInstance: {fileID: 313797333}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11b6d73c9cbb42e78eaae0ef705109e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Outing.OutingResultReceiver
 --- !u!1 &1334975052
 GameObject:
   m_ObjectHideFlags: 0
@@ -14959,7 +14891,7 @@ PrefabInstance:
     - target: {fileID: 534769817128372645, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: dataController
       value: 
-      objectReference: {fileID: 1334958972}
+      objectReference: {fileID: 0}
     - target: {fileID: 1007467169868346127, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -14975,7 +14907,7 @@ PrefabInstance:
     - target: {fileID: 1747666791340005328, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: dataController
       value: 
-      objectReference: {fileID: 1334958972}
+      objectReference: {fileID: 0}
     - target: {fileID: 1774856284769798199, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15003,11 +14935,11 @@ PrefabInstance:
     - target: {fileID: 2041226393119739522, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: dataController
       value: 
-      objectReference: {fileID: 1334958972}
+      objectReference: {fileID: 0}
     - target: {fileID: 2755104164097102134, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: dataController
       value: 
-      objectReference: {fileID: 1334958972}
+      objectReference: {fileID: 0}
     - target: {fileID: 4543858357917060149, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15135,7 +15067,7 @@ PrefabInstance:
     - target: {fileID: 8338560583937037415, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: dataController
       value: 
-      objectReference: {fileID: 1334958972}
+      objectReference: {fileID: 0}
     - target: {fileID: 8744241352943562262, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
       value: 366.79144
@@ -20883,8 +20815,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed11294f9ab84c21a875106fd4e3ae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
-  <MemberType>k__BackingField: 0
-  <MaxPoints>k__BackingField: 20
+  memberType: 0
+  maxPoints: 0
 --- !u!1 &1918431719
 GameObject:
   m_ObjectHideFlags: 0
@@ -23131,7 +23063,6 @@ SceneRoots:
   - {fileID: 1464388347}
   - {fileID: 341677069}
   - {fileID: 249881532}
-  - {fileID: 313797333}
   - {fileID: 1776487489}
   - {fileID: 1952333116}
   - {fileID: 1036421211}

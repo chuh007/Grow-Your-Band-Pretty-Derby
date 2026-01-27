@@ -17,7 +17,7 @@ namespace Code.MainSystem.MainScreen.Training
 
         private GameObject _instance;
         private PersonalPracticeView _view;
-        [Inject] private StatManager statManager;
+        private readonly StatManager statManager = StatManager.Instance;
 
         private MemberActionData _actionData;
 

@@ -18,7 +18,6 @@ namespace Code.MainSystem.MainScreen.Training
     {
         [SerializeField] private Transform sdRoot;
         [SerializeField] private Transform uiRoot;
-        [SerializeField] private StatManager statManager;
 
         private GameObject idleInstance;
         private TrainingProgressBar bar;
@@ -43,7 +42,7 @@ namespace Code.MainSystem.MainScreen.Training
 
             var idleSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetIdleImageKey());
             var resultSprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(trainingType.GetResultImageKey(isSuccess));
-            var statList = personalProvider.GetStatChanges(unit, statManager, isSuccess);
+            var statList = personalProvider.GetStatChanges(unit, StatManager.Instance, isSuccess);
 
             await ShowResultUI();
 

@@ -3,13 +3,20 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class BreathControlEffect : AbstractTraitEffect, IConditionChangeModifier, IFeverInputModifier
+    /// <summary>
+    /// 호흡 조절 특성
+    /// </summary>
+    public class BreathControlEffect : AbstractTraitEffect, IPercentageModifier, IAdditiveModifier
     {
-        public float ConditionChangeMultiplier => _conditionMultiplier;
-        public int FeverInputReduce => _feverInputReduce;
+        public float Percentage { get; private set; }
+        public float AdditiveValue { get; private set; }
 
-        private float _conditionMultiplier = 1f;
-        private int _feverInputReduce;
+        public override void Initialize(ActiveTrait trait)
+        {
+            base.Initialize(trait);
+            Percentage = N1(trait);
+            AdditiveValue = (int)N2(trait);
+        }
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
@@ -18,16 +25,14 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            _conditionMultiplier = N1(trait);
-            _feverInputReduce = (int)N2(trait);
-            (holder as IModifierProvider)?.RegisterModifier(this);
+            holder?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            (holder as IModifierProvider)?.UnregisterModifier(this);
-            _conditionMultiplier = 1f;
-            _feverInputReduce = 0;
+            holder?.UnregisterModifier(this);
+            Percentage = 1f;
+            AdditiveValue = 0;
         }
     }
 }

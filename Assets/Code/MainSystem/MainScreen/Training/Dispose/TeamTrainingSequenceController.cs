@@ -14,7 +14,6 @@ namespace Code.MainSystem.MainScreen.Training
     {
         [SerializeField] private Transform sdRoot;
         [SerializeField] private Transform uiRoot;
-        [SerializeField] private StatManager statManager;
         [SerializeField] private BottomTab bottomTab;
 
         private GameObject idleInstance;
@@ -36,7 +35,7 @@ namespace Code.MainSystem.MainScreen.Training
             }
 
             var unitSnapshot = new List<UnitDataSO>(units);
-            var allStats = teamProvider.GetAllStatChanges(unitSnapshot, statManager, isSuccess);
+            var allStats = teamProvider.GetAllStatChanges(unitSnapshot, StatManager.Instance, isSuccess);
 
             await SetupBar(trainingType, unitSnapshot[0].memberType);
             await ShowTeamProgress(trainingType, unitSnapshot.ConvertAll(u => u.memberType));

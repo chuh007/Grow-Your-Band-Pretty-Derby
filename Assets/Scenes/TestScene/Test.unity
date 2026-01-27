@@ -463,7 +463,64 @@ PrefabInstance:
       propertyPath: _concertType
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8405492818611567474, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405492818611567474, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405492818611567474, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2016742944}
+    - target: {fileID: 8405492818611567474, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405492818611567474, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseEntrancePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405492818611567474, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Code.MainSystem.Rhythm.Test.RhythmGameTransitionTester, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405492818611567474, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8919108766362653625, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8919108766362653625, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8919108766362653625, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2016742944}
+    - target: {fileID: 8919108766362653625, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8919108766362653625, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnterRhythmGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8919108766362653625, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Code.MainSystem.Rhythm.Test.RhythmGameTransitionTester, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8919108766362653625, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5991761991752768639, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -552,6 +609,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2016742943
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2016742945}
+  - component: {fileID: 2016742944}
+  m_Layer: 0
+  m_Name: RhythmGameTransitionTester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2016742944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016742943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ee78109fc3f9b4caa0faead87ba8c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.Test.RhythmGameTransitionTester
+  dataSender: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
+  transitionSender: {fileID: 11400000, guid: 2c4d5cbf2e4fe324f8359818cc03e848, type: 2}
+  entrancePanel: {fileID: 1303370705}
+  defaultSongId: TestSong
+  defaultDifficulty: 1
+  memberIds: 0100000002000000030000000400000005000000
+--- !u!4 &2016742945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016742943}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.21354, y: 4.54813, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1449312029323713158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -561,12 +668,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 1231590672}
     m_Modifications:
     - target: {fileID: 3464690655870929048, guid: 7e850adeb19593248abf7686b17b1e3e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3464690655870929048, guid: 7e850adeb19593248abf7686b17b1e3e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3464690655870929048, guid: 7e850adeb19593248abf7686b17b1e3e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2016742944}
+    - target: {fileID: 3464690655870929048, guid: 7e850adeb19593248abf7686b17b1e3e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3464690655870929048, guid: 7e850adeb19593248abf7686b17b1e3e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DisplayConcertPopUp
+      value: OpenEntrancePanel
       objectReference: {fileID: 0}
     - target: {fileID: 3464690655870929048, guid: 7e850adeb19593248abf7686b17b1e3e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Code.MainSystem.Rhythm.Test.ConcertPopUpDisplay, Assembly-CSharp
+      value: Code.MainSystem.Rhythm.Test.RhythmGameTransitionTester, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3464690655870929048, guid: 7e850adeb19593248abf7686b17b1e3e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -673,3 +796,4 @@ SceneRoots:
   - {fileID: 1375963384}
   - {fileID: 1231590672}
   - {fileID: 1303370704}
+  - {fileID: 2016742945}
