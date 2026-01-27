@@ -11,7 +11,7 @@ namespace Code.MainSystem.Rhythm.Data
         Vocal
     }
 
-    [CreateAssetMenu(fileName = "PartData", menuName = "RhythmGame/PartData")]
+    [CreateAssetMenu(fileName = "PartData", menuName = "SO/Rhythm/PartData")]
     public class PartDataSO : ScriptableObject
     {
         public PartType partType;
