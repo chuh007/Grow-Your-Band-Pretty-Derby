@@ -4,9 +4,9 @@ using Code.MainSystem.TraitSystem.Runtime;
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     /// <summary>
-    /// 하이라이트 강화 특성
+    /// 독선적 효과
     /// </summary>
-    public class HighlightBoostEffect : AbstractTraitEffect, IPercentageModifier
+    public class DogmaticEffect : AbstractTraitEffect, IPercentageModifier
     {
         public float Percentage { get; private set; }
 
@@ -23,13 +23,13 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            holder?.RegisterModifier(this);
+            (holder as IModifierProvider)?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            holder?.UnregisterModifier(this);
-            Percentage = 1f;
+            (holder as IModifierProvider)?.UnregisterModifier(this);
+            Percentage = 0f;
         }
     }
 }

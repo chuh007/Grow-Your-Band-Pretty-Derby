@@ -4,16 +4,18 @@ using Code.MainSystem.TraitSystem.Runtime;
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     /// <summary>
-    /// 하이라이트 강화 특성
+    /// 반짝이는 눈
     /// </summary>
-    public class HighlightBoostEffect : AbstractTraitEffect, IPercentageModifier
+    public class ShiningEyesEffect : AbstractTraitEffect, IPercentageModifier, IAdditiveModifier
     {
         public float Percentage { get; private set; }
+        public float AdditiveValue { get; private set; }
 
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
             Percentage = N1(trait);
+            AdditiveValue = (int)N2(trait);
         }
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
@@ -29,7 +31,8 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
             holder?.UnregisterModifier(this);
-            Percentage = 1f;
+            Percentage = 0f;
+            AdditiveValue = 0;
         }
     }
 }

@@ -4,9 +4,9 @@ using Code.MainSystem.TraitSystem.Runtime;
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     /// <summary>
-    /// 하이라이트 강화 특성
+    /// 단련기술 특성
     /// </summary>
-    public class HighlightBoostEffect : AbstractTraitEffect, IPercentageModifier
+    public class HonedTechniqueEffect : AbstractTraitEffect, IPercentageModifier
     {
         public float Percentage { get; private set; }
 
@@ -29,7 +29,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
             holder?.UnregisterModifier(this);
-            Percentage = 1f;
+            Percentage = 0f;
         }
     }
 }

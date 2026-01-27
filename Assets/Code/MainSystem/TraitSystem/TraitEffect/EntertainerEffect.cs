@@ -4,16 +4,16 @@ using Code.MainSystem.TraitSystem.Runtime;
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     /// <summary>
-    /// 하이라이트 강화 특성
+    /// 만담가 특성
     /// </summary>
-    public class HighlightBoostEffect : AbstractTraitEffect, IPercentageModifier
+    public class EntertainerEffect : AbstractTraitEffect, IAdditiveModifier
     {
-        public float Percentage { get; private set; }
-
+        public float AdditiveValue { get; private set; }
+        
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
-            Percentage = N1(trait);
+            AdditiveValue = N1(trait);
         }
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
@@ -29,7 +29,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
             holder?.UnregisterModifier(this);
-            Percentage = 1f;
+            AdditiveValue = 0f;
         }
     }
 }
