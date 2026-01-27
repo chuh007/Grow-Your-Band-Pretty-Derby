@@ -148,7 +148,6 @@ GameObject:
   - component: {fileID: 7169666051708007565}
   - component: {fileID: 1103664239142097060}
   - component: {fileID: 3464690655870929048}
-  - component: {fileID: 8114687865184980953}
   m_Layer: 5
   m_Name: PopUpDisplay
   m_TagString: Untagged
@@ -257,29 +256,4 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1103664239142097060}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8114687865184980953}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &8114687865184980953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6337552997840226555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7964cb6fcba4dd7a4b7911bfaaecb24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.Test.ConcertPopUpDisplay
-  concertPopUp: {fileID: 634393088696299770, guid: 76a16586ae84be84496dfc7f115d3afb, type: 3}
+      m_Calls: []

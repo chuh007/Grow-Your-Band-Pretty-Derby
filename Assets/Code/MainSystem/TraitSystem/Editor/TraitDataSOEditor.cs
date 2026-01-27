@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using Code.MainSystem.TraitSystem.Data;
+using UnityEditor.UIElements;
 
 namespace Code.MainSystem.TraitSystem.Editor
 {
@@ -14,74 +14,73 @@ namespace Code.MainSystem.TraitSystem.Editor
     {
         [SerializeField] private VisualTreeAsset view = default;
         
-        private TraitDataSO _targetSO;
         private VisualElement _root;
-        private List<string> _cachedEffectTypes;
-        private List<string> _cachedConditionTypes;
+
+        private Dictionary<string, string> _effectTypeDict = new();
+        private Dictionary<string, string> _conditionTypeDict = new();
 
         public override VisualElement CreateInspectorGUI()
         {
-            _targetSO = target as TraitDataSO;
             _root = new VisualElement();
             
             InspectorElement.FillDefaultInspector(_root, serializedObject, this);
             
-            view.CloneTree(_root);
+            if (view != null)
+                view.CloneTree(_root);
             
-            _cachedEffectTypes = GetDerivedTypes(typeof(TraitEffect.AbstractTraitEffect));
-            _cachedConditionTypes = GetDerivedTypes(typeof(TraitConditions.AbstractTraitCondition));
+            _effectTypeDict = GetDerivedTypesDict(typeof(TraitEffect.AbstractTraitEffect));
+            _conditionTypeDict = GetDerivedTypesDict(typeof(TraitConditions.AbstractTraitCondition));
             
-            MakeTraitEffectDropdown();
-            MakeTraitConditionDropdown();
+            SetupDropdown("EffectDropdown", "effectName", _effectTypeDict);
+            SetupDropdown("ConditionDropdown", "conditionName", _conditionTypeDict);
             
             return _root;
         }
 
-        private List<string> GetDerivedTypes(Type baseType)
+        private Dictionary<string, string> GetDerivedTypesDict(Type baseType)
         {
             return AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assem => assem.GetTypes())
-                .Where(type => type.IsSubclassOf(baseType) && !type.IsAbstract)
-                .Select(type => type.AssemblyQualifiedName)
-                .ToList();
+                .Where(type => baseType.IsAssignableFrom(type) && !type.IsAbstract && type != baseType)
+                .ToDictionary(
+                    type => type.Name,
+                    type => type.AssemblyQualifiedName
+                );
         }
 
-        private void MakeTraitEffectDropdown()
+        private void SetupDropdown(string visualElementName, string propertyName, Dictionary<string, string> typeDict)
         {
-            DropdownField dropdown = _root.Q<DropdownField>("EffectDropdown");
-            SetupDropdown(dropdown, _cachedEffectTypes, _targetSO.effectName, 
-                newValue => _targetSO.effectName = newValue);
-        }
+            DropdownField dropdown = _root.Q<DropdownField>(visualElementName);
+            if (dropdown == null) return;
 
-        private void MakeTraitConditionDropdown()
-        {
-            DropdownField dropdown = _root.Q<DropdownField>("ConditionDropdown");
+            SerializedProperty property = serializedObject.FindProperty(propertyName);
             
-            SetupDropdown(dropdown, _cachedConditionTypes, _targetSO.conditionName, 
-                newValue => _targetSO.conditionName = newValue);
-        }
-        
-        private void SetupDropdown(DropdownField dropdown, List<string> choices, string currentValue, Action<string> onValueChanged)
-        {
-            dropdown.choices = choices;
+            dropdown.choices = typeDict.Keys.ToList();
             
-            if (!dropdown.choices.Contains(currentValue))
+            string currentFullValue = property.stringValue;
+            string currentDisplayName = typeDict.FirstOrDefault(x => x.Value == currentFullValue).Key;
+
+            if (string.IsNullOrEmpty(currentDisplayName) && dropdown.choices.Count > 0)
             {
-                currentValue = dropdown.choices.Count > 0 
-                    ? dropdown.choices.First() 
-                    : string.Empty;
-                    
-                onValueChanged(currentValue);
-                EditorUtility.SetDirty(_targetSO);
+                currentDisplayName = dropdown.choices[0];
+                UpdateProperty(property, typeDict[currentDisplayName]);
             }
 
-            dropdown.value = currentValue;
+            dropdown.value = currentDisplayName;
             
             dropdown.RegisterValueChangedCallback(evt =>
             {
-                onValueChanged(evt.newValue);
-                EditorUtility.SetDirty(_targetSO);
+                if (typeDict.TryGetValue(evt.newValue, out string fullTypeName))
+                {
+                    UpdateProperty(property, fullTypeName);
+                }
             });
+        }
+
+        private void UpdateProperty(SerializedProperty property, string value)
+        {
+            property.stringValue = value;
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }

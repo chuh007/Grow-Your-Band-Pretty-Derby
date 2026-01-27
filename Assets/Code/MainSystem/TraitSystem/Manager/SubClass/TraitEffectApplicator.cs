@@ -2,36 +2,24 @@
 using System.Collections.Generic;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Runtime;
 using Code.MainSystem.TraitSystem.TraitEffect;
 
 namespace Code.MainSystem.TraitSystem.Manager.SubClass
 {
     public class TraitEffectApplicator : MonoBehaviour
     {
-        private readonly Dictionary<TraitEffectType, AbstractTraitEffect> _effects = new();
-        private ConditionChecker _conditionChecker; 
-    
-        private void Awake()
+        public void ApplyEffects(ITraitHolder holder, IEnumerable<ActiveTrait> traits, TraitEffectType timing)
         {
-            _conditionChecker = GetComponent<ConditionChecker>();
-        }
-    
-        public void RegisterEffect(TraitEffectType type, AbstractTraitEffect effect)
-        {
-            _effects[type] = effect;
-        }
-    
-        public void ApplyEffects(ITraitHolder holder, TraitEffectType timing)
-        {
-            foreach (var trait in holder.ActiveTraits)
+            foreach (var trait in traits)
             {
-                if (trait.Data.traitEffectType != timing) continue;
-                if (!_effects.TryGetValue(trait.Data.traitEffectType, out var effect)) 
+                if (trait.Data.traitEffectType != timing)
                     continue;
-                
-                if (!_conditionChecker.CheckCondition(holder, trait))
+
+                AbstractTraitEffect effect = trait.TraitEffect;
+                if (effect == null)
                     continue;
-            
+
                 if (effect.CanApply(holder, trait))
                     effect.Apply(holder, trait);
             }
