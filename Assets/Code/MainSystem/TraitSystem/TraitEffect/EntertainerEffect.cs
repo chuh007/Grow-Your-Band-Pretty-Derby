@@ -3,11 +3,18 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class SelfCenteredEffect : AbstractTraitEffect, ISelfCenteredModifier
+    /// <summary>
+    /// 만담가 특성
+    /// </summary>
+    public class EntertainerEffect : AbstractTraitEffect, IAdditiveModifier
     {
-        public float EnsembleEffectPenaltyPercent => _ensembleEffectPenaltyPercent;
-
-        private float _ensembleEffectPenaltyPercent;
+        public float AdditiveValue { get; private set; }
+        
+        public override void Initialize(ActiveTrait trait)
+        {
+            base.Initialize(trait);
+            AdditiveValue = N1(trait);
+        }
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
@@ -16,14 +23,13 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            _ensembleEffectPenaltyPercent = 50f;
-            (holder as IModifierProvider)?.RegisterModifier(this);
+            holder?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            (holder as IModifierProvider)?.UnregisterModifier(this);
-            _ensembleEffectPenaltyPercent = 0f;
+            holder?.UnregisterModifier(this);
+            AdditiveValue = 0f;
         }
     }
 }

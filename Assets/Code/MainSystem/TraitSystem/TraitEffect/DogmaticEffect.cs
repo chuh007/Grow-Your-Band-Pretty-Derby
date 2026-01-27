@@ -3,13 +3,18 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class HeartToHeartEffect : AbstractTraitEffect, IHeartToHeartModifier
+    /// <summary>
+    /// 독선적 효과
+    /// </summary>
+    public class DogmaticEffect : AbstractTraitEffect, IPercentageModifier
     {
-        public float BaseEnsembleBonusPercent => _baseEnsembleBonusPercent;
-        public float BothHaveTraitMultiplier => _bothHaveTraitMultiplier;
+        public float Percentage { get; private set; }
 
-        private float _baseEnsembleBonusPercent;
-        private float _bothHaveTraitMultiplier;
+        public override void Initialize(ActiveTrait trait)
+        {
+            base.Initialize(trait);
+            Percentage = N1(trait);
+        }
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
@@ -18,16 +23,13 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            _baseEnsembleBonusPercent = N1(trait);
-            _bothHaveTraitMultiplier = N2(trait);
             (holder as IModifierProvider)?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
             (holder as IModifierProvider)?.UnregisterModifier(this);
-            _baseEnsembleBonusPercent = 0f;
-            _bothHaveTraitMultiplier = 0f;
+            Percentage = 0f;
         }
     }
 }

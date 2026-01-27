@@ -3,14 +3,23 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class InjuryEffect : AbstractTraitEffect, IInjuryModifier
+    /// <summary>
+    /// 부상 특성
+    /// </summary>
+    public class InjuryEffect : AbstractTraitEffect, IPercentageModifier, IStackable
     {
-        public float TrainingSuccessPenaltyPercent => _trainingSuccessPenaltyPercent;
-        public int InjuryDurationTurns => _injuryDurationTurns;
+        public float Percentage { get; private set; }
+        public int StackCount { get; private set; }
+        public int IncreaseStack { get; private set; } = 1;
+        public int MaxStack { get; private set; }
 
-        private float _trainingSuccessPenaltyPercent;
-        private int _injuryDurationTurns;
-        
+        public override void Initialize(ActiveTrait trait)
+        {
+            base.Initialize(trait);
+            Percentage = N1(trait);
+            MaxStack = (int)N2(trait);
+        }
+
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
             return true;
@@ -18,16 +27,14 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            _trainingSuccessPenaltyPercent = N1(trait);
-            _injuryDurationTurns = (int)N2(trait);
-            (holder as IModifierProvider)?.RegisterModifier(this);
+            holder?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            (holder as IModifierProvider)?.UnregisterModifier(this);
-            _trainingSuccessPenaltyPercent = 1f;
-            _injuryDurationTurns = 0;
+            holder?.UnregisterModifier(this);
+            Percentage = 0f;
+            MaxStack = 0;
         }
     }
 }

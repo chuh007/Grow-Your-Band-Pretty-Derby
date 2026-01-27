@@ -3,12 +3,19 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class HonedTechniqueEffect : AbstractTraitEffect , IHonedTechniqueModifier
+    /// <summary>
+    /// 단련기술 특성
+    /// </summary>
+    public class HonedTechniqueEffect : AbstractTraitEffect, IPercentageModifier
     {
-        public float HealthIncreaseRate => _healthIncreaseRate;
+        public float Percentage { get; private set; }
 
-        private float _healthIncreaseRate;
-        
+        public override void Initialize(ActiveTrait trait)
+        {
+            base.Initialize(trait);
+            Percentage = N1(trait);
+        }
+
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
             return true;
@@ -16,14 +23,13 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            _healthIncreaseRate = N1(trait);
-            (holder as IModifierProvider)?.RegisterModifier(this);
+            holder?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            (holder as IModifierProvider)?.UnregisterModifier(this);
-            _healthIncreaseRate = 0f;
+            holder?.UnregisterModifier(this);
+            Percentage = 0f;
         }
     }
 }

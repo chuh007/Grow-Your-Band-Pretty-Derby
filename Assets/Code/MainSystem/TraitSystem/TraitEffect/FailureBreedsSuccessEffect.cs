@@ -3,31 +3,39 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class FailureBreedsSuccessEffect : AbstractTraitEffect, IFailureBreedsSuccessModifier
+    /// <summary>
+    /// 실패는 성공의 어머니 특성
+    /// </summary>
+    public class FailureBreedsSuccessEffect : AbstractTraitEffect, IAdditiveModifier, IStackable
     {
-        public int InspirationGainOnFail => _inspirationGainOnFail;
-        public int GuaranteedSuccessThreshold => _guaranteedSuccessThreshold;
+        public float AdditiveValue { get; private set; } = 100;
+        public int StackCount { get; private set; }
+        public int IncreaseStack { get; private set; }
+        public int MaxStack { get; private set; }
 
-        private int _inspirationGainOnFail;
-        private int _guaranteedSuccessThreshold;
+        public override void Initialize(ActiveTrait trait)
+        {
+            base.Initialize(trait);
+            StackCount = 0;
+            IncreaseStack = (int)N1(trait);
+            MaxStack = (int)N2(trait);
+        }
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
-            return true;
+            return StackCount >= MaxStack;
         }
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            _inspirationGainOnFail = (int)N1(trait);
-            _guaranteedSuccessThreshold = (int)N2(trait);
-            (holder as IModifierProvider)?.RegisterModifier(this);
+            holder?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            (holder as IModifierProvider)?.UnregisterModifier(this);
-            _inspirationGainOnFail = 0;
-            _guaranteedSuccessThreshold = 0;
+            holder?.UnregisterModifier(this);
+            StackCount = 0;
+            MaxStack = 0;
         }
     }
 }

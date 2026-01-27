@@ -3,13 +3,20 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class ShiningEyesEffect : AbstractTraitEffect, IShiningEyesModifier
+    /// <summary>
+    /// 반짝이는 눈
+    /// </summary>
+    public class ShiningEyesEffect : AbstractTraitEffect, IPercentageModifier, IAdditiveModifier
     {
-        public float ExtraActionChancePercent => _extraActionChancePercent;
-        public int ExtraActionAmount => _extraActionAmount;
+        public float Percentage { get; private set; }
+        public float AdditiveValue { get; private set; }
 
-        private float _extraActionChancePercent;
-        private int _extraActionAmount;
+        public override void Initialize(ActiveTrait trait)
+        {
+            base.Initialize(trait);
+            Percentage = N1(trait);
+            AdditiveValue = (int)N2(trait);
+        }
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
@@ -18,16 +25,14 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            _extraActionChancePercent = N1(trait);
-            _extraActionAmount = (int)N2(trait);
-            (holder as IModifierProvider)?.RegisterModifier(this);
+            holder?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            (holder as IModifierProvider)?.UnregisterModifier(this);
-            _extraActionChancePercent = 0f;
-            _extraActionAmount = 0;
+            holder?.UnregisterModifier(this);
+            Percentage = 0f;
+            AdditiveValue = 0;
         }
     }
 }
