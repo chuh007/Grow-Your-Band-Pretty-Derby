@@ -70,11 +70,6 @@ namespace Code.MainSystem.Rhythm.Core
             ApplyStatsToManagers();
 
             await FadeInGameScreen();
-
-            if (_conductor != null)
-            {
-                _conductor.Play();
-            }
         }
 
         private void ApplyStatsToManagers()
