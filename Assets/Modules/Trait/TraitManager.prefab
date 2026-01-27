@@ -177,10 +177,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDatabase
   traits:
-  - {fileID: 11400000, guid: 452c844e9c6155a4a87b49126fbe43dc, type: 2}
-  - {fileID: 11400000, guid: d26b7679b88f5814b8951c688b174a78, type: 2}
   - {fileID: 11400000, guid: 1d4d5d31d2aee1748ae6634c5a93a1ac, type: 2}
   - {fileID: 11400000, guid: bce770db155beea429f4c1ca32d2f192, type: 2}
+  - {fileID: 11400000, guid: 32b50c7cf5aa22642b80a74705395338, type: 2}
+  - {fileID: 11400000, guid: ef000d1a2ff4b25409438ab8ed841467, type: 2}
+  - {fileID: 11400000, guid: 452c844e9c6155a4a87b49126fbe43dc, type: 2}
+  - {fileID: 11400000, guid: d26b7679b88f5814b8951c688b174a78, type: 2}
+  - {fileID: 11400000, guid: 27449a00ca12e5141baf3f3333824499, type: 2}
+  - {fileID: 11400000, guid: 681b16d38ac6d7b459232499197bc0e8, type: 2}
+  - {fileID: 11400000, guid: 019a9b5de3b27bc42be9c7d73168f935, type: 2}
+  - {fileID: 11400000, guid: 58b09c46c277ac44eb806af81c9511cd, type: 2}
+  - {fileID: 11400000, guid: 63212224f82703c45894ef56f8f3a1bf, type: 2}
+  - {fileID: 11400000, guid: 014f9251646bf3640a362ffb496f3d7b, type: 2}
 --- !u!1 &7551168508848186664
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +311,6 @@ Transform:
   m_Children:
   - {fileID: 6343367606330979414}
   - {fileID: 2703522419587287969}
-  - {fileID: 1760659624402140524}
   - {fileID: 7063433486215225995}
   - {fileID: 5478000864848882374}
   - {fileID: 5892712501321110677}
@@ -322,47 +329,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afbdbaca9ee470887ac1b5f820cf943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Manager.TraitManager
---- !u!1 &8588777471000353431
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1760659624402140524}
-  - component: {fileID: 7398714943332328554}
-  m_Layer: 0
-  m_Name: ConditionChecker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1760659624402140524
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588777471000353431}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7174086074461526105}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7398714943332328554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588777471000353431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f37ba892afe4bacb69ffe4e14a69c52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Manager.SubClass.ConditionChecker

@@ -1,4 +1,7 @@
-﻿using Code.MainSystem.StatSystem.Events;
+﻿using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
 using UnityEngine;
 
 namespace Code.MainSystem.StatSystem.Manager.SubClass
@@ -16,15 +19,17 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
 
         public void ProcessRest(ConfirmRestEvent evt)
         {
-            var unit = evt.Unit;
+            UnitDataSO unit = evt.Unit;
             if (unit is null || !_registry.TryGetMember(unit.memberType, out _))
                 return;
 
-            unit.currentCondition = Mathf.Clamp(
-                unit.currentCondition + _restRecoveryAmount, 
-                0, 
-                unit.maxCondition
-            );
+            ITraitHolder holder = TraitManager.Instance.GetHolder(unit.memberType);
+            float finalRecovery = holder.GetFinalStat<IConditionStat>(_restRecoveryAmount);
+            
+            // if (holder.GetModifiers<IInspirationSystem>().Any(i =>  영감 충족 조건 ))
+            //     finalRate = 100f;
+
+            unit.currentCondition = Mathf.Clamp(unit.currentCondition + finalRecovery, 0, unit.maxCondition);
         }
     }
 }

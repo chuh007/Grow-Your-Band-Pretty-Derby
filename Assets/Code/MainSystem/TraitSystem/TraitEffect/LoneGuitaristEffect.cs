@@ -4,16 +4,16 @@ using Code.MainSystem.TraitSystem.Runtime;
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     /// <summary>
-    /// 만담가 특성
+    /// 고독한 기타리스트 특성
     /// </summary>
-    public class EntertainerEffect : AbstractTraitEffect, IAdditiveModifier<IMentalStat>
+    public class LoneGuitaristEffect : AbstractTraitEffect, IPercentageModifier<IPracticeStat>, IPercentageModifier<IConditionStat>
     {
-        public float AdditiveValue { get; private set; }
-        
+        public float Percentage { get; private set; }
+
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
-            AdditiveValue = N1(trait);
+            Percentage = N1(trait);
         }
     }
 }

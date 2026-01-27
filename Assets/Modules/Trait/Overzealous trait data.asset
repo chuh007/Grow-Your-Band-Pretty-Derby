@@ -20,7 +20,6 @@ MonoBehaviour:
   MaxLevel: 10
   Point: 5
   IsRemovable: 1
-  conditionType: 2
   Effects:
   - 30
   - 1
@@ -30,5 +29,5 @@ MonoBehaviour:
     \uC18C\uBAA8 {2}% \uC99D\uAC00"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.ExcessivePassionEffect, Assembly-CSharp,
+  effectName: Code.MainSystem.TraitSystem.TraitEffect.OverzealousEffect, Assembly-CSharp,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
