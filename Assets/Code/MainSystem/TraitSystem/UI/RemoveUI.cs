@@ -30,6 +30,9 @@ namespace Code.MainSystem.TraitSystem.UI
         
         private void Awake()
         {
+            toggle.isOn = false;
+            IsCheck = false;
+            
             if (confirmButton != null)
                 confirmButton.onClick.AddListener(OnConfirmClicked);
             toggle.onValueChanged.AddListener(OnToggleValueChanged);
@@ -43,6 +46,13 @@ namespace Code.MainSystem.TraitSystem.UI
 
         public void EnableFor(ActiveTrait trait, ITraitHolder holder)
         {
+            if (IsCheck)
+            {
+                Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(TraitManager.Instance.CurrentMember,
+                    trait.Data.TraitType));
+                return;
+            }
+
             _currentTrait = trait;
             _currentHolder = holder;
             UpdateUI();
@@ -111,7 +121,6 @@ namespace Code.MainSystem.TraitSystem.UI
         public void TurnEnd()
         {
             IsCheck = false;
-            toggle.isOn = false;
         }
         
         private void OnToggleValueChanged(bool isOn)

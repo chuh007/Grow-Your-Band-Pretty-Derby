@@ -105,8 +105,7 @@ namespace Code.MainSystem.TraitSystem.UI
         /// </summary>
         private void HandleTraitRemoveRequestedUI(TraitRemoveRequestedUI evt)
         {
-            if (!removeUI.IsCheck)
-                removeUI?.EnableFor(evt.Trait, evt.Holder);
+            removeUI?.EnableFor(evt.Trait, evt.Holder);
         }
 
         /// <summary>
