@@ -86,7 +86,6 @@ namespace Code.MainSystem.Outing
                 Bus<TraitAddRequested>.Raise(new TraitAddRequested
                     (outingResultSender.targetMember.memberType, trait));
             }
-            TrainingManager.Instance.MarkMemberTrained(outingResultSender.targetMember.memberType);
             Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using UnityEngine;
 
