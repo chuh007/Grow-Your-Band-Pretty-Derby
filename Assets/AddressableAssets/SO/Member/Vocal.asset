@@ -16,13 +16,13 @@ MonoBehaviour:
   memberType: 3
   spriteAddressableKey: Guitar
   stats:
-  - {fileID: 11400000, guid: cf5bb866e3a7bf843b4f7e9b3c7d1852, type: 2}
   - {fileID: 11400000, guid: 4bb5bd465b3f2064eab8c984a2352724, type: 2}
   - {fileID: 11400000, guid: 4f023774db1638c409fd38e465f941c3, type: 2}
+  - {fileID: 11400000, guid: cf5bb866e3a7bf843b4f7e9b3c7d1852, type: 2}
   - {fileID: 11400000, guid: 24362be1c5514484eb270b1ba49b2de6, type: 2}
   personalPractices:
-  - {fileID: 11400000, guid: 26bf6c549897c654380fc35962e2d244, type: 2}
-  - {fileID: 11400000, guid: e6ff848408928fb4bbff90f106e30585, type: 2}
+  - {fileID: 11400000, guid: d73b56a2643afa8479fb69bd9f16c18a, type: 2}
+  - {fileID: 11400000, guid: 9fe6ed9e305ac6045b158ed86ce2b673, type: 2}
   - {fileID: 11400000, guid: e78747427ba84e346899de478913f87a, type: 2}
   - {fileID: 11400000, guid: 5a3b82556147ec14bbc917b115aedb13, type: 2}
   maxCondition: 100
