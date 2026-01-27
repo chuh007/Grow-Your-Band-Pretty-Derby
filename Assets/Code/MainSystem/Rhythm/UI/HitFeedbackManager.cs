@@ -105,8 +105,9 @@ namespace Code.MainSystem.Rhythm.UI
             
             if (returner == null)
             {
-                Debug.LogError($"[HitFeedbackManager] AutoReturnToPool component missing on {_hitEffectPrefab.name}. Please attach it in Editor.");
-                returner = newInstance.AddComponent<AutoReturnToPool>();
+                Debug.LogError($"[HitFeedbackManager] AutoReturnToPool component missing on {_hitEffectPrefab.name}. Please attach it in Editor. Returning null to avoid runtime allocation errors.");
+                Destroy(newInstance);
+                return null;
             }
             
             returner.onReturn = (obj) => _effectPool.Enqueue(obj);

@@ -50,15 +50,8 @@ namespace Code.MainSystem.Rhythm.Core
             }
             else
             {
-                Debug.LogWarning("RhythmGameResultReceiver: No members provided in event. Using Default Fallback (Full Band).");
-                dataSender.members = new List<MemberGroup>
-                {
-                    new MemberGroup { Members = new List<MemberType> { MemberType.Vocal } },
-                    new MemberGroup { Members = new List<MemberType> { MemberType.Guitar } },
-                    new MemberGroup { Members = new List<MemberType> { MemberType.Bass } },
-                    new MemberGroup { Members = new List<MemberType> { MemberType.Drums } },
-                    new MemberGroup { Members = new List<MemberType> { MemberType.Piano } }
-                };
+                Debug.LogError("RhythmGameResultReceiver: No members provided in event. Cannot proceed with concert.");
+                return;
             }
 
             if (transitionSender != null)

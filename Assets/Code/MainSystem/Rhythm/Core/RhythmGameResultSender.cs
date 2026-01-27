@@ -1,8 +1,5 @@
-﻿using System;
-using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
+﻿using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.RhythmEvents;
-using Code.MainSystem.Etc;
 using Code.MainSystem.Rhythm.SceneTransition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
