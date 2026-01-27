@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d89799a62b74a97a5aee5ce16694d41, type: 3}
-  m_Name: Mental
+  m_Name: DrumMental
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.MemberData.PersonalpracticeDataSO
   PracticeStatType: 1
   PracticeStatName: "\uBA58\uD0C8"
