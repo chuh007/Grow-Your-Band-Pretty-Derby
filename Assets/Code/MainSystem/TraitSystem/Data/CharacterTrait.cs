@@ -9,7 +9,7 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.Data
 {
-    public class CharacterTrait : MonoBehaviour, ITraitHolder
+    public class CharacterTrait : MonoBehaviour, ITraitHolder, IModifierProvider
     {
         [SerializeField] private MemberType memberType;
         [SerializeField] private int maxPoints;
@@ -30,7 +30,7 @@ namespace Code.MainSystem.TraitSystem.Data
             if (data is null)
                 return;
             
-            ActiveTrait newTrait = new ActiveTrait(data);
+            var newTrait = new ActiveTrait(data, this.transform);
             _activeTraits.Add(newTrait);
         }
 
@@ -38,8 +38,9 @@ namespace Code.MainSystem.TraitSystem.Data
         {
             if (trait == null)
                 return;
-
-            _activeTraits.Remove(trait);
+        
+            if (_activeTraits.Remove(trait))
+                trait.Dispose();
         }
         
         public void BeginAdjustment(TraitDataSO pendingTrait)

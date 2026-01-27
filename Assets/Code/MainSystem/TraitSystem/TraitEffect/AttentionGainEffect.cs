@@ -3,18 +3,11 @@ using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    /// <summary>
-    /// 주목도 상승 특성
-    /// </summary>
-    public class AttentionGainEffect : AbstractTraitEffect, IPercentageModifier
+    public class AttentionGainEffect : AbstractTraitEffect, IFeverDurationModifier
     {
-        public float Percentage { get; private set; }
+        public float FeverDurationBonus => _bonus;
 
-        public override void Initialize(ActiveTrait trait)
-        {
-            base.Initialize(trait);
-            Percentage = N1(trait);
-        }
+        private float _bonus;
 
         public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
         {
@@ -23,14 +16,14 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            Percentage = N1(trait);
-            holder.RegisterModifier(this);
+            _bonus = N1(trait);
+            (holder as IModifierProvider)?.RegisterModifier(this);
         }
 
         protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
         {
-            holder.UnregisterModifier(this);
-            Percentage = 0f;
+            (holder as IModifierProvider)?.UnregisterModifier(this);
+            _bonus = 0f;
         }
     }
 }

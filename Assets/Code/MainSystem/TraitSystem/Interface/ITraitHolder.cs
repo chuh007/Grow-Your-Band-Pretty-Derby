@@ -4,7 +4,7 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.Interface
 {
-    public interface ITraitHolder : IModifierProvider
+    public interface ITraitHolder
     {
         int TotalPoint { get; }
         int MaxPoints { get; }
