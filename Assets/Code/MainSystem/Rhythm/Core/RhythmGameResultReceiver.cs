@@ -43,15 +43,23 @@ namespace Code.MainSystem.Rhythm.Core
         {
             dataSender.songId = evt.SongId;
             dataSender.isResultDataAvailable = false;
-            
-            dataSender.members = new List<MemberGroup>
+
+            if (evt.Members != null && evt.Members.Count > 0)
             {
-                new MemberGroup { Members = new List<MemberType> { MemberType.Vocal } },
-                new MemberGroup { Members = new List<MemberType> { MemberType.Guitar } },
-                new MemberGroup { Members = new List<MemberType> { MemberType.Bass } },
-                new MemberGroup { Members = new List<MemberType> { MemberType.Drums } },
-                new MemberGroup { Members = new List<MemberType> { MemberType.Piano } }
-            };
+                dataSender.members = evt.Members;
+            }
+            else
+            {
+                Debug.LogWarning("RhythmGameResultReceiver: No members provided in event. Using Default Fallback (Full Band).");
+                dataSender.members = new List<MemberGroup>
+                {
+                    new MemberGroup { Members = new List<MemberType> { MemberType.Vocal } },
+                    new MemberGroup { Members = new List<MemberType> { MemberType.Guitar } },
+                    new MemberGroup { Members = new List<MemberType> { MemberType.Bass } },
+                    new MemberGroup { Members = new List<MemberType> { MemberType.Drums } },
+                    new MemberGroup { Members = new List<MemberType> { MemberType.Piano } }
+                };
+            }
 
             if (transitionSender != null)
             {
@@ -67,39 +75,40 @@ namespace Code.MainSystem.Rhythm.Core
 
         private void ProcessGameResult()
         {
+            var (isAvailable, allStatUpValue, harmonyStatUpValue) = dataSender.ConsumeResult();
+            
+            if (!isAvailable) return;
+
             Bus<TeamStatValueChangedEvent>.Raise(new TeamStatValueChangedEvent
-                (StatType.TeamHarmony, dataSender.harmonyStatUpValue));
+                (StatType.TeamHarmony, harmonyStatUpValue));
 
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Guitar, StatType.GuitarEndurance, dataSender.allStatUpValue));
+                (MemberType.Guitar, StatType.GuitarEndurance, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Guitar, StatType.GuitarConcentration, dataSender.allStatUpValue));
+                (MemberType.Guitar, StatType.GuitarConcentration, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Drums, StatType.DrumsSenseOfRhythm, dataSender.allStatUpValue));
+                (MemberType.Drums, StatType.DrumsSenseOfRhythm, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Drums, StatType.DrumsPower, dataSender.allStatUpValue));
+                (MemberType.Drums, StatType.DrumsPower, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Bass, StatType.BassDexterity, dataSender.allStatUpValue));
+                (MemberType.Bass, StatType.BassDexterity, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Bass, StatType.BassSenseOfRhythm, dataSender.allStatUpValue));
+                (MemberType.Bass, StatType.BassSenseOfRhythm, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Vocal, StatType.VocalVocalization, dataSender.allStatUpValue));
+                (MemberType.Vocal, StatType.VocalVocalization, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Vocal, StatType.VocalBreathing, dataSender.allStatUpValue));
+                (MemberType.Vocal, StatType.VocalBreathing, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Piano, StatType.PianoDexterity, dataSender.allStatUpValue));
+                (MemberType.Piano, StatType.PianoDexterity, allStatUpValue));
             Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                (MemberType.Piano, StatType.PianoStagePresence, dataSender.allStatUpValue));
+                (MemberType.Piano, StatType.PianoStagePresence, allStatUpValue));
             for (int i = 0; i < (int)MemberType.Team; ++i)
             {
                 Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                    ((MemberType)i, StatType.Condition, dataSender.allStatUpValue));
+                    ((MemberType)i, StatType.Condition, allStatUpValue));
                 Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                    ((MemberType)i, StatType.Mental, dataSender.allStatUpValue));
+                    ((MemberType)i, StatType.Mental, allStatUpValue));
             }
-
-            dataSender.allStatUpValue = 0;
-            dataSender.harmonyStatUpValue = 0;
         }
 
 

@@ -50,9 +50,9 @@ namespace Code.MainSystem.Rhythm.Core
 
             var evt = _cachedResult.Value;
 
-            dataSender.allStatUpValue = 1 + (int)(evt.FinalScore * 0.1f);
+            dataSender.allStatUpValue = RhythmGameStatCalculator.CalculateAllStatGain(evt.FinalScore);
             int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
-            dataSender.harmonyStatUpValue = memberCount * (int)(evt.FinalScore * 0.1f);
+            dataSender.harmonyStatUpValue = RhythmGameStatCalculator.CalculateHarmonyStatGain(evt.FinalScore, memberCount);
             
             dataSender.isResultDataAvailable = true;
 
