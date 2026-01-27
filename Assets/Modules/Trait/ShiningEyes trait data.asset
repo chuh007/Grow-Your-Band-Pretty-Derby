@@ -20,7 +20,6 @@ MonoBehaviour:
   MaxLevel: 10
   Point: 11
   IsRemovable: 1
-  conditionType: 2
   Effects:
   - 20
   - 1

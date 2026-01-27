@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: Focus trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitID: 1001
-  TraitType: 1
+  TraitID: 1005
+  TraitType: 10
   TraitName: "\uC9D1\uC911\uB825"
   TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
   traitEffectType: 0
   MaxLevel: 10
   Point: 10
   IsRemovable: 0
-  conditionType: 1
   Effects:
   - 67
   DescriptionEffect: "\uC721\uC131: \uD6C8\uB828 \uC2E4\uD328 \uD655\uB960 {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
