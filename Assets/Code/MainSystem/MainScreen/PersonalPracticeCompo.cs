@@ -6,6 +6,7 @@ using Code.Core.Bus.GameEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.Etc;
+using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using Reflex.Attributes;
 using TMPro;
@@ -143,7 +144,7 @@ namespace Code.MainSystem.MainScreen
                     practice,
                     _currentCondition,              
                     _currentUnit.TeamStat,            
-                    success ? practice.statIncrease : 0 
+                    StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue
                 );
 
 

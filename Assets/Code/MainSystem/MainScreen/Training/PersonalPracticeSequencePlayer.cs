@@ -26,7 +26,7 @@ namespace Code.MainSystem.MainScreen.Training
             PersonalpracticeDataSO dataSo,
             float currentCondition,
             StatData teamStatData,
-            float teamStatDelta)
+            float teamStatCurrentValue)
         {
             if (_instance == null)
             {
@@ -70,15 +70,14 @@ namespace Code.MainSystem.MainScreen.Training
             
             float conditionDelta = -dataSo.StaminaReduction;
 
-
             await practiceResultWindow.Play(
                 StatManager.Instance,
                 new List<UnitDataSO> { unitData },
                 currentCondition,              
                 conditionDelta,              
                 teamStatData,                 
-                personalStatCurrentValue,     
-                teamStatDelta,                 
+                teamStatCurrentValue,
+                StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue,
                 new Dictionary<(MemberType, StatType), int>
                 {
                     { (unitData.memberType, dataSo.PracticeStatType), receivedDelta } 
