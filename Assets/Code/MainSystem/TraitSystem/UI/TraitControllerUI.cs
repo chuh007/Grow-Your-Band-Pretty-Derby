@@ -79,7 +79,8 @@ namespace Code.MainSystem.TraitSystem.UI
         
         private void HandleTraitUpgraded(TraitUpgraded evt)
         {
-            upgradeCheckUI?.EnableFor(evt.Trait, evt.PrevLevel);
+            if (!upgradeCheckUI.IsCheck)
+                upgradeCheckUI?.EnableFor(evt.Trait, evt.PrevLevel);
         }
 
         /// <summary>
