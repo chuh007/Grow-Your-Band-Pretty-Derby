@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 
 namespace Code.MainSystem.MainScreen.Training
 {
@@ -14,6 +16,8 @@ namespace Code.MainSystem.MainScreen.Training
 
         private readonly List<CommentData> _pendingComments = new();
         private bool _isTeamTraining = false;
+        private Dictionary<string, List<CommentData>> _setupComments;
+        private CancellationTokenSource _showCTS;
 
         private void Awake()
         {
@@ -27,15 +31,41 @@ namespace Code.MainSystem.MainScreen.Training
             }
         }
 
-        public void AddComment(CommentData data, bool isTeamTraining = false) //이걸로 코멘트 추가할수있음
+        public void AddComment(CommentData data, bool isTeamTraining = false)
         {
             _pendingComments.Add(data);
             _isTeamTraining = isTeamTraining;
         }
 
+        public void SetupComments()
+        {
+            if (_pendingComments.Count == 0)
+            {
+                _setupComments = null;
+                return;
+            }
+
+            _setupComments = new Dictionary<string, List<CommentData>>();
+        
+            foreach (var comment in _pendingComments)
+            {
+                string key = string.IsNullOrEmpty(comment.memberName) ? "Unknown" : comment.memberName;
+            
+                if (!_setupComments.ContainsKey(key))
+                {
+                    _setupComments[key] = new List<CommentData>();
+                }
+                _setupComments[key].Add(comment);
+            }
+        }
+
         public async UniTask ShowAllComments()
         {
-            if (_pendingComments.Count == 0) return;
+            if (_setupComments == null || _setupComments.Count == 0) return;
+
+            _showCTS?.Cancel();
+            _showCTS?.Dispose();
+            _showCTS = new CancellationTokenSource();
         
             if (commentPage == null || !commentPage.gameObject.scene.isLoaded)
             {
@@ -47,23 +77,17 @@ namespace Code.MainSystem.MainScreen.Training
                 Debug.LogError("현재 씬에서 PracticeCommentPage를 찾을 수 없습니다!");
                 return;
             }
-        
-            var groupedByMember = new Dictionary<string, List<CommentData>>();
-        
-            foreach (var comment in _pendingComments)
+
+            try
             {
-                string key = string.IsNullOrEmpty(comment.memberName) ? "Unknown" : comment.memberName;
-            
-                if (!groupedByMember.ContainsKey(key))
+                foreach (var kvp in _setupComments)
                 {
-                    groupedByMember[key] = new List<CommentData>();
+                    _showCTS.Token.ThrowIfCancellationRequested();
+                    await commentPage.ShowComments(kvp.Value, kvp.Key).AttachExternalCancellation(_showCTS.Token);
                 }
-                groupedByMember[key].Add(comment);
             }
-        
-            foreach (var kvp in groupedByMember)
+            catch (OperationCanceledException)
             {
-                await commentPage.ShowComments(kvp.Value, kvp.Key);
             }
 
             commentPage.gameObject.SetActive(false);
@@ -74,7 +98,28 @@ namespace Code.MainSystem.MainScreen.Training
             }
         
             _pendingComments.Clear();
+            _setupComments = null;
             _isTeamTraining = false;
+        }
+
+        public void ClearAllComments()
+        {
+            _showCTS?.Cancel();
+            
+            if (commentPage != null)
+            {
+                commentPage.ClearComments();
+            }
+            
+            _pendingComments.Clear();
+            _setupComments = null;
+            _isTeamTraining = false;
+        }
+
+        private void OnDestroy()
+        {
+            _showCTS?.Cancel();
+            _showCTS?.Dispose();
         }
     }
 }
