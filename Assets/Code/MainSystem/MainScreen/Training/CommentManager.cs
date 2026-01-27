@@ -27,7 +27,7 @@ namespace Code.MainSystem.MainScreen.Training
             }
         }
 
-        public void AddComment(CommentData data, bool isTeamTraining = false) 
+        public void AddComment(CommentData data, bool isTeamTraining = false) //이걸로 코멘트 추가할수있음
         {
             _pendingComments.Add(data);
             _isTeamTraining = isTeamTraining;

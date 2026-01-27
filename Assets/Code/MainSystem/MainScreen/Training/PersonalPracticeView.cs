@@ -60,8 +60,6 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
                 commentData.comment,
                 statChanges,
                 PracticenType.Personal,
-                commentData.icon,
-                true,
                 commentData.thoughts,
                 name 
             );
@@ -91,8 +89,6 @@ public class PersonalPracticeView : MonoBehaviour, IPointerDownHandler
                 commentData.comment,
                 statChanges,
                 PracticenType.Personal,
-                commentData.icon,
-                false,
                 commentData.thoughts,
                 name 
             );
