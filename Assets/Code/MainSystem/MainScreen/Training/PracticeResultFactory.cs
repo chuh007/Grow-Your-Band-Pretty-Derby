@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code.Core;
 using UnityEngine;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -39,10 +40,11 @@ namespace Code.MainSystem.MainScreen.Training
 
             return list;
         }
-
+        
         public static List<CommentData> BuildCommentData(
             List<UnitDataSO> allUnits,
-            Dictionary<(MemberType, StatType), int> statDeltaDict
+            Dictionary<(MemberType, StatType), int> statDeltaDict,
+            PracticenType trainingType = PracticenType.Personal 
         )
         {
             var comments = new List<CommentData>();
@@ -64,7 +66,7 @@ namespace Code.MainSystem.MainScreen.Training
                     string title = $"{unit.memberType} 연습 결과";
                     string content = $"{unit.memberType}의 능력치가 변경되었습니다.";
 
-                    comments.Add(new CommentData(title, content, changes));
+                    comments.Add(new CommentData(title, content, changes, trainingType));
                 }
             }
 
@@ -73,7 +75,8 @@ namespace Code.MainSystem.MainScreen.Training
                 comments.Add(new CommentData(
                     "변화 없음",
                     "변화된 스탯이 없습니다.",
-                    new List<StatChangeInfo>()
+                    new List<StatChangeInfo>(),
+                    trainingType 
                 ));
             }
 

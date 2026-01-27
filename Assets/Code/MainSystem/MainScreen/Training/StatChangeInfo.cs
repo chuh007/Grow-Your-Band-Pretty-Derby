@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code.Core;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Training
@@ -28,8 +29,10 @@ namespace Code.MainSystem.MainScreen.Training
         public bool isPositive;
         public string thoughts;
         public string memberName;
+        public PracticenType trainingType;
 
         public CommentData(string title, string content, List<StatChangeInfo> statChanges, 
+            PracticenType trainingType,
             Sprite icon = null, bool isPositive = true, string thoughts = "", 
             string memberName = "") 
         {

@@ -12,7 +12,7 @@ namespace Code.MainSystem.MainScreen.Training
         public static Dictionary<(MemberType memberType, StatType statType), int> StatDeltaDict = new();
 
         public static StatData TeamStat;
-        public static float TeamStatDelta;
+        public static int TeamStatDelta;
 
         public static float TeamConditionCurrent;
         public static float TeamConditionDelta;
