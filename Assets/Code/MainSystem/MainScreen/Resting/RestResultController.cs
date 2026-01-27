@@ -22,9 +22,9 @@ namespace Code.MainSystem.MainScreen.Resting
                 await GameManager.Instance.LoadAddressableAsync<GameObject>("Rest/SD/Idle");
             var idleInstance = Instantiate(idleSDPrefab, sdRoot);
 
-            var bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();
-            if (bar != null)
-                await bar.Play(1f);
+            //var bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();
+           // if (bar != null)
+             //await bar.Play(1f);
 
             Destroy(idleInstance);
 
