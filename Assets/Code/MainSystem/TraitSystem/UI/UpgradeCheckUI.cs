@@ -7,10 +7,11 @@ using Code.MainSystem.TraitSystem.Runtime;
 using Code.MainSystem.TraitSystem.Manager;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.Turn;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class UpgradeCheckUI : TraitPanelBase, IUIElement<ActiveTrait, int>
+    public class UpgradeCheckUI : TraitPanelBase, IUIElement<ActiveTrait, int>, ITurnEndComponent
     {
         [Inject] private TraitManager _traitManager;
         
@@ -18,15 +19,14 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private Button checkButton;
+        [SerializeField] private Toggle toggle;
+
+        public bool IsCheck { get; private set; }
 
         private void Awake()
         {
             checkButton.onClick.AddListener(OnCheck);
-        }
-
-        private void OnCheck()
-        {
-            Disable();
+            toggle.onValueChanged.AddListener(OnToggleValueChanged);
         }
 
         public void EnableFor(ActiveTrait trait, int prevLevel)
@@ -41,6 +41,22 @@ namespace Code.MainSystem.TraitSystem.UI
         public void Disable()
         {
             Hide();
+        }
+
+        public void TurnEnd()
+        {
+            IsCheck = false;
+            toggle.isOn = false;
+        }
+        
+        private void OnToggleValueChanged(bool isOn)
+        {
+            IsCheck = isOn;
+        }
+        
+        private void OnCheck()
+        {
+            Disable();
         }
     }
 }
