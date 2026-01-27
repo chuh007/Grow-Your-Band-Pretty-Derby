@@ -79,8 +79,7 @@ namespace Code.MainSystem.TraitSystem.UI
         
         private void HandleTraitUpgraded(TraitUpgraded evt)
         {
-            if (!upgradeCheckUI.IsCheck)
-                upgradeCheckUI?.EnableFor(evt.Trait, evt.PrevLevel);
+            upgradeCheckUI?.EnableFor(evt.Trait, evt.PrevLevel);
         }
 
         /// <summary>
@@ -106,7 +105,8 @@ namespace Code.MainSystem.TraitSystem.UI
         /// </summary>
         private void HandleTraitRemoveRequestedUI(TraitRemoveRequestedUI evt)
         {
-            removeUI?.EnableFor(evt.Trait, evt.Holder);
+            if (!removeUI.IsCheck)
+                removeUI?.EnableFor(evt.Trait, evt.Holder);
         }
 
         /// <summary>
