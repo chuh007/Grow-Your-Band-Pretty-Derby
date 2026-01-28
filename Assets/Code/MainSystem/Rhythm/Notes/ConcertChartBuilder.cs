@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
 
@@ -25,14 +24,14 @@ namespace Code.MainSystem.Rhythm.Notes
             List<UniTask<List<NoteData>>> tasks = new List<UniTask<List<NoteData>>>();
             List<int> memberIds = new List<int>();
 
-            string mainKey = string.Format(RhythmGameConsts.ChartPathFormat, songId, "Main");
+            string mainKey = string.Format(RhythmGameConsts.CHART_PATH_FORMAT, songId, "Main");
             tasks.Add(chartLoader.LoadChartAsync(mainKey));
             memberIds.Add(0);
 
             for (int i = 0; i < memberRoles.Count; i++)
             {
                 MemberType role = memberRoles[i];
-                string roleKey = string.Format(RhythmGameConsts.ChartPathFormat, songId, role);
+                string roleKey = string.Format(RhythmGameConsts.CHART_PATH_FORMAT, songId, role);
                 tasks.Add(chartLoader.LoadChartAsync(roleKey));
                 memberIds.Add(i + 1);
             }
