@@ -4,9 +4,11 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
+using Code.MainSystem.Rhythm.Core;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.Turn
 {
@@ -14,6 +16,9 @@ namespace Code.MainSystem.Turn
     {
         [Header("Data")]
         [SerializeField] private GoalFlowSO flowSO;
+        [SerializeField] private RhythmGameDataSenderSO dataSO;
+        
+        public static TurnManager Instance { get; private set; }
         
         public event Action<int> TurnChanged;
         public event Action<Goal> GoalChanged;
@@ -35,12 +40,21 @@ namespace Code.MainSystem.Turn
                 }
             }
         }
-
+        
         private void Awake()
         {
             Bus<TurnReturnEvent>.OnEvent += HandleTurnReturn;
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(this);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-
+        
         private async void Start()
         {
             while (StatManager.Instance != null && !StatManager.Instance.IsInitialized)
@@ -62,7 +76,6 @@ namespace Code.MainSystem.Turn
             {
                 Goal nextGoal = flowSO.goals[_currentGoalIndex];
                 
-                RemainingTurn = nextGoal.turn;
                 if (nextGoal.icon != null)
                 {
                     BaseStat stat = GetStat(nextGoal.targetType);
@@ -72,7 +85,7 @@ namespace Code.MainSystem.Turn
                 }
                 
                 GoalChanged?.Invoke(nextGoal);
-                TurnChanged?.Invoke(RemainingTurn);
+                RemainingTurn = nextGoal.turn;
             }
         }
 
@@ -81,7 +94,6 @@ namespace Code.MainSystem.Turn
         /// </summary>
         private void OnGoalFinished()
         {
-            
             Goal goal = flowSO.goals[_currentGoalIndex];
             switch (goal.type)
             {
@@ -100,7 +112,8 @@ namespace Code.MainSystem.Turn
                     break;
                 case GoalType.Busking:
                     // 버스킹 준비하는 씬으로 전환
-                    Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", null, 0));
+                    Debug.Log("BusKing");
+                    Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", dataSO.members));
                     break;
                 case GoalType.Performance:
                     // TODO 공연으로
@@ -120,7 +133,21 @@ namespace Code.MainSystem.Turn
         public void TurnEnd()
         {
             if (RemainingTurn > 0)
+            {
                 RemainingTurn--;
+                if (flowSO != null && _currentGoalIndex < flowSO.goals.Count)
+                {
+                    Goal nextGoal = flowSO.goals[_currentGoalIndex];
+                
+                    if (nextGoal.icon != null)
+                    {
+                        BaseStat stat = GetStat(nextGoal.targetType);
+                        Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
+                        (nextGoal.titleText, nextGoal.icon, 
+                            (nextGoal.target - stat.CurrentValue).ToString(), nextGoal.isTargetSet));
+                    }
+                }
+            }
         }
 
         private BaseStat GetStat(StatType type)

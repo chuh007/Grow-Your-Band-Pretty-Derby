@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 441360048386220852}
   - component: {fileID: 208271456366512651}
   m_Layer: 0
-  m_Name: TrunManager
+  m_Name: TurnManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bb451aa60d477590603b291c9fbe71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Turn.TurnManager
-  maxTurn: 15
-  _remainingTurn: 0
+  flowSO: {fileID: 11400000, guid: 79cab9437db7d75499fbc71842a55342, type: 2}
+  dataSO: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}

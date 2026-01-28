@@ -26,8 +26,6 @@ namespace Code.MainSystem.Turn.UI
         [SerializeField] private Vector3 activeScale = new Vector3(1.2f, 1.2f, 1.2f);
         [SerializeField] private Vector3 inactiveScale = new Vector3(0.8f, 0.8f, 0.8f);
         
-        [Inject] private TurnManager _turnManager;
-        
         private readonly List<DayOfWeekUI> _spawnedDays = new List<DayOfWeekUI>();
         private int _currentDayDisplayCount = 0;
         private bool _isAnimating = false;
@@ -51,7 +49,7 @@ namespace Code.MainSystem.Turn.UI
             
             CreateDayUI(_currentDayDisplayCount, Vector2.zero, activeScale);
             CreateDayUI(_currentDayDisplayCount + 1, new Vector2(daySpacing, 0), inactiveScale);
-            remainingTurnText.SetText(string.Format(RESULT_FORMAT, _turnManager.RemainingTurn));
+            remainingTurnText.SetText(string.Format(RESULT_FORMAT, TurnManager.Instance.RemainingTurn));
         }
 
         public async UniTask TurnChangeAnimation()
@@ -86,7 +84,7 @@ namespace Code.MainSystem.Turn.UI
             
             await seq.Play().AsyncWaitForCompletion();
             
-            remainingTurnText.SetText(string.Format(RESULT_FORMAT, _turnManager.RemainingTurn));
+            remainingTurnText.SetText(string.Format(RESULT_FORMAT, TurnManager.Instance.RemainingTurn));
             
             await UniTask.WaitForSeconds(0.25f);
             
