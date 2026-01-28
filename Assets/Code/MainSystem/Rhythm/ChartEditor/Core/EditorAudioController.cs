@@ -59,14 +59,22 @@ namespace Code.MainSystem.Rhythm.ChartEditor.Core
         {
             if (audioSource != null)
             {
-                audioSource.Play();
+                if (!audioSource.isPlaying)
+                {
+                    Debug.Log($"[EditorAudio] Play called. Resuming from {audioSource.time}");
+                    audioSource.Play();
+                }
                 _lastBeatTime = audioSource.time;
             }
         }
 
         public void Pause()
         {
-            if (audioSource != null) audioSource.Pause();
+            if (audioSource != null) 
+            {
+                Debug.Log($"[EditorAudio] Pause called. Pausing at {audioSource.time}");
+                audioSource.Pause();
+            }
         }
 
         public void Seek(double time)
