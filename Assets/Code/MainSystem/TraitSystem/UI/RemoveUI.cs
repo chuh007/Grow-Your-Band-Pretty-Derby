@@ -7,10 +7,11 @@ using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.Turn;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class RemoveUI : TraitPanelBase, IUIElement<ActiveTrait, ITraitHolder>
+    public class RemoveUI : TraitPanelBase, IUIElement<ActiveTrait, ITraitHolder>, ITurnEndComponent
     {
         [Header("Dependencies")]
         [Inject] private TraitManager _traitManager;
@@ -20,14 +21,21 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private Button confirmButton;
+        [SerializeField] private Toggle toggle;
+        
+        public bool IsCheck { get; private set; }
         
         private ActiveTrait _currentTrait;
         private ITraitHolder _currentHolder;
         
         private void Awake()
         {
+            toggle.isOn = false;
+            IsCheck = false;
+            
             if (confirmButton != null)
                 confirmButton.onClick.AddListener(OnConfirmClicked);
+            toggle.onValueChanged.AddListener(OnToggleValueChanged);
         }
 
         private void OnDestroy()
@@ -38,6 +46,13 @@ namespace Code.MainSystem.TraitSystem.UI
 
         public void EnableFor(ActiveTrait trait, ITraitHolder holder)
         {
+            if (IsCheck)
+            {
+                Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(TraitManager.Instance.CurrentMember,
+                    trait.Data.TraitType));
+                return;
+            }
+
             _currentTrait = trait;
             _currentHolder = holder;
             UpdateUI();
@@ -101,6 +116,16 @@ namespace Code.MainSystem.TraitSystem.UI
         public void Close()
         {
             OnCancelClicked();
+        }
+
+        public void TurnEnd()
+        {
+            IsCheck = false;
+        }
+        
+        private void OnToggleValueChanged(bool isOn)
+        {
+            IsCheck = isOn;
         }
     }
 }
