@@ -25,6 +25,7 @@ namespace Code.MainSystem.Outing
 
         public void Click()
         {
+            if(TrainingManager.Instance.IsMemberTrained(sender.targetMember.memberType)) return;
             TrainingManager.Instance.MarkMemberTrained(sender.targetMember.memberType);
             var evt = dataController.GetMemberOutingData(sender.targetMember.memberType, outingPlace);
             sender.selectedEvent = evt;

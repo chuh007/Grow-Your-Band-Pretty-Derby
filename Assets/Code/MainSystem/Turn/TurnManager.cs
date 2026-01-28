@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
+using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
 
 namespace Code.MainSystem.Turn
@@ -36,9 +39,17 @@ namespace Code.MainSystem.Turn
         private void Awake()
         {
             Bus<TurnReturnEvent>.OnEvent += HandleTurnReturn;
+        }
+
+        private async void Start()
+        {
+            while (StatManager.Instance != null && !StatManager.Instance.IsInitialized)
+            {
+                await Task.Delay(100);
+            }
             NextGoal();
         }
-        
+
         private void OnDestroy()
         {
             Bus<TurnReturnEvent>.OnEvent -= HandleTurnReturn;
@@ -47,12 +58,18 @@ namespace Code.MainSystem.Turn
         private void NextGoal()
         {
             _currentGoalIndex++;
-
             if (flowSO != null && _currentGoalIndex < flowSO.goals.Count)
             {
                 Goal nextGoal = flowSO.goals[_currentGoalIndex];
                 
-                RemainingTurn = nextGoal.turn; 
+                RemainingTurn = nextGoal.turn;
+                if (nextGoal.icon != null)
+                {
+                    BaseStat stat = GetStat(nextGoal.targetType);
+                    Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
+                    (nextGoal.titleText, nextGoal.icon, 
+                        (nextGoal.target - stat.CurrentValue).ToString(), nextGoal.isTargetSet));
+                }
                 
                 GoalChanged?.Invoke(nextGoal);
                 TurnChanged?.Invoke(RemainingTurn);
@@ -64,12 +81,22 @@ namespace Code.MainSystem.Turn
         /// </summary>
         private void OnGoalFinished()
         {
-            // TODO 각각에 맞는 코드 실행
+            
             Goal goal = flowSO.goals[_currentGoalIndex];
             switch (goal.type)
             {
                 case GoalType.Stat:
-                    // 특별한 연출 없이 합 스텟이 요구량 이상인지 검사
+                    // 특별한 연출 없이 특정 스텟이 요구량 이상인지 검사
+                    BaseStat stat = GetStat(goal.targetType);
+                    if (stat.CurrentValue < goal.target)
+                    {
+                        Debug.Log("아이고들어가면큰일나죠이거는");
+                        // TODO 끝나는 인카운터 호출
+                    }
+                    else
+                    {
+                        // TODO 이벤트가 있을지도
+                    }
                     break;
                 case GoalType.Busking:
                     // 버스킹 준비하는 씬으로 전환
@@ -95,5 +122,8 @@ namespace Code.MainSystem.Turn
             if (RemainingTurn > 0)
                 RemainingTurn--;
         }
+
+        private BaseStat GetStat(StatType type)
+            => StatManager.Instance.GetTeamStat(type);
     }
 }

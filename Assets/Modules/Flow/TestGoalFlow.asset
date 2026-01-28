@@ -13,9 +13,17 @@ MonoBehaviour:
   m_Name: TestGoalFlow
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Turn.GoalFlowSO
   goals:
-  - text: "\uD569 \uC2A4\uD15F 10 \uC774\uC0C1 \uB2EC\uC131"
+  - titleText: "\uD569 \uC2A4\uD15F 10 \uC774\uC0C1 \uB2EC\uC131"
+    isTargetSet: 1
+    icon: {fileID: 1208040086343421634, guid: 5520ac3433a986143a323543b8041c7e, type: 3}
+    targetType: 12
+    target: 10
     type: 2
     turn: 2
-  - text: "\uBC84\uC2A4\uD0B9 \uCC38\uC5EC"
+  - titleText: "\uBC84\uC2A4\uD0B9 \uCC38\uC5EC"
+    isTargetSet: 0
+    icon: {fileID: 0}
+    targetType: 0
+    target: 0
     type: 2
     turn: 5
