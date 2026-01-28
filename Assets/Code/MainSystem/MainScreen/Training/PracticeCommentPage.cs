@@ -65,6 +65,7 @@ namespace Code.MainSystem.MainScreen.Training
             catch (OperationCanceledException)
             {
                 _isWaitingForClick = false;
+                Debug.Log($"[PracticeCommentPage] {name} 취소됨");
                 throw;
             }
         }
@@ -87,10 +88,9 @@ namespace Code.MainSystem.MainScreen.Training
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log($"[PracticeCommentPage] 클릭 이벤트 발생! _isWaitingForClick: {_isWaitingForClick}, _clickTcs != null: {_clickTcs != null}");
-            
             if (_isWaitingForClick && _clickTcs != null)
             {
+                Debug.Log($"[PracticeCommentPage] 클릭 이벤트 발생! _isWaitingForClick: {_isWaitingForClick}");
                 _clickTcs.TrySetResult();
                 Debug.Log("[PracticeCommentPage] 클릭 처리 완료!");
             }

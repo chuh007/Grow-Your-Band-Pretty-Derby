@@ -28,6 +28,27 @@ namespace Code.MainSystem.MainScreen.Training
                 await UniTask.Delay(200, cancellationToken: token);
             }
         }
+        
+        public void ForceCompleteAllStats(List<StatChangeResult> statResults)
+        {
+            for (int i = 0; i < resultItems.Count; i++)
+            {
+                var ui = resultItems[i];
+                ui.StopAnimation();
+                
+                if (i < statResults.Count)
+                {
+                    var data = statResults[i];
+                    ui.SetInitialData(data.statName, data.rightIcon);
+                    ui.ForceSetValue(data.leftIcon, data.currentValue);
+                }
+                else
+                {
+
+                    ui.ResetUI();
+                }
+            }
+        }
 
         public void ClearStats()
         {
