@@ -181,7 +181,7 @@ namespace Code.MainSystem.Rhythm.Notes
                 NoteData note = node.Value;
                 
                 // 판정 시간 + 0.2초가 지나도록 처리가 안 되면 Miss
-                if (songTime > note.Time + 0.2f)
+                if (songTime > note.Time + RhythmGameBalanceConsts.MISS_THRESHOLD_SECONDS)
                 {
                     if (_judgementSystem != null)
                     {
@@ -214,10 +214,24 @@ namespace Code.MainSystem.Rhythm.Notes
             _pulsePool.Enqueue(pulse);
         }
 
-        public NoteData GetNearestNote(double songTime)
+        public NoteData GetClosestNoteAcrossAllTracks(double inputTime)
         {
             if (_activeHitNotes.Count == 0) return null;
-            return _activeHitNotes.First.Value; 
+
+            NoteData closestNote = null;
+            double minDiff = double.MaxValue;
+            double window = RhythmGameBalanceConsts.MISS_THRESHOLD_SECONDS; // Valid window
+
+            foreach (var note in _activeHitNotes)
+            {
+                double diff = System.Math.Abs(note.Time - inputTime);
+                if (diff < minDiff && diff <= window)
+                {
+                    minDiff = diff;
+                    closestNote = note;
+                }
+            }
+            return closestNote;
         }
         
         public void RemoveNote(NoteData note)

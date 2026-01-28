@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using Reflex.Attributes;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -23,27 +24,42 @@ namespace Code.MainSystem.Rhythm.Judgement
         [SerializeField] private double greatWindow = 0.100;   
         [SerializeField] private double goodWindow = 0.150;    
 
-        private PartDataSO _currentPartData;
+        private Dictionary<int, PartDataSO> _partDataMap = new Dictionary<int, PartDataSO>();
 
-        public void SetPartData(PartDataSO partData)
+        public void SetPartData(List<PartDataSO> partDataList)
         {
-            _currentPartData = partData;
+            _partDataMap.Clear();
+            foreach(var data in partDataList)
+            {
+                //TODO : 나중에 초기화 단계에서 할 게 있으면 채워넣기
+            }
+        }
+        
+        public void SetPartDataMap(Dictionary<int, PartDataSO> map)
+        {
+            _partDataMap = map;
         }
 
-        public void OnInputDetected(int laneIndex)
+        public void OnInputDetected()
         {
             if (_lineController == null || _conductor == null) return;
 
             double songTime = _conductor.SongPosition;
             double compensatedTime = songTime + _conductor.InputOffset;
 
-            NoteData targetNote = _lineController.GetNearestNote(compensatedTime);
+            // 수정: 모든 트랙을 대상으로 가장 가까운 노트를 가져옴
+            NoteData targetNote = _lineController.GetClosestNoteAcrossAllTracks(compensatedTime);
             
             if (targetNote == null) return;
 
             double diff = Math.Abs(targetNote.Time - compensatedTime);
             
-            float difficultyMult = _currentPartData != null ? _currentPartData.judgementDifficulty : 1.0f;
+            // 해당 멤버에 대한 난이도 배수를 가져옴
+            float difficultyMult = 1.0f;
+            if (_partDataMap.ContainsKey(targetNote.MemberId))
+            {
+                difficultyMult = _partDataMap[targetNote.MemberId].judgementDifficulty;
+            }
 
             if (diff <= perfectWindow * difficultyMult)
             {

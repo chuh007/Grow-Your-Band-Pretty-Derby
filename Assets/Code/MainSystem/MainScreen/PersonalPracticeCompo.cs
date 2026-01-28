@@ -6,6 +6,7 @@ using Code.Core.Bus.GameEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.Etc;
+using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using Reflex.Attributes;
 using TMPro;
@@ -32,9 +33,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
         [SerializeField] private List<UnitHealthBars> unitHealthBars;
-
-        private readonly StatManager _statManager = StatManager.Instance;
-
+        
         private UnitDataSO _currentUnit;
         private float _currentCondition;
         private float _previewDamage;
@@ -109,7 +108,7 @@ namespace Code.MainSystem.MainScreen
 
             if (_selectedPracticeIndex == index)
             {
-                bool success = _statManager.PredictMemberPractice(_currentCondition);
+                bool success = StatManager.Instance.PredictMemberPractice(_currentCondition);
 
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,
@@ -145,7 +144,7 @@ namespace Code.MainSystem.MainScreen
                     practice,
                     _currentCondition,              
                     _currentUnit.TeamStat,            
-                    success ? practice.statIncrease : 0 
+                    StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue
                 );
 
 

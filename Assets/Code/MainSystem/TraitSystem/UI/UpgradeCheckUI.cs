@@ -24,11 +24,6 @@ namespace Code.MainSystem.TraitSystem.UI
             checkButton.onClick.AddListener(OnCheck);
         }
 
-        private void OnCheck()
-        {
-            Disable();
-        }
-
         public void EnableFor(ActiveTrait trait, int prevLevel)
         {
             iconImage.sprite = trait.Data.TraitIcon;
@@ -41,6 +36,11 @@ namespace Code.MainSystem.TraitSystem.UI
         public void Disable()
         {
             Hide();
+        }
+        
+        private void OnCheck()
+        {
+            Disable();
         }
     }
 }

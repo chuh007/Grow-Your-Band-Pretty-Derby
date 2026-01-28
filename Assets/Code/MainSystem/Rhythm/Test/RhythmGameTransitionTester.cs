@@ -19,8 +19,6 @@ namespace Code.MainSystem.Rhythm.Test
 
         [Header("Default Settings (Fallback)")]
         [SerializeField] private string defaultSongId = "TestSong";
-        [SerializeField] private int defaultDifficulty = 1;
-        [SerializeField] private List<int> memberIds = new List<int> { 1, 2, 3, 4, 5 };
 
         private void Start()
         {
@@ -40,16 +38,15 @@ namespace Code.MainSystem.Rhythm.Test
         public void EnterRhythmGame()
         {
             string sId = defaultSongId;
-            int diff = defaultDifficulty;
 
-            Debug.Log($"[Test] Starting Rhythm Game directly: {sId} (Diff: {diff})");
+            Debug.Log($"[Test] Starting Rhythm Game directly: {sId}");
 
             // 1. DataSender 설정
             if (dataSender != null)
             {
+                Debug.Log($"[Test] Setting up DataSender (InstanceID: {dataSender.GetInstanceID()})");
                 dataSender.songId = defaultSongId;
-                dataSender.memberIds = new List<int>(memberIds);
-                dataSender.difficulty = defaultDifficulty;
+                Debug.Log($"[Test] DataSender.songId set to: {dataSender.songId}");
                 dataSender.isResultDataAvailable = false;
                 
                 // 임시 멤버 구성 (5인조 기본값)

@@ -6,33 +6,17 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 반짝이는 눈
     /// </summary>
-    public class ShiningEyesEffect : AbstractTraitEffect, IPercentageModifier, IAdditiveModifier
+    public class ShiningEyesEffect : AbstractTraitEffect, IActionPointBonus
     {
-        public float Percentage { get; private set; }
-        public float AdditiveValue { get; private set; }
+        public float Chance { get; private set; }
+        public int Amount { get; private set; }
+        
 
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
-            Percentage = N1(trait);
-            AdditiveValue = (int)N2(trait);
-        }
-
-        public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
-        {
-            return true;
-        }
-
-        protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.RegisterModifier(this);
-        }
-
-        protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.UnregisterModifier(this);
-            Percentage = 0f;
-            AdditiveValue = 0;
+            Chance = N1(trait);
+            Amount = (int)N2(trait);
         }
     }
 }

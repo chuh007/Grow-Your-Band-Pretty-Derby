@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -14,34 +16,57 @@ namespace Code.MainSystem.MainScreen.Training
 
         private readonly List<GameObject> spawnedComments = new();
         private UniTaskCompletionSource _clickTcs;
-        private bool _isWaitingForClick = false; 
+        private bool _isWaitingForClick = false;
+        private CancellationTokenSource _showCTS;
 
-        public async UniTask ShowComments(List<CommentData> commentDataList, string name)
+        public async UniTask ShowComments(List<CommentData> commentDataList, string name, CancellationToken token = default)
         {
-            gameObject.SetActive(true);
-            titleText.SetText(name + "의 훈련일지");
-            ClearOldComments();
+            _showCTS?.Cancel();
+            _showCTS?.Dispose();
+            _showCTS = CancellationTokenSource.CreateLinkedTokenSource(token);
 
-            foreach (var comment in commentDataList)
+            try
             {
-                var go = Instantiate(commentItemPrefab, commentParent);
+                gameObject.SetActive(true);
+                titleText.SetText(name + "의 훈련일지");
+                ClearOldComments();
+
+                foreach (var comment in commentDataList)
+                {
+                    _showCTS.Token.ThrowIfCancellationRequested();
+                    
+                    var go = Instantiate(commentItemPrefab, commentParent);
+                    
+                    go.transform.localScale = Vector3.one;
+                    go.SetActive(true);
+            
+                    go.GetComponent<PracticeCommentItemUI>().Setup(comment);
+                    spawnedComments.Add(go);
+                }
                 
-                go.transform.localScale = Vector3.one;
-                go.SetActive(true);
-        
-                go.GetComponent<PracticeCommentItemUI>().Setup(comment);
-                spawnedComments.Add(go);
+                _clickTcs = new UniTaskCompletionSource();
+                _isWaitingForClick = true;
+                
+                Debug.Log($"[PracticeCommentPage] {name} 댓글 표시 완료, 클릭 대기 중...");
+
+                await UniTask.WhenAny(
+                    _clickTcs.Task,
+                    UniTask.WaitUntilCanceled(_showCTS.Token)
+                );
+
+                if (_showCTS.Token.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException();
+                }
+                
+                _isWaitingForClick = false;
+                Debug.Log($"[PracticeCommentPage] {name} 클릭 감지됨!");
             }
-            
-            _clickTcs = new UniTaskCompletionSource();
-            _isWaitingForClick = true; 
-            
-            Debug.Log($"[PracticeCommentPage] {name} 댓글 표시 완료, 클릭 대기 중...");
-            
-            await _clickTcs.Task;
-            
-            _isWaitingForClick = false; 
-            Debug.Log($"[PracticeCommentPage] {name} 클릭 감지됨!");
+            catch (OperationCanceledException)
+            {
+                _isWaitingForClick = false;
+                throw;
+            }
         }
 
         private void ClearOldComments()
@@ -50,6 +75,14 @@ namespace Code.MainSystem.MainScreen.Training
                 Destroy(go);
 
             spawnedComments.Clear();
+        }
+
+        public void ClearComments()
+        {
+            _showCTS?.Cancel();
+            _isWaitingForClick = false;
+            _clickTcs?.TrySetCanceled();
+            ClearOldComments();
         }
         
         public void OnPointerClick(PointerEventData eventData)
@@ -61,6 +94,12 @@ namespace Code.MainSystem.MainScreen.Training
                 _clickTcs.TrySetResult();
                 Debug.Log("[PracticeCommentPage] 클릭 처리 완료!");
             }
+        }
+
+        private void OnDestroy()
+        {
+            _showCTS?.Cancel();
+            _showCTS?.Dispose();
         }
     }
 }

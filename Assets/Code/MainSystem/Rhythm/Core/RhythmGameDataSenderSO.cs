@@ -20,8 +20,6 @@ namespace Code.MainSystem.Rhythm.Core
         [Header("Game Input Data")]
         public string songId;
         public ConcertType concertType;
-        public List<int> memberIds;
-        public int difficulty;
         public List<NoteData> combinedChart;
         
         public List<MemberGroup> members = new List<MemberGroup>();
@@ -30,6 +28,19 @@ namespace Code.MainSystem.Rhythm.Core
         public bool isResultDataAvailable;
         public int allStatUpValue;
         public int harmonyStatUpValue;
-        
+
+        public (bool isAvailable, int allStat, int harmonyStat) ConsumeResult()
+        {
+            if (!isResultDataAvailable) return (false, 0, 0);
+
+            var result = (true, allStatUpValue, harmonyStatUpValue);
+
+            // 데이터 파기 (초기화)
+            isResultDataAvailable = false;
+            allStatUpValue = 0;
+            harmonyStatUpValue = 0;
+
+            return result;
+        }
     }
 }

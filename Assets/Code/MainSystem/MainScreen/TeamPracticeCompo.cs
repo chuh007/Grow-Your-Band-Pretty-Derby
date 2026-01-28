@@ -193,20 +193,8 @@ namespace Code.MainSystem.MainScreen
         TeamPracticeResultCache.TeamConditionCurrent = avgConditionAfter;
         TeamPracticeResultCache.TeamConditionDelta = -teamConditionCost;
 
-        foreach (var unit in _selectedMembers)
-        {
-            foreach (var stat in unit.stats)
-            {
-                int delta = _wasSuccess ? UnityEngine.Random.Range(1, 5) : 0;
-                var key = (unit.memberType, stat.statType);
-                TeamPracticeResultCache.StatDeltaDict[key] = delta;
-                if (delta > 0)
-                {
-                    StatManager.Instance.GetMemberStat(unit.memberType, stat.statType)
-                        .PlusValue(delta);
-                }
-            }
-        }
+        int delta = _wasSuccess ? UnityEngine.Random.Range(1, 5) : 0;
+        StatManager.Instance.GetTeamStat(StatType.TeamHarmony).PlusValue(delta);
     }
 
         public void OnClickBack()
