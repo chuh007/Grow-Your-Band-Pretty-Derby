@@ -8,12 +8,18 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// </summary>
     public class LoneGuitaristEffect : AbstractTraitEffect, IPracticeStat, IConditionStat, IPercentageModifier<IPracticeStat>, IPercentageModifier<IConditionStat>
     {
-        public float Percentage { get; private set; }
+        float IPercentageModifier<IPracticeStat>.Percentage => _practicePercentage;
+        float IPercentageModifier<IConditionStat>.Percentage => _conditionPercentage;
+        
+        private float _practicePercentage;
+        private float _conditionPercentage;
 
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
-            Percentage = N1(trait);
+            
+            _practicePercentage = N1(trait); 
+            _conditionPercentage = N2(trait);
         }
     }
 }

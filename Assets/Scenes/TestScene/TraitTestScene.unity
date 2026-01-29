@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.UI.TraitTest
   label: {fileID: 0}
   memberType: 4
-  traitType: 3
+  traitType: 12
 --- !u!114 &31235286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2870,7 +2870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.UI.TraitTest
   label: {fileID: 0}
   memberType: 1
-  traitType: 1
+  traitType: 10
 --- !u!114 &807944250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4144,7 +4144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.UI.TraitTest
   label: {fileID: 0}
   memberType: 2
-  traitType: 2
+  traitType: 11
 --- !u!114 &1184714796
 MonoBehaviour:
   m_ObjectHideFlags: 0
