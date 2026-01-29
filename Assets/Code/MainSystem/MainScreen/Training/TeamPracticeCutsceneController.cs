@@ -109,10 +109,14 @@ namespace Code.MainSystem.MainScreen.Training
             }
 
             await UniTask.Delay(1000);
-
+            
             foreach (var unit in TeamPracticeResultCache.SelectedMembers)
             {
+                CommentManager.instance.ClearAllComments();
+                
                 AddCommentForMember(unit);
+                CommentManager.instance.SetupComments(); 
+                
                 await ShowResultForMember(unit);
             }
             

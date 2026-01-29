@@ -34,6 +34,7 @@ namespace Code.MainSystem.MainScreen.Training
 
         [Header("Skip Settings")]
         [SerializeField] private bool allowSkip = true;
+        [SerializeField] private float skipCooldown = 0.3f;
 
         [Header("Transition Settings")]
         [SerializeField] private float fadeInDuration = 0.3f;
@@ -43,6 +44,8 @@ namespace Code.MainSystem.MainScreen.Training
         private bool _isPlaying = false;
         private CancellationTokenSource _skipCTS;
         private Sequence _currentSequence;
+        private bool _hasSkipped = false;
+        private float _lastSkipTime = 0f;
 
         private void Awake()
         {
@@ -64,14 +67,18 @@ namespace Code.MainSystem.MainScreen.Training
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (_isPlaying && allowSkip)
+            if (Time.time - _lastSkipTime < skipCooldown)
             {
-                DOTween.KillAll();
+                Debug.Log($"[PracticeResultWindow] Skip cooldown active ({skipCooldown}s)");
+                return;
+            }
+
+            if (_isPlaying && allowSkip && !_hasSkipped)
+            {
+                _hasSkipped = true;
+                _lastSkipTime = Time.time;
                 _skipCTS?.Cancel();
-                _currentSequence?.Kill();
-                statUI.StopAllCoroutines();
-                statUI.ClearStats();
-                CommentManager.instance.ClearAllComments();
+                Debug.Log("[PracticeResultWindow] Skip requested by user");
             }
         }
 
@@ -89,6 +96,7 @@ namespace Code.MainSystem.MainScreen.Training
         )
         {
             _isPlaying = true;
+            _hasSkipped = false;
             _skipCTS?.Cancel();
             _skipCTS?.Dispose();
             _skipCTS = new CancellationTokenSource();
@@ -138,7 +146,14 @@ namespace Code.MainSystem.MainScreen.Training
                 }
                 catch (OperationCanceledException)
                 {
-                    throw;
+                    statUI.ForceCompleteAllStats(results);
+                    Debug.Log("[PracticeResultWindow] Stat UI skipped and force completed");
+                }
+                
+                if (_hasSkipped)
+                {
+                    Debug.Log("[PracticeResultWindow] Skipping transition and comments");
+                    throw new OperationCanceledException();
                 }
 
                 await TransitionToCommentPage().AttachExternalCancellation(_skipCTS.Token);
@@ -147,6 +162,7 @@ namespace Code.MainSystem.MainScreen.Training
             }
             catch (OperationCanceledException)
             {
+                Debug.Log("[PracticeResultWindow] Entire flow skipped by user");
             }
             finally
             {
@@ -202,6 +218,7 @@ namespace Code.MainSystem.MainScreen.Training
             gameObject.SetActive(false);
             
             _isPlaying = false;
+            _hasSkipped = false;
         }
 
         private void OnDestroy()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.OutingEvents;
 using Code.Core.Bus.GameEvents.TraitEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Dialogue;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
@@ -85,7 +86,7 @@ namespace Code.MainSystem.Outing
                 Bus<TraitAddRequested>.Raise(new TraitAddRequested
                     (outingResultSender.targetMember.memberType, trait));
             }
-            TrainingManager.Instance.MarkMemberTrained(outingResultSender.targetMember.memberType);
+            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
 
         public void TurnStart()

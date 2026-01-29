@@ -11,11 +11,11 @@ namespace Code.MainSystem.Rhythm.ChartEditor.Core
         public static void SaveChart(string songId, int memberId, List<NoteData> notes, double bpm)
         {
             string memberName = GetMemberName(memberId);
-            string folderPath = Path.Combine(Application.dataPath, "Resources/RhythmGame/Chart", songId);
+            string folderPath = $"{Application.dataPath}/Assets/RhythmGameResource/Charts/{songId}";
             
             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
             
-            string filePath = Path.Combine(folderPath, $"{memberName}.json");
+            string filePath = $"{folderPath}/{memberName}.json";
             
             foreach(var note in notes)
             {
@@ -33,7 +33,7 @@ namespace Code.MainSystem.Rhythm.ChartEditor.Core
         public static List<NoteData> LoadChart(string songId, int memberId)
         {
             string memberName = GetMemberName(memberId);
-            string filePath = Path.Combine(Application.dataPath, "Resources/RhythmGame/Chart", songId, $"{memberName}.json");
+            string filePath = $"{Application.dataPath}/Resources/RhythmGame/Chart/{songId}/{memberName}.json";
             
             if (!File.Exists(filePath)) return new List<NoteData>();
             

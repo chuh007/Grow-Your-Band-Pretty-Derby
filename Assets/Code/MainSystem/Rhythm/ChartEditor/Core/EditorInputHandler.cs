@@ -36,6 +36,13 @@ namespace Code.MainSystem.Rhythm.ChartEditor.Core
 
         private void HandleGlobalShortcuts()
         {
+            if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject != null)
+            {
+                if (EventSystem.current.currentSelectedGameObject.GetComponent<TMPro.TMP_InputField>() != null ||
+                    EventSystem.current.currentSelectedGameObject.GetComponent<UnityEngine.UI.InputField>() != null)
+                    return;
+            }
+
             if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
                 manager.TogglePlayPause();
@@ -72,8 +79,6 @@ namespace Code.MainSystem.Rhythm.ChartEditor.Core
             
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
-
                 RectTransform gridRect = gridController.GetContentRect();
                 if (gridRect == null) return;
                 

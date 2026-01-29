@@ -57,6 +57,22 @@ namespace Code.MainSystem.MainScreen.Training
             _gaugeTween = null;
             _valueTween = null;
         }
+        
+        public void ForceSetValue(Sprite left, float currentValue)
+        {
+            StopAnimation();
+            
+            if (leftIcon != null)
+                leftIcon.sprite = left;
+
+            float toScale = Mathf.Clamp01(currentValue / maxValue);
+            
+            if (gaugeFill != null)
+                gaugeFill.localScale = new Vector3(toScale, 1f, 1f);
+
+            if (valueText != null)
+                valueText.text = $"{Mathf.RoundToInt(currentValue)}%";
+        }
 
         public async UniTask AnimateToValue(Sprite left, float currentValue, float duration = 0.5f, CancellationToken token = default)
         {

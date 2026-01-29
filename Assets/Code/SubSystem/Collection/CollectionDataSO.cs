@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code.MainSystem.Encounter;
 using Code.MainSystem.Outing;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Code.SubSystem.Collection
         public int level; // 레벨? 사용할지 모름
         public int star; // 성급? 사용할지 모름. 에초에 int일지도 모르겠다
         public List<OutingEvent> plusEvents; // 이 소장품에 딸린 이벤트들
+        public List<EncounterDataSO> plusEncounters; // 소장품에 딸린 인카운터들
         
     }
 }
