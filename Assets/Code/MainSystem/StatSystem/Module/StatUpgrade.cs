@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using Code.MainSystem.StatSystem.Module.Data;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
+using Code.MainSystem.TraitSystem.TraitEffect;
 
 namespace Code.MainSystem.StatSystem.Module
 {
@@ -52,8 +56,20 @@ namespace Code.MainSystem.StatSystem.Module
         /// <summary>
         /// 훈련 성공 여부 판정
         /// </summary>
-        public bool CanUpgrade()
-            => Random.Range(0f, 100f) < GetSuccessRate();
+        public bool CanUpgrade(ITraitHolder holder)
+        {
+            var inspirations
+                = holder.GetModifiers<IInspirationSystem>()
+                .OfType<FailureBreedsSuccessEffect>();
+
+            if (inspirations.Any(inspiration
+                    => inspiration.ShouldGuaranteeSuccess()))
+                return true;
+            
+            float baseRate = GetSuccessRate();
+            float finalRate = holder.GetFinalStat<ISuccessRateStat>(baseRate);
+            return Random.Range(0f, 100f) < finalRate;
+        }
 
         /// <summary>
         /// 컨디션 설정

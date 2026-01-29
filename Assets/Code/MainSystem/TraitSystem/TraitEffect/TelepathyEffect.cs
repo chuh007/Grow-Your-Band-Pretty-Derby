@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 이심전심 특성
     /// </summary>
-    public class TelepathyEffect : AbstractTraitEffect, IPercentageModifier<IEnsembleStat>
+    public class TelepathyEffect : AbstractTraitEffect, IEnsembleStat, IPercentageModifier<IEnsembleStat>
     {
         public float Percentage { get; private set; }
 

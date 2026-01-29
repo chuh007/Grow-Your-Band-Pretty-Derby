@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 부상 특성
     /// </summary>
-    public class InjuryEffect : AbstractTraitEffect, IPercentageModifier<ISuccessRateStat>, IStackable
+    public class InjuryEffect : AbstractTraitEffect, ISuccessRateStat, IPercentageModifier<ISuccessRateStat>, IStackable
     {
         public float Percentage { get; private set; }
         public int StackCount { get; private set; }

@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 단련기술 특성
     /// </summary>
-    public class HonedTechniqueEffect : AbstractTraitEffect, IPercentageModifier<ITrainingStat>
+    public class HonedTechniqueEffect : AbstractTraitEffect, ITrainingStat, IPercentageModifier<ITrainingStat>
     {
         public float Percentage { get; private set; }
 
