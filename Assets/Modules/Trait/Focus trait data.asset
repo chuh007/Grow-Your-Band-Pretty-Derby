@@ -18,10 +18,10 @@ MonoBehaviour:
   TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
   traitEffectType: 0
   MaxLevel: 10
-  Point: 10
+  Point: 8
   IsRemovable: 0
   Effects:
-  - -100
+  - -25
   DescriptionEffect: "\uC721\uC131: \uD6C8\uB828 \uC2E4\uD328 \uD655\uB960 {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
     \uAC8C\uC784: Miss \uD310\uC815\uC744 Good\uC73C\uB85C \uBCF4\uC815"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,

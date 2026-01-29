@@ -22,10 +22,10 @@ MonoBehaviour:
   IsRemovable: 1
   Effects:
   - 50
-  - 50
+  - -50
   DescriptionEffect: "(\uAE30\uD0C0 \uC804\uC6A9) \uAC1C\uC778 \uC5F0\uC2B5 \uD6A8\uACFC
-    +{0}%, \uAC1C\uC778 \uC5F0\uC2B5 \uC2DC \uCEE8\uB514\uC158 \uC18C\uBAA8 -{1}%"
+    {0}%, \uAC1C\uC778 \uC5F0\uC2B5 \uC2DC \uCEE8\uB514\uC158 \uC18C\uBAA8 {1}%"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.TelepathyEffect, Assembly-CSharp,
+  effectName: Code.MainSystem.TraitSystem.TraitEffect.LoneGuitaristEffect, Assembly-CSharp,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

@@ -26,7 +26,7 @@ MonoBehaviour:
   DescriptionEffect: "\uD569\uC8FC \uBA64\uBC84\uAC00 2\uC778\uC778 \uACBD\uC6B0
     \uD569\uC8FC\uC758 \uD6A8\uACFC +{0}%, \n\uB098\uBA38\uC9C0 \uD55C\uBA85\uC758
     \uBA64\uBC84\uB3C4 \u2018\uC774\uC2EC\uC804\uC2EC\u2019\uC744 \uBCF4\uC720\uD55C
-    \uACBD\uC6B0 +{0} * {1}%\uB85C \uBCC0\uACBD"
+    \uACBD\uC6B0 +{0} X {1}%\uB85C \uBCC0\uACBD"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   effectName: Code.MainSystem.TraitSystem.TraitEffect.TelepathyEffect, Assembly-CSharp,
