@@ -8,13 +8,12 @@ namespace Code.MainSystem.TraitSystem.Manager
         public static float GetFinalStat<T>(this ITraitHolder holder, float baseValue) where T : class
         {
             if (holder == null) return baseValue;
-            
+    
             var modifiers = holder.GetModifiers<T>();
             if (modifiers == null) return baseValue;
 
             float additive = 0f;
-            float percent = 0f;
-            float multiplier = 1f;
+            float totalMultiplier = 0f;
 
             foreach (var m in modifiers)
             {
@@ -23,16 +22,18 @@ namespace Code.MainSystem.TraitSystem.Manager
                     case IAdditiveModifier<T> addMod:
                         additive += addMod.AdditiveValue;
                         break;
+
                     case IPercentageModifier<T> perMod:
-                        percent += perMod.Percentage;
+                        totalMultiplier += perMod.Percentage * 0.01f;
                         break;
+
                     case IMultiplyModifier<T> mulMod:
-                        multiplier *= mulMod.Multiplier;
+                        totalMultiplier += mulMod.Multiplier - 1f;
                         break;
                 }
             }
-
-            float result = (baseValue + additive) * (1f + percent) * multiplier;
+            
+            float result = (baseValue + additive) * (1f + totalMultiplier);
 
             return Mathf.Max(0, result); 
         }
