@@ -4,6 +4,7 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Core;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager.SubClass;
@@ -141,13 +142,23 @@ namespace Code.MainSystem.StatSystem.Manager
 
             rewardValue = holder.GetFinalStat<ITrainingStat>(rewardValue);
 
-            if (evt.statType == StatType.Mental)
-                rewardValue = holder.GetFinalStat<IMentalStat>(rewardValue);
+            if (evt.Type == PracticenType.Personal)
+                rewardValue = holder.GetFinalStat<IPracticeStat>(rewardValue);
 
             _operator.IncreaseMemberStat(evt.memberType, evt.statType, rewardValue);
         }
+        
+        public float GetFinalRewardValue(MemberType member, StatType statType, float baseValue)
+        {
+            ITraitHolder holder = TraitManager.Instance.GetHolder(member);
+            float finalValue = baseValue;
+            
+            if (statType == StatType.Mental)
+                finalValue = holder.GetFinalStat<IMentalStat>(finalValue);
 
-
+            return finalValue;
+        }
+        
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
             if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)

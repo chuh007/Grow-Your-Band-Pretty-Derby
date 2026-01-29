@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEngine;
-using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Code.MainSystem.MainScreen.Resting
 {
@@ -12,7 +12,8 @@ namespace Code.MainSystem.MainScreen.Resting
         [SerializeField] private HealthBar healthBar;
 
         public Action OnClose;
-        
+        private bool _canClose = false;
+
         public async UniTask Play(
             Sprite idleSprite,
             Sprite resultSprite,
@@ -20,6 +21,9 @@ namespace Code.MainSystem.MainScreen.Resting
             float beforeHealth = -1f,
             float maxHealth = -1f)
         {
+            _canClose = false;
+            OnClose = onClose;
+
             if (restResultImage != null && idleSprite != null)
                 restResultImage.sprite = idleSprite;
 
@@ -28,35 +32,28 @@ namespace Code.MainSystem.MainScreen.Resting
                 healthBar.gameObject.SetActive(true);
                 healthBar.SetHealth(beforeHealth, maxHealth);
             }
-            else if (healthBar != null)
-            {
-                healthBar.gameObject.SetActive(false);
-            }
 
             await UniTask.Delay(1000);
 
             if (restResultImage != null && resultSprite != null)
                 restResultImage.sprite = resultSprite;
             
-            OnClose = onClose;
+            _canClose = true;
         }
 
         public void SetHealth(float currentHealth, float maxHealth)
         {
-            if (healthBar == null)
-                return;
-
-            healthBar.gameObject.SetActive(true);
+            if (healthBar == null) return;
             healthBar.SetHealth(currentHealth, maxHealth);
         }
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (OnClose != null)
-            {
-                OnClose?.Invoke();
-                Destroy(gameObject);
-            }
+            if (!_canClose) 
+                return;
+
+            OnClose?.Invoke();
+            Destroy(gameObject);
         }
     }
 }

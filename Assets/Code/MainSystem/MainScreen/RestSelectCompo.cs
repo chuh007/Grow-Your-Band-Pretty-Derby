@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Resting;
 using Code.MainSystem.MainScreen.Training;
@@ -84,47 +85,44 @@ namespace Code.MainSystem.MainScreen
 
         private async void Confirm()
         {
-            if (_selectedUnit == null)
+            if (_selectedUnit == null) 
                 return;
-
-            
+    
             selectRequiredUI.Close();
-            
+    
             float beforeHealth = _selectedUnit.currentCondition;
             float healAmount = _selectedUnit.maxCondition * 0.3f;
-            float afterHealth = Mathf.Min(
-                beforeHealth + healAmount,
-                _selectedUnit.maxCondition
-            );
+            float afterHealth = Mathf.Min(beforeHealth + healAmount, _selectedUnit.maxCondition);
 
             _selectedUnit.currentCondition = afterHealth;
 
             restResultController.gameObject.SetActive(true);
+
             await restResultController.PlayRestSequence(
                 _selectedUnit,
                 beforeHealth,
                 afterHealth
             );
             
+            TrainingManager.Instance.MarkMemberTrained(_selectedUnit.memberType);
+            
             Bus<ConfirmRestEvent>.Raise(new ConfirmRestEvent(_selectedUnit));
             
+            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+
             healthBar.SetHealth(_selectedUnit.currentCondition, _selectedUnit.maxCondition);
 
             _isOpen = false;
             _selectedUnit = null;
         }
-
+        
         private void OnConfirmRest(ConfirmRestEvent evt)
         {
             var unit = evt.Unit;
-            if (unit is null)
+            if (unit is null) 
                 return;
-
-            if (TrainingManager.Instance.IsMemberTrained(unit.memberType))
-                return;
-
+            
             Bus<RestEvent>.Raise(new RestEvent(unit));
-            TrainingManager.Instance.MarkMemberTrained(unit.memberType);
         }
     }
 }

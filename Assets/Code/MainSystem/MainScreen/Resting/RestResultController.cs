@@ -44,18 +44,19 @@ namespace Code.MainSystem.MainScreen.Resting
                 await GameManager.Instance.LoadAddressableAsync<GameObject>("Rest/UI/Result");
             var resultInstance = Instantiate(resultPrefab, uiRoot);
             var resultUI = resultInstance.GetComponent<RestResultUI>();
-
+            
             await resultUI.Play(
                 idleSprite: idleSprite,
                 resultSprite: resultSprite,
-                () => gameObject.SetActive(false),
+                onClose: () => gameObject.SetActive(false),
                 beforeHealth: beforeHealth,
                 maxHealth: unit.maxCondition
             );
-
+            
             await UniTask.Delay(300);
-
             resultUI.SetHealth(afterHealth, unit.maxCondition);
+            
+            await UniTask.WaitUntil(() => resultInstance == null);
         }
     }
 }

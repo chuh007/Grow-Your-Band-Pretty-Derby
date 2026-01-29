@@ -10,6 +10,8 @@ using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -158,44 +160,49 @@ namespace Code.MainSystem.MainScreen
 
         private void BuildResultCache()
         {
-            float totalConditionBefore = 0f;
+            if (_selectedMembers == null || _selectedMembers.Count == 0) return;
             
-            foreach (var unit in _selectedMembers)
-            {
-                totalConditionBefore += unit.currentCondition;
-                unit.currentCondition = Mathf.Clamp(unit.currentCondition - teamConditionCost, 0, unit.maxCondition);
+            float totalConditionBefore = _selectedMembers.Sum(u => u.currentCondition);
+            float avgConditionAfter = (totalConditionBefore / _selectedMembers.Count) - teamConditionCost;
 
-                var bar = unitHealthBars.Find(b => b.memberType == unit.memberType);
-                if (bar != null)
-                    bar.healthBar.ApplyHealth(teamConditionCost);
-
-                TrainingManager.Instance.MarkMemberTrained(unit.memberType);
-            }
-
-            float avgConditionBefore = totalConditionBefore / _selectedMembers.Count;
-            float avgConditionAfter = avgConditionBefore - teamConditionCost;
-            
             TeamPracticeResultCache.IsSuccess = _wasSuccess;
             TeamPracticeResultCache.SelectedMembers = new List<UnitDataSO>(_selectedMembers);
             TeamPracticeResultCache.StatDeltaDict = new Dictionary<(MemberType, StatType), int>();
 
-            var firstUnit = _selectedMembers[0];
-            TeamPracticeResultCache.TeamStat = firstUnit.TeamStat;
-            
             float totalTeamStatDelta = 0;
+
             if (_wasSuccess)
             {
                 float baseGain = UnityEngine.Random.Range(1.0f, 3.0f);
+                var statManager = StatManager.Instance;
+                var ensembleModule = statManager.GetEnsembleModuleHandler();
+                
+                var mentalBonusProvider = _selectedMembers
+                    .Select(u => TraitManager.Instance.GetHolder(u.memberType))
+                    .FirstOrDefault(holder => holder.GetModifiers<IMentalStat>().Any());
 
                 foreach (var unit in _selectedMembers)
                 {
-                    var ensembleModule = StatManager.Instance.GetEnsembleModuleHandler();
-                    totalTeamStatDelta += ensembleModule.ApplyEnsembleBonus(baseGain, unit.memberType);
+                    float finalMentalGain = ensembleModule.ApplyEnsembleBonus(baseGain, unit.memberType);
+                    
+                    if (mentalBonusProvider != null)
+                    {
+                        finalMentalGain = mentalBonusProvider.GetFinalStat<IMentalStat>(finalMentalGain);
+                    }
+
+                    int roundedMentalGain = Mathf.RoundToInt(finalMentalGain);
+                    statManager.GetMemberStat(unit.memberType, StatType.Mental).PlusValue(roundedMentalGain);
+                    TeamPracticeResultCache.StatDeltaDict[(unit.memberType, StatType.Mental)] = roundedMentalGain;
+                    totalTeamStatDelta += finalMentalGain;
                 }
             }
             
-            TeamPracticeResultCache.TeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
+            UpdateMembersCondition();
             
+            var firstUnit = _selectedMembers[0];
+            TeamPracticeResultCache.TeamStat = firstUnit.TeamStat;
+            TeamPracticeResultCache.TeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
+
             if (TeamPracticeResultCache.TeamStatDelta > 0)
             {
                 StatManager.Instance.GetTeamStat(StatType.TeamHarmony)
@@ -204,6 +211,19 @@ namespace Code.MainSystem.MainScreen
 
             TeamPracticeResultCache.TeamConditionCurrent = avgConditionAfter;
             TeamPracticeResultCache.TeamConditionDelta = -teamConditionCost;
+        }
+
+        private void UpdateMembersCondition()
+        {
+            foreach (var unit in _selectedMembers)
+            {
+                unit.currentCondition = Mathf.Clamp(unit.currentCondition - teamConditionCost, 0, unit.maxCondition);
+
+                var bar = unitHealthBars.Find(b => b.memberType == unit.memberType);
+                bar?.healthBar.ApplyHealth(teamConditionCost);
+
+                TrainingManager.Instance.MarkMemberTrained(unit.memberType);
+            }
         }
 
         public void OnClickBack()

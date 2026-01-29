@@ -27,17 +27,21 @@ namespace Code.MainSystem.TraitSystem.Data
 
         public void AddTrait(TraitDataSO data)
         {
-            if (data is null)
-                return;
-            
+            if (data is null) return;
+    
             ActiveTrait newTrait = new ActiveTrait(data);
             _activeTraits.Add(newTrait);
+            
+            if (newTrait.TraitEffect != null)
+                RegisterModifier(newTrait.TraitEffect);
         }
 
         public void RemoveActiveTrait(ActiveTrait trait)
         {
-            if (trait == null)
-                return;
+            if (trait == null) return;
+            
+            if (trait.TraitEffect != null)
+                UnregisterModifier(trait.TraitEffect);
 
             _activeTraits.Remove(trait);
         }

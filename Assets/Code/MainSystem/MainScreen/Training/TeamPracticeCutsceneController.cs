@@ -203,7 +203,8 @@ namespace Code.MainSystem.MainScreen.Training
                 TeamPracticeResultCache.TeamStatDelta, 
                 statDeltaDict,
                 TeamPracticeResultCache.IsSuccess,
-                null
+                null,
+                true 
             );
         }
 
