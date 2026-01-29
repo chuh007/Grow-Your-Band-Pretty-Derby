@@ -10,6 +10,9 @@ namespace Code.MainSystem.Rhythm.Core
     {
         [SerializeField] private RhythmGameDataSenderSO dataSender;
         [SerializeField] private SceneTransitionSenderSO transitionSender;
+        [SerializeField] private string sceneName = "lch";
+        [SerializeField] private string transitionSceneName = "TransitionScene";
+        
         
         private RhythmGameResultEvent? _cachedResult;
         
@@ -35,12 +38,12 @@ namespace Code.MainSystem.Rhythm.Core
                 Debug.LogWarning("No result data to send!");
                 if (transitionSender != null)
                 {
-                    transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
-                    SceneManager.LoadScene("TransitionScene");
+                    transitionSender.SetTransition(sceneName, TransitionMode.ToPortrait);
+                    SceneManager.LoadScene(transitionSceneName);
                 }
                 else
                 {
-                    SceneManager.LoadScene("Test");
+                    SceneManager.LoadScene(sceneName);
                 }
                 return;
             }
@@ -55,13 +58,13 @@ namespace Code.MainSystem.Rhythm.Core
 
             if (transitionSender != null)
             {
-                transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
-                SceneManager.LoadScene("TransitionScene");
+                transitionSender.SetTransition(sceneName, TransitionMode.ToPortrait);
+                SceneManager.LoadScene(transitionSceneName);
             }
             else
             {
                 Debug.Log("Fail to submit result");
-                SceneManager.LoadScene("Test");
+                SceneManager.LoadScene(sceneName);
             }
         }
     }

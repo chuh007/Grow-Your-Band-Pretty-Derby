@@ -6,7 +6,9 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 호흡 조절 특성
     /// </summary>
-    public class BreathControlEffect : AbstractTraitEffect, IPercentageModifier<IConditionStat>, IAdditiveModifier<IFeverInputStat>
+    public class BreathControlEffect : AbstractTraitEffect, 
+        IConditionStat, IFeverInputStat,
+        IPercentageModifier<IConditionStat>, IAdditiveModifier<IFeverInputStat>
     {
         public float Percentage { get; private set; }
         public float AdditiveValue { get; private set; }

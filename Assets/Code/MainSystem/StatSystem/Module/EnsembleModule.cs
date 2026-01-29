@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.StatSystem.Module.Data;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -34,7 +37,13 @@ namespace Code.MainSystem.StatSystem.Module
             
             return _upgradeData.conditionSuccessRates[avgLevel];
         }
-
+        
+        public float ApplyEnsembleBonus(float baseValue, MemberType memberType)
+        {
+            var holder = TraitManager.Instance.GetHolder(memberType);
+            return holder.GetFinalStat<IEnsembleStat>(baseValue);
+        }
+        
         /// <summary>
         /// 합주 성공 여부 판정
         /// </summary>

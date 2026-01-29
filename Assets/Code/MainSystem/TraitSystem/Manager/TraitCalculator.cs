@@ -1,27 +1,41 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
+﻿using UnityEngine;
+using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.Manager
 {
     public static class TraitCalculator
     {
-        public static float GetFinalStat<T>(this ITraitHolder holder, float baseValue)
+        public static float GetFinalStat<T>(this ITraitHolder holder, float baseValue) where T : class
         {
             if (holder == null) return baseValue;
-            
-            var mods = holder.GetModifiers<object>(); 
-        
-            float additive = 0;
-            float percentSum = 0;
-            float multiplier = 1f;
+    
+            var modifiers = holder.GetModifiers<T>();
+            if (modifiers == null) return baseValue;
 
-            foreach (var m in mods)
+            float additive = 0f;
+            float totalMultiplier = 0f;
+
+            foreach (var m in modifiers)
             {
-                if (m is IAdditiveModifier<T> a) additive += a.AdditiveValue;
-                if (m is IPercentageModifier<T> p) percentSum += p.Percentage;
-                if (m is IMultiplyModifier<T> x) multiplier *= x.Multiplier;
-            }
+                switch (m)
+                {
+                    case IAdditiveModifier<T> addMod:
+                        additive += addMod.AdditiveValue;
+                        break;
 
-            return (baseValue + additive) * (1f + percentSum) * multiplier;
+                    case IPercentageModifier<T> perMod:
+                        totalMultiplier += perMod.Percentage * 0.01f;
+                        break;
+
+                    case IMultiplyModifier<T> mulMod:
+                        totalMultiplier += mulMod.Multiplier - 1f;
+                        break;
+                }
+            }
+            
+            float result = (baseValue + additive) * (1f + totalMultiplier);
+
+            return Mathf.Max(0, result); 
         }
     }
 }

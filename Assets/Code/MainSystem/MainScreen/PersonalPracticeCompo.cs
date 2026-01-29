@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -8,10 +9,9 @@ using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.Etc;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
-using Reflex.Attributes;
+using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Code.MainSystem.MainScreen
@@ -108,7 +108,8 @@ namespace Code.MainSystem.MainScreen
 
             if (_selectedPracticeIndex == index)
             {
-                bool success = StatManager.Instance.PredictMemberPractice(_currentCondition);
+                bool success 
+                    = StatManager.Instance.PredictMemberPractice(_currentCondition, TraitManager.Instance.GetHolder(_currentUnit.memberType));
 
                 Bus<PracticenEvent>.Raise(new PracticenEvent(
                     PracticenType.Personal,
@@ -118,13 +119,17 @@ namespace Code.MainSystem.MainScreen
                     success ? practice.statIncrease : 0
                 ));
 
-                float realDamage = practice.StaminaReduction;
+                float realDamage = StatManager.Instance
+                    .GetConditionHandler()
+                    .ModifyConditionCost(_currentUnit.memberType, practice.StaminaReduction);
+                
+                Debug.Log(realDamage.ToString(CultureInfo.InvariantCulture));
 
                 _currentCondition = Mathf.Clamp(
                     _currentCondition - realDamage,
                     0,
                     _currentUnit.maxCondition);
-
+                
                 _currentUnit.currentCondition = _currentCondition;
                 healthBar.ApplyHealth(realDamage);
 
