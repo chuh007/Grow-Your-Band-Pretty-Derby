@@ -1,14 +1,17 @@
 ﻿using System;
 using UnityEngine;
-using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
+using System.Linq;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager.SubClass;
 using Code.MainSystem.StatSystem.Module;
 using Code.MainSystem.StatSystem.Stats;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
+using Code.MainSystem.TraitSystem.TraitEffect;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -120,38 +123,37 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void HandlePracticeRequested(PracticenEvent evt)
         {
-            bool isSuccess = PredictMemberPractice(evt.SuccessRate);
-            
+            ITraitHolder holder = TraitManager.Instance.GetHolder(evt.memberType);
+            bool isSuccess = PredictMemberPractice(evt.SuccessRate, holder);
+
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
-            
+
             if (!isSuccess)
+            {
+                foreach (var inspiration in
+                         holder.GetModifiers<IInspirationSystem>()
+                             .OfType<FailureBreedsSuccessEffect>())
+                    inspiration.OnFailure();
                 return;
-            
-            // 성공 시 보상 적용
-            ApplyPracticeReward(evt);
+            }
+
+            float rewardValue = evt.Value;
+
+            rewardValue = holder.GetFinalStat<ITrainingStat>(rewardValue);
+
+            if (evt.statType == StatType.Mental)
+                rewardValue = holder.GetFinalStat<IMentalStat>(rewardValue);
+
+            _operator.IncreaseMemberStat(evt.memberType, evt.statType, rewardValue);
         }
 
-        private void ApplyPracticeReward(PracticenEvent evt)
-        {
-            if (evt.Type == PracticenType.Team)
-                _operator.IncreaseTeamStat(evt.Value);
-            else
-                _operator.IncreaseMemberStat(evt.memberType, evt.statType, evt.Value);
-        }
 
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
             if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
                 return;
-            
             bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
-            
             Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
-            
-            if (isSuccess)
-            {
-                // TODO: 특성 시스템 완성 시 보상 추가
-            }
         }
 
         private void HandleSingleStatIncreaseRequested(StatIncreaseEvent evt)
@@ -193,12 +195,17 @@ namespace Code.MainSystem.StatSystem.Manager
             return _registry.GetTeamStatValue(statType);
         }
 
-        public bool PredictMemberPractice(float successRate)
+        public bool PredictMemberPractice(float successRate, ITraitHolder holder)
         {
             upgradeModule.SetCondition(successRate);
-            return upgradeModule.CanUpgrade();
+            return upgradeModule.CanUpgrade(holder);
         }
 
+        public ConditionHandler GetConditionHandler()
+        {
+            return _conditionHandler;
+        }
+        
         #endregion
     }
 }

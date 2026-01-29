@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 고독한 기타리스트 특성
     /// </summary>
-    public class LoneGuitaristEffect : AbstractTraitEffect, IPercentageModifier<IPracticeStat>, IPercentageModifier<IConditionStat>
+    public class LoneGuitaristEffect : AbstractTraitEffect, IPracticeStat, IConditionStat, IPercentageModifier<IPracticeStat>, IPercentageModifier<IConditionStat>
     {
         public float Percentage { get; private set; }
 

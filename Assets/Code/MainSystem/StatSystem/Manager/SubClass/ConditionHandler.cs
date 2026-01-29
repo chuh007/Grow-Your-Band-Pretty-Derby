@@ -23,13 +23,22 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
             if (unit is null || !_registry.TryGetMember(unit.memberType, out _))
                 return;
 
-            ITraitHolder holder = TraitManager.Instance.GetHolder(unit.memberType);
-            float finalRecovery = holder.GetFinalStat<IConditionStat>(_restRecoveryAmount);
-            
-            // if (holder.GetModifiers<IInspirationSystem>().Any(i =>  영감 충족 조건 ))
-            //     finalRate = 100f;
+            var holder = TraitManager.Instance.GetHolder(unit.memberType);
 
-            unit.currentCondition = Mathf.Clamp(unit.currentCondition + finalRecovery, 0, unit.maxCondition);
+            float finalRecovery =
+                holder.GetFinalStat<IConditionStat>(_restRecoveryAmount);
+
+            unit.currentCondition = Mathf.Clamp(
+                unit.currentCondition + finalRecovery,
+                0,
+                unit.maxCondition
+            );
+        }
+
+        public float ModifyConditionCost(MemberType memberType, float baseCost)
+        {
+            var holder = TraitManager.Instance.GetHolder(memberType);
+            return holder?.GetFinalStat<IConditionStat>(baseCost) ?? baseCost;
         }
     }
 }
