@@ -107,6 +107,7 @@ namespace Code.MainSystem.Turn
                     }
                     else
                     {
+                        Debug.Log("발동했다");
                         // TODO 이벤트가 있을지도
                     }
                     break;
