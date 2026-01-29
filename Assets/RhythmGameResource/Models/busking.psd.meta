@@ -1,0 +1,1365 @@
+fileFormatVersion: 2
+guid: 72297d627cd6b2248a556097aed6aa62
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1825674787653564287
+    second: busking_0
+  - first:
+      213: 4582080891508898392
+    second: busking_1
+  - first:
+      213: 203405574580454717
+    second: busking_2
+  - first:
+      213: -6974712749074113191
+    second: busking_3
+  - first:
+      213: 981691958592684673
+    second: busking_4
+  - first:
+      213: -99745207091048724
+    second: busking_5
+  - first:
+      213: 1214096787900533498
+    second: busking_6
+  - first:
+      213: -4735753475456910753
+    second: busking_7
+  - first:
+      213: -839477312983946668
+    second: busking_8
+  - first:
+      213: -4943470212186444947
+    second: busking_9
+  - first:
+      213: 1097606457532714042
+    second: busking_10
+  - first:
+      213: -9187761035263869537
+    second: busking_11
+  - first:
+      213: -5564716452995751986
+    second: busking_12
+  - first:
+      213: -7686153293812117373
+    second: busking_13
+  - first:
+      213: 7431565362776186857
+    second: busking_14
+  - first:
+      213: -7741415630082114353
+    second: busking_15
+  - first:
+      213: 4500163450825032204
+    second: busking_16
+  - first:
+      213: -7224683211670150742
+    second: busking_17
+  - first:
+      213: 5682113546020622573
+    second: busking_18
+  - first:
+      213: -2279348293008333911
+    second: busking_19
+  - first:
+      213: -7008898700513099502
+    second: busking_20
+  - first:
+      213: -823002813911547952
+    second: busking_21
+  - first:
+      213: -3410025168511542118
+    second: busking_22
+  - first:
+      213: 485050892633060470
+    second: busking_23
+  - first:
+      213: 3023844530675348492
+    second: busking_24
+  - first:
+      213: -8567511012306616046
+    second: busking_25
+  - first:
+      213: 8685816546271921276
+    second: busking_26
+  - first:
+      213: -1393770507892286466
+    second: busking_27
+  - first:
+      213: 4090087580107677736
+    second: busking_28
+  - first:
+      213: 1017159428628576
+    second: busking_29
+  - first:
+      213: -7485437146130254866
+    second: busking_30
+  - first:
+      213: -6069008030352307136
+    second: busking_31
+  - first:
+      213: 5453742788011326916
+    second: busking_32
+  - first:
+      213: 4474346374465848482
+    second: busking_33
+  - first:
+      213: 8059582628413790157
+    second: busking_34
+  - first:
+      213: -1948309737725904122
+    second: busking_35
+  - first:
+      213: -3659529352782185130
+    second: busking_36
+  - first:
+      213: -4585726383129662363
+    second: busking_37
+  - first:
+      213: 7134175688015452917
+    second: busking_38
+  - first:
+      213: -4679742240274689100
+    second: busking_39
+  - first:
+      213: 8041664853924572385
+    second: busking_40
+  - first:
+      213: 8770130108197072321
+    second: busking_41
+  - first:
+      213: 1002182013542285462
+    second: busking_42
+  - first:
+      213: 8291133678095315230
+    second: busking_43
+  - first:
+      213: 833982573682836379
+    second: busking_44
+  - first:
+      213: 7490246489731521828
+    second: busking_45
+  - first:
+      213: 476589496627718642
+    second: busking_46
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: busking_0
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 955
+        width: 86
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f773a79eb89165910800000000000000
+      internalID: 1825674787653564287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_1
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 957
+        width: 60
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85a3e7e3b42d69f30800000000000000
+      internalID: 4582080891508898392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_2
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 1003
+        width: 27
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d35c33ada44a2d200800000000000000
+      internalID: 203405574580454717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_3
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 1000
+        width: 106
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95d9c0555b7d43f90800000000000000
+      internalID: -6974712749074113191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_4
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 815
+        width: 57
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18246c692abaf9d00800000000000000
+      internalID: 981691958592684673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_5
+      rect:
+        serializedVersion: 2
+        x: 581
+        y: 931
+        width: 123
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cee4a4b3342ad9ef0800000000000000
+      internalID: -99745207091048724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_6
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 982
+        width: 27
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afa01c5989659d010800000000000000
+      internalID: 1214096787900533498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_7
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 934
+        width: 44
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5ab19f1e49374eb0800000000000000
+      internalID: -4735753475456910753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_8
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 931
+        width: 109
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45aa792e4d39954f0800000000000000
+      internalID: -839477312983946668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_9
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 902
+        width: 99
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6be6ec9804456bb0800000000000000
+      internalID: -4943470212186444947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_10
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 829
+        width: 17
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3c896cf14b7b3f00800000000000000
+      internalID: 1097606457532714042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_11
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 953
+        width: 35
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9dfbeb64048e7080800000000000000
+      internalID: -9187761035263869537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_12
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 878
+        width: 33
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecf9a6f7ed726c2b0800000000000000
+      internalID: -5564716452995751986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_13
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 829
+        width: 25
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38051216d4c455590800000000000000
+      internalID: -7686153293812117373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_14
+      rect:
+        serializedVersion: 2
+        x: 808
+        y: 863
+        width: 177
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ef1f55c259322760800000000000000
+      internalID: 7431565362776186857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_15
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 880
+        width: 43
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcc7c4e0087f09490800000000000000
+      internalID: -7741415630082114353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_16
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 880
+        width: 27
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c024f9dc0dac37e30800000000000000
+      internalID: 4500163450825032204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_17
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 893
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa12ca1a5e4ccbb90800000000000000
+      internalID: -7224683211670150742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_18
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 890
+        width: 33
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de09efb3a2ceade40800000000000000
+      internalID: 5682113546020622573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_19
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 888
+        width: 29
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a368d3ddc02e50e0800000000000000
+      internalID: -2279348293008333911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_20
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 891
+        width: 27
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 211483144c36bbe90800000000000000
+      internalID: -7008898700513099502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_21
+      rect:
+        serializedVersion: 2
+        x: 781
+        y: 825
+        width: 181
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dfb7ab1d4b1494f0800000000000000
+      internalID: -823002813911547952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_22
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 487
+        width: 372
+        height: 368
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9c5ab32d282da0d0800000000000000
+      internalID: -3410025168511542118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_23
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 485
+        width: 164
+        height: 374
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6743169873f3bb600800000000000000
+      internalID: 485050892633060470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_24
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 627
+        width: 198
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0479e2649ad6f920800000000000000
+      internalID: 3023844530675348492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_25
+      rect:
+        serializedVersion: 2
+        x: 797
+        y: 628
+        width: 185
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 211873e70261a1980800000000000000
+      internalID: -8567511012306616046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_26
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 424
+        width: 202
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c748fb021283a8870800000000000000
+      internalID: 8685816546271921276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_27
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 430
+        width: 173
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efb1aaa8b1558ace0800000000000000
+      internalID: -1393770507892286466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_28
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 496
+        width: 176
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8202e80ebf8e2c830800000000000000
+      internalID: 4090087580107677736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_29
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 13
+        width: 467
+        height: 452
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0606c62e91d930000800000000000000
+      internalID: 1017159428628576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_30
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 436
+        width: 64
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee3746c33926e1890800000000000000
+      internalID: -7485437146130254866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_31
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 398
+        width: 373
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04c8bd3f95d86cba0800000000000000
+      internalID: -6069008030352307136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_32
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 320
+        width: 180
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cd73c7ab269fab40800000000000000
+      internalID: 5453742788011326916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_33
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 358
+        width: 367
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a4081c4252181e30800000000000000
+      internalID: 4474346374465848482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_34
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 275
+        width: 343
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc75384f2b369df60800000000000000
+      internalID: 8059582628413790157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_35
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 311
+        width: 35
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60bb96abd9636f4e0800000000000000
+      internalID: -1948309737725904122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_36
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 202
+        width: 373
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65d7d42517db63dc0800000000000000
+      internalID: -3659529352782185130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_37
+      rect:
+        serializedVersion: 2
+        x: 901
+        y: 262
+        width: 75
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56c6b68962a3c50c0800000000000000
+      internalID: -4585726383129662363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_38
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 119
+        width: 343
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fa93616dfea10360800000000000000
+      internalID: 7134175688015452917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_39
+      rect:
+        serializedVersion: 2
+        x: 892
+        y: 168
+        width: 35
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b359001a373e0fb0800000000000000
+      internalID: -4679742240274689100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_40
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 90
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1eceaecf39bb99f60800000000000000
+      internalID: 8041664853924572385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_41
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 8
+        width: 312
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cd6b050ed2c5b970800000000000000
+      internalID: 8770130108197072321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_42
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 45
+        width: 76
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69049754b3778ed00800000000000000
+      internalID: 1002182013542285462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_43
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 15
+        width: 96
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e113624e626001370800000000000000
+      internalID: 8291133678095315230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_44
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 72
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b934b3d6bb6e29b00800000000000000
+      internalID: 833982573682836379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_45
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 31
+        width: 73
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42d50945f73b2f760800000000000000
+      internalID: 7490246489731521828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: busking_46
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 7
+        width: 113
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f96d224f9f2d9600800000000000000
+      internalID: 476589496627718642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      busking_0: 1825674787653564287
+      busking_1: 4582080891508898392
+      busking_10: 1097606457532714042
+      busking_11: -9187761035263869537
+      busking_12: -5564716452995751986
+      busking_13: -7686153293812117373
+      busking_14: 7431565362776186857
+      busking_15: -7741415630082114353
+      busking_16: 4500163450825032204
+      busking_17: -7224683211670150742
+      busking_18: 5682113546020622573
+      busking_19: -2279348293008333911
+      busking_2: 203405574580454717
+      busking_20: -7008898700513099502
+      busking_21: -823002813911547952
+      busking_22: -3410025168511542118
+      busking_23: 485050892633060470
+      busking_24: 3023844530675348492
+      busking_25: -8567511012306616046
+      busking_26: 8685816546271921276
+      busking_27: -1393770507892286466
+      busking_28: 4090087580107677736
+      busking_29: 1017159428628576
+      busking_3: -6974712749074113191
+      busking_30: -7485437146130254866
+      busking_31: -6069008030352307136
+      busking_32: 5453742788011326916
+      busking_33: 4474346374465848482
+      busking_34: 8059582628413790157
+      busking_35: -1948309737725904122
+      busking_36: -3659529352782185130
+      busking_37: -4585726383129662363
+      busking_38: 7134175688015452917
+      busking_39: -4679742240274689100
+      busking_4: 981691958592684673
+      busking_40: 8041664853924572385
+      busking_41: 8770130108197072321
+      busking_42: 1002182013542285462
+      busking_43: 8291133678095315230
+      busking_44: 833982573682836379
+      busking_45: 7490246489731521828
+      busking_46: 476589496627718642
+      busking_5: -99745207091048724
+      busking_6: 1214096787900533498
+      busking_7: -4735753475456910753
+      busking_8: -839477312983946668
+      busking_9: -4943470212186444947
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
