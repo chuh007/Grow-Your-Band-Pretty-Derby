@@ -22,7 +22,7 @@ namespace Code.MainSystem.Rhythm.Core
         public ConcertType concertType;
         public List<NoteData> combinedChart;
         
-        public List<MemberGroup> members = new List<MemberGroup>();
+        public List<MemberGroup> members;
         
         [Header("Game Result Data")]
         public bool isResultDataAvailable;
