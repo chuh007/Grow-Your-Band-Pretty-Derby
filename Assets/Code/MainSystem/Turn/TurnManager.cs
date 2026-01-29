@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
+using Code.MainSystem.Encounter;
 using Code.MainSystem.Rhythm.Core;
 using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -17,7 +19,6 @@ namespace Code.MainSystem.Turn
     {
         [Header("Data")]
         [SerializeField] private GoalFlowSO flowSO;
-        [SerializeField] private RhythmGameDataSenderSO dataSO;
         
         public static TurnManager Instance { get; private set; }
         
@@ -90,26 +91,41 @@ namespace Code.MainSystem.Turn
             Goal goal = flowSO.goals[_currentGoalIndex];
             switch (goal.type)
             {
+                // 특별한 연출 없이 특정 스텟이 요구량 이상인지 검사
                 case GoalType.Stat:
-                    // 특별한 연출 없이 특정 스텟이 요구량 이상인지 검사
+                {
                     BaseStat stat = GetStat(goal.targetType);
                     if (stat.CurrentValue < goal.target)
                     {
-                        Debug.Log("아이고들어가면큰일나죠이거는");
-                        // TODO 끝나는 인카운터 호출
+                        Debug.Log("스텟실패");
+                        Bus<EncounterCheckEvent>.Raise(new EncounterCheckEvent(EncounterConditionType.StatCaseFall));
                     }
                     else
                     {
-                        Debug.Log("발동했다");
+                        Debug.Log("스텟성공");
                         // TODO 이벤트가 있을지도
                     }
                     break;
+                }
+
                 case GoalType.Busking:
+                {
                     // 버스킹 준비하는 씬으로 전환
-                    Debug.Log("BusKing");
-                    Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", ConcertType.Busking,
-                        RhythmGameConsts.MEMBERS_GROUP));
+                    BaseStat stat = GetStat(goal.targetType);
+                    if (stat.CurrentValue < goal.target)
+                    {
+                        Debug.Log("버스킹실패");
+                        Bus<EncounterCheckEvent>.Raise(new EncounterCheckEvent(EncounterConditionType.BuskingCaseFall));
+                    }
+                    else
+                    {
+                        Debug.Log("버스킹성공");
+                        Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", ConcertType.Busking,
+                            RhythmGameConsts.MEMBERS_GROUP));
+                    }
                     break;
+                }
+                    
                 case GoalType.Performance:
                     // TODO 공연으로
                     break;
