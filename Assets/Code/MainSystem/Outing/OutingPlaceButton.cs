@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.MainSystem.Dialogue;
+using Code.MainSystem.MainScreen.Training;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -24,6 +25,8 @@ namespace Code.MainSystem.Outing
 
         public void Click()
         {
+            if(TrainingManager.Instance.IsMemberTrained(sender.targetMember.memberType)) return;
+            TrainingManager.Instance.MarkMemberTrained(sender.targetMember.memberType);
             var evt = dataController.GetMemberOutingData(sender.targetMember.memberType, outingPlace);
             sender.selectedEvent = evt;
             if (evt == null)

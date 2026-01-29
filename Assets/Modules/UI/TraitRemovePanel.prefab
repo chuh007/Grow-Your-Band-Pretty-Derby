@@ -1077,6 +1077,7 @@ MonoBehaviour:
   nameText: {fileID: 6000981447276120382}
   descriptionText: {fileID: 880201146077837618}
   confirmButton: {fileID: 4398350629866766440}
+  toggle: {fileID: 2576061107846703676}
 --- !u!1 &8428393919246981329
 GameObject:
   m_ObjectHideFlags: 0

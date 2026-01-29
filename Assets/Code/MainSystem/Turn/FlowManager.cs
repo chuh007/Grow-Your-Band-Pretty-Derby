@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Code.MainSystem.Turn
 {
     /// <summary>
-    /// 턴 사이의 로직 관리해주는 메니저
+    /// 턴 사이의 로직 관리해주고, 목표 관리하는 메니저
     /// </summary>
     public class FlowManager : MonoBehaviour
     {
@@ -28,6 +28,11 @@ namespace Code.MainSystem.Turn
                 .ToList();
             
             Bus<TurnEndEvent>.OnEvent += HandleTurnEnd;
+        }
+        
+        private void OnDestroy()
+        {
+            Bus<TurnEndEvent>.OnEvent -= HandleTurnEnd;
         }
 
         private async void HandleTurnEnd(TurnEndEvent evt)

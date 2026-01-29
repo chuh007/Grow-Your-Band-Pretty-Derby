@@ -12,12 +12,6 @@ namespace Code.MainSystem.Outing
     {
         [SerializeField] private Image characterImage;
         
-        // [SerializeField] private Image parkIcon;
-        // [SerializeField] private Image martIcon;
-        // [SerializeField] private Image pcIcon;
-        // [SerializeField] private Image cafeIcon;
-        // [SerializeField] private Image marketIcon;
-        
         private float _width;
         [SerializeField] private RectTransform rect;
         
