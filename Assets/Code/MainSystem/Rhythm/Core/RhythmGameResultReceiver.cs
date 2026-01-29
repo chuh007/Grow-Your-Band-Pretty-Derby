@@ -16,17 +16,6 @@ namespace Code.MainSystem.Rhythm.Core
     public class RhythmGameResultReceiver : MonoBehaviour
     {
         [SerializeField] private RhythmGameDataSenderSO dataSender;
-        [SerializeField] private SceneTransitionSenderSO transitionSender;
-
-        private void OnEnable()
-        {
-            Bus<ConcertStartRequested>.OnEvent += HandleConcertStart;
-        }
-
-        private void OnDisable()
-        {
-            Bus<ConcertStartRequested>.OnEvent -= HandleConcertStart;
-        }
 
         private void Start()
         {
@@ -37,33 +26,6 @@ namespace Code.MainSystem.Rhythm.Core
                 ProcessGameResult();
                 dataSender.isResultDataAvailable = false;
             }
-        }
-
-        private void HandleConcertStart(ConcertStartRequested evt)
-        {
-            dataSender.songId = evt.SongId;
-            dataSender.isResultDataAvailable = false;
-
-            if (evt.Members != null && evt.Members.Count > 0)
-            {
-                dataSender.members = evt.Members;
-            }
-            else
-            {
-                Debug.LogError("RhythmGameResultReceiver: No members provided in event. Cannot proceed with concert.");
-                return;
-            }
-
-            if (transitionSender != null)
-            {
-                transitionSender.SetTransition("Rhythm", TransitionMode.ToLandscape);
-            }
-            else
-            {
-                Debug.LogWarning("RhythmGameResultReceiver: SceneTransitionSenderSO is missing. Defaulting to direct load or inconsistent state.");
-            }
-
-            SceneManager.LoadScene("TransitionScene");
         }
 
         private void ProcessGameResult()

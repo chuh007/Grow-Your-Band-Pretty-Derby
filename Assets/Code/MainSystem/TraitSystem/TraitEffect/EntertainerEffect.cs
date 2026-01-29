@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 만담가 특성
     /// </summary>
-    public class EntertainerEffect : AbstractTraitEffect, IAdditiveModifier<IMentalStat>
+    public class EntertainerEffect : AbstractTraitEffect, IMentalStat, IAdditiveModifier<IMentalStat>
     {
         public float AdditiveValue { get; private set; }
         

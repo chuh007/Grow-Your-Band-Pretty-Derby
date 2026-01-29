@@ -39,9 +39,10 @@ namespace Code.MainSystem.MainScreen.Training
 
         public void SetupComments()
         {
+            _setupComments = null;
+            
             if (_pendingComments.Count == 0)
             {
-                _setupComments = null;
                 return;
             }
 
@@ -57,11 +58,21 @@ namespace Code.MainSystem.MainScreen.Training
                 }
                 _setupComments[key].Add(comment);
             }
+            
+            Debug.Log($"[CommentManager] Setup {_setupComments.Count} comment groups from {_pendingComments.Count} pending comments");
         }
 
         public async UniTask ShowAllComments()
         {
-            if (_setupComments == null || _setupComments.Count == 0) return;
+            if (_setupComments == null || _setupComments.Count == 0) 
+            {
+                Debug.Log("[CommentManager] No comments to show");
+                if (!_isTeamTraining)
+                {
+                    Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+                }
+                return;
+            }
 
             _showCTS?.Cancel();
             _showCTS?.Dispose();
@@ -75,6 +86,11 @@ namespace Code.MainSystem.MainScreen.Training
             if (commentPage == null)
             {
                 Debug.LogError("현재 씬에서 PracticeCommentPage를 찾을 수 없습니다!");
+                
+                if (!_isTeamTraining)
+                {
+                    Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+                }
                 return;
             }
 
@@ -83,23 +99,33 @@ namespace Code.MainSystem.MainScreen.Training
                 foreach (var kvp in _setupComments)
                 {
                     _showCTS.Token.ThrowIfCancellationRequested();
+                    Debug.Log($"[CommentManager] Showing comments for {kvp.Key}");
                     await commentPage.ShowComments(kvp.Value, kvp.Key).AttachExternalCancellation(_showCTS.Token);
+                }
+                
+                Debug.Log("[CommentManager] All comments shown successfully");
+                if (!_isTeamTraining)
+                {
+                    Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
                 }
             }
             catch (OperationCanceledException)
             {
+                Debug.Log("[CommentManager] Comments skipped by user");
+                if (!_isTeamTraining)
+                {
+                    Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+                }
             }
-
-            commentPage.gameObject.SetActive(false);
-            
-            if (!_isTeamTraining)
+            finally
             {
-                Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+                commentPage.gameObject.SetActive(false);
+                
+                _pendingComments.Clear();
+                _setupComments = null;
+                
+                Debug.Log("[CommentManager] Comments cleaned up");
             }
-        
-            _pendingComments.Clear();
-            _setupComments = null;
-            _isTeamTraining = false;
         }
 
         public void ClearAllComments()
@@ -114,6 +140,8 @@ namespace Code.MainSystem.MainScreen.Training
             _pendingComments.Clear();
             _setupComments = null;
             _isTeamTraining = false;
+            
+            Debug.Log("[CommentManager] All comments force cleared");
         }
 
         private void OnDestroy()

@@ -21,8 +21,8 @@ MonoBehaviour:
   Point: -5
   IsRemovable: 1
   Effects:
-  - 50
-  DescriptionEffect: "\uD569\uC8FC\uC758 \uD6A8\uACFC -{0}%"
+  - -50
+  DescriptionEffect: "\uD569\uC8FC\uC758 \uD6A8\uACFC {0}%"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   effectName: Code.MainSystem.TraitSystem.TraitEffect.DogmaticEffect, Assembly-CSharp,

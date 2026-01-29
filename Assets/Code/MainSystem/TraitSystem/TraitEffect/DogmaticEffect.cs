@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 독선적 효과
     /// </summary>
-    public class DogmaticEffect : AbstractTraitEffect, IPercentageModifier<IEnsembleStat>
+    public class DogmaticEffect : AbstractTraitEffect, IEnsembleStat, IPercentageModifier<IEnsembleStat>
     {
         public float Percentage { get; private set; }
 

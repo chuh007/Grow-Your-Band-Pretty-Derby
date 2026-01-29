@@ -114,7 +114,7 @@ namespace Code.MainSystem.Turn
                 case GoalType.Busking:
                     // 버스킹 준비하는 씬으로 전환
                     Debug.Log("BusKing");
-                    Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", dataSO.members));
+                    //Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", dataSO.members));
                     break;
                 case GoalType.Performance:
                     // TODO 공연으로

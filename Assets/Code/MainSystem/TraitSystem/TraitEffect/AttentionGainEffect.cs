@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 주목도 상승 특성
     /// </summary>
-    public class AttentionGainEffect : AbstractTraitEffect, IPercentageModifier<IFeverTimeStat>
+    public class AttentionGainEffect : AbstractTraitEffect, IFeverTimeStat, IPercentageModifier<IFeverTimeStat>
     {
         public float Percentage { get; private set; }
 
