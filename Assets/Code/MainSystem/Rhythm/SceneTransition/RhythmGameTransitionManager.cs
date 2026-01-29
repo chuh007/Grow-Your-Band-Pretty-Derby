@@ -11,6 +11,7 @@ namespace Code.MainSystem.Rhythm.SceneTransition
         [SerializeField] private RhythmGameDataSenderSO dataSender;
         [SerializeField] private SceneTransitionSenderSO transitionSender;
         [SerializeField] private string sceneName = "Rhythm";
+        [SerializeField] private string transitionSceneName = "TransitionScene";
 
         private void OnEnable()
         {
@@ -36,7 +37,7 @@ namespace Code.MainSystem.Rhythm.SceneTransition
                 Debug.LogError("[TransitionManager] DataSender is missing!");
             }
             transitionSender.SetTransition(sceneName, TransitionMode.ToLandscape);
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(transitionSceneName);
         }
     }
 }
