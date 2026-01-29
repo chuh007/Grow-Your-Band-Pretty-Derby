@@ -9,6 +9,8 @@ using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine.EventSystems;
 using System.Threading;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.TurnEvents;
 
 namespace Code.MainSystem.MainScreen.Training
 {
@@ -46,6 +48,7 @@ namespace Code.MainSystem.MainScreen.Training
         private Sequence _currentSequence;
         private bool _hasSkipped = false;
         private float _lastSkipTime = 0f;
+        private bool _isTeamTraining = false; 
 
         private void Awake()
         {
@@ -92,11 +95,13 @@ namespace Code.MainSystem.MainScreen.Training
             float teamStatDelta,         
             Dictionary<(MemberType memberType, StatType statType), int> statDeltaDict,
             bool hadAnyStatChanged,
-            PersonalpracticeDataSO practiceData = null 
+            PersonalpracticeDataSO practiceData = null,
+            bool isTeamTraining = false
         )
         {
             _isPlaying = true;
             _hasSkipped = false;
+            _isTeamTraining = isTeamTraining; 
             _skipCTS?.Cancel();
             _skipCTS?.Dispose();
             _skipCTS = new CancellationTokenSource();
@@ -163,6 +168,14 @@ namespace Code.MainSystem.MainScreen.Training
             catch (OperationCanceledException)
             {
                 Debug.Log("[PracticeResultWindow] Entire flow skipped by user");
+                
+                CommentManager.instance.ClearAllComments();
+                
+                if (!_isTeamTraining)
+                {
+                    Debug.Log("[PracticeResultWindow] Raising CheckTurnEnd event after skip");
+                    Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+                }
             }
             finally
             {
@@ -219,6 +232,7 @@ namespace Code.MainSystem.MainScreen.Training
             
             _isPlaying = false;
             _hasSkipped = false;
+            _isTeamTraining = false;
         }
 
         private void OnDestroy()

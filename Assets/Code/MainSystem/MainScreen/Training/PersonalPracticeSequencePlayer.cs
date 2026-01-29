@@ -83,7 +83,8 @@ namespace Code.MainSystem.MainScreen.Training
                     { (unitData.memberType, dataSo.PracticeStatType), receivedDelta } 
                 },
                 isSuccess,
-                dataSo 
+                dataSo,
+                false 
             );
 
             _instance.SetActive(false);
