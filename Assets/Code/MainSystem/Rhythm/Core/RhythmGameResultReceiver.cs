@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Etc;
 using Code.MainSystem.Rhythm.SceneTransition;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -20,11 +21,14 @@ namespace Code.MainSystem.Rhythm.Core
         private void Start()
         {
             Debug.Assert(dataSender != null, "RhythmGameDataSenderSO is missing");
+        }
 
+        private void Update()
+        {
             if (dataSender.isResultDataAvailable)
             {
+                Debug.Log("RhythmGameResultReceiver");
                 ProcessGameResult();
-                dataSender.isResultDataAvailable = false;
             }
         }
 
@@ -64,8 +68,9 @@ namespace Code.MainSystem.Rhythm.Core
                 Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
                     ((MemberType)i, StatType.Mental, allStatUpValue));
             }
-        }
 
+            Bus<TurnEndEvent>.Raise(new TurnEndEvent());
+        }
 
     }
 }

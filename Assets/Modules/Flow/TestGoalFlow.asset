@@ -22,8 +22,8 @@ MonoBehaviour:
     turn: 2
   - titleText: "\uBC84\uC2A4\uD0B9 \uCC38\uC5EC"
     isTargetSet: 0
-    icon: {fileID: 0}
-    targetType: 0
-    target: 0
+    icon: {fileID: 21300000, guid: 79f207fa03251374984180437024066a, type: 3}
+    targetType: 12
+    target: 10
     type: 2
     turn: 5

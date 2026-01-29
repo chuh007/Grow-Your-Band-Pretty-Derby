@@ -54,14 +54,14 @@ namespace Code.MainSystem.MainScreen
                 bar.SetActive(true);
                 title.SetText(evt.title);
                 icon.sprite = evt.icon;
-                targetText.SetText(evt.target);
+                targetText.SetText(evt.target.ToString());
             }
             else
             {
                 title.SetText(evt.title);
                 description.gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
-                targetText.gameObject.SetActive(true);
+                targetText.gameObject.SetActive(false);
                 bar.SetActive(false);
             }
         }

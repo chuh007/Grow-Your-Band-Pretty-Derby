@@ -28,15 +28,18 @@ namespace Code.MainSystem.Turn
                 .ToList();
             
             Bus<TurnEndEvent>.OnEvent += HandleTurnEnd;
+            Debug.LogWarning("Awake");
         }
         
         private void OnDestroy()
         {
             Bus<TurnEndEvent>.OnEvent -= HandleTurnEnd;
+            Debug.LogWarning("Destory");
         }
 
         private async void HandleTurnEnd(TurnEndEvent evt)
         {
+            Debug.Log("HandleTurnEnd");
             // 턴 종료시 할 일 수행.
             foreach (var compo in _turnEndComponents)
             {

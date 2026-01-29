@@ -255,7 +255,7 @@ MonoBehaviour:
   turnCountRectTrm: {fileID: 4155581798559085689}
   dayOfWeekPrefab: {fileID: 8446437423013697299, guid: d330bfa567036174e82df8f3313ff3c7, type: 3}
   remainingTurnText: {fileID: 4842976578880546435}
-  duration: 0.5
+  duration: 0.75
   daySpacing: 450
   activeScale: {x: 1.2, y: 1.2, z: 1.2}
   inactiveScale: {x: 0.7, y: 0.7, z: 0.7}

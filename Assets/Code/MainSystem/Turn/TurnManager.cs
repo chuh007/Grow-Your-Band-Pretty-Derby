@@ -13,7 +13,7 @@ using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.Turn
 {
-    public class TurnManager : MonoBehaviour, ITurnEndComponent
+    public class TurnManager : MonoBehaviour, ITurnEndComponent, ITurnStartComponent
     {
         [Header("Data")]
         [SerializeField] private GoalFlowSO flowSO;
@@ -33,12 +33,7 @@ namespace Code.MainSystem.Turn
             private set
             {
                 _remainingTurn = value;
-                Debug.Log(value);
                 TurnChanged?.Invoke(_remainingTurn);
-                if (_remainingTurn <= 0)
-                {
-                    OnGoalFinished();
-                }
             }
         }
         
@@ -49,11 +44,13 @@ namespace Code.MainSystem.Turn
             {
                 Instance = this;
                 DontDestroyOnLoad(this);
+                RemainingTurn = flowSO.goals[0].turn;
             }
             else
             {
                 Destroy(gameObject);
             }
+
         }
         
         private async void Start()
@@ -76,14 +73,10 @@ namespace Code.MainSystem.Turn
             if (flowSO != null && _currentGoalIndex < flowSO.goals.Count)
             {
                 Goal nextGoal = flowSO.goals[_currentGoalIndex];
-                
-                if (nextGoal.icon != null)
-                {
-                    BaseStat stat = GetStat(nextGoal.targetType);
-                    Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
-                    (nextGoal.titleText, nextGoal.icon, 
-                        (nextGoal.target - stat.CurrentValue).ToString(), nextGoal.isTargetSet));
-                }
+                BaseStat stat = GetStat(nextGoal.targetType);
+                Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
+                (nextGoal.titleText, nextGoal.icon, 
+                    (nextGoal.target - stat.CurrentValue), nextGoal.isTargetSet));
                 
                 GoalChanged?.Invoke(nextGoal);
                 RemainingTurn = nextGoal.turn;
@@ -135,6 +128,7 @@ namespace Code.MainSystem.Turn
         
         public void TurnEnd()
         {
+            Debug.Log("TurnEnd");
             if (RemainingTurn > 0)
             {
                 RemainingTurn--;
@@ -142,18 +136,21 @@ namespace Code.MainSystem.Turn
                 {
                     Goal nextGoal = flowSO.goals[_currentGoalIndex];
                 
-                    if (nextGoal.icon != null)
-                    {
-                        BaseStat stat = GetStat(nextGoal.targetType);
-                        Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
-                        (nextGoal.titleText, nextGoal.icon, 
-                            (nextGoal.target - stat.CurrentValue).ToString(), nextGoal.isTargetSet));
-                    }
+                    BaseStat stat = GetStat(nextGoal.targetType);
+                    Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
+                    (nextGoal.titleText, nextGoal.icon, 
+                        (nextGoal.target - stat.CurrentValue), nextGoal.isTargetSet));
                 }
             }
         }
 
         private BaseStat GetStat(StatType type)
             => StatManager.Instance.GetTeamStat(type);
+
+        public void TurnStart()
+        {
+            if (RemainingTurn <= 0)
+                OnGoalFinished();
+        }
     }
 }

@@ -63,7 +63,7 @@ namespace Code.MainSystem.Turn.UI
             _isAnimating = true;
             gameObject.SetActive(true);
             
-            await UniTask.WaitForSeconds(0.25f);
+            await UniTask.WaitForSeconds(0.4f);
             
             Vector2 lastPos = _spawnedDays[^1].RectTransform.anchoredPosition;
             CreateDayUI(_currentDayDisplayCount + 2, new Vector2(lastPos.x + daySpacing, 0), inactiveScale);
@@ -86,7 +86,7 @@ namespace Code.MainSystem.Turn.UI
             
             remainingTurnText.SetText(string.Format(RESULT_FORMAT, TurnManager.Instance.RemainingTurn));
             
-            await UniTask.WaitForSeconds(0.25f);
+            await UniTask.WaitForSeconds(0.75f);
             
             if (_spawnedDays.Count > 3) 
             {
