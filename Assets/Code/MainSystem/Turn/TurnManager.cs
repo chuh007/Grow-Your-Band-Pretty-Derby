@@ -5,6 +5,7 @@ using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Rhythm.Core;
+using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
@@ -114,7 +115,8 @@ namespace Code.MainSystem.Turn
                 case GoalType.Busking:
                     // 버스킹 준비하는 씬으로 전환
                     Debug.Log("BusKing");
-                    //Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", dataSO.members));
+                    Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", ConcertType.Busking,
+                        RhythmGameConsts.MEMBERS_GROUP));
                     break;
                 case GoalType.Performance:
                     // TODO 공연으로

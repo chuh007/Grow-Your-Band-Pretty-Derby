@@ -13,7 +13,6 @@ namespace Code.MainSystem.Turn.UI
         private void Start()
         {
             TurnManager.Instance.TurnChanged += HandleTurnChange;
-            Bus<TargetTurnSetEvent>.Raise(new TargetTurnSetEvent(15));
         }
 
         private void OnDestroy()
