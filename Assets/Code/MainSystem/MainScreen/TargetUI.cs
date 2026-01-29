@@ -1,6 +1,8 @@
 ﻿using System;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.Turn;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +21,12 @@ namespace Code.MainSystem.MainScreen
         {
             Bus<TargetSettingEvent>.OnEvent += HandleTargetSetting;
             Bus<TargetChangeEvent>.OnEvent += HandleTargetChange;
+        }
+
+        private async void Start()
+        {
+            if (StatManager.Instance.IsInitialized)
+                TurnManager.Instance.UpdateTarget();
         }
 
         private void HandleTargetChange(TargetChangeEvent evt)

@@ -61,7 +61,9 @@ namespace Code.MainSystem.Turn
             }
             NextGoal();
         }
-
+        
+        
+        
         private void OnDestroy()
         {
             Bus<TurnReturnEvent>.OnEvent -= HandleTurnReturn;
@@ -73,10 +75,7 @@ namespace Code.MainSystem.Turn
             if (flowSO != null && _currentGoalIndex < flowSO.goals.Count)
             {
                 Goal nextGoal = flowSO.goals[_currentGoalIndex];
-                BaseStat stat = GetStat(nextGoal.targetType);
-                Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
-                (nextGoal.titleText, nextGoal.icon, 
-                    (nextGoal.target - stat.CurrentValue), nextGoal.isTargetSet));
+                UpdateTarget();
                 
                 GoalChanged?.Invoke(nextGoal);
                 RemainingTurn = nextGoal.turn;
@@ -134,12 +133,7 @@ namespace Code.MainSystem.Turn
                 RemainingTurn--;
                 if (flowSO != null && _currentGoalIndex < flowSO.goals.Count)
                 {
-                    Goal nextGoal = flowSO.goals[_currentGoalIndex];
-                
-                    BaseStat stat = GetStat(nextGoal.targetType);
-                    Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
-                    (nextGoal.titleText, nextGoal.icon, 
-                        (nextGoal.target - stat.CurrentValue), nextGoal.isTargetSet));
+                    UpdateTarget();
                 }
             }
         }
@@ -151,6 +145,16 @@ namespace Code.MainSystem.Turn
         {
             if (RemainingTurn <= 0)
                 OnGoalFinished();
+        }
+
+        public void UpdateTarget()
+        {
+            Goal nextGoal = flowSO.goals[_currentGoalIndex];
+            
+            BaseStat stat = GetStat(nextGoal.targetType);
+            Bus<TargetSettingEvent>.Raise(new TargetSettingEvent
+            (nextGoal.titleText, nextGoal.icon, 
+                (nextGoal.target - stat.CurrentValue), nextGoal.isTargetSet));
         }
     }
 }

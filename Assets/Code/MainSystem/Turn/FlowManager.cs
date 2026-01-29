@@ -28,13 +28,11 @@ namespace Code.MainSystem.Turn
                 .ToList();
             
             Bus<TurnEndEvent>.OnEvent += HandleTurnEnd;
-            Debug.LogWarning("Awake");
         }
         
         private void OnDestroy()
         {
             Bus<TurnEndEvent>.OnEvent -= HandleTurnEnd;
-            Debug.LogWarning("Destory");
         }
 
         private async void HandleTurnEnd(TurnEndEvent evt)
