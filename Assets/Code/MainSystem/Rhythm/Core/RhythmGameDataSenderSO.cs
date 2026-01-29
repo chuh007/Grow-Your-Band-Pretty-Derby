@@ -24,6 +24,14 @@ namespace Code.MainSystem.Rhythm.Core
         
         public List<MemberGroup> members;
         
+        public void Initialize(string songId, ConcertType concertType, List<MemberGroup> members)
+        {
+            this.songId = songId;
+            this.concertType = concertType;
+            this.members = members;
+            this.isResultDataAvailable = false;
+        }
+
         [Header("Game Result Data")]
         public bool isResultDataAvailable;
         public int allStatUpValue;
