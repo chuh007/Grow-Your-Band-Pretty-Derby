@@ -206,6 +206,11 @@ namespace Code.MainSystem.StatSystem.Manager
             return _conditionHandler;
         }
         
+        public EnsembleModule GetEnsembleModuleHandler()
+        {
+            return ensembleModule;
+        }
+        
         #endregion
     }
 }
