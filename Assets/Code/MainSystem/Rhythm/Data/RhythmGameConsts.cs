@@ -1,3 +1,8 @@
+using System.Collections.Generic;
+using Code.MainSystem.Rhythm.Core;
+using Code.MainSystem.StatSystem.Manager;
+using NUnit.Framework;
+
 namespace Code.MainSystem.Rhythm.Data
 {
     public static class RhythmGameConsts
@@ -11,5 +16,14 @@ namespace Code.MainSystem.Rhythm.Data
         public const string MUSIC_PATH_FORMAT = "RhythmGame/Music/{0}";
         public const string MEMBER_PREFAB_FORMAT = "RhythmGame/Prefab/Member/{0}";
         public const string CHART_PATH_FORMAT = "RhythmGame/Chart/{0}/{1}";
+        
+        public static readonly List<MemberGroup> MEMBERS_GROUP = new List<MemberGroup>
+        {
+            new MemberGroup { Members = new List<MemberType> { MemberType.Vocal } },
+            new MemberGroup { Members = new List<MemberType> { MemberType.Guitar } },
+            new MemberGroup { Members = new List<MemberType> { MemberType.Bass } },
+            new MemberGroup { Members = new List<MemberType> { MemberType.Drums } },
+            new MemberGroup { Members = new List<MemberType> { MemberType.Piano } }
+        };
     }
 }
