@@ -21,7 +21,7 @@ MonoBehaviour:
   Point: 10
   IsRemovable: 0
   Effects:
-  - 67
+  - -100
   DescriptionEffect: "\uC721\uC131: \uD6C8\uB828 \uC2E4\uD328 \uD655\uB960 {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
     \uAC8C\uC784: Miss \uD310\uC815\uC744 Good\uC73C\uB85C \uBCF4\uC815"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,

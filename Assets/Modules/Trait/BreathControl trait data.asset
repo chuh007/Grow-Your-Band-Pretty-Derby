@@ -21,8 +21,8 @@ MonoBehaviour:
   Point: 10
   IsRemovable: 0
   Effects:
-  - 67
-  - 67
+  - -100
+  - 10
   DescriptionEffect: "\uC721\uC131: \uCEE8\uB514\uC158 \uBCC0\uD654 \uD3ED {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
     \uAC8C\uC784: \uBBF8\uC2A4 \uC774\uD6C4 \uD53C\uBC84 \uD0C0\uC784 \uD544\uC694
     \uC785\uB825 {1} \uAC10\uC18C"
