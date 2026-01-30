@@ -1,5 +1,6 @@
 ﻿using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.RhythmEvents;
+using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.Rhythm.SceneTransition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -50,11 +51,20 @@ namespace Code.MainSystem.Rhythm.Core
 
             var evt = _cachedResult.Value;
 
-            dataSender.allStatUpValue = RhythmGameStatCalculator.CalculateAllStatGain(evt.FinalScore);
-            int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
-            dataSender.harmonyStatUpValue = RhythmGameStatCalculator.CalculateHarmonyStatGain(evt.FinalScore, memberCount);
+            int currentScore = evt.FinalScore;
             
-            dataSender.isResultDataAvailable = true;
+            bool isSuccess = currentScore >= RhythmGameConsts.SUCCESS_SCORE_THRESHOLD;
+            
+            dataSender.SetResult(currentScore, isSuccess);
+
+            if (isSuccess)
+            {
+                dataSender.allStatUpValue = RhythmGameStatCalculator.CalculateAllStatGain(currentScore);
+                int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
+                dataSender.harmonyStatUpValue = RhythmGameStatCalculator.CalculateHarmonyStatGain(currentScore, memberCount);
+            
+                dataSender.isResultDataAvailable = true;
+            }
 
             if (transitionSender != null)
             {
