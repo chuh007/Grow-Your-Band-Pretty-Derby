@@ -29,7 +29,7 @@ namespace Code.MainSystem.Rhythm.Core
         [field: SerializeField] public bool IsSuccess { get; private set; }
 
         [Header("Game Result Data")]
-        public bool isResultDataAvailable;
+        public bool isResultDataAvailable = false;
         public int allStatUpValue;
         public int harmonyStatUpValue;
         
