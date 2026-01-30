@@ -54,17 +54,18 @@ namespace Code.MainSystem.Rhythm.Core
             int currentScore = evt.FinalScore;
             
             bool isSuccess = currentScore >= RhythmGameConsts.SUCCESS_SCORE_THRESHOLD;
+            bool isFailed = !isSuccess;
             
-            dataSender.SetResult(currentScore, isSuccess);
+            dataSender.SetResult(currentScore, isSuccess, isFailed);
 
             if (isSuccess)
             {
                 dataSender.allStatUpValue = RhythmGameStatCalculator.CalculateAllStatGain(currentScore);
                 int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
                 dataSender.harmonyStatUpValue = RhythmGameStatCalculator.CalculateHarmonyStatGain(currentScore, memberCount);
+                dataSender.isResultDataAvailable = true;
             }
             
-            dataSender.isResultDataAvailable = true;
 
             if (transitionSender != null)
             {

@@ -27,6 +27,7 @@ namespace Code.MainSystem.Rhythm.Core
         [Header("Result Data")]
         [field: SerializeField] public int FinalScore { get; private set; }
         [field: SerializeField] public bool IsSuccess { get; private set; }
+        [field: SerializeField] public bool IsFailed { get; private set; }
 
         [Header("Game Result Data")]
         public bool isResultDataAvailable = false;
@@ -43,10 +44,11 @@ namespace Code.MainSystem.Rhythm.Core
             this.IsSuccess = false;
         }
         
-        public void SetResult(int finalScore, bool isSuccess)
+        public void SetResult(int finalScore, bool isSuccess, bool isFailed)
         {
             FinalScore = finalScore;
             IsSuccess = isSuccess;
+            IsFailed = isFailed;
         }
 
         public (bool isAvailable, int allStat, int harmonyStat) ConsumeResult()
