@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.MainSystem.Rhythm.Core;
 using Code.MainSystem.Turn;
 using DG.Tweening;
@@ -16,6 +18,8 @@ namespace Code.MainSystem.Encounter
     public class EncounterManager : MonoBehaviour, ITurnStartComponent
     {
         [SerializeField] private CurrentEncounterListSO currentEncounterList;
+        [SerializeField] private EncounterSenderSO encounterSender;
+        
         [SerializeField] private RhythmGameDataSenderSO rhythmGameDataSender;
         
         public static EncounterManager Instance;
@@ -46,18 +50,54 @@ namespace Code.MainSystem.Encounter
             }
         }
 
+        private void Start()
+        {
+            Bus<EncounterCheckEvent>.OnEvent += HandleEncounterCheck;
+        }
+
+        private void OnDestroy()
+        {
+            Bus<EncounterCheckEvent>.OnEvent -= HandleEncounterCheck;
+        }
+
+        private void HandleEncounterCheck(EncounterCheckEvent evt)
+        {
+            if (evt.Type == EncounterConditionType.BuskingCaseFall)
+            {
+                var data = encounterData[EncounterConditionType.BuskingCaseFall];
+
+                encounterSender.encounterData = data[0];
+                DOVirtual.DelayedCall(0.5f, 
+                    () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
+            }
+        }
 
         public void TurnStart()
         {
-            foreach (var data in encounterData[EncounterConditionType.TurnStart])
+            if (rhythmGameDataSender.IsSuccess)
             {
-                if (Random.Range(0f, 1.0f) <= data.percent)
-                {
-                    DOVirtual.DelayedCall(0.5f, 
-                        () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
-                    break;
-                }
+                var data = encounterData[EncounterConditionType.BuskingSuccess];
+                encounterSender.encounterData = data[0];
+                DOVirtual.DelayedCall(0.5f, 
+                    () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
+                return;
             }
+            else if(rhythmGameDataSender.IsSuccess)
+            {
+                
+            }
+            
+            // foreach (var data in encounterData[EncounterConditionType.TurnStart])
+            // {
+            //     if (Random.Range(0f, 1.0f) <= data.percent)
+            //     {
+            //         encounterSender.encounterData = data;
+            //         encounterData[EncounterConditionType.TurnStart].Remove(data);
+            //         DOVirtual.DelayedCall(0.5f, 
+            //             () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
+            //         return;
+            //     }
+            // }
         }
     }
 }

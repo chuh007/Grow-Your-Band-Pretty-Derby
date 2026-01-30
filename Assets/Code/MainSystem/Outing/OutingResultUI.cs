@@ -22,11 +22,15 @@ namespace Code.MainSystem.Outing
         private static readonly string RESULT_FORMAT = "{0} <color=#00FFAC>+{1}</color>";
         private static readonly string SKILL_RESULT_FORMAT = "<color=#00FFAC>{0}</color> 획득";
         
-        public void ShowResultUI()
+        private string _sceneName;
+        
+        public void ShowResultUI(string SceneName)
         {
             closeButton.onClick.RemoveAllListeners();
             closeButton.onClick.AddListener(CloseOutingScene);
-
+            
+            _sceneName = SceneName;
+            
             StringBuilder resultBuilder = new StringBuilder();
             
 
@@ -62,8 +66,8 @@ namespace Code.MainSystem.Outing
         private void CloseOutingScene()
         {
             closeButton.onClick.RemoveAllListeners();
-            Bus<OutingEndEvent>.Raise(new OutingEndEvent()); 
-            SceneManager.UnloadSceneAsync("OutingScene");
+            Bus<OutingEndEvent>.Raise(new OutingEndEvent());
+            SceneManager.UnloadSceneAsync(_sceneName);
         }
     }
 }

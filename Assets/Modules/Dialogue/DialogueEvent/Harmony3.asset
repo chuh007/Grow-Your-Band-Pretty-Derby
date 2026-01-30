@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Harmony3
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueEvent.StatChangeDialogueEventSO
   statType: 12
-  statChangeAmount: 5
+  statChangeAmount: 3

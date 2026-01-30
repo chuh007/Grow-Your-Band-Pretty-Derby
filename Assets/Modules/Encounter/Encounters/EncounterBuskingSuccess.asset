@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2faf2a38c8344118e755c7adc70346d, type: 3}
-  m_Name: EncounterRandom1
+  m_Name: EncounterBuskingSuccess
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Encounter.EncounterDataSO
-  dialogue: {fileID: 11400000, guid: 3512ddb1ddba01f45a68b2d00df76366, type: 2}
+  dialogue: {fileID: 11400000, guid: 202acc939e386f64cb46ad4fb4e6abc5, type: 2}
   percent: 0.3
-  type: 0
+  type: 4

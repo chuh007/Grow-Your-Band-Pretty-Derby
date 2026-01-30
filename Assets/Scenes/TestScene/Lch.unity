@@ -8677,6 +8677,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Encounter.EncounterManager
   currentEncounterList: {fileID: 11400000, guid: df862e8ba05264f4dbf226d390efa935, type: 2}
+  encounterSender: {fileID: 11400000, guid: c30114553299f514dbec772db22e3f9f, type: 2}
   rhythmGameDataSender: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
 --- !u!4 &787371434
 Transform:
@@ -15575,11 +15576,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.3
+      value: -9.2
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.7
+      value: 4.8
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
