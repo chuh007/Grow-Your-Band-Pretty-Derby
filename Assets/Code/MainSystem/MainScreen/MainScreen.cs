@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Code.Core;
 using Code.Core.Bus;
@@ -9,8 +8,6 @@ using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -118,43 +115,15 @@ namespace Code.MainSystem.MainScreen
         private async UniTask CheckTeamPracticeReturn()
         {
             await UniTask.Delay(100);
-
+            
             if (CommentManager.instance != null)
+            {
                 await CommentManager.instance.ShowAllComments();
-
+            }
+            
             await UniTask.Yield();
 
             _returnedFromTeamPractice = false;
-
-            bool isBonusActionTriggered = false;
-            int totalBonusAmount = 0;
-
-            foreach (var unit in TeamPracticeResultCache.SelectedMembers)
-            {
-                var holder = TraitManager.Instance.GetHolder(unit.memberType);
-                var bonusTrait = holder.GetModifiers<IActionPointBonus>().FirstOrDefault();
-
-                if (bonusTrait != null)
-                {
-                    bool isConditionMet = unit.currentCondition >= 80f;
-
-                    if (isConditionMet && Random.Range(0f, 100f) <= bonusTrait.Chance)
-                    {
-                        isBonusActionTriggered = true;
-                        totalBonusAmount = bonusTrait.Amount; 
-                
-                        Debug.Log($"<color=yellow>{unit.memberType}의 '지나친 열정' 발동!</color> 행동권 {totalBonusAmount}개 이득!");
-                        break;
-                    }
-                }
-            }
-
-            if (isBonusActionTriggered)
-            {
-                Debug.Log($"행동권 보너스 발생: 차례를 종료하지 않습니다. (보너스 양: {totalBonusAmount})");
-                return; 
-            }
-            
             Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
         
