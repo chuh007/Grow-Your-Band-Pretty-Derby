@@ -24,18 +24,30 @@ namespace Code.MainSystem.Rhythm.Core
         
         public List<MemberGroup> members;
         
+        [Header("Result Data")]
+        [field: SerializeField] public int FinalScore { get; private set; }
+        [field: SerializeField] public bool IsSuccess { get; private set; }
+
+        [Header("Game Result Data")]
+        public bool isResultDataAvailable;
+        public int allStatUpValue;
+        public int harmonyStatUpValue;
+        
         public void Initialize(string songId, ConcertType concertType, List<MemberGroup> members)
         {
             this.songId = songId;
             this.concertType = concertType;
             this.members = members;
             this.isResultDataAvailable = false;
+            this.FinalScore = 0;
+            this.IsSuccess = false;
         }
-
-        [Header("Game Result Data")]
-        public bool isResultDataAvailable;
-        public int allStatUpValue;
-        public int harmonyStatUpValue;
+        
+        public void SetResult(int finalScore, bool isSuccess)
+        {
+            FinalScore = finalScore;
+            IsSuccess = isSuccess;
+        }
 
         public (bool isAvailable, int allStat, int harmonyStat) ConsumeResult()
         {

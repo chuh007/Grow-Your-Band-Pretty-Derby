@@ -25,5 +25,7 @@ namespace Code.MainSystem.Rhythm.Data
             new MemberGroup { Members = new List<MemberType> { MemberType.Drums } },
             new MemberGroup { Members = new List<MemberType> { MemberType.Piano } }
         };
+        
+        public const int SUCCESS_SCORE_THRESHOLD = 300;
     }
 }
