@@ -62,9 +62,9 @@ namespace Code.MainSystem.Rhythm.Core
                 dataSender.allStatUpValue = RhythmGameStatCalculator.CalculateAllStatGain(currentScore);
                 int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
                 dataSender.harmonyStatUpValue = RhythmGameStatCalculator.CalculateHarmonyStatGain(currentScore, memberCount);
-            
-                dataSender.isResultDataAvailable = true;
             }
+            
+            dataSender.isResultDataAvailable = true;
 
             if (transitionSender != null)
             {
