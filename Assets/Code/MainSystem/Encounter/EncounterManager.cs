@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.MainSystem.Rhythm.Core;
 using Code.MainSystem.Turn;
 using DG.Tweening;
 using UnityEngine;
@@ -15,7 +16,8 @@ namespace Code.MainSystem.Encounter
     public class EncounterManager : MonoBehaviour, ITurnStartComponent
     {
         [SerializeField] private CurrentEncounterListSO currentEncounterList;
-
+        [SerializeField] private RhythmGameDataSenderSO rhythmGameDataSender;
+        
         public static EncounterManager Instance;
         
         private Dictionary<EncounterConditionType, List<EncounterDataSO>> encounterData;

@@ -18,12 +18,12 @@ MonoBehaviour:
     icon: {fileID: 1208040086343421634, guid: 5520ac3433a986143a323543b8041c7e, type: 3}
     targetType: 12
     target: 10
-    type: 2
+    type: 0
     turn: 2
   - titleText: "\uBC84\uC2A4\uD0B9 \uCC38\uC5EC"
-    isTargetSet: 0
+    isTargetSet: 1
     icon: {fileID: 21300000, guid: 79f207fa03251374984180437024066a, type: 3}
     targetType: 12
-    target: 10
+    target: 15
     type: 2
     turn: 5

@@ -19,3 +19,8 @@ MonoBehaviour:
     weight: 1
     isImportance: 0
     dialogue: {fileID: 11400000, guid: a96d77e9449eaed4d9b32ebccc421799, type: 2}
+  - type: 4
+    place: 3
+    weight: 1
+    isImportance: 0
+    dialogue: {fileID: 11400000, guid: 5f29c10b945321c4ca4aba3972093f1c, type: 2}
