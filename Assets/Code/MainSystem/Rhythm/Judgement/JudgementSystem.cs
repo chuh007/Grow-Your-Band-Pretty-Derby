@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Reflex.Attributes;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.RhythmEvents;
@@ -8,6 +9,9 @@ using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.MainSystem.Rhythm.Notes;
 using Code.MainSystem.Rhythm.Audio;
 using Code.MainSystem.Rhythm.Data;
+using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
 
 namespace Code.MainSystem.Rhythm.Judgement
 {
@@ -43,50 +47,56 @@ namespace Code.MainSystem.Rhythm.Judgement
             _partDataMap = map;
         }
 
+        private JudgementType GetJudgement(double diff, float difficultyMult, int memberId)
+        {
+            JudgementType initialType;
+
+            if (diff <= perfectWindow * difficultyMult) 
+                initialType = JudgementType.Perfect;
+            else if (diff <= greatWindow * difficultyMult)
+                initialType = JudgementType.Great;
+            else if (diff <= goodWindow * difficultyMult)
+                initialType = JudgementType.Good;
+            else if (diff <= badWindow * difficultyMult) 
+                initialType = JudgementType.Bad;
+            else 
+                initialType = JudgementType.Miss;
+
+            return ApplyCorrection(initialType, memberId);
+        }
+
+        private JudgementType ApplyCorrection(JudgementType type, int memberId)
+        {
+            var holder = TraitManager.Instance.GetHolder((MemberType)memberId);
+            if (holder == null) return type;
+            
+            var corrections = holder.GetModifiers<IJudgmentCorrection>();
+
+            return corrections.Any(modifier => type == JudgementType.Miss && modifier.CorrectMissToGood) ? JudgementType.Good : type;
+        }
+
         public void OnInputDetected()
         {
             if (_lineController == null || _conductor == null) return;
 
-            double songTime = _conductor.SongPosition;
-            double compensatedTime = songTime + _conductor.InputOffset;
-
+            double compensatedTime = _conductor.SongPosition + _conductor.InputOffset;
             NoteData targetNote = _lineController.GetClosestNoteAcrossAllTracks(compensatedTime);
-            
+    
             if (targetNote == null) return;
 
             double diff = Math.Abs(targetNote.Time - compensatedTime);
-            
+    
             float difficultyMult = 1.0f;
             if (_partDataMap.ContainsKey(targetNote.MemberId))
             {
                 difficultyMult = _partDataMap[targetNote.MemberId].judgementDifficulty;
             }
+            
+            if (diff > missWindow * difficultyMult) return; 
+            
+            JudgementType finalType = GetJudgement(diff, difficultyMult, targetNote.MemberId);
 
-            if (diff > missWindow * difficultyMult) 
-            {
-                return; 
-            }
-
-            if (diff <= perfectWindow * difficultyMult)
-            {
-                HandleInputResult(targetNote, JudgementType.Perfect);
-            }
-            else if (diff <= greatWindow * difficultyMult)
-            {
-                HandleInputResult(targetNote, JudgementType.Great);
-            }
-            else if (diff <= goodWindow * difficultyMult)
-            {
-                HandleInputResult(targetNote, JudgementType.Good);
-            }
-            else if (diff <= badWindow * difficultyMult)
-            {
-                HandleInputResult(targetNote, JudgementType.Bad);
-            }
-            else
-            {
-                HandleInputResult(targetNote, JudgementType.Miss);
-            }
+            HandleInputResult(targetNote, finalType);
         }
 
         private void HandleInputResult(NoteData note, JudgementType type)
