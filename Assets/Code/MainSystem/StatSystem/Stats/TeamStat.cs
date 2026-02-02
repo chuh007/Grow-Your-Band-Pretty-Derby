@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Code.Core;
 using Code.Core.Bus;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.StatSystem.Stats
 {
@@ -19,30 +21,26 @@ namespace Code.MainSystem.StatSystem.Stats
             if (_initialized)
                 return;
 
-            if (string.IsNullOrEmpty(statLabel))
+            Debug.Assert(!string.IsNullOrEmpty(statLabel), $"{gameObject.name}: statLabel이 비어있습니다!");
+
+            try
             {
-                return;
+                List<StatData> statDataList = await GameManager.Instance.LoadAllAddressablesAsync<StatData>(statLabel);
+                
+                InitializeStats(statDataList);
+                _initialized = true;
             }
-
-            var statDataList = new List<StatData>();
-
-            var handle = Addressables.LoadAssetsAsync<StatData>(
-                statLabel,
-                data => statDataList.Add(data)
-            );
-
-            await handle.Task;
-            InitializeStats(statDataList);
-            _initialized = true;
+            catch (Exception e)
+            {
+                Debug.LogError($"[TeamStat] 초기화 중 오류 발생 ({statLabel}): {e.Message}");
+                _initialized = false;
+            }
         }
 
         private void InitializeStats(List<StatData> list)
         {
-            foreach (var data in list)
+            foreach (var data in list.Where(data => !Stats.ContainsKey(data.statType)))
             {
-                if (Stats.ContainsKey(data.statType))
-                    continue;
-
                 Stats[data.statType] = new BaseStat(data);
             }
         }

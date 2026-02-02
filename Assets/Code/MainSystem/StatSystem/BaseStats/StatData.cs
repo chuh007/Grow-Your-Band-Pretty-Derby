@@ -11,5 +11,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int minValue;
         public int maxValue;
         public Sprite statIcon;
+        
+        public StatRankTable rankTable;
     }
 }

@@ -18,7 +18,7 @@ namespace Code.MainSystem.StatSystem.Module
         VeryGood = 4    // 매우 좋음 (80-100%)
     }
     
-    public class StatUpgrade : MonoBehaviour
+    public class StatUpgradeModule : MonoBehaviour
     {
         [SerializeField] private string upgradeDataLabel;
         
