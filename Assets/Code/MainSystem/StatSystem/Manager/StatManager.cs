@@ -13,6 +13,7 @@ using Code.MainSystem.StatSystem.Stats;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.TraitSystem.TraitEffect;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -29,15 +30,16 @@ namespace Code.MainSystem.StatSystem.Manager
         [SerializeField] private List<MemberStat> memberStats;
         [SerializeField] private TeamStat teamStat;
 
+        [FormerlySerializedAs("upgradeModule")]
         [Header("StatModule")]
-        [SerializeField] private StatUpgrade upgradeModule;
+        [SerializeField] private StatUpgradeModule upgradeModuleModule;
         [SerializeField] private EnsembleModule ensembleModule;
 
         [Header("Settings")]
         [SerializeField] private float restRecoveryAmount = 10f;
 
         private Dictionary<MemberType, MemberStat> _memberMap;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
         public bool IsInitialized => _isInitialized;
         
         private StatRegistry _registry;
@@ -80,7 +82,7 @@ namespace Code.MainSystem.StatSystem.Manager
             {
                 await _registry.InitializeAsync();
                 
-                await upgradeModule.Initialize();
+                await upgradeModuleModule.Initialize();
                 await ensembleModule.Initialize();
                 _isInitialized = true; 
             }
@@ -176,8 +178,8 @@ namespace Code.MainSystem.StatSystem.Manager
 
         public bool PredictMemberPractice(float successRate, ITraitHolder holder)
         {
-            upgradeModule.SetCondition(successRate);
-            return upgradeModule.CanUpgrade(holder);
+            upgradeModuleModule.SetCondition(successRate);
+            return upgradeModuleModule.CanUpgrade(holder);
         }
 
         public ConditionHandler GetConditionHandler()
