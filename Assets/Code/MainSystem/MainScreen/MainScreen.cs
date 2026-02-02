@@ -30,8 +30,8 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private Image characterIcon;
         [SerializeField] private GameObject teamPanel;
 
-        [Header("Member Buttons (기본 화면)")]
-        [SerializeField] private List<Button> memberButtons;
+        [Header("Member Carousel (새 UI 시스템)")]
+        [SerializeField] private MemberCarousel memberCarousel;
 
         [Header("Components")]
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
@@ -43,17 +43,14 @@ namespace Code.MainSystem.MainScreen
         private StatUIUpdater _statUIUpdater;
         private List<UnitDataSO> _loadedUnits;
         
-        private readonly Dictionary<MemberType, Button> _memberButtonMap = new();
-        
         private static bool _returnedFromTeamPractice = false;
 
         #region Unity LifeCycle
 
         private async void Start()
         {
-            CacheMemberButtons();
             await LoadUnitsAsync();
-            RefreshAllMemberButtons();
+            
             if (_returnedFromTeamPractice)
             {
                 await CheckTeamPracticeReturn();
@@ -74,23 +71,6 @@ namespace Code.MainSystem.MainScreen
 
         #region Init
 
-        private void CacheMemberButtons()
-        {
-            _memberButtonMap.Clear();
-
-            foreach (var btn in memberButtons)
-            {
-                if (System.Enum.TryParse(btn.name, out MemberType type))
-                {
-                    _memberButtonMap[type] = btn;
-                }
-                else
-                {
-                    Debug.LogWarning($"Member 버튼 이름이 MemberType과 다름 : {btn.name}");
-                }
-            }
-        }
-
         private async Task LoadUnitsAsync()
         {
             _loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
@@ -104,10 +84,18 @@ namespace Code.MainSystem.MainScreen
             }
 
             _statUIUpdater = new StatUIUpdater(statNameTexts, statValueTexts, statIcons, StatManager.Instance);
-
-            if (_loadedUnits.Count > 0)
+            
+            if (memberCarousel != null)
             {
-                SelectUnit(_loadedUnits[0]);
+                memberCarousel.Init(_loadedUnits, OnMemberSelectedFromCarousel);
+            }
+            else
+            {
+                Debug.LogWarning("MemberCarousel이 할당되지 않았습니다!");
+                if (_loadedUnits.Count > 0)
+                {
+                    SelectUnit(_loadedUnits[0]);
+                }
             }
             
             teamPracticeCompo.CacheUnits(_loadedUnits);
@@ -134,32 +122,16 @@ namespace Code.MainSystem.MainScreen
 
         private void OnMemberTrainingStateChanged(MemberTrainingStateChangedEvent evt)
         {
-            UpdateMemberButtonVisual(evt.MemberType);
         }
 
-        #endregion
-
-        #region Member Button Visual
-
-        private void RefreshAllMemberButtons()
+        /// <summary>
+        /// 캐러셀에서 멤버가 선택되었을 때 호출되는 콜백
+        /// </summary>
+        private void OnMemberSelectedFromCarousel(UnitDataSO unit)
         {
-            foreach (var kv in _memberButtonMap)
+            if (unit != null)
             {
-                UpdateMemberButtonVisual(kv.Key);
-            }
-        }
-
-        private void UpdateMemberButtonVisual(MemberType member)
-        {
-            if (!_memberButtonMap.TryGetValue(member, out var btn))
-                return;
-
-            bool isTrained = TrainingManager.Instance.IsMemberTrained(member);
-
-            var image = btn.GetComponent<Image>();
-            if (image != null)
-            {
-                image.color = isTrained ? Color.gray : Color.white;
+                SelectUnit(unit);
             }
         }
 
@@ -170,21 +142,6 @@ namespace Code.MainSystem.MainScreen
         public void TeamButtonClicked()
         {
             teamPanel.gameObject.SetActive(true);
-           
-        }
-
-        public void MemberBtnClicked(string type)
-        {
-            if (!System.Enum.TryParse(type, out MemberType memberType))
-                return;
-            if (UnitSelector.TryGetUnit(type, out UnitDataSO unit) && unit != null)
-            {
-                SelectUnit(unit);
-            }
-            else
-            {
-                Debug.LogWarning($"No unit found for type: {type}");
-            }
         }
 
         #endregion
@@ -203,6 +160,11 @@ namespace Code.MainSystem.MainScreen
             _statUIUpdater.UpdateAll(unit);
 
             LoadUnitSprite(unit);
+            
+            if (UnitSelector != null)
+            {
+                UnitSelector.SetCurrentUnit(unit);
+            }
         }
 
         private async void LoadUnitSprite(UnitDataSO unit)
@@ -212,8 +174,12 @@ namespace Code.MainSystem.MainScreen
             
             restSelectCompo.CacheUnits(_loadedUnits);
             var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(unit.spriteAddressableKey);
-            characterIcon.sprite = sprite;
-            characterIcon.color = Color.white;
+            
+            if (characterIcon != null && sprite != null)
+            {
+                characterIcon.sprite = sprite;
+                characterIcon.color = Color.white;
+            }
         }
 
         #endregion
@@ -221,6 +187,25 @@ namespace Code.MainSystem.MainScreen
         public void SetReturnedFromTeamPractice()
         {
             _returnedFromTeamPractice = true;
+        }
+
+        /// <summary>
+        /// 외부에서 특정 멤버를 선택하도록 요청할 때 사용
+        /// </summary>
+        public void SelectMemberByType(MemberType memberType)
+        {
+            if (memberCarousel != null)
+            {
+                memberCarousel.SelectMember(memberType);
+            }
+            else
+            {
+                var unit = _loadedUnits.FirstOrDefault(u => u.memberType == memberType);
+                if (unit != null)
+                {
+                    SelectUnit(unit);
+                }
+            }
         }
     }
 }

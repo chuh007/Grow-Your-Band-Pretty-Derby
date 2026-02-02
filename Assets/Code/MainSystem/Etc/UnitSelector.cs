@@ -27,5 +27,14 @@ namespace Code.MainSystem.Etc
                 CurrentUnit = unit;
             return found;
         }
+
+        /// <summary>
+        /// 현재 선택된 유닛을 외부에서 설정
+        /// (캐러셀에서 선택된 유닛과 동기화하기 위해 사용)
+        /// </summary>
+        public void SetCurrentUnit(UnitDataSO unit)
+        {
+            CurrentUnit = unit;
+        }
     }
 }
