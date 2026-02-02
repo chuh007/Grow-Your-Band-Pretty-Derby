@@ -10,7 +10,9 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int MinValue { get; private set; }
         public int MaxValue { get; private set; }
         public Sprite StatIcon { get; private set; }
-        public StatRankTable RankTable { get; private set; }
+        public string CurrentRankName => RankTable != null ? RankTable.GetRankName(CurrentValue) : "N/A";
+        
+        private StatRankTable RankTable { get; set; }
 
         public BaseStat(StatData data)
         {
@@ -22,9 +24,6 @@ namespace Code.MainSystem.StatSystem.BaseStats
             MaxValue = data.maxValue;
             RankTable = data.rankTable;
         }
-
-        public string GetRankName(int value)
-            => RankTable.GetRankName(value);
 
         public void PlusValue(int value)
             => CurrentValue = Mathf.Clamp(CurrentValue + value, MinValue, MaxValue);

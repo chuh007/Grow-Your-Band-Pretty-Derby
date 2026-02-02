@@ -16,13 +16,6 @@ namespace Code.MainSystem.StatSystem.BaseStats
             stat?.PlusValue((int)value);
         }
 
-        public void ApplyRecover(StatType statType, int recoverValue)
-        {
-            BaseStat stat = Stats.GetValueOrDefault(statType);
-
-            stat?.PlusValue(recoverValue);
-        }
-
         public BaseStat GetStat(StatType statType)
         {
             return Stats.GetValueOrDefault(statType);
