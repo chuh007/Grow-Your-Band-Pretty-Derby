@@ -9,6 +9,7 @@ using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager.SubClass;
 using Code.MainSystem.Turn;
+using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.TraitSystem.Manager
 {
@@ -289,6 +290,11 @@ namespace Code.MainSystem.TraitSystem.Manager
         {
             foreach (var holder in _holders.Values)
                 _effectApplicator.ApplyEffects(holder, holder.ActiveTraits, evt.TraitEffectType);
+        }
+
+        public void NextScene()
+        {
+            SceneManager.LoadScene("Lch");
         }
     }
 }

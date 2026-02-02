@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 부상 특성
     /// </summary>
-    public class InjuryEffect : AbstractTraitEffect, IPercentageModifier, IStackable
+    public class InjuryEffect : AbstractTraitEffect, ISuccessRateStat, IPercentageModifier<ISuccessRateStat>, IStackable
     {
         public float Percentage { get; private set; }
         public int StackCount { get; private set; }
@@ -18,23 +18,6 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
             base.Initialize(trait);
             Percentage = N1(trait);
             MaxStack = (int)N2(trait);
-        }
-
-        public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
-        {
-            return true;
-        }
-
-        protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.RegisterModifier(this);
-        }
-
-        protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.UnregisterModifier(this);
-            Percentage = 0f;
-            MaxStack = 0;
         }
     }
 }

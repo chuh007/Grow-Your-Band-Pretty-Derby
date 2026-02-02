@@ -22,12 +22,47 @@ namespace Code.MainSystem.Rhythm.Core
         public ConcertType concertType;
         public List<NoteData> combinedChart;
         
-        public List<MemberGroup> members = new List<MemberGroup>();
+        public List<MemberGroup> members;
         
+        [Header("Result Data")]
+        [field: SerializeField] public int FinalScore { get; private set; }
+        [field: SerializeField] public bool IsSuccess { get; private set; }
+        [field: SerializeField] public bool IsFailed { get; private set; }
+
         [Header("Game Result Data")]
-        public bool isResultDataAvailable;
+        public bool isResultDataAvailable = false;
         public int allStatUpValue;
         public int harmonyStatUpValue;
         
+        public void Initialize(string songId, ConcertType concertType, List<MemberGroup> members)
+        {
+            this.songId = songId;
+            this.concertType = concertType;
+            this.members = members;
+            this.isResultDataAvailable = false;
+            this.FinalScore = 0;
+            this.IsSuccess = false;
+        }
+        
+        public void SetResult(int finalScore, bool isSuccess, bool isFailed)
+        {
+            FinalScore = finalScore;
+            IsSuccess = isSuccess;
+            IsFailed = isFailed;
+        }
+
+        public (bool isAvailable, int allStat, int harmonyStat) ConsumeResult()
+        {
+            if (!isResultDataAvailable) return (false, 0, 0);
+
+            var result = (true, allStatUpValue, harmonyStatUpValue);
+
+            // 데이터 파기 (초기화)
+            isResultDataAvailable = false;
+            allStatUpValue = 0;
+            harmonyStatUpValue = 0;
+
+            return result;
+        }
     }
 }

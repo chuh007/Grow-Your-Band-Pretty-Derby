@@ -1,13 +1,10 @@
 using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents; 
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Reflex.Attributes;
-
 using Code.MainSystem.Rhythm.Audio;
-using Code.MainSystem.Rhythm.Judgement;
 
 namespace Code.MainSystem.Rhythm.Core
 {
@@ -53,7 +50,7 @@ namespace Code.MainSystem.Rhythm.Core
             if (comboText != null) 
             {
                 comboText.text = evt.CurrentCombo > 0 ? $"{evt.CurrentCombo}" : "";
-                // 콤보 애니메이션 등을 여기에 추가할 수 있습니다.
+                // 콤보 애니메이션 등을 여기에 추가
             }
         }
         

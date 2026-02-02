@@ -1,7 +1,9 @@
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Code.MainSystem.Rhythm.Data;
 
 namespace Code.MainSystem.Rhythm.SceneTransition
 {
@@ -25,18 +27,29 @@ namespace Code.MainSystem.Rhythm.SceneTransition
             if (_landscapeGuideObj) _landscapeGuideObj.SetActive(toLandscape);
             if (_portraitGuideObj) _portraitGuideObj.SetActive(!toLandscape);
 
-            if (toLandscape)
+            // 타임아웃 설정을 위한 CTS 생성
+            using var cts = new CancellationTokenSource();
+            cts.CancelAfter(RhythmGameBalanceConsts.TRANSITION_TIMEOUT_MS);
+
+            try 
             {
-                Screen.orientation = ScreenOrientation.LandscapeLeft;
-                await UniTask.WaitUntil(() => Screen.width > Screen.height); 
+                if (toLandscape)
+                {
+                    Screen.orientation = ScreenOrientation.LandscapeLeft;
+                    await UniTask.WaitUntil(() => Screen.width > Screen.height, cancellationToken: cts.Token); 
+                }
+                else
+                {
+                    Screen.orientation = ScreenOrientation.Portrait;
+                    await UniTask.WaitUntil(() => Screen.height > Screen.width, cancellationToken: cts.Token); 
+                }
             }
-            else
+            catch (OperationCanceledException)
             {
-                Screen.orientation = ScreenOrientation.Portrait;
-                await UniTask.WaitUntil(() => Screen.height > Screen.width); 
+                Debug.LogWarning($"TransitionSceneController: Orientation change timed out after {RhythmGameBalanceConsts.TRANSITION_TIMEOUT_MS}ms. Proceeding anyway.");
             }
 
-            await UniTask.Delay(1000);
+            await UniTask.Delay(RhythmGameBalanceConsts.MIN_LOADING_TIME_MS);
 
             SceneManager.LoadScene(nextScene);
         }

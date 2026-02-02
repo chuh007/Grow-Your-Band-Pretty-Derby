@@ -8,10 +8,11 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 namespace Code.MainSystem.MainScreen.Training
 {
-    public class TeamPracticeCutsceneController : MonoBehaviour
+    public class TeamPracticeCutsceneController : MonoBehaviour, IPointerDownHandler
     {
         public PlayableDirector director;
         public TimelineAsset timelineAsset;
@@ -32,11 +33,36 @@ namespace Code.MainSystem.MainScreen.Training
         [Header("Icons")]
         [SerializeField] private Sprite conditionSprite;
 
+        [Header("Skip Settings")]
+        [SerializeField] private bool allowSkip = true;
+
+        private bool _isTimelinePlaying = true;
+        private bool _hasSkipped = false;
+
         private void Start()
         {
             ApplyTimelineBindings();
             director.stopped += OnTimelineEnd;
             director.Play();
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (_isTimelinePlaying && allowSkip && !_hasSkipped)
+            {
+                SkipTimeline();
+            }
+        }
+
+        private void SkipTimeline()
+        {
+            if (!_isTimelinePlaying || _hasSkipped) return;
+            
+            _hasSkipped = true;
+            Debug.Log("[TeamPracticeCutsceneController] Timeline skipped by user");
+            
+            director.time = director.duration;
+            director.Evaluate();
         }
 
         private void ApplyTimelineBindings()
@@ -69,6 +95,8 @@ namespace Code.MainSystem.MainScreen.Training
 
         private async void OnTimelineEnd(PlayableDirector director)
         {
+            _isTimelinePlaying = false;
+
             foreach (var binding in memberObjects)
             {
                 if (!binding.characterObject.activeInHierarchy) continue;
@@ -81,10 +109,14 @@ namespace Code.MainSystem.MainScreen.Training
             }
 
             await UniTask.Delay(1000);
-
+            
             foreach (var unit in TeamPracticeResultCache.SelectedMembers)
             {
+                CommentManager.instance.ClearAllComments();
+                
                 AddCommentForMember(unit);
+                CommentManager.instance.SetupComments(); 
+                
                 await ShowResultForMember(unit);
             }
             
@@ -135,13 +167,11 @@ namespace Code.MainSystem.MainScreen.Training
                 commentDataSO.comment,
                 statChanges,
                 PracticenType.Personal,
-                commentDataSO.icon,
-                isSuccess,
                 commentDataSO.thoughts,
                 unit.unitName 
             );
 
-            CommentManager.instance.AddComment(comment,true); 
+            CommentManager.instance.AddComment(comment, true); 
         }
 
         private async UniTask ShowResultForMember(UnitDataSO unit)
@@ -157,16 +187,24 @@ namespace Code.MainSystem.MainScreen.Training
                 }
             }
             
+            float currentTeamStatValue = StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue;
+            
+            Debug.Log($"[ShowResultForMember] Unit: {unit.unitName}");
+            Debug.Log($"[ShowResultForMember] TeamStatDelta from Cache: {TeamPracticeResultCache.TeamStatDelta}");
+            Debug.Log($"[ShowResultForMember] Current TeamStat Value: {currentTeamStatValue}");
+            
             await resultWindow.Play(
                 StatManager.Instance,
                 new List<UnitDataSO> { unit },
                 TeamPracticeResultCache.TeamConditionCurrent,
                 TeamPracticeResultCache.TeamConditionDelta,
                 TeamPracticeResultCache.TeamStat,
-                TeamPracticeResultCache.TeamStatDelta,
+                currentTeamStatValue, 
+                TeamPracticeResultCache.TeamStatDelta, 
                 statDeltaDict,
                 TeamPracticeResultCache.IsSuccess,
-                null
+                null,
+                true 
             );
         }
 
@@ -181,6 +219,11 @@ namespace Code.MainSystem.MainScreen.Training
         public void OnClickReturnToMain()
         {
             SceneManager.LoadScene("MainScene");
+        }
+
+        private void OnDestroy()
+        {
+            director.stopped -= OnTimelineEnd;
         }
     }
 }

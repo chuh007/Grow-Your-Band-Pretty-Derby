@@ -1,14 +1,19 @@
 ﻿using System;
 using UnityEngine;
-using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using System.Collections.Generic;
+using System.Linq;
+using Code.Core;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager.SubClass;
 using Code.MainSystem.StatSystem.Module;
 using Code.MainSystem.StatSystem.Stats;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
+using Code.MainSystem.TraitSystem.TraitEffect;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -25,15 +30,16 @@ namespace Code.MainSystem.StatSystem.Manager
         [SerializeField] private List<MemberStat> memberStats;
         [SerializeField] private TeamStat teamStat;
 
+        [FormerlySerializedAs("upgradeModule")]
         [Header("StatModule")]
-        [SerializeField] private StatUpgrade upgradeModule;
+        [SerializeField] private StatUpgradeModule upgradeModuleModule;
         [SerializeField] private EnsembleModule ensembleModule;
 
         [Header("Settings")]
         [SerializeField] private float restRecoveryAmount = 10f;
 
         private Dictionary<MemberType, MemberStat> _memberMap;
-        private bool _isInitialized = false;
+        private bool _isInitialized;
         public bool IsInitialized => _isInitialized;
         
         private StatRegistry _registry;
@@ -76,7 +82,7 @@ namespace Code.MainSystem.StatSystem.Manager
             {
                 await _registry.InitializeAsync();
                 
-                await upgradeModule.Initialize();
+                await upgradeModuleModule.Initialize();
                 await ensembleModule.Initialize();
                 _isInitialized = true; 
             }
@@ -97,9 +103,6 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
-            Bus<StatAllIncreaseEvent>.OnEvent += HandleAllMemberStatIncreaseRequested;
-            Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatIncreaseRequested;
-            Bus<StatAllMemberStatIncreaseEvent>.OnEvent += HandleMemberAllStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent += HandleTeamPracticeRequested;
         }
 
@@ -108,9 +111,6 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
-            Bus<StatAllIncreaseEvent>.OnEvent -= HandleAllMemberStatIncreaseRequested;
-            Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatIncreaseRequested;
-            Bus<StatAllMemberStatIncreaseEvent>.OnEvent -= HandleMemberAllStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent -= HandleTeamPracticeRequested;
         }
 
@@ -120,58 +120,41 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void HandlePracticeRequested(PracticenEvent evt)
         {
-            bool isSuccess = PredictMemberPractice(evt.SuccessRate);
-            
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
-            
-            if (!isSuccess)
-                return;
-            
-            // 성공 시 보상 적용
-            ApplyPracticeReward(evt);
-        }
+            ITraitHolder holder = TraitManager.Instance.GetHolder(evt.memberType);
+            bool isSuccess = PredictMemberPractice(evt.SuccessRate, holder);
 
-        private void ApplyPracticeReward(PracticenEvent evt)
-        {
-            if (evt.Type == PracticenType.Team)
-                _operator.IncreaseTeamStat(evt.Value);
-            else
-                _operator.IncreaseMemberStat(evt.memberType, evt.statType, evt.Value);
+            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
+
+            if (!isSuccess)
+            {
+                foreach (var inspiration in
+                         holder.GetModifiers<IInspirationSystem>()
+                             .OfType<FailureBreedsSuccessEffect>())
+                    inspiration.OnFailure();
+                return;
+            }
+
+            float rewardValue = evt.Value;
+
+            rewardValue = holder.GetFinalStat<ITrainingStat>(rewardValue);
+
+            if (evt.Type == PracticenType.Personal)
+                rewardValue = holder.GetFinalStat<IPracticeStat>(rewardValue);
+
+            _operator.IncreaseMemberStat(evt.memberType, evt.statType, rewardValue);
         }
 
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
             if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
                 return;
-            
             bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
-            
             Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
-            
-            if (isSuccess)
-            {
-                // TODO: 특성 시스템 완성 시 보상 추가
-            }
         }
 
         private void HandleSingleStatIncreaseRequested(StatIncreaseEvent evt)
         {
             _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, evt.Value);
-        }
-
-        private void HandleMemberAllStatIncreaseRequested(StatAllMemberStatIncreaseEvent evt)
-        {
-            _operator.IncreaseAllStatsForMember(evt.MemberType, evt.Value);
-        }
-
-        private void HandleAllMemberStatIncreaseRequested(StatAllIncreaseEvent evt)
-        {
-            _operator.IncreaseStatForAllMembers(evt.StatType, evt.Value);
-        }
-
-        private void HandleTeamStatIncreaseRequested(TeamStatIncreaseEvent evt)
-        {
-            _operator.IncreaseTeamStat(evt.AddValue);
         }
 
         private void HandleRestRequested(ConfirmRestEvent evt)
@@ -193,12 +176,22 @@ namespace Code.MainSystem.StatSystem.Manager
             return _registry.GetTeamStatValue(statType);
         }
 
-        public bool PredictMemberPractice(float successRate)
+        public bool PredictMemberPractice(float successRate, ITraitHolder holder)
         {
-            upgradeModule.SetCondition(successRate);
-            return upgradeModule.CanUpgrade();
+            upgradeModuleModule.SetCondition(successRate);
+            return upgradeModuleModule.CanUpgrade(holder);
         }
 
+        public ConditionHandler GetConditionHandler()
+        {
+            return _conditionHandler;
+        }
+        
+        public EnsembleModule GetEnsembleModuleHandler()
+        {
+            return ensembleModule;
+        }
+        
         #endregion
     }
 }

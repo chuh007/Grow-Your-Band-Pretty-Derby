@@ -1,6 +1,5 @@
 ﻿using Code.Core;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -12,19 +11,32 @@ namespace Code.MainSystem.MainScreen.Resting
         [SerializeField] private Transform sdRoot;
         [SerializeField] private Transform uiRoot;
         [SerializeField] private StatManager statManager;
-        
+
         public async UniTask PlayRestSequence(
             UnitDataSO unit,
             float beforeHealth,
             float afterHealth)
         {
-            var idleSDPrefab =
-                await GameManager.Instance.LoadAddressableAsync<GameObject>("Rest/SD/Idle");
+            var idleSDPrefab 
+                = await GameManager.Instance.LoadAddressableAsync<GameObject>("Rest/SD/Idle");
             var idleInstance = Instantiate(idleSDPrefab, sdRoot);
 
-            var bar = idleInstance.GetComponentInChildren<TrainingProgressBar>();
+            var progressImage = idleInstance.GetComponentInChildren<RestingProgressImage>();
+            
+            var idleSprite 
+                = await GameManager.Instance.LoadAddressableAsync<Sprite>("Sprites/Guitar/Idle");
+            var resultSprite 
+                = await GameManager.Instance.LoadAddressableAsync<Sprite>("Sprites/Guitar/Succse");
+            if (progressImage != null)
+            {
+                progressImage.SetProgressImage(idleSprite);
+            }
+
+            var bar = idleInstance.GetComponentInChildren<RestingProgressBar>();
             if (bar != null)
+            {
                 await bar.Play(1f);
+            }
 
             Destroy(idleInstance);
 
@@ -32,18 +44,19 @@ namespace Code.MainSystem.MainScreen.Resting
                 await GameManager.Instance.LoadAddressableAsync<GameObject>("Rest/UI/Result");
             var resultInstance = Instantiate(resultPrefab, uiRoot);
             var resultUI = resultInstance.GetComponent<RestResultUI>();
-
+            
             await resultUI.Play(
-                idleSprite: null,
-                resultSprite: null,
-                () => gameObject.SetActive(false),
+                idleSprite: idleSprite,
+                resultSprite: resultSprite,
+                onClose: () => gameObject.SetActive(false),
                 beforeHealth: beforeHealth,
                 maxHealth: unit.maxCondition
             );
-
+            
             await UniTask.Delay(300);
-
             resultUI.SetHealth(afterHealth, unit.maxCondition);
+            
+            await UniTask.WaitUntil(() => resultInstance == null);
         }
     }
 }

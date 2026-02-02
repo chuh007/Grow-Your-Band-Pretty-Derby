@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.Core.Bus.GameEvents.OutingEvents;
 using UnityEngine;
 
@@ -16,6 +17,11 @@ namespace Code.SubSystem.Collection
                 foreach (var evt in collection.plusEvents)
                 {
                     Bus<AddOutingEvent>.Raise(new AddOutingEvent(evt));
+                }
+
+                foreach (var encounter in collection.plusEncounters)
+                {
+                    Bus<EncounterAddEvent>.Raise(new EncounterAddEvent(encounter));
                 }
             }
         }

@@ -17,7 +17,6 @@ namespace Code.MainSystem.MainScreen.Training
 
         private GameObject _instance;
         private PersonalPracticeView _view;
-        private readonly StatManager statManager = StatManager.Instance;
 
         private MemberActionData _actionData;
 
@@ -27,7 +26,7 @@ namespace Code.MainSystem.MainScreen.Training
             PersonalpracticeDataSO dataSo,
             float currentCondition,
             StatData teamStatData,
-            float teamStatDelta)
+            float teamStatCurrentValue)
         {
             if (_instance == null)
             {
@@ -55,7 +54,7 @@ namespace Code.MainSystem.MainScreen.Training
                 isSuccess,
                 dataSo,
                 currentCondition,
-                statManager,
+                StatManager.Instance,
                 unitData.name,
                 (statDelta) =>
                 {
@@ -65,24 +64,30 @@ namespace Code.MainSystem.MainScreen.Training
 
             await tcs.Task; 
             _view.gameObject.SetActive(false);
+            
+            BaseStat personalStat = StatManager.Instance.GetMemberStat(unitData.memberType, dataSo.PracticeStatType);
+            float personalStatCurrentValue = personalStat != null ? personalStat.CurrentValue : 0;
+            
+            float conditionDelta = -dataSo.StaminaReduction;
+
             await practiceResultWindow.Play(
-                statManager,
+                StatManager.Instance,
                 new List<UnitDataSO> { unitData },
-                currentCondition,
-                isSuccess ? dataSo.statIncrease : -dataSo.StaminaReduction,
-                teamStatData,
-                teamStatDelta,
+                currentCondition,              
+                conditionDelta,              
+                teamStatData,                 
+                teamStatCurrentValue,
+                StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue,
                 new Dictionary<(MemberType, StatType), int>
                 {
-                    { (unitData.memberType, dataSo.PracticeStatType), receivedDelta }
+                    { (unitData.memberType, dataSo.PracticeStatType), receivedDelta } 
                 },
                 isSuccess,
-                dataSo 
+                dataSo,
+                false 
             );
-
 
             _instance.SetActive(false);
         }
-
     }
 }

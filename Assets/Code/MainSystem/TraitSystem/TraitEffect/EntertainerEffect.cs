@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 만담가 특성
     /// </summary>
-    public class EntertainerEffect : AbstractTraitEffect, IAdditiveModifier
+    public class EntertainerEffect : AbstractTraitEffect, IMentalStat, IAdditiveModifier<IMentalStat>
     {
         public float AdditiveValue { get; private set; }
         
@@ -14,22 +14,6 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         {
             base.Initialize(trait);
             AdditiveValue = N1(trait);
-        }
-
-        public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
-        {
-            return true;
-        }
-
-        protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.RegisterModifier(this);
-        }
-
-        protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.UnregisterModifier(this);
-            AdditiveValue = 0f;
         }
     }
 }

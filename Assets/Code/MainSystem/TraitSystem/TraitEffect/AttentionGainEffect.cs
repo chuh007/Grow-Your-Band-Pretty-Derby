@@ -6,7 +6,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 주목도 상승 특성
     /// </summary>
-    public class AttentionGainEffect : AbstractTraitEffect, IPercentageModifier
+    public class AttentionGainEffect : AbstractTraitEffect, IFeverTimeStat, IPercentageModifier<IFeverTimeStat>
     {
         public float Percentage { get; private set; }
 
@@ -14,23 +14,6 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         {
             base.Initialize(trait);
             Percentage = N1(trait);
-        }
-
-        public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
-        {
-            return true;
-        }
-
-        protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            Percentage = N1(trait);
-            holder.RegisterModifier(this);
-        }
-
-        protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder.UnregisterModifier(this);
-            Percentage = 0f;
         }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: Entertainer trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitID: 1012
+  TraitID: 1004
   TraitType: 9
   TraitName: "\uB9CC\uB2F4\uAC00"
   TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
@@ -20,12 +20,11 @@ MonoBehaviour:
   MaxLevel: 10
   Point: 7
   IsRemovable: 1
-  conditionType: 2
   Effects:
   - 5
   DescriptionEffect: "\uD569\uC8FC \uC2DC \uBAA8\uB4E0 \uBA64\uBC84\uC758 \uBA58\uD0C8
-    \uB2A5\uB825\uCE58 +{0}"
+    \uB2A5\uB825\uCE58 {0}"
   conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
     Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.StorytellerEffect, Assembly-CSharp,
+  effectName: Code.MainSystem.TraitSystem.TraitEffect.EntertainerEffect, Assembly-CSharp,
     Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

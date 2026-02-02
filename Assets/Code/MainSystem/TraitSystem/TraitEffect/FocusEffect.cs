@@ -6,30 +6,22 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
     /// <summary>
     /// 집중력 특성
     /// </summary>
-    public class FocusEffect : AbstractTraitEffect, IPercentageModifier
+    public class FocusEffect : AbstractTraitEffect, 
+        ISuccessRateStat, 
+        IPercentageModifier<ISuccessRateStat>, 
+        IJudgmentCorrection
     {
-        public float Percentage { get; private set; }
+        // 필드 이름을 명확히 구분
+        private float _successRateBonus;
+        public bool CorrectMissToGood => true;
 
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
-            Percentage = N1(trait);
+            _successRateBonus = N1(trait);
         }
 
-        public override bool CanApply(ITraitHolder holder, ActiveTrait trait)
-        {
-            return true;
-        }
-
-        protected override void ApplyEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.RegisterModifier(this);
-        }
-
-        protected override void RemoveEffect(ITraitHolder holder, ActiveTrait trait)
-        {
-            holder?.UnregisterModifier(this);
-            Percentage = 0f;
-        }
+        // 명시적으로 IPercentageModifier<ISuccessRateStat>의 Percentage임을 정의
+        float IPercentageModifier<ISuccessRateStat>.Percentage => _successRateBonus;
     }
 }

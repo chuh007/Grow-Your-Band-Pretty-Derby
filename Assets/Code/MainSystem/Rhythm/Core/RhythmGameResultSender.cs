@@ -1,8 +1,6 @@
-﻿using System;
-using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
+﻿using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.RhythmEvents;
-using Code.MainSystem.Etc;
+using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.Rhythm.SceneTransition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,6 +11,9 @@ namespace Code.MainSystem.Rhythm.Core
     {
         [SerializeField] private RhythmGameDataSenderSO dataSender;
         [SerializeField] private SceneTransitionSenderSO transitionSender;
+        [SerializeField] private string sceneName = "lch";
+        [SerializeField] private string transitionSceneName = "TransitionScene";
+        
         
         private RhythmGameResultEvent? _cachedResult;
         
@@ -38,33 +39,43 @@ namespace Code.MainSystem.Rhythm.Core
                 Debug.LogWarning("No result data to send!");
                 if (transitionSender != null)
                 {
-                    transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
-                    SceneManager.LoadScene("TransitionScene");
+                    transitionSender.SetTransition(sceneName, TransitionMode.ToPortrait);
+                    SceneManager.LoadScene(transitionSceneName);
                 }
                 else
                 {
-                    SceneManager.LoadScene("Test");
+                    SceneManager.LoadScene(sceneName);
                 }
                 return;
             }
 
             var evt = _cachedResult.Value;
 
-            dataSender.allStatUpValue = 1 + (int)(evt.FinalScore * 0.1f);
-            int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
-            dataSender.harmonyStatUpValue = memberCount * (int)(evt.FinalScore * 0.1f);
+            int currentScore = evt.FinalScore;
             
-            dataSender.isResultDataAvailable = true;
+            bool isSuccess = currentScore >= RhythmGameConsts.SUCCESS_SCORE_THRESHOLD;
+            bool isFailed = !isSuccess;
+            
+            dataSender.SetResult(currentScore, isSuccess, isFailed);
+
+            if (isSuccess)
+            {
+                dataSender.allStatUpValue = RhythmGameStatCalculator.CalculateAllStatGain(currentScore);
+                int memberCount = dataSender.members != null ? dataSender.members.Count : 0;
+                dataSender.harmonyStatUpValue = RhythmGameStatCalculator.CalculateHarmonyStatGain(currentScore, memberCount);
+                dataSender.isResultDataAvailable = true;
+            }
+            
 
             if (transitionSender != null)
             {
-                transitionSender.SetTransition("Test", TransitionMode.ToPortrait);
-                SceneManager.LoadScene("TransitionScene");
+                transitionSender.SetTransition(sceneName, TransitionMode.ToPortrait);
+                SceneManager.LoadScene(transitionSceneName);
             }
             else
             {
                 Debug.Log("Fail to submit result");
-                SceneManager.LoadScene("Test");
+                SceneManager.LoadScene(sceneName);
             }
         }
     }

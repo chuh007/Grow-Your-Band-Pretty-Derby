@@ -11,7 +11,6 @@ using Code.MainSystem.StatSystem.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 
 namespace Code.MainSystem.MainScreen
@@ -115,7 +114,7 @@ namespace Code.MainSystem.MainScreen
             _returnedFromTeamPractice = false;
             Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
-
+        
         #endregion
 
         #region Event Handling

@@ -10,21 +10,14 @@ namespace Code.MainSystem.Turn.UI
     {
         [SerializeField] private TextMeshProUGUI turnText;
         
-        [Inject] TurnManager _turnManager;
-        
-        private void Awake()
-        {
-            _turnManager.TurnChanged += HandleTurnChange;
-        }
-
         private void Start()
         {
-            Bus<TargetTurnSetEvent>.Raise(new TargetTurnSetEvent(15));
+            TurnManager.Instance.TurnChanged += HandleTurnChange;
         }
 
         private void OnDestroy()
         {
-            _turnManager.TurnChanged -= HandleTurnChange;
+            TurnManager.Instance.TurnChanged -= HandleTurnChange;
         }
 
         private void HandleTurnChange(int value)

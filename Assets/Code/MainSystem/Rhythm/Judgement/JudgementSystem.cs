@@ -1,13 +1,17 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Reflex.Attributes;
 using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 
 using Code.MainSystem.Rhythm.Notes;
 using Code.MainSystem.Rhythm.Audio;
 using Code.MainSystem.Rhythm.Data;
+using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
 
 namespace Code.MainSystem.Rhythm.Judgement
 {
@@ -18,50 +22,86 @@ namespace Code.MainSystem.Rhythm.Judgement
         [Inject] private ScoreManager _scoreManager;
         [Inject] private Conductor _conductor;
 
-        [Header("Base Timing Windows (Seconds +/-)")]
+        [Header("Timing Windows (Seconds +/-)")]
         [SerializeField] private double perfectWindow = 0.050; 
         [SerializeField] private double greatWindow = 0.100;   
-        [SerializeField] private double goodWindow = 0.150;    
+        [SerializeField] private double goodWindow = 0.150;
+        
+        [SerializeField] private double badWindow = 0.250; 
+        
+        [SerializeField] private double missWindow = 0.600;    
 
-        private PartDataSO _currentPartData;
+        private Dictionary<int, PartDataSO> _partDataMap = new Dictionary<int, PartDataSO>();
 
-        public void SetPartData(PartDataSO partData)
+        public void SetPartData(List<PartDataSO> partDataList)
         {
-            _currentPartData = partData;
+            _partDataMap.Clear();
+            foreach(var data in partDataList)
+            {
+                //TODO : 나중에 초기화 단계에서 할 게 있으면 채워넣기
+            }
+        }
+        
+        public void SetPartDataMap(Dictionary<int, PartDataSO> map)
+        {
+            _partDataMap = map;
         }
 
-        public void OnInputDetected(int laneIndex)
+        private JudgementType GetJudgement(double diff, float difficultyMult, int memberId)
+        {
+            JudgementType initialType;
+
+            if (diff <= perfectWindow * difficultyMult) 
+                initialType = JudgementType.Perfect;
+            else if (diff <= greatWindow * difficultyMult)
+                initialType = JudgementType.Great;
+            else if (diff <= goodWindow * difficultyMult)
+                initialType = JudgementType.Good;
+            else if (diff <= badWindow * difficultyMult) 
+                initialType = JudgementType.Bad;
+            else 
+                initialType = JudgementType.Miss;
+
+            return ApplyCorrection(initialType, memberId);
+        }
+
+        private JudgementType ApplyCorrection(JudgementType type, int memberId)
+        {
+            var holder = TraitManager.Instance.GetHolder((MemberType)memberId);
+            if (holder == null) return type;
+            
+            var corrections = holder.GetModifiers<IJudgmentCorrection>();
+
+            return corrections.Any(modifier => type == JudgementType.Miss && modifier.CorrectMissToGood) ? JudgementType.Good : type;
+        }
+
+        public void OnInputDetected()
         {
             if (_lineController == null || _conductor == null) return;
 
-            double songTime = _conductor.SongPosition;
-            double compensatedTime = songTime + _conductor.InputOffset;
-
-            NoteData targetNote = _lineController.GetNearestNote(compensatedTime);
-            
+            double compensatedTime = _conductor.SongPosition + _conductor.InputOffset;
+            NoteData targetNote = _lineController.GetClosestNoteAcrossAllTracks(compensatedTime);
+    
             if (targetNote == null) return;
 
             double diff = Math.Abs(targetNote.Time - compensatedTime);
+    
+            float difficultyMult = 1.0f;
+            if (_partDataMap.ContainsKey(targetNote.MemberId))
+            {
+                difficultyMult = _partDataMap[targetNote.MemberId].judgementDifficulty;
+            }
             
-            float difficultyMult = _currentPartData != null ? _currentPartData.judgementDifficulty : 1.0f;
+            if (diff > missWindow * difficultyMult) return; 
+            
+            JudgementType finalType = GetJudgement(diff, difficultyMult, targetNote.MemberId);
 
-            if (diff <= perfectWindow * difficultyMult)
-            {
-                HandleHit(targetNote, JudgementType.Perfect);
-            }
-            else if (diff <= greatWindow * difficultyMult)
-            {
-                HandleHit(targetNote, JudgementType.Great);
-            }
-            else if (diff <= goodWindow * difficultyMult)
-            {
-                HandleHit(targetNote, JudgementType.Good);
-            }
+            HandleInputResult(targetNote, finalType);
         }
 
-        private void HandleHit(NoteData note, JudgementType type)
+        private void HandleInputResult(NoteData note, JudgementType type)
         {
-            Debug.Log($"<color=cyan>{type}</color> Diff: {Math.Abs(note.Time - _conductor.SongPosition):F3}");
+            Debug.Log($"<color=cyan>Input Judgement: {type}</color> Diff: {Math.Abs(note.Time - _conductor.SongPosition):F3}");
             
             _lineController.RemoveNote(note);
 

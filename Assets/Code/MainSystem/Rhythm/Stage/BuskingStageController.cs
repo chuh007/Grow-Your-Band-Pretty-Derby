@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Code.Core.Addressable;
 using Cysharp.Threading.Tasks;
 using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.MainSystem.StatSystem.Manager;
 
@@ -82,7 +81,7 @@ namespace Code.MainSystem.Rhythm.Stage
                 }
 
                 MemberType memberType = members[i];
-                string key = string.Format(RhythmGameConsts.MemberPrefabFormat, memberType);
+                string key = string.Format(RhythmGameConsts.MEMBER_PREFAB_FORMAT, memberType);
                 
                 try 
                 {
@@ -138,7 +137,7 @@ namespace Code.MainSystem.Rhythm.Stage
 
         private async UniTaskVoid LoadAudiencePrefab()
         {
-            _audiencePrefabSource = await GameResourceManager.Instance.LoadAssetAsync<GameObject>(RhythmGameConsts.AudiencePrefab);
+            _audiencePrefabSource = await GameResourceManager.Instance.LoadAssetAsync<GameObject>(RhythmGameConsts.AUDIENCE_PREFAB);
         }
 
         protected override void OnProgressUpdated(float progress, float currentScore)
@@ -200,21 +199,31 @@ namespace Code.MainSystem.Rhythm.Stage
         private async UniTaskVoid SpawnAudienceSequence(int targetCount)
         {
             _isSpawning = true;
+            var token = this.GetCancellationTokenOnDestroy();
 
-            if (_audiencePrefabSource == null)
+            try 
             {
-                await UniTask.WaitUntil(() => _audiencePrefabSource != null);
-            }
+                if (_audiencePrefabSource == null)
+                {
+                    await UniTask.WaitUntil(() => _audiencePrefabSource != null, cancellationToken: token);
+                }
 
-            while (_currentAudienceCount < targetCount)
+                while (_currentAudienceCount < targetCount)
+                {
+                    SpawnSingleAudience(_currentAudienceCount);
+                    _currentAudienceCount++;
+
+                    await UniTask.Delay(millisecondsDelay, cancellationToken: token);
+                }
+            }
+            catch (System.OperationCanceledException) 
             {
-                SpawnSingleAudience(_currentAudienceCount);
-                _currentAudienceCount++;
-
-                await UniTask.Delay(millisecondsDelay);
+                
             }
-
-            _isSpawning = false;
+            finally
+            {
+                _isSpawning = false;
+            }
         }
 
         private void SpawnSingleAudience(int index)

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Code.Core;
 using Code.Core.Bus;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.StatSystem.Stats
 {
@@ -19,18 +20,23 @@ namespace Code.MainSystem.StatSystem.Stats
 
         protected override async void Awake()
         {
-            base.Awake();
+            Debug.Assert(!string.IsNullOrEmpty(statDataLabel), $"{gameObject.name}: statDataLabel이 비어있습니다!");
+            
+            try
+            {
+                base.Awake();
 
-            var handle = Addressables.LoadAssetsAsync<StatData>(
-                statDataLabel,
-                data => _statDataList.Add(data)
-            );
+                List<StatData> statDataList = await GameManager.Instance.LoadAllAddressablesAsync<StatData>(statDataLabel);
+                _statDataList.AddRange(statDataList);
 
-            await handle.Task;
-
-            InitializeStats(_statDataList);
-
-            Bus<TeamStatValueChangedEvent>.OnEvent += OnTeamStatChanged;
+                InitializeStats(_statDataList);
+                Bus<TeamStatValueChangedEvent>.OnEvent += OnTeamStatChanged;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[MemberStat] 초기화 실패: {e.Message}");
+                InitializeStats(new List<StatData>());
+            }
         }
 
         private void InitializeStats(List<StatData> list)

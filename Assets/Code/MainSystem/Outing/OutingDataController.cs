@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.OutingEvents;
 using Code.Core.Bus.GameEvents.TraitEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Dialogue;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
@@ -13,7 +14,7 @@ using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.Outing
 {
-    // 외출 종료시 데이터 받아서 처리해줌
+    // 외출 종료시 데이터 받아서 처리해주고, 턴 시작 시점에서 외출 설정
     public class OutingDataController : MonoBehaviour, ITurnStartComponent
     {
         [SerializeField] private OutingMemberEventListSO[] outingMemberEventLists;
@@ -85,7 +86,7 @@ namespace Code.MainSystem.Outing
                 Bus<TraitAddRequested>.Raise(new TraitAddRequested
                     (outingResultSender.targetMember.memberType, trait));
             }
-            TrainingManager.Instance.MarkMemberTrained(outingResultSender.targetMember.memberType);
+            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
 
         public void TurnStart()

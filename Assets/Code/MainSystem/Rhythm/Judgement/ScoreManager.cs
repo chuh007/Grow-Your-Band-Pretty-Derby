@@ -113,7 +113,11 @@ namespace Code.MainSystem.Rhythm.Judgement
                 statMult = mult;
             }
             
-            float feverMult = (_feverManager != null && _feverManager.IsFeverActive) ? 1.5f : 1.0f;
+            float feverMult = 1.0f;
+            if (_feverManager != null)
+            {
+                feverMult = _feverManager.GetFeverScoreMultiplier(memberId);
+            }
 
             float finalScoreAdded = 0;
             

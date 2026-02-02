@@ -30,11 +30,6 @@ namespace Code.MainSystem.Rhythm.Core
         [SerializeField] private CanvasGroup _loadingCanvasGroup;
         [SerializeField] private float _fadeDuration = 0.5f;
 
-        private const string KEY_ENV_BUSKING = "RhythmGame/Environment/Busking";
-        private const string KEY_ENV_LIVE    = "RhythmGame/Environment/Live";
-        private const string KEY_NOTE_BASIC  = "RhythmGame/Prefab/Note_Basic";
-        private const string KEY_VFX_HIT     = "RhythmGame/Prefab/HitEffect";
-
         private AudioClip _loadedMusic;
         private GameObject _loadedNotePrefab;
         private GameObject _loadedHitEffect;
@@ -70,11 +65,6 @@ namespace Code.MainSystem.Rhythm.Core
             ApplyStatsToManagers();
 
             await FadeInGameScreen();
-
-            if (_conductor != null)
-            {
-                _conductor.Play();
-            }
         }
 
         private void ApplyStatsToManagers()
@@ -170,13 +160,13 @@ namespace Code.MainSystem.Rhythm.Core
                 return;
             }
 
-            string musicKey = string.Format(RhythmGameConsts.MusicPathFormat, songId);
-            string envKey = _dataSender.concertType == ConcertType.Live ? RhythmGameConsts.EnvLive : RhythmGameConsts.EnvBusking;
+            string musicKey = string.Format(RhythmGameConsts.MUSIC_PATH_FORMAT, songId);
+            string envKey = _dataSender.concertType == ConcertType.Live ? RhythmGameConsts.ENV_LIVE : RhythmGameConsts.ENV_BUSKING;
 
             _loadedMusic = await SafeLoadAssetAsync<AudioClip>(musicKey);
-            _loadedNotePrefab = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.NoteBasic);
+            _loadedNotePrefab = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.NOTE_BASIC);
             
-            _loadedHitEffect = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.VfxHit);
+            _loadedHitEffect = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.VFX_HIT);
             _loadedEnvPrefab = await SafeLoadAssetAsync<GameObject>(envKey);
 
             var chartData = await ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
@@ -193,13 +183,13 @@ namespace Code.MainSystem.Rhythm.Core
                 }
                 else
                 {
-                    Debug.LogError($"[Rhythm] Loaded Note Prefab does not have RhythmPulse component: {RhythmGameConsts.NoteBasic}");
+                    Debug.LogError($"[Rhythm] Loaded Note Prefab does not have RhythmPulse component: {RhythmGameConsts.NOTE_BASIC}");
                 }
             }
-            else Debug.LogError($"[Rhythm] Note Prefab is missing: {RhythmGameConsts.NoteBasic}");
+            else Debug.LogError($"[Rhythm] Note Prefab is missing: {RhythmGameConsts.NOTE_BASIC}");
 
             if (_loadedHitEffect != null) _hitFeedbackManager.SetHitEffectPrefab(_loadedHitEffect);
-            else Debug.LogWarning($"[Rhythm] Hit Effect is missing: {RhythmGameConsts.VfxHit}");
+            else Debug.LogWarning($"[Rhythm] Hit Effect is missing: {RhythmGameConsts.VFX_HIT}");
 
             if (_loadedEnvPrefab != null)
             {
