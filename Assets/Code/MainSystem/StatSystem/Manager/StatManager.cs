@@ -101,9 +101,6 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
-            Bus<StatAllIncreaseEvent>.OnEvent += HandleAllMemberStatIncreaseRequested;
-            Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatIncreaseRequested;
-            Bus<StatAllMemberStatIncreaseEvent>.OnEvent += HandleMemberAllStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent += HandleTeamPracticeRequested;
         }
 
@@ -112,9 +109,6 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
-            Bus<StatAllIncreaseEvent>.OnEvent -= HandleAllMemberStatIncreaseRequested;
-            Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatIncreaseRequested;
-            Bus<StatAllMemberStatIncreaseEvent>.OnEvent -= HandleMemberAllStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent -= HandleTeamPracticeRequested;
         }
 
@@ -147,18 +141,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
             _operator.IncreaseMemberStat(evt.memberType, evt.statType, rewardValue);
         }
-        
-        public float GetFinalRewardValue(MemberType member, StatType statType, float baseValue)
-        {
-            ITraitHolder holder = TraitManager.Instance.GetHolder(member);
-            float finalValue = baseValue;
-            
-            if (statType == StatType.Mental)
-                finalValue = holder.GetFinalStat<IMentalStat>(finalValue);
 
-            return finalValue;
-        }
-        
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
             if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
@@ -170,21 +153,6 @@ namespace Code.MainSystem.StatSystem.Manager
         private void HandleSingleStatIncreaseRequested(StatIncreaseEvent evt)
         {
             _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, evt.Value);
-        }
-
-        private void HandleMemberAllStatIncreaseRequested(StatAllMemberStatIncreaseEvent evt)
-        {
-            _operator.IncreaseAllStatsForMember(evt.MemberType, evt.Value);
-        }
-
-        private void HandleAllMemberStatIncreaseRequested(StatAllIncreaseEvent evt)
-        {
-            _operator.IncreaseStatForAllMembers(evt.StatType, evt.Value);
-        }
-
-        private void HandleTeamStatIncreaseRequested(TeamStatIncreaseEvent evt)
-        {
-            _operator.IncreaseTeamStat(evt.AddValue);
         }
 
         private void HandleRestRequested(ConfirmRestEvent evt)
