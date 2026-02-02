@@ -2,7 +2,7 @@
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
-    public class BaseStat : IModifierStat
+    public class BaseStat
     {
         public StatType StatType { get; private set; }
         public string StatName { get; private set; }
