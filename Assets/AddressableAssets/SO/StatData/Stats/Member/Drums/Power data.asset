@@ -18,3 +18,4 @@ MonoBehaviour:
   minValue: 0
   maxValue: 100
   statIcon: {fileID: 0}
+  rankTable: {fileID: 11400000, guid: 82b52e190a619834297bf7f423f884d6, type: 2}
