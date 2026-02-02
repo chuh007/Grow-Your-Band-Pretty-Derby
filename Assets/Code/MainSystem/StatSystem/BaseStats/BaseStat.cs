@@ -2,7 +2,7 @@
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
-    public class BaseStat : IModifierStat
+    public class BaseStat
     {
         public StatType StatType { get; private set; }
         public string StatName { get; private set; }
@@ -10,6 +10,9 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int MinValue { get; private set; }
         public int MaxValue { get; private set; }
         public Sprite StatIcon { get; private set; }
+        public string CurrentRankName => RankTable != null ? RankTable.GetRankName(CurrentValue) : "N/A";
+        
+        private StatRankTable RankTable { get; set; }
 
         public BaseStat(StatData data)
         {
@@ -19,9 +22,10 @@ namespace Code.MainSystem.StatSystem.BaseStats
             StatIcon = data.statIcon;
             MinValue = data.minValue;
             MaxValue = data.maxValue;
+            RankTable = data.rankTable;
         }
 
-        public void PlusValue(int value) 
+        public void PlusValue(int value)
             => CurrentValue = Mathf.Clamp(CurrentValue + value, MinValue, MaxValue);
 
         public void MultiplyValue(int value)
@@ -31,15 +35,11 @@ namespace Code.MainSystem.StatSystem.BaseStats
             => CurrentValue = Mathf.Clamp(CurrentValue - value, MinValue, MaxValue);
 
         public void PlusPercentValue(int value)
-        {
-            int addValue = Mathf.RoundToInt(CurrentValue * (value / 100f));
-            CurrentValue = Mathf.Clamp(CurrentValue + addValue, MinValue, MaxValue);
-        }
-
+            => CurrentValue = Mathf.Clamp(CurrentValue + Mathf.RoundToInt(CurrentValue * (value / 100f)), MinValue,
+                MaxValue);
+        
         public void MinusPercentValue(int value)
-        {
-            int subtractValue = Mathf.RoundToInt(CurrentValue * (value / 100f));
-            CurrentValue = Mathf.Clamp(CurrentValue - subtractValue, MinValue, MaxValue);
-        }
+            => CurrentValue = Mathf.Clamp(CurrentValue - Mathf.RoundToInt(CurrentValue * (value / 100f)), MinValue,
+                MaxValue);
     }
 }
