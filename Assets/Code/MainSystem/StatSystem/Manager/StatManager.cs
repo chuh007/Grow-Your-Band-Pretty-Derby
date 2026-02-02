@@ -38,9 +38,11 @@ namespace Code.MainSystem.StatSystem.Manager
         [Header("Settings")]
         [SerializeField] private float restRecoveryAmount = 10f;
 
-        private Dictionary<MemberType, MemberStat> _memberMap;
-        private bool _isInitialized;
         public bool IsInitialized => _isInitialized;
+        
+        private bool _isInitialized;
+        
+        private Dictionary<MemberType, MemberStat> _memberMap;
         
         private StatRegistry _registry;
         private StatOperator _operator;
@@ -88,7 +90,7 @@ namespace Code.MainSystem.StatSystem.Manager
             }
             catch (Exception e)
             {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR
                 Debug.LogError($"StatManager 초기화 실패: {e}");
 #endif
             }
@@ -173,7 +175,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         public BaseStat GetTeamStat(StatType statType)
         {
-            return _registry.GetTeamStatValue(statType);
+            return _registry.GetTeamStatValue();
         }
 
         public bool PredictMemberPractice(float successRate, ITraitHolder holder)

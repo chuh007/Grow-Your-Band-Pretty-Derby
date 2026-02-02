@@ -53,7 +53,7 @@ MonoBehaviour:
   - {fileID: 234794193466078422}
   - {fileID: 3648603304473147580}
   teamStat: {fileID: 6637089592258978425}
-  upgradeModule: {fileID: 3016641898987846928}
+  upgradeModuleModule: {fileID: 3016641898987846928}
   ensembleModule: {fileID: 3536337859171953911}
   restRecoveryAmount: 10
 --- !u!1 &5656882154430880968
