@@ -35,9 +35,9 @@ namespace Code.MainSystem.StatSystem.Module
         /// <summary>
         /// 현재 컨디션 레벨 반환
         /// </summary>
-        private ConditionLevel GetConditionLevel()
+        private ConditionLevel GetConditionLevel(float condition)
         {
-            return _currentCondition switch
+            return condition switch
             {
                 < 20f => ConditionLevel.VeryBad,
                 < 40f => ConditionLevel.Bad,
@@ -46,12 +46,23 @@ namespace Code.MainSystem.StatSystem.Module
                 _ => ConditionLevel.VeryGood
             };
         }
-
+        
+        /// <summary>
+        /// 특정 홀더(멤버)의 현재 컨디션 기반 최종 성공 확률을 반환
+        /// </summary>
+        public float GetFinalSuccessRate(float condition, ITraitHolder holder)
+        {
+            ConditionLevel level = GetConditionLevel(condition); 
+            float baseRate = _upgradeData.conditionSuccessRates[(int)level];
+            
+            return holder.GetFinalStat<ISuccessRateStat>(baseRate);
+        }
+        
         /// <summary>
         /// 컨디션 레벨에 따른 성공 확률 반환
         /// </summary>
         private float GetSuccessRate()
-            => _upgradeData.conditionSuccessRates[(int)GetConditionLevel()];
+            => _upgradeData.conditionSuccessRates[(int)GetConditionLevel(_currentCondition)];
 
         /// <summary>
         /// 훈련 성공 여부 판정

@@ -38,9 +38,11 @@ namespace Code.MainSystem.StatSystem.Manager
         [Header("Settings")]
         [SerializeField] private float restRecoveryAmount = 10f;
 
-        private Dictionary<MemberType, MemberStat> _memberMap;
-        private bool _isInitialized;
         public bool IsInitialized => _isInitialized;
+        
+        private bool _isInitialized;
+        
+        private Dictionary<MemberType, MemberStat> _memberMap;
         
         private StatRegistry _registry;
         private StatOperator _operator;
@@ -88,7 +90,7 @@ namespace Code.MainSystem.StatSystem.Manager
             }
             catch (Exception e)
             {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR
                 Debug.LogError($"StatManager 초기화 실패: {e}");
 #endif
             }
@@ -165,6 +167,27 @@ namespace Code.MainSystem.StatSystem.Manager
         #endregion
 
         #region Public API
+        
+        /// <summary>
+        /// 현재 멤버들의 컨디션 리스트를 받아 예상 합주 성공 확률을 반환합니다.
+        /// </summary>
+        /// <param name="memberConditions">참여하는 멤버들의 컨디션 값 리스트</param>
+        /// <returns>0 ~ 100 사이의 성공 확률</returns>
+        public float GetEnsembleSuccessRate(List<float> memberConditions)
+        {
+            return ensembleModule.CalculateSuccessRate(memberConditions);
+        }
+
+        /// <summary>
+        /// 개인 훈련 예상 성공 확률을 가져옵니다.
+        /// </summary>
+        /// <param name="memberType">대상 멤버</param>
+        /// <param name="condition">현재 컨디션 수치</param>
+        public float GetPersonalSuccessRate(MemberType memberType, float condition)
+        {
+            ITraitHolder holder = TraitManager.Instance.GetHolder(memberType);
+            return upgradeModuleModule.GetFinalSuccessRate(condition, holder);
+        }
 
         public BaseStat GetMemberStat(MemberType memberType, StatType statType)
         {
@@ -173,7 +196,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         public BaseStat GetTeamStat(StatType statType)
         {
-            return _registry.GetTeamStatValue(statType);
+            return _registry.GetTeamStatValue();
         }
 
         public bool PredictMemberPractice(float successRate, ITraitHolder holder)
