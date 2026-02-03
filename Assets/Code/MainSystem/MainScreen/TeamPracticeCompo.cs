@@ -12,6 +12,7 @@ using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
+using TMPro;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -40,6 +41,9 @@ namespace Code.MainSystem.MainScreen
         [Header("Practice Settings")]
         [SerializeField] private float teamConditionCost = 5f;
         [SerializeField] private MainScreen mainScreen;
+
+        [Header("UI")] 
+        [SerializeField] private TextMeshProUGUI probabilityText;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
         private readonly Dictionary<MemberType, Vector3> _originalPosMap = new();
@@ -226,6 +230,16 @@ namespace Code.MainSystem.MainScreen
         private void UpdateUI()
         {
             startPracticeButton.interactable = _isTeamPracticeMode && _selectedMembers.Count >= 2;
+            if (_selectedMembers.Count >= 2)
+            {
+                var conditions = _selectedMembers.Select(u => u.currentCondition).ToList();
+                float successRate = StatManager.Instance.GetEnsembleSuccessRate(conditions);
+                probabilityText.SetText($"성공확률 : {successRate}%"); 
+            }
+            else
+            {
+                probabilityText.SetText("0%");
+            }
         }
     }
 }

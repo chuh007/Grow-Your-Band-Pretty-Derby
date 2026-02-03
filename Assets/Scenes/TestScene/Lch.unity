@@ -9032,6 +9032,7 @@ MonoBehaviour:
   teamHealthBar: {fileID: 508380102}
   teamConditionCost: 5
   mainScreen: {fileID: 904073741}
+  probabilityText: {fileID: 1590115965}
 --- !u!114 &904073745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14137,11 +14138,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.5
+      value: -9.2
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14
+      value: 4.8
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
@@ -22438,6 +22439,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 904073744}
+    - target: {fileID: 6690285138889598841, guid: f21ed45508879dc489ae5bc21be458b0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Vocal
+      objectReference: {fileID: 0}
     - target: {fileID: 6976138030134841895, guid: f21ed45508879dc489ae5bc21be458b0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
