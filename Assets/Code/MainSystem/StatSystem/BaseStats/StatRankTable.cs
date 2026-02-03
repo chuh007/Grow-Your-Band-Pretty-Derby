@@ -7,7 +7,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
     [Serializable]
     public struct StatRank 
     {
-        public string RankName;
+        public StatRankType RankName;
         public int Threshold;
         public Sprite RankIcon;
     }
@@ -22,14 +22,14 @@ namespace Code.MainSystem.StatSystem.BaseStats
         /// </summary>
         /// <param name="value">판정할 현재 스탯 값</param>
         /// <returns>해당 수치 구간의 등급 명칭, 어떤 등급 조건도 만족하지 못할 경우 "Null"을 반환한다.</returns>
-        public string GetRankName(int value)
+        public StatRankType GetRankName(int value)
         {
             for (int i = Ranks.Count - 1; i >= 0; i--)
             {
                 if (value >= Ranks[i].Threshold)
                     return Ranks[i].RankName;
             }
-            return "Null";
+            return StatRankType.None;
         }
         
         /// <summary>

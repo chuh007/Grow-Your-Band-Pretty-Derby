@@ -11,7 +11,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int MaxValue { get; private set; }
         public Sprite StatIcon { get; private set; }
         
-        public string CurrentRankName => RankTable != null ? RankTable.GetRankName(CurrentValue) : "N/A";
+        public StatRankType CurrentRankName => RankTable != null ? RankTable.GetRankName(CurrentValue) : StatRankType.None;
         public Sprite CurrentRankIcon => RankTable != null ? RankTable.GetRankIcon(CurrentValue) : null;
         
         private StatRankTable RankTable { get; set; }
