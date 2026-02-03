@@ -15,6 +15,14 @@ namespace Code.MainSystem.Rhythm.Judgement
     {
         public int CurrentScore { get; private set; }
         public int CurrentCombo { get; private set; }
+
+        public int MaxCombo => _maxCombo;
+        public int PerfectCount => _perfectCount;
+        public int GreatCount => _greatCount;
+        public int GoodCount => _goodCount;
+        public int MissCount => _missCount;
+        
+        
         private int _maxCombo; 
 
         private int _perfectCount;
@@ -147,7 +155,7 @@ namespace Code.MainSystem.Rhythm.Judgement
             ));
         }
 
-        private string CalculateRank(int score)
+        public string CalculateRank(int score)
         {
             if (score >= 100000) return "S";
             if (score >= 80000) return "A";

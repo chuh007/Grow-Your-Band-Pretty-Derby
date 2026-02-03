@@ -4,6 +4,8 @@ using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.Rhythm.SceneTransition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Reflex.Attributes;
+using Code.MainSystem.Rhythm.Judgement;
 
 namespace Code.MainSystem.Rhythm.Core
 {
@@ -14,6 +16,7 @@ namespace Code.MainSystem.Rhythm.Core
         [SerializeField] private string sceneName = "lch";
         [SerializeField] private string transitionSceneName = "TransitionScene";
         
+        [Inject] private ScoreManager _scoreManager;
         
         private RhythmGameResultEvent? _cachedResult;
         
@@ -25,6 +28,27 @@ namespace Code.MainSystem.Rhythm.Core
         private void OnDestroy()
         {
             Bus<RhythmGameResultEvent>.OnEvent -= OnRhythmGameResult;
+        }
+        
+        public void SendResult()
+        {
+            if (_scoreManager == null)
+            {
+                Debug.LogError("RhythmGameResultSender: ScoreManager is missing.");
+                return;
+            }
+
+            string rank = _scoreManager.CalculateRank(_scoreManager.CurrentScore);
+
+            Bus<RhythmGameResultEvent>.Raise(new RhythmGameResultEvent(
+                _scoreManager.CurrentScore,
+                _scoreManager.MaxCombo,
+                rank,
+                _scoreManager.PerfectCount,
+                _scoreManager.GreatCount,
+                _scoreManager.GoodCount,
+                _scoreManager.MissCount
+            ));
         }
         
         private void OnRhythmGameResult(RhythmGameResultEvent evt)
