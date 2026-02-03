@@ -12,6 +12,7 @@ using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
+using TMPro;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -35,12 +36,14 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private float liftY = 20f;
 
         [Header("Health Bars")]
-        [SerializeField] private List<UnitHealthBars> unitHealthBars;
         [SerializeField] private HealthBar teamHealthBar;
 
         [Header("Practice Settings")]
         [SerializeField] private float teamConditionCost = 5f;
         [SerializeField] private MainScreen mainScreen;
+
+        [Header("UI")] 
+        [SerializeField] private TextMeshProUGUI probabilityText;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
         private readonly Dictionary<MemberType, Vector3> _originalPosMap = new();
@@ -77,7 +80,6 @@ namespace Code.MainSystem.MainScreen
                 _unitMap[unit.memberType] = unit;
 
             InitButtons();
-            InitHealthBars();
         }
 
         private void InitButtons()
@@ -89,15 +91,6 @@ namespace Code.MainSystem.MainScreen
                     _buttonMap[type] = btn;
                     _originalPosMap[type] = btn.transform.localPosition;
                 }
-            }
-        }
-
-        private void InitHealthBars()
-        {
-            foreach (var bar in unitHealthBars)
-            {
-                if (_unitMap.TryGetValue(bar.memberType, out var unit))
-                    bar.healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
             }
         }
 
@@ -129,10 +122,6 @@ namespace Code.MainSystem.MainScreen
 
             _buttonMap[member].transform.localPosition = _originalPosMap[member] + Vector3.up * liftY;
 
-            var bar = unitHealthBars.Find(b => b.memberType == member);
-            if (bar != null)
-                bar.healthBar.PrevieMinusHealth(teamConditionCost);
-
             teamHealthBar.SetHealth(unit.currentCondition, unit.maxCondition);
             teamHealthBar.PrevieMinusHealth(teamConditionCost);
         }
@@ -143,10 +132,6 @@ namespace Code.MainSystem.MainScreen
             _selectedMembers.Remove(unit);
 
             _buttonMap[member].transform.localPosition = _originalPosMap[member];
-
-            var bar = unitHealthBars.Find(b => b.memberType == member);
-            if (bar != null)
-                bar.healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
 
             teamHealthBar.SetHealth(unit.currentCondition, unit.maxCondition);
         }
@@ -219,9 +204,6 @@ namespace Code.MainSystem.MainScreen
             {
                 unit.currentCondition = Mathf.Clamp(unit.currentCondition - teamConditionCost, 0, unit.maxCondition);
 
-                var bar = unitHealthBars.Find(b => b.memberType == unit.memberType);
-                bar?.healthBar.ApplyHealth(teamConditionCost);
-
                 TrainingManager.Instance.MarkMemberTrained(unit.memberType);
             }
         }
@@ -238,10 +220,6 @@ namespace Code.MainSystem.MainScreen
             {
                 if (_buttonMap.TryGetValue(member.memberType, out var btn))
                     btn.transform.localPosition = _originalPosMap[member.memberType];
-
-                var bar = unitHealthBars.Find(b => b.memberType == member.memberType);
-                if (bar != null)
-                    bar.healthBar.SetHealth(member.currentCondition, member.maxCondition);
             }
 
             teamHealthBar.PrevieMinusHealth(0);
@@ -252,6 +230,16 @@ namespace Code.MainSystem.MainScreen
         private void UpdateUI()
         {
             startPracticeButton.interactable = _isTeamPracticeMode && _selectedMembers.Count >= 2;
+            if (_selectedMembers.Count >= 2)
+            {
+                var conditions = _selectedMembers.Select(u => u.currentCondition).ToList();
+                float successRate = StatManager.Instance.GetEnsembleSuccessRate(conditions);
+                probabilityText.SetText($"성공확률 : {successRate}%"); 
+            }
+            else
+            {
+                probabilityText.SetText("0%");
+            }
         }
     }
 }
