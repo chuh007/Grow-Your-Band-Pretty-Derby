@@ -12,7 +12,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public Sprite StatIcon { get; private set; }
         
         public StatRankType CurrentRankName => RankTable != null ? RankTable.GetRankName(CurrentValue) : StatRankType.None;
-        public Sprite CurrentRankIcon => RankTable != null ? RankTable.GetRankIcon(CurrentValue) : null;
+        public Sprite CurrentRankIcon => RankTable != null ? RankTable.GetRankIcon(CurrentValue).Asset as Sprite : null;
         
         private StatRankTable RankTable { get; set; }
 
