@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Code.Core;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
@@ -113,15 +115,19 @@ namespace Code.MainSystem.MainScreen.Training
             foreach (var unit in TeamPracticeResultCache.SelectedMembers)
             {
                 CommentManager.instance.ClearAllComments();
-                
                 AddCommentForMember(unit);
-                CommentManager.instance.SetupComments(); 
-                
+                CommentManager.instance.SetupComments();
                 await ShowResultForMember(unit);
             }
             
-            Debug.Log("[TeamPracticeCutsceneController] 모든 결과 확인 완료, 메인 씬으로 이동");
-            await UniTask.Delay(500); 
+            Debug.Log("[TeamPracticeCutsceneController] 모든 결과 확인 완료");
+            
+            Debug.Log("[TeamPracticeCutsceneController] Raising CheckTurnEnd event");
+            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+            
+            await UniTask.Delay(500);
+            
+            Debug.Log("[TeamPracticeCutsceneController] Moving to main scene");
             SceneManager.LoadScene("Lch");
         }
 

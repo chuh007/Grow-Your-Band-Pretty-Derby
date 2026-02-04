@@ -69,7 +69,6 @@ namespace Code.MainSystem.MainScreen
         {
             _wasSuccess = evt.IsSuccess;
             BuildResultCache();
-            mainScreen.SetReturnedFromTeamPractice();
             SceneManager.LoadScene("Ensembleproductiontest");
         }
 
