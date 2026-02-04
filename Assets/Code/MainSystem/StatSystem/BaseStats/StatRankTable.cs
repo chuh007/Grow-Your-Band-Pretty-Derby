@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
@@ -9,7 +10,7 @@ namespace Code.MainSystem.StatSystem.BaseStats
     {
         public StatRankType RankName;
         public int Threshold;
-        public Sprite RankIcon;
+        public AssetReferenceSprite RankIconReference;
     }
     
     [CreateAssetMenu(fileName = "Stat rank", menuName = "SO/Stat/Stat rank", order = 0)]
@@ -37,12 +38,12 @@ namespace Code.MainSystem.StatSystem.BaseStats
         /// </summary>
         /// <param name="value">판정할 현재 스탯 값</param>
         /// <returns>해당 수치 구간의 등급 아이콘, 어떤 등급 조건도 만족하지 못할 경우 Null을 반환한다.</returns>
-        public Sprite GetRankIcon(int value)
+        public AssetReferenceSprite GetRankIcon(int value)
         {
             for (int i = Ranks.Count - 1; i >= 0; i--)
             {
                 if (value >= Ranks[i].Threshold)
-                    return Ranks[i].RankIcon;
+                    return Ranks[i].RankIconReference;
             }
             
             return null;
