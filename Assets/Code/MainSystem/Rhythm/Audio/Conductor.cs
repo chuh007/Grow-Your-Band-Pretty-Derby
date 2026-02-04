@@ -1,11 +1,11 @@
 using UnityEngine;
 using System;
 using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 
 namespace Code.MainSystem.Rhythm.Audio
 {
+    [DefaultExecutionOrder(-5)]
     public class Conductor : MonoBehaviour
     {
         [Header("Dependencies")]
