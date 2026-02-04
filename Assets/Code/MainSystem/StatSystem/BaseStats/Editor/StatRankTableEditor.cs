@@ -26,17 +26,14 @@ namespace Code.MainSystem.StatSystem.BaseStats.Editor
         private const string EnumFilePath = "Assets/Code/MainSystem/StatSystem/BaseStats/StatRankType.cs";
         private const string WindowTitle = "Stat Rank Manager";
 
-        [MenuItem("Tools/Stat/StatRank Manager")]
+        [MenuItem("Tools/Stat/Stat Rank Manager")]
         public static void ShowWindow()
             => GetWindow<StatRankTableEditor>(WindowTitle).Show();
 
         public void CreateGUI()
         {
             if (view == null)
-            {
-                rootVisualElement.Add(new Label("VisualTreeAsset(uxml)이 할당되지 않았습니다."));
                 return;
-            }
 
             view.CloneTree(rootVisualElement);
             BindVisualElements();
