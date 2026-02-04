@@ -14,6 +14,15 @@ namespace Code.MainSystem.Rhythm.Stage
         [Inject] private Conductor _conductor;
         private bool _isPlaying = false;
 
+        private void Awake()
+        {
+            if (director != null)
+            {
+                director.timeUpdateMode = DirectorUpdateMode.Manual;
+                director.playOnAwake = false;
+            }
+        }
+
         private void Update()
         {
             if (!_isPlaying || director == null) return;
@@ -39,16 +48,17 @@ namespace Code.MainSystem.Rhythm.Stage
 
         private void OnSongStart(SongStartEvent evt)
         {
-            director.time = 0;
-            director.Play();
-            director.Evaluate();
+            if (director != null)
+            {
+                director.time = 0;
+                director.Evaluate();
+            }
             _isPlaying = true;
         }
 
         private void OnSongEnd(SongEndEvent evt)
         {
             _isPlaying = false;
-            director.Stop();
         }
     }
 }
