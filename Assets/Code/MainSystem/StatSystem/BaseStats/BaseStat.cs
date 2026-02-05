@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Threading.Tasks;
+using Code.Core.Addressable;
+using UnityEngine;
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
@@ -10,10 +12,14 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int MinValue { get; private set; }
         public int MaxValue { get; private set; }
         public Sprite StatIcon { get; private set; }
-        
-        public StatRankType CurrentRankName => RankTable != null ? RankTable.GetRankName(CurrentValue) : StatRankType.None;
-        public Sprite CurrentRankIcon => RankTable != null ? RankTable.GetRankIcon(CurrentValue).Asset as Sprite : null;
-        
+
+        public StatRankType CurrentRankName =>
+            RankTable != null ? RankTable.GetRankName(CurrentValue) : StatRankType.None;
+
+        public Sprite CurrentRankIcon =>
+            RankTable?.GetRankIcon(CurrentValue) is { } iconRef && iconRef.RuntimeKeyIsValid()
+                ? GameResourceManager.Instance.Load<Sprite>(iconRef.RuntimeKey.ToString()) : null;
+
         private StatRankTable RankTable { get; set; }
 
         public BaseStat(StatData data)
@@ -21,27 +27,39 @@ namespace Code.MainSystem.StatSystem.BaseStats
             StatType = data.statType;
             CurrentValue = data.currentValue;
             StatName = data.statName;
-            StatIcon = data.statIcon;
             MinValue = data.minValue;
             MaxValue = data.maxValue;
-            RankTable = data.rankTable;
         }
 
-        public void PlusValue(int value)
-            => CurrentValue = Mathf.Clamp(CurrentValue + value, MinValue, MaxValue);
+        public async Task InitializeAssetsAsync(StatData data)
+        {
+            var rm = GameResourceManager.Instance;
+            if (data.statIcon.RuntimeKeyIsValid()) 
+                StatIcon = await rm.LoadAsync<Sprite>(data.statIcon.RuntimeKey.ToString());
+            
+            if (data.rankTable.RuntimeKeyIsValid())
+            {
+                RankTable = await rm.LoadAsync<StatRankTable>(data.rankTable.RuntimeKey.ToString());
+                if (RankTable != null) await RankTable.LoadAllRankIconsAsync();
+            }
+        }
 
+        public void PlusValue(int value) 
+            => SetValue(CurrentValue + value);
+        
         public void MultiplyValue(int value)
-            => CurrentValue = Mathf.Clamp(CurrentValue * value, MinValue, MaxValue);
-
+            => SetValue(CurrentValue * value);
+        
         public void SubtractValue(int value)
-            => CurrentValue = Mathf.Clamp(CurrentValue - value, MinValue, MaxValue);
-
-        public void PlusPercentValue(int value)
-            => CurrentValue = Mathf.Clamp(CurrentValue + Mathf.RoundToInt(CurrentValue * (value / 100f)), MinValue,
-                MaxValue);
+            => SetValue(CurrentValue - value);
+        
+        public void PlusPercentValue(int value) 
+            => SetValue(CurrentValue + Mathf.RoundToInt(CurrentValue * (value / 100f)));
         
         public void MinusPercentValue(int value)
-            => CurrentValue = Mathf.Clamp(CurrentValue - Mathf.RoundToInt(CurrentValue * (value / 100f)), MinValue,
-                MaxValue);
+            => SetValue(CurrentValue - Mathf.RoundToInt(CurrentValue * (value / 100f)));
+
+        private void SetValue(int newValue) 
+            => CurrentValue = Mathf.Clamp(newValue, MinValue, MaxValue);
     }
 }

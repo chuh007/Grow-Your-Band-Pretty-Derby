@@ -50,15 +50,16 @@ namespace Code.MainSystem.Etc
 
                 nameTexts[i].SetText(stat.statName);
                 valueTexts[i].SetText($"{statData.CurrentValue} / {statData.MaxValue}");
+                
                 if (iconImages[i] != null)
-                    iconImages[i].sprite = stat.statIcon;
+                    iconImages[i].sprite = statData.StatIcon;
             }
 
-            BaseStat teamstatData = statManager.GetTeamStat(unit.teamStat.statType);
-            nameTexts[4].SetText(teamstatData.StatName);
-            valueTexts[4].SetText($"{teamstatData.CurrentValue} / {teamstatData.MaxValue}");
+            BaseStat teamStatData = statManager.GetTeamStat(unit.teamStat.statType);
+            nameTexts[4].SetText(teamStatData.StatName);
+            valueTexts[4].SetText($"{teamStatData.CurrentValue} / {teamStatData.MaxValue}");
             if (iconImages[4] != null)
-                iconImages[4].sprite = teamstatData.StatIcon;
+                iconImages[4].sprite = teamStatData.StatIcon;
         }
 
         public void PreviewStat(UnitDataSO unit, StatType targetType, float increase)
@@ -91,15 +92,15 @@ namespace Code.MainSystem.Etc
                 }
             }
 
-            BaseStat teamstatData = statManager.GetTeamStat(unit.teamStat.statType);
+            BaseStat teamStatData = statManager.GetTeamStat(unit.teamStat.statType);
             
             if (unit.teamStat.statType == targetType)
             {
-                valueTexts[4].SetText($"<color=green>{teamstatData.CurrentValue + increase} (+{increase})</color> / {teamstatData.MaxValue}");
+                valueTexts[4].SetText($"<color=green>{teamStatData.CurrentValue + increase} (+{increase})</color> / {teamStatData.MaxValue}");
             }
             else
             {
-                valueTexts[4].SetText($"{teamstatData.CurrentValue} / {teamstatData.MaxValue}");
+                valueTexts[4].SetText($"{teamStatData.CurrentValue} / {teamStatData.MaxValue}");
             }
         }
     }

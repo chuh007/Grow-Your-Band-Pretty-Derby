@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Code.Core.Addressable;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -47,6 +50,14 @@ namespace Code.MainSystem.StatSystem.BaseStats
             }
             
             return null;
+        }
+        
+        public async Task LoadAllRankIconsAsync()
+        {
+            GameResourceManager resourceManager = GameResourceManager.Instance;
+            var tasks = Ranks.Where(r => r.RankIconReference.RuntimeKeyIsValid())
+                .Select(r => resourceManager.LoadAsync<Sprite>(r.RankIconReference.RuntimeKey.ToString()));
+            await Task.WhenAll(tasks);
         }
     }
 }
