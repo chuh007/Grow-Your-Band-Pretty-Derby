@@ -149,10 +149,12 @@ namespace Code.MainSystem.MainScreen.Training
             if (isSuccess && TeamPracticeResultCache.TeamStat != null)
             {
                 float teamStatDelta = TeamPracticeResultCache.TeamStatDelta;
+                
+                BaseStat teamBaseStat = StatManager.Instance.GetTeamStat(TeamPracticeResultCache.TeamStat.statType);
                 statChanges.Add(new StatChangeInfo(
                     TeamPracticeResultCache.TeamStat.statName, 
                     Mathf.RoundToInt(teamStatDelta), 
-                    TeamPracticeResultCache.TeamStat.statIcon
+                    teamBaseStat.StatIcon
                 ));
             }
             

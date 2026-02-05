@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.StatSystem.BaseStats
 {
@@ -10,8 +11,8 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int currentValue;
         public int minValue;
         public int maxValue;
-        public Sprite statIcon;
+        public AssetReferenceSprite statIcon;
         
-        public StatRankTable rankTable;
+        public AssetReferenceT<StatRankTable> rankTable;
     }
 }

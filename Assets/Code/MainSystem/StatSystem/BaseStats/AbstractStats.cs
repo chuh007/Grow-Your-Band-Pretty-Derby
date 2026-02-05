@@ -21,14 +21,17 @@ namespace Code.MainSystem.StatSystem.BaseStats
                 return;
         
             Debug.Assert(!string.IsNullOrEmpty(statDataLabel), $"{gameObject.name}: Label이 비어있습니다!");
-        
+
             try
             {
                 List<StatData> dataList = await GameManager.Instance.LoadAllAddressablesAsync<StatData>(statDataLabel);
                 foreach (var data in dataList)
                 {
-                    _stats[data.statType] = new BaseStat(data);
+                    BaseStat baseStat = new BaseStat(data);
+                    await baseStat.InitializeAssetsAsync(data);
+                    _stats[data.statType] = baseStat;
                 }
+
                 _isInitialized = true;
             }
             catch (Exception e)

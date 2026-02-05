@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 
 namespace Code.MainSystem.StatSystem.BaseStats.Editor
 {
@@ -25,6 +27,7 @@ namespace Code.MainSystem.StatSystem.BaseStats.Editor
         private const string AssetPath = "Assets/AddressableAssets/SO/StatData/RankData";
         private const string EnumFilePath = "Assets/Code/MainSystem/StatSystem/BaseStats/StatRankType.cs";
         private const string WindowTitle = "Stat Rank Manager";
+        private const string TargetGroupName = "StatData";
 
         [MenuItem("Tools/Stat/Stat Rank Manager")]
         public static void ShowWindow()
@@ -125,6 +128,8 @@ namespace Code.MainSystem.StatSystem.BaseStats.Editor
             AssetDatabase.CreateAsset(newInstance, fullPath);
             AssetDatabase.SaveAssets();
 
+            AddToAddressables(newInstance);
+            
             RefreshAssetList();
             
             _assetListView.SetSelection(_foundAssets.IndexOf(newInstance));
@@ -134,10 +139,13 @@ namespace Code.MainSystem.StatSystem.BaseStats.Editor
         {
             if (string.IsNullOrEmpty(newName) || table.name == newName) return;
 
-            string error = AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(table), newName);
+            string oldPath = AssetDatabase.GetAssetPath(table);
+            string error = AssetDatabase.RenameAsset(oldPath, newName);
+            
             if (string.IsNullOrEmpty(error))
             {
                 AssetDatabase.SaveAssets();
+                UpdateAddressableAddress(table, newName);
                 RefreshAssetList();
             }
             else
@@ -162,6 +170,51 @@ namespace Code.MainSystem.StatSystem.BaseStats.Editor
             _assetListView.ClearSelection();
     
             RefreshAssetList();
+        }
+        
+        /// <summary>
+        /// 에셋을 Addressable 그룹에 추가하고 이름을 설정합니다.
+        /// </summary>
+        private void AddToAddressables(StatRankTable asset)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (settings == null) return;
+
+            string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(asset));
+            var group = GetOrCreateGroup(settings, TargetGroupName);
+            
+            var entry = settings.CreateOrMoveEntry(guid, group);
+            entry.address = asset.name; // 주소를 에셋 이름으로 설정
+            
+            settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
+        }
+
+        /// <summary>
+        /// 이름 변경 시 Addressable 주소를 갱신합니다.
+        /// </summary>
+        private void UpdateAddressableAddress(StatRankTable asset, string newName)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (settings == null) return;
+
+            string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(asset));
+            var entry = settings.FindAssetEntry(guid);
+            
+            if (entry != null)
+            {
+                entry.address = newName;
+                settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryModified, entry, true);
+            }
+        }
+
+        private AddressableAssetGroup GetOrCreateGroup(AddressableAssetSettings settings, string groupName)
+        {
+            var group = settings.FindGroup(groupName);
+            if (group == null)
+            {
+                group = settings.CreateGroup(groupName, false, false, false, settings.DefaultGroup.Schemas);
+            }
+            return group;
         }
 
         #endregion
