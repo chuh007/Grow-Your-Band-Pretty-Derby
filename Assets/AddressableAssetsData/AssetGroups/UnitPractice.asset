@@ -81,6 +81,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Units
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5cd732ad5379364d95147312e6d9c1e
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Team.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cceb29962249cf44381b2c251f398d08
     m_Address: Assets/AddressableAssets/SO/Member/Practice/Guitar/Guitar1.asset
     m_ReadOnly: 0

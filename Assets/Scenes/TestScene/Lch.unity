@@ -6658,9 +6658,13 @@ MonoBehaviour:
   - {fileID: 733711903}
   liftY: 20
   teamHealthBar: {fileID: 508380102}
-  teamConditionCost: 5
-  mainScreen: {fileID: 904073741}
   probabilityText: {fileID: 1590115965}
+  teamPracticeDataReference:
+    m_AssetGUID: c5cd732ad5379364d95147312e6d9c1e
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
 --- !u!114 &904073745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9816,11 +9820,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.5
+      value: 17.8
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14
+      value: -7.6
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
