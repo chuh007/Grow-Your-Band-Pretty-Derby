@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d89799a62b74a97a5aee5ce16694d41, type: 3}
-  m_Name: DrumMental
+  m_Name: Drums1
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.MemberData.PersonalpracticeDataSO
-  PracticeStatType: 1
-  PracticeStatName: "\uBA58\uD0C8"
+  PracticeStatType: 4
+  PracticeStatName: "\uBC15\uC790\uB9DE\uCD94\uAE30"
   PersonalpracticeDescription: 
   StaminaReduction: 2
   statIncrease: 10
   PersonalsuccessComment:
-    comment: "\uD6C8\uB828\uC798\uB428"
-    thoughts: :)
+    comment: "\uD6C8\uB828\uC5F4\uC2EC\uD788\uD588\uB2E4"
+    thoughts: "\uC798\uB418\uC11C\uAE30\uC068"
     icon: {fileID: 21300000, guid: ca463b2e30202f041bfc14e8bda91e76, type: 3}
   PersonalfaillComment:
-    comment: "\uD6C8\uB828\uC548\uB428"
-    thoughts: :(
+    comment: "\uD6C8\uB828\uC2E4\uD328\uD568"
+    thoughts: "\uC798\uB418\uC9C0\uC54A\uC544\u3160\u3160"
     icon: {fileID: 21300000, guid: 550e4efbeb343734ca390779bae9fab3, type: 3}
   ProgressImageAddresableKey: Sprites/Guitar/Idle
   IdleImageAddressableKey: Sprites/Guitar/Idle
