@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d89799a62b74a97a5aee5ce16694d41, type: 3}
-  m_Name: Drum1
+  m_Name: Drums2
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.MemberData.PersonalpracticeDataSO
-  PracticeStatType: 4
-  PracticeStatName: "\uBC15\uC790\uB9DE\uCD94\uAE30"
+  PracticeStatType: 5
+  PracticeStatName: "\uB09C\uD0C0"
   PersonalpracticeDescription: 
   StaminaReduction: 2
   statIncrease: 10
