@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UnitPractice
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: UnitPractice
+  m_GUID: 17d3059fea113cd4299eb687f23d40d7
+  m_SerializeEntries:
+  - m_GUID: 06dca3d9cc098504abd0e15769e524a1
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Piano/Piano1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 178c5f7cecdb29c42849b85716fb349e
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Guitar/GuitarMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21fdefab1e5ff7943a81cd09378531fd
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Bass/BassMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 25d7c0dc380d22f4abeedc9ffb99bd58
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Piano/PianoHealth.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2788771867aecc149bf6195c547afa54
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Guitar/Guitar2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 53fac43b991d5954e916940f0e7cdad1
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Bass/Bass1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54e2690e59ad49642880d8e535cc91f0
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Drum/DrumHealth.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a3b82556147ec14bbc917b115aedb13
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Vocal/Vocal1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d021c93e233c6448b502513bd4629d8
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Bass/BassHealth.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 942985b4170c0e94eabd2c40fb9524ac
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Guitar/GuitarHealth.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fe6ed9e305ac6045b158ed86ce2b673
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Vocal/VocalMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cceb29962249cf44381b2c251f398d08
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Guitar/Guitar1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d73b56a2643afa8479fb69bd9f16c18a
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Vocal/VocalHealth.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc37d876655452c459863bb7c3f726b3
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Piano/Piano2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0619b01af0e1ac4fa4ded34539234af
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Bass/Bass2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e38c0e0dc3d605f4bb2f1d9139be2ef4
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Drum/Drum2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e78747427ba84e346899de478913f87a
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Vocal/Vocal2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e85ae8ac383736a498c5bd92f6cdf678
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Drum/Drum1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea4fe08a175220e46a4f96798c6f4cc4
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Piano/PianoMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f9adc859ec1bf104ca4385331d37a96c
+    m_Address: Assets/AddressableAssets/SO/Member/Practice/Drum/DrumMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: da30d0b494538594c81cb118dfe36c6b, type: 2}
+    - {fileID: 11400000, guid: 59adbc6df11e38e42a9822abf63b1a6d, type: 2}

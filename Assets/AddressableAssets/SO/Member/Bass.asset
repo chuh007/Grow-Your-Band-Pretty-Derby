@@ -15,24 +15,81 @@ MonoBehaviour:
   unitName: Bass
   memberType: 2
   spriteAddressableKey: Guitar
-  stats:
-  - {fileID: 11400000, guid: 4ef2a76c768c0c54abdb1c03c3e3e18d, type: 2}
-  - {fileID: 11400000, guid: 2775ad80743c3fc419bc0ce548bbb8e1, type: 2}
-  - {fileID: 11400000, guid: 0f4e6c73d3d11a240baba5418ec8c67e, type: 2}
-  - {fileID: 11400000, guid: c835a920bb606ba4d8f2365fc515b093, type: 2}
-  personalPractices:
-  - {fileID: 11400000, guid: 6d021c93e233c6448b502513bd4629d8, type: 2}
-  - {fileID: 11400000, guid: 21fdefab1e5ff7943a81cd09378531fd, type: 2}
-  - {fileID: 11400000, guid: 53fac43b991d5954e916940f0e7cdad1, type: 2}
-  - {fileID: 11400000, guid: e0619b01af0e1ac4fa4ded34539234af, type: 2}
+  statsReferences:
+  - m_AssetGUID: 4ef2a76c768c0c54abdb1c03c3e3e18d
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 2775ad80743c3fc419bc0ce548bbb8e1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 0f4e6c73d3d11a240baba5418ec8c67e
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: c835a920bb606ba4d8f2365fc515b093
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  personalPracticesReferences:
+  - m_AssetGUID: 6d021c93e233c6448b502513bd4629d8
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 21fdefab1e5ff7943a81cd09378531fd
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 53fac43b991d5954e916940f0e7cdad1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: e0619b01af0e1ac4fa4ded34539234af
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  unitActionsReferences:
+  - m_AssetGUID: f2b088d95a67e834bbdf91b0deba64d2
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 0a5929d2074526e4aa2f83bd07a88982
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 1dbe8808bd9c7ae4ea6f0c9b53e39487
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 730f09195f1740446809bfd4a2aaa0f5
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: c51cc98046f21a14d9804cc53dba13b9
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   maxCondition: 100
-  currentCondition: 59
-  TeamStat: {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}
-  unitActions:
-  - {fileID: 11400000, guid: f2b088d95a67e834bbdf91b0deba64d2, type: 2}
-  - {fileID: 11400000, guid: 0a5929d2074526e4aa2f83bd07a88982, type: 2}
-  - {fileID: 11400000, guid: 1dbe8808bd9c7ae4ea6f0c9b53e39487, type: 2}
-  - {fileID: 11400000, guid: 730f09195f1740446809bfd4a2aaa0f5, type: 2}
-  - {fileID: 11400000, guid: c51cc98046f21a14d9804cc53dba13b9, type: 2}
+  currentCondition: 100
+  TeamStat:
+    m_AssetGUID: 19c37e942ee3da545adcf240f1dd8c3a
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   teamSuccessComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
   teamFailComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}

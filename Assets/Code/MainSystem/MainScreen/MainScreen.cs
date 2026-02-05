@@ -81,6 +81,12 @@ namespace Code.MainSystem.MainScreen
                 return;
             }
 
+            // 각 유닛의 AssetReference 로드
+            foreach (var unit in _loadedUnits)
+            {
+                await unit.LoadAssets();
+            }
+
             UnitSelector = new UnitSelector();
             UnitSelector.Init(_loadedUnits);
             

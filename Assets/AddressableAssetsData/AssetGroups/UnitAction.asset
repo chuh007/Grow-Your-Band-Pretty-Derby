@@ -1,0 +1,173 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UnitAction
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: UnitAction
+  m_GUID: a2b5815ac63bff04c9d5eb7ef2e5a6ab
+  m_SerializeEntries:
+  - m_GUID: 0a5929d2074526e4aa2f83bd07a88982
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Bass/BassDexterity.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dbe8808bd9c7ae4ea6f0c9b53e39487
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Bass/BassMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fa6387a19832cf46a4c50c291972bc2
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Vocal/VocalTeam.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b03542a16a30b649a2b57bf64fe1827
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Vocal/VocalBreathing.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c28be2d10bd7794e8d406e341398169
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Guitar/GuitarCondition.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5125c33c7f0be6644a64b8ee6e6a3730
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Guitar/GuitarMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a86567737417a9428787b0f90f815ef
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Piano/PianoCondition.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 730f09195f1740446809bfd4a2aaa0f5
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Bass/BassSense.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86a3dbd590885a8429013a189a361b3c
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Guitar/GuitarTeam.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87af479df7034a24b8511da15b70c487
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Drum/DrumTeam.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87da3327bed23c8499939221007d9265
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Guitar/GuitarEndurance.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b601a246543508409705b8ce4fa9ec1
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Vocal/VocalMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a397e79cb993f8d499470550b6f612df
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Piano/PianoDexterity.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a72d748ec652186418a70c7e4165834d
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Vocal/VocalVocalization.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c51cc98046f21a14d9804cc53dba13b9
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Bass/BassTeam.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c85b3bd6b86548d499d81b0a4ac53c52
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Guitar/GuitarConcentaion.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2f2818e93c5f6341a02ef16865a5556
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Piano/PianoMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d34fc274f7cd09c4997739b27ee089cd
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Drum/DrumCondition.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d95b9ffdb3063074382894a421d136f8
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Drum/DrumMental.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e21b7f77fe9f16a49bdec8a566636db7
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Drum/DrumSense.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea2d9d5ad656314459d3920774da8cf0
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Drum/DrumPower.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1a4b85a561a1f848a2a31d20f1e2d7a
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Vocal/VocalCondition.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2b088d95a67e834bbdf91b0deba64d2
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Bass/BassCondition.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7f7784cb51edaf40b07eead141334fd
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Piano/PianoStage.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: faecc33e5fdd804409afb7d9810fc858
+    m_Address: Assets/AddressableAssets/SO/Member/Action/Piano/PianoTeam.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Units
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: bfe753d45dc57414da2d914c6cdb4577, type: 2}
+    - {fileID: 11400000, guid: fa257a38e71205a47afa29694c1633ee, type: 2}
