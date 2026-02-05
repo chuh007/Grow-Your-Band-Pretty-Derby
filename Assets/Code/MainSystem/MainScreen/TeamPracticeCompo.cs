@@ -13,6 +13,8 @@ using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -38,12 +40,11 @@ namespace Code.MainSystem.MainScreen
         [Header("Health Bars")]
         [SerializeField] private HealthBar teamHealthBar;
 
-        [Header("Practice Settings")]
-        [SerializeField] private float teamConditionCost = 5f;
-        [SerializeField] private MainScreen mainScreen;
-
         [Header("UI")] 
         [SerializeField] private TextMeshProUGUI probabilityText;
+        
+        [Header("Team Practice Data")]
+        [SerializeField] private AssetReference teamPracticeDataReference;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
         private readonly Dictionary<MemberType, Vector3> _originalPosMap = new();
@@ -52,24 +53,51 @@ namespace Code.MainSystem.MainScreen
         private Dictionary<MemberType, UnitDataSO> _unitMap;
         private bool _isTeamPracticeMode = false;
         private bool _wasSuccess;
+        private PersonalpracticeDataSO _teamPracticeData;
+
+        private float teamConditionCost => _teamPracticeData != null ? _teamPracticeData.StaminaReduction : 10f;
+        private float teamStatIncrease => _teamPracticeData != null ? _teamPracticeData.statIncrease : 1f;
 
         private void Awake()
         {
             Bus<TeamPracticeResultEvent>.OnEvent += OnPracticeResult;
             enterTeamPracticeButton.onClick.AddListener(OnEnterTeamPractice);
             startPracticeButton.onClick.AddListener(OnClickStartPractice);
+            
+            LoadTeamPracticeData();
         }
 
         private void OnDestroy()
         {
             Bus<TeamPracticeResultEvent>.OnEvent -= OnPracticeResult;
+            
+            if (teamPracticeDataReference != null && teamPracticeDataReference.IsValid())
+            {
+                teamPracticeDataReference.ReleaseAsset();
+            }
+        }
+
+        private void LoadTeamPracticeData()
+        {
+            if (teamPracticeDataReference == null) return;
+
+            teamPracticeDataReference.LoadAssetAsync<PersonalpracticeDataSO>().Completed += handle =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    _teamPracticeData = handle.Result;
+                }
+                else
+                {
+                    Debug.LogError("Failed to load team practice data");
+                }
+            };
         }
 
         private void OnPracticeResult(TeamPracticeResultEvent evt)
         {
             _wasSuccess = evt.IsSuccess;
             BuildResultCache();
-            mainScreen.SetReturnedFromTeamPractice();
             SceneManager.LoadScene("Ensembleproductiontest");
         }
 
@@ -158,7 +186,6 @@ namespace Code.MainSystem.MainScreen
 
             if (_wasSuccess)
             {
-                float baseGain = UnityEngine.Random.Range(1.0f, 3.0f);
                 var statManager = StatManager.Instance;
                 var ensembleModule = statManager.GetEnsembleModuleHandler();
                 
@@ -168,24 +195,24 @@ namespace Code.MainSystem.MainScreen
 
                 foreach (var unit in _selectedMembers)
                 {
-                    float finalMentalGain = ensembleModule.ApplyEnsembleBonus(baseGain, unit.memberType);
+                    float finalStatGain = ensembleModule.ApplyEnsembleBonus(teamStatIncrease, unit.memberType);
                     
-                    if (mentalBonusProvider != null)
+                    if (mentalBonusProvider != null && _teamPracticeData.PracticeStatType == StatType.Mental)
                     {
-                        finalMentalGain = mentalBonusProvider.GetFinalStat<IMentalStat>(finalMentalGain);
+                        finalStatGain = mentalBonusProvider.GetFinalStat<IMentalStat>(finalStatGain);
                     }
 
-                    int roundedMentalGain = Mathf.RoundToInt(finalMentalGain);
-                    statManager.GetMemberStat(unit.memberType, StatType.Mental).PlusValue(roundedMentalGain);
-                    TeamPracticeResultCache.StatDeltaDict[(unit.memberType, StatType.Mental)] = roundedMentalGain;
-                    totalTeamStatDelta += finalMentalGain;
+                    int roundedStatGain = Mathf.RoundToInt(finalStatGain);
+                    statManager.GetMemberStat(unit.memberType, _teamPracticeData.PracticeStatType).PlusValue(roundedStatGain);
+                    TeamPracticeResultCache.StatDeltaDict[(unit.memberType, _teamPracticeData.PracticeStatType)] = roundedStatGain;
+                    totalTeamStatDelta += finalStatGain;
                 }
             }
             
             UpdateMembersCondition();
             
             var firstUnit = _selectedMembers[0];
-            TeamPracticeResultCache.TeamStat = firstUnit.TeamStat;
+            TeamPracticeResultCache.TeamStat = firstUnit.teamStat;
             TeamPracticeResultCache.TeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
 
             if (TeamPracticeResultCache.TeamStatDelta > 0)

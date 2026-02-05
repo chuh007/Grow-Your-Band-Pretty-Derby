@@ -26,7 +26,8 @@ namespace Code.MainSystem.MainScreen.Training
             PersonalpracticeDataSO dataSo,
             float currentCondition,
             StatData teamStatData,
-            float teamStatCurrentValue)
+            float teamStatCurrentValue,
+            float teamStatDelta = 0f)
         {
             if (_instance == null)
             {
@@ -69,6 +70,8 @@ namespace Code.MainSystem.MainScreen.Training
             float personalStatCurrentValue = personalStat != null ? personalStat.CurrentValue : 0;
             
             float conditionDelta = -dataSo.StaminaReduction;
+            
+            CommentManager.instance.SetupComments();
 
             await practiceResultWindow.Play(
                 StatManager.Instance,
@@ -76,8 +79,8 @@ namespace Code.MainSystem.MainScreen.Training
                 currentCondition,              
                 conditionDelta,              
                 teamStatData,                 
-                teamStatCurrentValue,
-                StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue,
+                teamStatCurrentValue,         
+                teamStatDelta,               
                 new Dictionary<(MemberType, StatType), int>
                 {
                     { (unitData.memberType, dataSo.PracticeStatType), receivedDelta } 

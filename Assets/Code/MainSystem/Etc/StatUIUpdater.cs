@@ -54,7 +54,7 @@ namespace Code.MainSystem.Etc
                     iconImages[i].sprite = stat.statIcon;
             }
 
-            BaseStat teamstatData = statManager.GetTeamStat(unit.TeamStat.statType);
+            BaseStat teamstatData = statManager.GetTeamStat(unit.teamStat.statType);
             nameTexts[4].SetText(teamstatData.StatName);
             valueTexts[4].SetText($"{teamstatData.CurrentValue} / {teamstatData.MaxValue}");
             if (iconImages[4] != null)
@@ -91,9 +91,9 @@ namespace Code.MainSystem.Etc
                 }
             }
 
-            BaseStat teamstatData = statManager.GetTeamStat(unit.TeamStat.statType);
+            BaseStat teamstatData = statManager.GetTeamStat(unit.teamStat.statType);
             
-            if (unit.TeamStat.statType == targetType)
+            if (unit.teamStat.statType == targetType)
             {
                 valueTexts[4].SetText($"<color=green>{teamstatData.CurrentValue + increase} (+{increase})</color> / {teamstatData.MaxValue}");
             }
