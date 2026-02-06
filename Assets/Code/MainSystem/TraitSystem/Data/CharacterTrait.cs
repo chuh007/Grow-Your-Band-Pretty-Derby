@@ -5,6 +5,7 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.Data
@@ -29,7 +30,7 @@ namespace Code.MainSystem.TraitSystem.Data
         {
             if (data is null) return;
     
-            ActiveTrait newTrait = new ActiveTrait(data);
+            ActiveTrait newTrait = new ActiveTrait(data, memberType);
             _activeTraits.Add(newTrait);
             
             if (newTrait.TraitEffect != null)
@@ -57,6 +58,11 @@ namespace Code.MainSystem.TraitSystem.Data
             IsAdjusting = false;
             PendingTrait = null;
             Bus<TraitAdjusted>.Raise(new TraitAdjusted());
+        }
+
+        public float GetCalculatedStat(TraitTarget category, float baseValue, object context = null)
+        {
+            return TraitCalculator.GetCalculatedStat(this, category, baseValue, context);
         }
 
         public IEnumerable<T> GetModifiers<T>() where T : class

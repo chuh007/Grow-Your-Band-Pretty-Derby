@@ -93,6 +93,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - PianoStatData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 832877aae9f961a41bc136d1da22cde3
+    m_Address: Stat Rank
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 87738471ac80c2a479ed7726202dec57
     m_Address: Upgrade data
     m_ReadOnly: 0

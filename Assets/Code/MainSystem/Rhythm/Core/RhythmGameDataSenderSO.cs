@@ -26,8 +26,8 @@ namespace Code.MainSystem.Rhythm.Core
         
         [Header("Result Data")]
         [field: SerializeField] public int FinalScore { get; private set; }
-        [field: SerializeField] public bool IsSuccess { get; private set; }
-        [field: SerializeField] public bool IsFailed { get; private set; }
+        [field: SerializeField] public bool IsSuccess { get;  set; }
+        [field: SerializeField] public bool IsFailed { get;  set; }
 
         [Header("Game Result Data")]
         public bool isResultDataAvailable = false;

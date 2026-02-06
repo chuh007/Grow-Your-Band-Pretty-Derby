@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
-using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Cysharp.Threading.Tasks;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -44,18 +41,19 @@ namespace Code.MainSystem.MainScreen
 
         private StatUIUpdater _statUIUpdater;
         private List<UnitDataSO> _loadedUnits;
-        
-        private static bool _returnedFromTeamPractice = false;
 
         #region Unity LifeCycle
 
         private async void Start()
         {
-            await LoadUnitsAsync();
-            
-            if (_returnedFromTeamPractice)
+            try
             {
-                await CheckTeamPracticeReturn();
+                await LoadUnitsAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[MainScreen] Error in Start: {e.Message}");
+                throw;
             }
         }
 
@@ -81,6 +79,12 @@ namespace Code.MainSystem.MainScreen
             {
                 Debug.LogError("Failed to load units!");
                 return;
+            }
+
+            // 각 유닛의 AssetReference 로드
+            foreach (var unit in _loadedUnits)
+            {
+                await unit.LoadAssets();
             }
 
             UnitSelector = new UnitSelector();
@@ -122,46 +126,6 @@ namespace Code.MainSystem.MainScreen
             {
                 restSelectCompo.CacheUnits(_loadedUnits);
             }
-        }
-        
-        private async UniTask CheckTeamPracticeReturn()
-        {
-            await UniTask.Delay(100);
-
-            if (CommentManager.instance != null)
-                await CommentManager.instance.ShowAllComments();
-
-            await UniTask.Yield();
-
-            _returnedFromTeamPractice = false;
-
-            bool isBonusActionTriggered = false;
-            int totalBonusAmount = 0;
-
-            foreach (var unit in TeamPracticeResultCache.SelectedMembers)
-            {
-                var holder = TraitManager.Instance.GetHolder(unit.memberType);
-                var bonusTrait = holder.GetModifiers<IActionPointBonus>().FirstOrDefault();
-
-                if (bonusTrait != null)
-                {
-                    bool isConditionMet = unit.currentCondition >= 80f;
-
-                    if (isConditionMet && Random.Range(0f, 100f) <= bonusTrait.Chance)
-                    {
-                        isBonusActionTriggered = true;
-                        totalBonusAmount = bonusTrait.Amount;
-                        break;
-                    }
-                }
-            }
-
-            if (isBonusActionTriggered)
-            {
-                return;
-            }
-            
-            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
         
         #endregion
@@ -275,11 +239,6 @@ namespace Code.MainSystem.MainScreen
         }
 
         #endregion
-        
-        public void SetReturnedFromTeamPractice()
-        {
-            _returnedFromTeamPractice = true;
-        }
 
         /// <summary>
         /// 외부에서 특정 멤버를 선택하도록 요청할 때 사용

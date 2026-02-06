@@ -63,6 +63,12 @@ namespace Code.MainSystem.MainScreen
                 title.SetText(evt.title);
                 icon.sprite = evt.icon;
                 targetText.SetText(evt.target.ToString());
+                if (evt.target <= 0)
+                {
+                    targetText.gameObject.SetActive(false);
+                    icon.gameObject.SetActive(false);
+                    description.SetText("목표 달성!");
+                }
             }
             else
             {
@@ -71,6 +77,12 @@ namespace Code.MainSystem.MainScreen
                 icon.gameObject.SetActive(false);
                 targetText.gameObject.SetActive(false);
                 bar.SetActive(false);
+                if (evt.target <= 0)
+                {
+                    targetText.gameObject.SetActive(false);
+                    icon.gameObject.SetActive(false);
+                    description.gameObject.SetActive(false);
+                }
             }
         }
 

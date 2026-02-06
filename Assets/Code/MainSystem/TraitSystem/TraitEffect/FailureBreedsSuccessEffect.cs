@@ -1,38 +1,18 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    public class FailureBreedsSuccessEffect : AbstractTraitEffect, IInspirationSystem
+    public class FailureBreedsSuccessEffect : MultiStatModifierEffect, IInspirationSystem, ISuccessGuarantor
     {
-        public int GainOnFailure { get; private set; }
-        public int MaxInspiration { get; private set; }
+        private float _currentInspiration;
+        public override bool IsTargetStat(TraitTarget category) => false;
+        public override float GetAmount(TraitTarget category, object context = null) => 0;
 
-        public int CurrentInspiration { get; private set; }
-
-        public override void Initialize(ActiveTrait trait)
-        {
-            base.Initialize(trait);
-            GainOnFailure = (int)N1(trait);
-            MaxInspiration = (int)N2(trait);
-            CurrentInspiration = 0;
-        }
-
-        public void OnFailure()
-        {
-            CurrentInspiration = System.Math.Min(
-                CurrentInspiration + GainOnFailure,
-                MaxInspiration
-            );
-        }
-
-        public bool ShouldGuaranteeSuccess()
-        {
-            if (CurrentInspiration < MaxInspiration)
-                return false;
-
-            CurrentInspiration = 0;
-            return true;
-        }
+        public void OnTrainingFailed() 
+            => _currentInspiration += GetValue(0);
+        
+        public bool ShouldGuarantee()
+            => _currentInspiration >= GetValue(1);
     }
 }

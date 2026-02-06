@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6d6585901a04b57845a9b6c8f3b95d7, type: 3}
+  m_Name: Stat Rank
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.BaseStats.StatRankTable
+  Ranks:
+  - RankName: 1
+    Threshold: 0
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 2
+    Threshold: 10
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 3
+    Threshold: 30
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 4
+    Threshold: 50
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 5
+    Threshold: 70
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 6
+    Threshold: 85
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 7
+    Threshold: 95
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1

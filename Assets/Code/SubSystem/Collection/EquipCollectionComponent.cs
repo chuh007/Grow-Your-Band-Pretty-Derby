@@ -2,15 +2,16 @@
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.Core.Bus.GameEvents.OutingEvents;
+using Code.Core.Load;
 using UnityEngine;
 
 namespace Code.SubSystem.Collection
 {
-    public class EquipCollectionComponent : MonoBehaviour
+    public class EquipCollectionComponent : MonoBehaviour, IAwakeLoadComponent
     {
         [SerializeField] private EquipCollectionListSO equipCollectionListSO;
-
-        private void Awake()
+        
+        public void FirstTimeAwake()
         {
             foreach (var collection in equipCollectionListSO.collections)
             {
@@ -18,7 +19,7 @@ namespace Code.SubSystem.Collection
                 {
                     Bus<AddOutingEvent>.Raise(new AddOutingEvent(evt));
                 }
-
+                
                 foreach (var encounter in collection.plusEncounters)
                 {
                     Bus<EncounterAddEvent>.Raise(new EncounterAddEvent(encounter));

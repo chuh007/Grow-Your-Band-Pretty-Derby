@@ -51,7 +51,6 @@ namespace Code.MainSystem.Turn
             {
                 compo.TurnStart();
             }
-            
         }
     }
 }

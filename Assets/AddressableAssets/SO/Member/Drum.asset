@@ -15,24 +15,82 @@ MonoBehaviour:
   unitName: Drum
   memberType: 1
   spriteAddressableKey: Guitar
-  stats:
-  - {fileID: 11400000, guid: 0a4d0778636631e4d85d0bb80a58bec5, type: 2}
-  - {fileID: 11400000, guid: cad1a44f437a40b48add136ff3f7ff13, type: 2}
-  - {fileID: 11400000, guid: c1f94a78388f6c54fb31daeb0ed173ab, type: 2}
-  - {fileID: 11400000, guid: 2be84bb9437418145b7261657812a55c, type: 2}
-  personalPractices:
-  - {fileID: 11400000, guid: 54e2690e59ad49642880d8e535cc91f0, type: 2}
-  - {fileID: 11400000, guid: f9adc859ec1bf104ca4385331d37a96c, type: 2}
-  - {fileID: 11400000, guid: e38c0e0dc3d605f4bb2f1d9139be2ef4, type: 2}
-  - {fileID: 11400000, guid: e85ae8ac383736a498c5bd92f6cdf678, type: 2}
+  handwritingFont: {fileID: 11400000, guid: d6499bd44cea4c54aaa74fc75fb4019e, type: 2}
+  statsReferences:
+  - m_AssetGUID: 0a4d0778636631e4d85d0bb80a58bec5
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: cad1a44f437a40b48add136ff3f7ff13
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 2be84bb9437418145b7261657812a55c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: c1f94a78388f6c54fb31daeb0ed173ab
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  personalPracticesReferences:
+  - m_AssetGUID: 54e2690e59ad49642880d8e535cc91f0
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: f9adc859ec1bf104ca4385331d37a96c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: e85ae8ac383736a498c5bd92f6cdf678
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: e38c0e0dc3d605f4bb2f1d9139be2ef4
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  unitActionsReferences:
+  - m_AssetGUID: d34fc274f7cd09c4997739b27ee089cd
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: d95b9ffdb3063074382894a421d136f8
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: ea2d9d5ad656314459d3920774da8cf0
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: e21b7f77fe9f16a49bdec8a566636db7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 87af479df7034a24b8511da15b70c487
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   maxCondition: 100
-  currentCondition: 65
-  TeamStat: {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}
-  unitActions:
-  - {fileID: 11400000, guid: d34fc274f7cd09c4997739b27ee089cd, type: 2}
-  - {fileID: 11400000, guid: d95b9ffdb3063074382894a421d136f8, type: 2}
-  - {fileID: 11400000, guid: ea2d9d5ad656314459d3920774da8cf0, type: 2}
-  - {fileID: 11400000, guid: e21b7f77fe9f16a49bdec8a566636db7, type: 2}
-  - {fileID: 11400000, guid: 87af479df7034a24b8511da15b70c487, type: 2}
-  teamSuccessComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
-  teamFailComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}
+  currentCondition: 98
+  TeamStat:
+    m_AssetGUID: 19c37e942ee3da545adcf240f1dd8c3a
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  successComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
+  failComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}

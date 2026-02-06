@@ -1,23 +1,22 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.TraitEvents;
+using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    /// <summary>
-    /// 부상 특성
-    /// </summary>
-    public class InjuryEffect : AbstractTraitEffect, ISuccessRateStat, IPercentageModifier<ISuccessRateStat>, IStackable
+    public class InjuryEffect : MultiStatModifierEffect, ITurnProcessListener
     {
-        public float Percentage { get; private set; }
-        public int StackCount { get; private set; }
-        public int IncreaseStack { get; private set; } = 1;
-        public int MaxStack { get; private set; }
+        private int _elapsedTurns = 0;
 
-        public override void Initialize(ActiveTrait trait)
+        public void OnTurnPassed()
         {
-            base.Initialize(trait);
-            Percentage = N1(trait);
-            MaxStack = (int)N2(trait);
+            _elapsedTurns++;
+            
+            if (_elapsedTurns >= (int)GetValue(1))
+            {
+                Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_activeTrait.Owner,
+                    _activeTrait.Data.TraitType));
+            }
         }
     }
 }

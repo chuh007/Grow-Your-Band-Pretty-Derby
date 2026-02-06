@@ -12,20 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: LoneGuitarist trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitID: 1009
   TraitType: 2
   TraitName: "\uACE0\uB3C5\uD55C \uAE30\uD0C0\uB9AC\uC2A4\uD2B8"
   TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
-  traitEffectType: 1
   MaxLevel: 10
   Point: 6
   IsRemovable: 1
+  Impacts:
+  - Target: 2
+    CalcType: 2
+    RequiredTag: 
+  - Target: 3
+    CalcType: 3
+    RequiredTag: 
   Effects:
   - 50
-  - -50
+  - 50
   DescriptionEffect: "(\uAE30\uD0C0 \uC804\uC6A9) \uAC1C\uC778 \uC5F0\uC2B5 \uD6A8\uACFC
     {0}%, \uAC1C\uC778 \uC5F0\uC2B5 \uC2DC \uCEE8\uB514\uC158 \uC18C\uBAA8 {1}%"
-  conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.LoneGuitaristEffect, Assembly-CSharp,
-    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  SpecialLogicClassName: 

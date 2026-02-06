@@ -135,7 +135,7 @@ namespace Code.MainSystem.MainScreen
                     success,
                     practice,
                     _currentCondition,              
-                    _currentUnit.TeamStat,            
+                    _currentUnit.teamStat,            
                     StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue
                 );
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using TMPro;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -16,21 +15,18 @@ namespace Code.MainSystem.MainScreen.Training
 {
     public class PracticeResultWindow : MonoBehaviour, IPointerDownHandler
     {
-        [SerializeField] private StatResultUI statUI;
-        [SerializeField] private Sprite test;
-        [SerializeField] private Sprite test2;
+        [Header("Prefabs")]
+        [SerializeField] private GameObject statItemPrefab;
+        [SerializeField] private GameObject commentItemPrefab;
 
-        [Header("Comment Page")] 
-        [SerializeField] private GameObject statPage;
-        [SerializeField] private RectTransform statPageRect;
-        [SerializeField] private GameObject commentPageGO;
-        [SerializeField] private RectTransform commentPageRect;
-        [SerializeField] private PracticeCommentPage commentPage;
+        [Header("Parents")]
+        [SerializeField] private Transform statParent;
+        [SerializeField] private Transform commentParent;
 
-        [Header("Canvas Groups")]
-        [SerializeField] private CanvasGroup statPageCanvasGroup;
-        [SerializeField] private CanvasGroup commentPageCanvasGroup;
-        
+        [Header("Icons")]
+        [SerializeField] private Sprite normalIcon;
+        [SerializeField] private Sprite deltaIcon;
+
         [Header("Title")]
         [SerializeField] private TextMeshProUGUI titleText;
 
@@ -38,34 +34,19 @@ namespace Code.MainSystem.MainScreen.Training
         [SerializeField] private bool allowSkip = true;
         [SerializeField] private float skipCooldown = 0.3f;
 
-        [Header("Transition Settings")]
-        [SerializeField] private float fadeInDuration = 0.3f;
-        [SerializeField] private float fadeOutDuration = 0.3f;
-        [SerializeField] private Ease fadeEase = Ease.OutCubic;
-
         private bool _isPlaying = false;
         private CancellationTokenSource _skipCTS;
-        private Sequence _currentSequence;
         private bool _hasSkipped = false;
         private float _lastSkipTime = 0f;
-        private bool _isTeamTraining = false; 
+        private bool _isTeamTraining = false;
+        private List<UnitDataSO> _currentUnits;
+
+        private readonly List<GameObject> _spawnedStats = new();
+        private readonly List<GameObject> _spawnedComments = new();
 
         private void Awake()
         {
             gameObject.SetActive(false);
-            commentPageGO.SetActive(false);
-
-            statPageCanvasGroup = EnsureCanvasGroup(statPage);
-            commentPageCanvasGroup = EnsureCanvasGroup(commentPageGO);
-
-            statPageCanvasGroup.blocksRaycasts = true;
-            commentPageCanvasGroup.blocksRaycasts = false;
-        }
-
-        private CanvasGroup EnsureCanvasGroup(GameObject go)
-        {
-            var cg = go.GetComponent<CanvasGroup>();
-            return cg != null ? cg : go.AddComponent<CanvasGroup>();
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -80,6 +61,16 @@ namespace Code.MainSystem.MainScreen.Training
             {
                 _hasSkipped = true;
                 _lastSkipTime = Time.time;
+                
+                foreach (var commentGO in _spawnedComments)
+                {
+                    var commentUI = commentGO.GetComponent<PracticeCommentItemUI>();
+                    if (commentUI != null && commentUI._currentData != null)
+                    {
+                        commentUI.SkipToComplete(commentUI._currentData);
+                    }
+                }
+                
                 _skipCTS?.Cancel();
                 Debug.Log("[PracticeResultWindow] Skip requested by user");
             }
@@ -91,8 +82,8 @@ namespace Code.MainSystem.MainScreen.Training
             float conditionCurrent,
             float conditionDelta,
             StatData teamStat,
-            float teamStatCurrentValue, 
-            float teamStatDelta,         
+            float teamStatCurrentValue,
+            float teamStatDelta,
             Dictionary<(MemberType memberType, StatType statType), int> statDeltaDict,
             bool hadAnyStatChanged,
             PersonalpracticeDataSO practiceData = null,
@@ -101,81 +92,40 @@ namespace Code.MainSystem.MainScreen.Training
         {
             _isPlaying = true;
             _hasSkipped = false;
-            _isTeamTraining = isTeamTraining; 
+            _isTeamTraining = isTeamTraining;
+            _currentUnits = allUnits;
             _skipCTS?.Cancel();
             _skipCTS?.Dispose();
             _skipCTS = new CancellationTokenSource();
 
-            CommentManager.instance.SetupComments();
-
             try
             {
                 gameObject.SetActive(true);
-                statPage.SetActive(true);
-                commentPageGO.SetActive(false);
-
-                statPageRect.anchoredPosition = Vector2.zero;
-                statPageCanvasGroup.alpha = 1f;
-                statPageCanvasGroup.blocksRaycasts = true;
-                commentPageCanvasGroup.blocksRaycasts = false;
-
+                ClearAll();
+                
                 if (titleText != null && allUnits != null && allUnits.Count > 0)
                 {
-                    titleText.text = $"{allUnits[0].unitName} 스탯 변화";
-                }
-
-                List<StatChangeResult> results = new();
-                results.Add(new StatChangeResult("컨디션", test2, test, Mathf.RoundToInt(conditionCurrent), conditionDelta));
-
-                if (teamStat != null)
-                {
-                    results.Add(new StatChangeResult(teamStat.statName, test2, test, Mathf.RoundToInt(teamStatCurrentValue), teamStatDelta));
-                }
-
-                foreach (var unit in allUnits)
-                {
-                    foreach (var stat in unit.stats)
-                    {
-                        BaseStat baseStat = statManager.GetMemberStat(unit.memberType, stat.statType);
-                        if (baseStat == null) continue;
-
-                        statDeltaDict.TryGetValue((unit.memberType, stat.statType), out int delta);
-
-                        results.Add(new StatChangeResult(stat.statName, test2, test, baseStat.CurrentValue, delta));
-                    }
-                }
-
-                try
-                {
-                    await statUI.ShowStats(results, _skipCTS.Token);
-                }
-                catch (OperationCanceledException)
-                {
-                    statUI.ForceCompleteAllStats(results);
-                    Debug.Log("[PracticeResultWindow] Stat UI skipped and force completed");
+                    titleText.text = $"{allUnits[0].unitName} 훈련 결과";
                 }
                 
-                if (_hasSkipped)
-                {
-                    Debug.Log("[PracticeResultWindow] Skipping transition and comments");
-                    throw new OperationCanceledException();
-                }
-
-                await TransitionToCommentPage().AttachExternalCancellation(_skipCTS.Token);
-
-                await CommentManager.instance.ShowAllComments().AttachExternalCancellation(_skipCTS.Token);
+                await CreateChangedStats(
+                    statManager,
+                    allUnits,
+                    conditionCurrent,
+                    conditionDelta,
+                    teamStat,
+                    teamStatCurrentValue,
+                    teamStatDelta,
+                    statDeltaDict
+                );
+                
+                await CreateComments();
+                
+                await WaitForClick();
             }
             catch (OperationCanceledException)
             {
-                Debug.Log("[PracticeResultWindow] Entire flow skipped by user");
-                
-                CommentManager.instance.ClearAllComments();
-                
-                if (!_isTeamTraining)
-                {
-                    Debug.Log("[PracticeResultWindow] Raising CheckTurnEnd event after skip");
-                    Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
-                }
+                Debug.Log("[PracticeResultWindow] Skipped by user");
             }
             finally
             {
@@ -183,55 +133,148 @@ namespace Code.MainSystem.MainScreen.Training
             }
         }
 
-        private async UniTask TransitionToCommentPage()
+        private async UniTask CreateChangedStats(
+            StatManager statManager,
+            List<UnitDataSO> allUnits,
+            float conditionCurrent,
+            float conditionDelta,
+            StatData teamStat,
+            float teamStatCurrentValue,
+            float teamStatDelta,
+            Dictionary<(MemberType, StatType), int> statDeltaDict
+        )
         {
-            commentPageGO.SetActive(true);
-            commentPageRect.anchoredPosition = new Vector2(100f, 0);
-            commentPageCanvasGroup.alpha = 0f;
-            commentPageCanvasGroup.blocksRaycasts = false;
-
-            _currentSequence?.Kill();
-            _currentSequence = DOTween.Sequence();
-
-            _currentSequence.Append(statPageCanvasGroup.DOFade(0f, fadeOutDuration).SetEase(fadeEase));
-            _currentSequence.Join(statPageRect.DOAnchorPosX(-100f, fadeOutDuration).SetEase(fadeEase));
-
-            _currentSequence.AppendCallback(() =>
+            if (!Mathf.Approximately(conditionDelta, 0f))
             {
-                statPage.SetActive(false);
-                statPageCanvasGroup.blocksRaycasts = false;
-                commentPageRect.anchoredPosition = new Vector2(100f, 0);
-            });
-
-            _currentSequence.Append(commentPageCanvasGroup.DOFade(1f, fadeInDuration).SetEase(fadeEase));
-            _currentSequence.Join(commentPageRect.DOAnchorPosX(0f, fadeInDuration).SetEase(fadeEase));
-
-            _currentSequence.AppendCallback(() =>
+                await CreateStatItemWithGauge("컨디션", Mathf.RoundToInt(conditionCurrent), conditionDelta, deltaIcon);
+            }
+            
+            if (teamStat != null && !Mathf.Approximately(teamStatDelta, 0f))
             {
-                commentPageCanvasGroup.blocksRaycasts = true;
-            });
+                await CreateStatItemWithGauge(teamStat.statName, Mathf.RoundToInt(teamStatCurrentValue), teamStatDelta, deltaIcon);
+            }
+            
+            foreach (var unit in allUnits)
+            {
+                foreach (var stat in unit.stats)
+                {
+                    BaseStat baseStat = statManager.GetMemberStat(unit.memberType, stat.statType);
+                    if (baseStat == null) continue;
 
-            var tcs = new UniTaskCompletionSource();
-            _currentSequence.OnComplete(() => tcs.TrySetResult());
-            _currentSequence.Play();
+                    statDeltaDict.TryGetValue((unit.memberType, stat.statType), out int delta);
 
-            await tcs.Task;
+                    if (delta != 0)
+                    {
+                        await CreateStatItemWithGauge(stat.statName, baseStat.CurrentValue, delta, normalIcon);
+                    }
+                }
+            }
+        }
+
+        private async UniTask CreateStatItemWithGauge(string statName, int currentValue, float delta, Sprite icon)
+        {
+            var go = Instantiate(statItemPrefab, statParent);
+            go.transform.localScale = Vector3.one;
+            go.SetActive(true);
+
+            var statUI = go.GetComponent<StatResultItemUI>();
+            if (statUI != null)
+            {
+                statUI.SetInitialData(statName, icon);
+                
+                try
+                {
+                    await statUI.AnimateToValue(icon, currentValue, 0.5f, _skipCTS.Token);
+                }
+                catch (System.OperationCanceledException)
+                {
+                    statUI.ForceSetValue(icon, currentValue);
+                }
+            }
+            
+            _spawnedStats.Add(go);
+
+            Debug.Log($"[PracticeResultWindow] Created stat: {statName} = {currentValue} ({delta:+0;-0})");
+        }
+
+        private async UniTask CreateComments()
+        {
+            var setupComments = CommentManager.instance.GetSetupComments();
+            
+            if (setupComments == null || setupComments.Count == 0)
+            {
+                Debug.Log("[PracticeResultWindow] No comments to display");
+                return;
+            }
+
+            TMP_FontAsset handwritingFont = null;
+            if (_currentUnits != null && _currentUnits.Count > 0 && _currentUnits[0].handwritingFont != null)
+            {
+                handwritingFont = _currentUnits[0].handwritingFont;
+            }
+            
+            Debug.Log(handwritingFont);
+
+            foreach (var kvp in setupComments)
+            {
+                _skipCTS.Token.ThrowIfCancellationRequested();
+
+                foreach (var commentData in kvp.Value)
+                {
+                    var go = Instantiate(commentItemPrefab, commentParent);
+                    go.transform.localScale = Vector3.one;
+                    go.SetActive(true);
+                    
+                    var commentUI = go.GetComponent<PracticeCommentItemUI>();
+                    
+                    if (handwritingFont != null)
+                    {
+                        commentUI.SetHandwritingFont(handwritingFont);
+                    }
+                    
+                    commentUI.Setup(commentData);
+                    
+                    _spawnedComments.Add(go);
+                }
+            }
+
+            await UniTask.Yield();
+        }
+
+        private async UniTask WaitForClick()
+        {
+            Debug.Log("[PracticeResultWindow] Waiting for click...");
+            await UniTask.WaitUntil(() => _hasSkipped, cancellationToken: _skipCTS.Token);
+            Debug.Log("[PracticeResultWindow] Click detected!");
+        }
+
+        private void ClearAll()
+        {
+            foreach (var go in _spawnedStats)
+                Destroy(go);
+            _spawnedStats.Clear();
+
+            foreach (var go in _spawnedComments)
+                Destroy(go);
+            _spawnedComments.Clear();
         }
 
         private void EndWindow()
         {
-            _currentSequence?.Kill();
-            
-            statUI.ClearStats();
-            
-            statPage.SetActive(false);
-            commentPageGO.SetActive(false);
-            statPageCanvasGroup.blocksRaycasts = false;
-            commentPageCanvasGroup.blocksRaycasts = false;
+            ClearAll();
             gameObject.SetActive(false);
             
             _isPlaying = false;
             _hasSkipped = false;
+            _currentUnits = null;
+            CommentManager.instance.ClearAllComments();
+            
+            if (!_isTeamTraining)
+            {
+                Debug.Log("[PracticeResultWindow] Raising CheckTurnEnd event");
+                Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+            }
+            
             _isTeamTraining = false;
         }
 
@@ -239,7 +282,6 @@ namespace Code.MainSystem.MainScreen.Training
         {
             _skipCTS?.Cancel();
             _skipCTS?.Dispose();
-            _currentSequence?.Kill();
         }
     }
 }

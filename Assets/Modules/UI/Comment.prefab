@@ -503,6 +503,15 @@ MonoBehaviour:
   - {fileID: 6674794503967396138}
   - {fileID: 22191816679064995}
   - {fileID: 7846339131749980193}
+  typingSpeed: 0.03
+  delayBetweenSections: 0.3
+  _currentData:
+    title: 
+    content: 
+    statChanges: []
+    thoughts: 
+    memberName: 
+    trainingType: 0
 --- !u!1 &4855941422864139723
 GameObject:
   m_ObjectHideFlags: 0
