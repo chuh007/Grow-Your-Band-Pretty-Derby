@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Data;
-using Code.MainSystem.TraitSystem.TraitConditions;
 using Code.MainSystem.TraitSystem.TraitEffect;
 
 namespace Code.MainSystem.TraitSystem.Runtime
@@ -12,19 +12,19 @@ namespace Code.MainSystem.TraitSystem.Runtime
     {
         public TraitDataSO Data { get; private set; }
         public AbstractTraitEffect TraitEffect { get; private set; }
-        public AbstractTraitCondition TraitCondition { get; private set; }
         public int CurrentLevel { get; private set; }
         public List<float> CurrentEffects { get; private set; }
 
-        public ActiveTrait(TraitDataSO data)
+        public MemberType Owner { get; private set; }
+
+        public ActiveTrait(TraitDataSO data, MemberType owner)
         {
             Data = data;
+            Owner = owner;
             CurrentLevel = 1;
             CurrentEffects = new List<float>(data.Effects);
             
             TraitEffect = data.CreateEffectInstance();
-            TraitCondition = data.CreateConditionInstance();
-
             TraitEffect.Initialize(this);
         }
 
