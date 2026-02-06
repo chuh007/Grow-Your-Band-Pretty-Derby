@@ -16,6 +16,16 @@ MonoBehaviour:
   statName: "\uBB34\uB300 \uC7A5\uC545\uB825"
   currentValue: 5
   minValue: 0
-  maxValue: 100
-  statIcon: {fileID: 0}
-  rankTable: {fileID: 11400000, guid: 82b52e190a619834297bf7f423f884d6, type: 2}
+  maxValue: 1500
+  statIcon:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  rankTable:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0

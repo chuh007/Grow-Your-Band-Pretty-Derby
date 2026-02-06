@@ -30,5 +30,5 @@ MonoBehaviour:
   - 1
   DescriptionEffect: "\uCEE8\uB514\uC158\uC774 \u2018\uB9E4\uC6B0 \uC88B\uC74C\u2019
     \uC774\uC0C1\uC5D0\uC11C \uAC1C\uC778 \uD6C8\uB828 \uB610\uB294 \uD569\uC8FC
-    \uC9C4\uD589 \uD6C4 {0}%\uD655\uB960\uB85C \uD589\uB3D9\uAD8C +{1}"
+    \uC9C4\uD589 \uD6C4 {0}%\uD655\uB960\uB85C \uCD94\uAC00 \uD589\uB3D9 +{1}"
   SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.ShiningEyesEffect

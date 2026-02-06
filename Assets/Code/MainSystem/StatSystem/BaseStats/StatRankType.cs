@@ -9,6 +9,8 @@ namespace Code.MainSystem.StatSystem.BaseStats
         C,
         B,
         A,
-        S
+        S,
+        MAX,
+        G
     }
 }
