@@ -1,7 +1,4 @@
 ﻿using System;
-using Code.Core;
-using Code.Core.Bus;
-using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Bottom
@@ -20,8 +17,7 @@ namespace Code.MainSystem.MainScreen.Bottom
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
         [SerializeField] private RestSelectCompo restSelectCompo;
-        [SerializeField] private TraitSelectCompo traitSelectCompo;
-        
+
         //연결 약하게할려고 이벤트사용함
         public Action<int> ExitModeEvent; 
         public Action<int> EnterModeEvent;
@@ -66,7 +62,6 @@ namespace Code.MainSystem.MainScreen.Bottom
                 case 4:
                     break;
                 case 5:
-                    traitSelectCompo.Show();
                     break;
                 case 6:
                     break;
@@ -93,7 +88,6 @@ namespace Code.MainSystem.MainScreen.Bottom
                 case 4:
                     break;
                 case 5:
-                    traitSelectCompo.Close();
                     break;
                 case 6:
                     break;
