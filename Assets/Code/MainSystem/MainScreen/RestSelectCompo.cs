@@ -54,12 +54,16 @@ namespace Code.MainSystem.MainScreen
                 btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(() => OnClickMember(type));
             }
+            
+            UpdateButtonsState();
         }
 
         public void Rest()
         {
             panel.SetActive(true);
             _isOpen = true;
+            
+            UpdateButtonsState();
         }
 
         public void Close()
@@ -112,6 +116,29 @@ namespace Code.MainSystem.MainScreen
             healthBar.SetHealth(_selectedUnit.currentCondition, _selectedUnit.maxCondition);
 
             Close();
+        }
+        
+        /// <summary>
+        /// 멤버의 행동 완료 여부에 따라 버튼의 활성화 상태와 색상을 업데이트합니다.
+        /// </summary>
+        private void UpdateButtonsState()
+        {
+            if (memberButtons == null) return;
+
+            foreach (var btn in memberButtons)
+            {
+                if (!Enum.TryParse(btn.name, out MemberType type))
+                    continue;
+
+                bool isTrained = TrainingManager.Instance.IsMemberTrained(type);
+                
+                btn.interactable = !isTrained;
+                
+                if (btn.image != null)
+                {
+                    btn.image.color = isTrained ? Color.gray : Color.white;
+                }
+            }
         }
         
         private void OnConfirmRest(ConfirmRestEvent evt)
