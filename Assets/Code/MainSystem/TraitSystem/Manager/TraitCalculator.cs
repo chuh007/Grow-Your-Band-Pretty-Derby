@@ -7,12 +7,6 @@ namespace Code.MainSystem.TraitSystem.Manager
 {
     public static class TraitCalculator
     {
-        // TODO 연결 작업후 삭제
-        public static float GetFinalStat<T>(this ITraitHolder holder, float baseValue) where T : class
-        {
-            return Mathf.Max(0, 1); 
-        }
-        
         public static float GetCalculatedStat(this ITraitHolder holder, TraitTarget category, float baseValue, object context = null)
         {
             var modifiers = holder.GetModifiers<MultiStatModifierEffect>();

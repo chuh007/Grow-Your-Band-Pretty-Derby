@@ -3,7 +3,7 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 
 namespace Code.MainSystem.Rhythm.Judgement
@@ -62,7 +62,7 @@ namespace Code.MainSystem.Rhythm.Judgement
             {
                 _hasMissedSinceLastFever = true;
                 var holder = TraitManager.Instance.GetHolder((MemberType)evt.TrackIndex);
-                _runtimeMaxGauge = holder.GetFinalStat<IFeverInputStat>(baseMaxFeverGauge);
+                _runtimeMaxGauge = holder.GetCalculatedStat(TraitTarget.FeverInput, baseFeverDuration);
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace Code.MainSystem.Rhythm.Judgement
             _currentGauge = 0;
             
             var holder = TraitManager.Instance.GetHolder((MemberType)trackIndex);
-            float finalTraitDuration = holder.GetFinalStat<IFeverTimeStat>(baseFeverDuration);
+            float finalTraitDuration = holder.GetCalculatedStat(TraitTarget.FeverTime, baseFeverDuration);
             
             // 미리 주입받은 보너스 사용
             _feverTimer = finalTraitDuration + _statBonusDuration;
@@ -101,7 +101,7 @@ namespace Code.MainSystem.Rhythm.Judgement
         {
             if (!_isFeverActive) return 1.0f;
             var holder = TraitManager.Instance.GetHolder((MemberType)trackIndex);
-            return holder.GetFinalStat<IFeverScoreStat>(1.0f);
+            return holder.GetCalculatedStat(TraitTarget.FeverScore, 1.0f);
         }
     }
 }

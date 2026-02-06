@@ -19,14 +19,4 @@
     {
         bool CorrectMissToGood { get; }
     }
-    
-    // TODO 연결 작업후 삭제
-    internal interface IFeverInputStat
-    { }
-
-    internal interface IFeverTimeStat
-    { }
-
-    public interface IFeverScoreStat
-    { }
 }
