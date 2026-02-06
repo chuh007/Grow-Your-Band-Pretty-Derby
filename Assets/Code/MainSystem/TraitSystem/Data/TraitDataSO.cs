@@ -27,16 +27,31 @@ namespace Code.MainSystem.TraitSystem.Data
         
         [TextArea] public string DescriptionEffect;
         
-        [Header("Special Case")]
-        public string SpecialLogicClassName;
+        [HideInInspector] public string SpecialLogicClassName;
 
         public AbstractTraitEffect CreateEffectInstance()
         {
             if (string.IsNullOrEmpty(SpecialLogicClassName))
                 return new MultiStatModifierEffect();
-
-            var type = System.Type.GetType(SpecialLogicClassName);
-            return (AbstractTraitEffect)System.Activator.CreateInstance(type);
+            
+            Type type = Type.GetType(SpecialLogicClassName);
+            
+            if (type == null)
+            {
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    type = assembly.GetType(SpecialLogicClassName);
+                    if (type != null)
+                        break;
+                }
+            }
+            
+            if (type != null)
+            {
+                return (AbstractTraitEffect)Activator.CreateInstance(type);
+            }
+            
+            return new MultiStatModifierEffect();
         }
     }
 }

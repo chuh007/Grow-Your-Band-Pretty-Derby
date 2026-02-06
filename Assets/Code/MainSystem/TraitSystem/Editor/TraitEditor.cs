@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.TraitEffect;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -70,12 +72,14 @@ namespace Code.MainSystem.TraitSystem.Editor
 
         private void BindImpactItem(VisualElement element, int i)
         {
-            if (_serializedTrait == null) return;
+            if (_serializedTrait == null)
+                return;
 
             var effectsProp = _serializedTrait.FindProperty("Effects");
             var impactsProp = _serializedTrait.FindProperty("Impacts");
 
-            if (i >= effectsProp.arraySize || i >= impactsProp.arraySize) return;
+            if (i >= effectsProp.arraySize || i >= impactsProp.arraySize)
+                return;
 
             element.Q<Label>("id-label").text = $"N{i + 1}";
             
@@ -103,30 +107,57 @@ namespace Code.MainSystem.TraitSystem.Editor
         private void DrawTraitDetail(TraitDataSO target)
         {
             _detailPanel.Unbind();
-    
-            if (target == null)
-            {
-                _detailPanel.style.display = DisplayStyle.None;
-                _serializedTrait = null;
-                return;
-            }
+            if (target == null) { _detailPanel.style.display = DisplayStyle.None; return; }
 
             _detailPanel.style.display = DisplayStyle.Flex;
-            
             _serializedTrait = new SerializedObject(target);
             _detailPanel.Bind(_serializedTrait);
-            
+
+            SetupSpecialLogicDropdown(target);
+
             _impactListView.itemsSource = target.Effects;
             _impactListView.Rebuild();
-            
-            _detailPanel.TrackSerializedObjectValue(_serializedTrait, _ => {
+
+            _detailPanel.TrackSerializedObjectValue(_serializedTrait, (so) => {
                 _traitListView.RefreshItem(_traitListView.selectedIndex);
             });
         }
 
+        private void SetupSpecialLogicDropdown(TraitDataSO target)
+        {
+            var effectTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(AbstractTraitEffect).IsAssignableFrom(p) && !p.IsAbstract)
+                .Select(t => t.FullName)
+                .ToList();
+            
+            effectTypes.Insert(0, "None (Default)");
+            var container = _detailPanel.Q<VisualElement>("logic-dropdown-container");
+            if (container == null) return;
+
+            container.Clear();
+            string currentSelection = string.IsNullOrEmpty(target.SpecialLogicClassName) 
+                ? "None (Default)" 
+                : target.SpecialLogicClassName;
+
+            var dropdown = new PopupField<string>("Special Logic", effectTypes, currentSelection);
+
+            dropdown.RegisterValueChangedCallback(evt => {
+                _serializedTrait.Update();
+                var prop = _serializedTrait.FindProperty("SpecialLogicClassName");
+        
+                prop.stringValue = (evt.newValue == "None (Default)") ? "" : evt.newValue;
+        
+                _serializedTrait.ApplyModifiedProperties();
+            });
+
+            container.Add(dropdown);
+        }
+
         private void AddEffectPair()
         {
-            if (_serializedTrait == null) return;
+            if (_serializedTrait == null) 
+                return;
 
             _serializedTrait.Update();
             var effectsProp = _serializedTrait.FindProperty("Effects");
@@ -142,7 +173,8 @@ namespace Code.MainSystem.TraitSystem.Editor
 
         private void RemoveEffectPair(int index)
         {
-            if (_serializedTrait == null) return;
+            if (_serializedTrait == null) 
+                return;
 
             _serializedTrait.Update();
             var effectsProp = _serializedTrait.FindProperty("Effects");
@@ -172,7 +204,8 @@ namespace Code.MainSystem.TraitSystem.Editor
         private void CreateNewTrait()
         {
             string path = EditorUtility.SaveFilePanelInProject("New Trait", "NewTrait", "asset", "Save Trait");
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrEmpty(path))
+                return;
 
             var asset = CreateInstance<TraitDataSO>();
             AssetDatabase.CreateAsset(asset, path);
