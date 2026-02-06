@@ -1,53 +1,56 @@
-﻿using System.Linq;
+﻿using Code.MainSystem.TraitSystem.Data;
 using UnityEngine;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.TraitEffect;
 
 namespace Code.MainSystem.TraitSystem.Manager
 {
     public static class TraitCalculator
     {
+        // TODO 연결 작업후 삭제
         public static float GetFinalStat<T>(this ITraitHolder holder, float baseValue) where T : class
         {
-            if (holder == null) return baseValue;
+            return Mathf.Max(0, 1); 
+        }
+        
+        public static float GetCalculatedStat(this ITraitHolder holder, TraitTarget category, float baseValue, object context = null)
+        {
+            var modifiers = holder.GetModifiers<MultiStatModifierEffect>();
     
-            var modifiers = holder.GetModifiers<T>();
-            if (modifiers == null || !modifiers.Any()) 
-            {
-                Debug.Log($"[Trait] {typeof(T).Name} 에 해당하는 Modifiers가 없습니다.");
-                return baseValue;
-            }
-
-            float additive = 0f;
-            float totalMultiplier = 0f;
-            
-            Debug.Log($"기본 밸류 : {baseValue}");
+            float flatBonus = 0f;
+            float percentBonus = 0f;
+            float finalMultiplier = 1f;
 
             foreach (var m in modifiers)
             {
-                switch (m)
+                if (!m.IsTargetStat(category)) continue;
+
+                float amount = m.GetAmount(category, context);
+                CalculationType type = m.GetCalcType(category);
+
+                switch (type)
                 {
-                    case IAdditiveModifier<T> addMod:
-                        additive += addMod.AdditiveValue;
-                        Debug.Log($"[Trait] 더하기 적용 성공: {addMod.AdditiveValue}%");
+                    case CalculationType.Additive:
+                        flatBonus += amount;
                         break;
-
-                    case IPercentageModifier<T> perMod:
-                        totalMultiplier += perMod.Percentage * 0.01f;
-                        Debug.Log($"[Trait] 퍼센트 적용 성공: {perMod.Percentage}%");
+                    case CalculationType.Subtractive:
+                        flatBonus -= amount;
                         break;
-
-                    case IMultiplyModifier<T> mulMod:
-                        totalMultiplier += mulMod.Multiplier - 1f;
-                        Debug.Log($"[Trait] 곱하기 적용 성공: {mulMod.Multiplier}%");
+                    case CalculationType.PercentAdd:
+                        percentBonus += amount * 0.01f;
+                        break;
+                    case CalculationType.PercentSub:
+                        percentBonus -= amount * 0.01f;
+                        break;
+                    case CalculationType.Multiplicative:
+                        finalMultiplier *= amount; 
                         break;
                 }
             }
             
-            float result = (baseValue + additive) * (1f + totalMultiplier);
+            float result = (baseValue + flatBonus) * (1f + percentBonus) * finalMultiplier;
             
-            Debug.Log($"최종 밸류 : {result}");
-
-            return Mathf.Max(0, result); 
+            return Mathf.Max(0, result);
         }
     }
 }

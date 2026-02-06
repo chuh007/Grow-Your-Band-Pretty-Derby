@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Reflex.Attributes;
 using Code.MainSystem.Rhythm.Audio;
+using Cysharp.Threading.Tasks;
 
 namespace Code.MainSystem.Rhythm.Core
 {
@@ -28,20 +29,43 @@ namespace Code.MainSystem.Rhythm.Core
         
         [Inject] private Conductor _conductor;
 
+        private bool _isGameEnded = false;
+
+        private void OnEnable()
+        {
+            Bus<RhythmGameResultEvent>.OnEvent += OnGameResultReceived;
+            Bus<ScoreUpdateEvent>.OnEvent += OnScoreUpdated;
+            Bus<SongEndEvent>.OnEvent += OnSongEnd;
+        }
+
+        private void OnDisable()
+        {
+            Bus<RhythmGameResultEvent>.OnEvent -= OnGameResultReceived;
+            Bus<ScoreUpdateEvent>.OnEvent -= OnScoreUpdated;
+            Bus<SongEndEvent>.OnEvent -= OnSongEnd;
+        }
+
         private void Start()
         {
             if(startPanel != null) startPanel.SetActive(true);
             if(gameHudPanel != null) gameHudPanel.SetActive(false);
             if(resultPanel != null) resultPanel.SetActive(false);
-        
-            Bus<RhythmGameResultEvent>.OnEvent += OnGameResultReceived;
-            Bus<ScoreUpdateEvent>.OnEvent += OnScoreUpdated;
         }
-        
-        private void OnDestroy()
+
+        private void OnSongEnd(SongEndEvent evt)
         {
-            Bus<RhythmGameResultEvent>.OnEvent -= OnGameResultReceived;
-            Bus<ScoreUpdateEvent>.OnEvent -= OnScoreUpdated;
+            if (_isGameEnded) return;
+            _isGameEnded = true;
+            HandleGameEndSequence().Forget();
+        }
+
+        private async UniTaskVoid HandleGameEndSequence()
+        {
+            await UniTask.Delay(1000);
+            if (_resultSender != null)
+            {
+                _resultSender.SendResult();
+            }
         }
 
         private void OnScoreUpdated(ScoreUpdateEvent evt)

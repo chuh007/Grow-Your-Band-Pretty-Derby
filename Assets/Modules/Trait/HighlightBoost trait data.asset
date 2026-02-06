@@ -12,19 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: HighlightBoost trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitID: 1006
   TraitType: 11
   TraitName: "\uD558\uC774\uB77C\uC774\uD2B8 \uAC15\uD654"
   TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
-  traitEffectType: 1
   MaxLevel: 10
   Point: 4
   IsRemovable: 0
+  Impacts:
+  - Target: 7
+    CalcType: 0
+    RequiredTag: 
   Effects:
-  - 25
+  - 20
   DescriptionEffect: "\uB9AC\uB4EC \uAC8C\uC784: \uD53C\uBC84 \uD0C0\uC784 \uC911
     \uD68D\uB4DD \uC810\uC218 {0}% \uC99D\uAC00"
-  conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.HighlightBoostEffect, Assembly-CSharp,
-    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  SpecialLogicClassName: 

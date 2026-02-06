@@ -28,11 +28,10 @@ namespace Code.MainSystem.MainScreen
         [Header("UI")] [SerializeField] private HealthBar healthBar;
         [SerializeField] private PersonalPracticeSequencePlayer personalTrainingSequenceController;
         [SerializeField] private List<Image> arrowObjs;
-        [SerializeField] private List<TextMeshProUGUI> probabilityTexts;
+        [SerializeField] private TextMeshProUGUI probabilityText;
         [SerializeField] private List<Button> practiceButtons;
         [SerializeField] private TextMeshProUGUI lesson1Text;
         [SerializeField] private TextMeshProUGUI lesson2Text;
-        [SerializeField] private List<UnitHealthBars> unitHealthBars;
         
         private UnitDataSO _currentUnit;
         private float _currentCondition;
@@ -57,14 +56,10 @@ namespace Code.MainSystem.MainScreen
             
             healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
 
-            var unitHealth = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
-            if (unitHealth != null)
-                unitHealth.healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
-
             _statUIUpdater.UpdateAll(_currentUnit);
 
             HideAllArrows();
-            HideAllProbabilityTexts();
+            HideProbabilityText();
         }
 
         #region Init
@@ -77,10 +72,6 @@ namespace Code.MainSystem.MainScreen
 
             healthBar.SetHealth(_currentCondition, unit.maxCondition);
 
-            var unitHealth = unitHealthBars.Find(u => u.memberType == unit.memberType);
-            if (unitHealth != null)
-                unitHealth.healthBar.SetHealth(_currentCondition, unit.maxCondition);
-
             _statUIUpdater.UpdateAll(unit);
 
             lesson1Text.text = unit.stats.Count > 2 ? unit.stats[2].statName : "";
@@ -89,7 +80,7 @@ namespace Code.MainSystem.MainScreen
             _selectedPracticeIndex = -1;
 
             HideAllArrows();
-            HideAllProbabilityTexts();
+            HideProbabilityText();
 
             UpdateButtonsState();
         }
@@ -133,10 +124,6 @@ namespace Code.MainSystem.MainScreen
                 _currentUnit.currentCondition = _currentCondition;
                 healthBar.ApplyHealth(realDamage);
 
-                var unitHealth = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
-                if (unitHealth != null)
-                    unitHealth.healthBar.ApplyHealth(realDamage);
-
                 TrainingManager.Instance.MarkMemberTrained(_currentUnit.memberType);
 
                 _selectedPracticeIndex = -1;
@@ -148,7 +135,7 @@ namespace Code.MainSystem.MainScreen
                     success,
                     practice,
                     _currentCondition,              
-                    _currentUnit.TeamStat,            
+                    _currentUnit.teamStat,            
                     StatManager.Instance.GetTeamStat(StatType.TeamHarmony).CurrentValue
                 );
 
@@ -156,12 +143,8 @@ namespace Code.MainSystem.MainScreen
                 
                 healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
 
-                var unitHealthReset = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
-                if (unitHealthReset != null)
-                    unitHealthReset.healthBar.SetHealth(_currentCondition, _currentUnit.maxCondition);
-
                 HideAllArrows();
-                HideAllProbabilityTexts();
+                HideProbabilityText();
                 UpdateButtonsState();
                 return;
             }
@@ -170,10 +153,6 @@ namespace Code.MainSystem.MainScreen
             _previewDamage = practice.StaminaReduction;
             
             healthBar.PrevieMinusHealth(_previewDamage);
-
-            var unitHealthBar = unitHealthBars.Find(u => u.memberType == _currentUnit.memberType);
-            if (unitHealthBar != null)
-                unitHealthBar.healthBar.PrevieMinusHealth(_previewDamage);
 
             _statUIUpdater.PreviewStat(_currentUnit, practice.PracticeStatType, practice.statIncrease);
 
@@ -214,22 +193,13 @@ namespace Code.MainSystem.MainScreen
 
         private void ShowProbability()
         {
-            if (_memberTypeIndexMap.TryGetValue(_currentUnit.memberType, out int idx) &&
-                idx < probabilityTexts.Count)
-            {
-                for (int i = 0; i < probabilityTexts.Count; i++)
-                    probabilityTexts[i].gameObject.SetActive(i == idx);
-
-                probabilityTexts[idx].SetText($"{Mathf.FloorToInt(_currentCondition)}%");
-            }
+            probabilityText.gameObject.SetActive(true);
+            probabilityText.SetText($"성공확률: {Mathf.FloorToInt(_currentCondition)}%");
         }
 
-        private void HideAllProbabilityTexts()
+        private void HideProbabilityText()
         {
-            foreach (var t in probabilityTexts)
-            {
-                t.gameObject.SetActive(false);
-            }
+            probabilityText.gameObject.SetActive(false);
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Events;
-using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 using UnityEngine;
 
@@ -26,7 +26,7 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
             var holder = TraitManager.Instance.GetHolder(unit.memberType);
 
             float finalRecovery =
-                holder.GetFinalStat<IConditionStat>(_restRecoveryAmount);
+                holder.GetCalculatedStat(TraitTarget.Condition, _restRecoveryAmount);
 
             unit.currentCondition = Mathf.Clamp(
                 unit.currentCondition + finalRecovery,
@@ -38,7 +38,8 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
         public float ModifyConditionCost(MemberType memberType, float baseCost)
         {
             var holder = TraitManager.Instance.GetHolder(memberType);
-            return holder?.GetFinalStat<IConditionStat>(baseCost) ?? baseCost;
+            var result = holder?.GetCalculatedStat(TraitTarget.Condition, baseCost);
+            return result ?? 0f;
         }
     }
 }

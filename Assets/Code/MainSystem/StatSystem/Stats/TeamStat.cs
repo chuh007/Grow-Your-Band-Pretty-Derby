@@ -1,74 +1,31 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Code.Core.Bus;
+﻿using Code.Core.Bus;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.StatSystem.Stats
 {
     public class TeamStat : AbstractStats
     {
-        [SerializeField] private string statLabel;
-
-        private bool _initialized;
-
-        public async Task InitializeAsync()
+        protected override void Awake()
         {
-            if (_initialized)
-                return;
-
-            if (string.IsNullOrEmpty(statLabel))
-            {
-                return;
-            }
-
-            var statDataList = new List<StatData>();
-
-            var handle = Addressables.LoadAssetsAsync<StatData>(
-                statLabel,
-                data => statDataList.Add(data)
-            );
-
-            await handle.Task;
-            InitializeStats(statDataList);
-            _initialized = true;
+            base.Awake();
+            Bus<TeamStatValueChangedEvent>.OnEvent += OnTeamStatChanged;
+        }
+        
+        private void OnDestroy()
+        {
+            Bus<TeamStatValueChangedEvent>.OnEvent -= OnTeamStatChanged;
         }
 
-        private void InitializeStats(List<StatData> list)
+        private void OnTeamStatChanged(TeamStatValueChangedEvent evt)
         {
-            foreach (var data in list)
-            {
-                if (Stats.ContainsKey(data.statType))
-                    continue;
-
-                Stats[data.statType] = new BaseStat(data);
-            }
+            BaseStat stat = GetStat(evt.StatType);
+            stat?.PlusValue(evt.AddValue);
         }
 
-        public BaseStat GetTeamStat(StatType statType)
+        public BaseStat GetTeamStat()
         {
-            return _initialized ? GetStat(statType) : null;
-        }
-
-        public void ApplyTeamStatIncrease(float value)
-        {
-            if (!_initialized)
-            {
-                return;
-            }
-
-            BaseStat stat = GetStat(StatType.TeamHarmony);
-            if (stat == null)
-                return;
-
-            stat.PlusValue((int)value);
-
-            Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(true));
-            Bus<TeamStatValueChangedEvent>.Raise(
-                new TeamStatValueChangedEvent(StatType.TeamHarmony, (int)value)
-            );
+            return _isInitialized ? GetStat(StatType.TeamHarmony) : null;
         }
     }
 }

@@ -10,9 +10,11 @@ using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager.SubClass;
 using Code.MainSystem.StatSystem.Module;
 using Code.MainSystem.StatSystem.Stats;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.TraitSystem.TraitEffect;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.StatSystem.Manager
 {
@@ -29,16 +31,19 @@ namespace Code.MainSystem.StatSystem.Manager
         [SerializeField] private List<MemberStat> memberStats;
         [SerializeField] private TeamStat teamStat;
 
+        [FormerlySerializedAs("upgradeModule")]
         [Header("StatModule")]
-        [SerializeField] private StatUpgrade upgradeModule;
+        [SerializeField] private StatUpgradeModule upgradeModuleModule;
         [SerializeField] private EnsembleModule ensembleModule;
 
         [Header("Settings")]
         [SerializeField] private float restRecoveryAmount = 10f;
 
-        private Dictionary<MemberType, MemberStat> _memberMap;
-        private bool _isInitialized = false;
         public bool IsInitialized => _isInitialized;
+        
+        private bool _isInitialized;
+        
+        private Dictionary<MemberType, MemberStat> _memberMap;
         
         private StatRegistry _registry;
         private StatOperator _operator;
@@ -80,13 +85,13 @@ namespace Code.MainSystem.StatSystem.Manager
             {
                 await _registry.InitializeAsync();
                 
-                await upgradeModule.Initialize();
+                await upgradeModuleModule.Initialize();
                 await ensembleModule.Initialize();
                 _isInitialized = true; 
             }
             catch (Exception e)
             {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR
                 Debug.LogError($"StatManager 초기화 실패: {e}");
 #endif
             }
@@ -101,9 +106,6 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
-            Bus<StatAllIncreaseEvent>.OnEvent += HandleAllMemberStatIncreaseRequested;
-            Bus<TeamStatIncreaseEvent>.OnEvent += HandleTeamStatIncreaseRequested;
-            Bus<StatAllMemberStatIncreaseEvent>.OnEvent += HandleMemberAllStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent += HandleTeamPracticeRequested;
         }
 
@@ -112,9 +114,6 @@ namespace Code.MainSystem.StatSystem.Manager
             Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
-            Bus<StatAllIncreaseEvent>.OnEvent -= HandleAllMemberStatIncreaseRequested;
-            Bus<TeamStatIncreaseEvent>.OnEvent -= HandleTeamStatIncreaseRequested;
-            Bus<StatAllMemberStatIncreaseEvent>.OnEvent -= HandleMemberAllStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent -= HandleTeamPracticeRequested;
         }
 
@@ -134,31 +133,20 @@ namespace Code.MainSystem.StatSystem.Manager
                 foreach (var inspiration in
                          holder.GetModifiers<IInspirationSystem>()
                              .OfType<FailureBreedsSuccessEffect>())
-                    inspiration.OnFailure();
+                    inspiration.OnTrainingFailed();
                 return;
             }
 
             float rewardValue = evt.Value;
 
-            rewardValue = holder.GetFinalStat<ITrainingStat>(rewardValue);
+            rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
 
             if (evt.Type == PracticenType.Personal)
-                rewardValue = holder.GetFinalStat<IPracticeStat>(rewardValue);
+                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice,rewardValue);
 
             _operator.IncreaseMemberStat(evt.memberType, evt.statType, rewardValue);
         }
-        
-        public float GetFinalRewardValue(MemberType member, StatType statType, float baseValue)
-        {
-            ITraitHolder holder = TraitManager.Instance.GetHolder(member);
-            float finalValue = baseValue;
-            
-            if (statType == StatType.Mental)
-                finalValue = holder.GetFinalStat<IMentalStat>(finalValue);
 
-            return finalValue;
-        }
-        
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
             if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
@@ -172,21 +160,6 @@ namespace Code.MainSystem.StatSystem.Manager
             _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, evt.Value);
         }
 
-        private void HandleMemberAllStatIncreaseRequested(StatAllMemberStatIncreaseEvent evt)
-        {
-            _operator.IncreaseAllStatsForMember(evt.MemberType, evt.Value);
-        }
-
-        private void HandleAllMemberStatIncreaseRequested(StatAllIncreaseEvent evt)
-        {
-            _operator.IncreaseStatForAllMembers(evt.StatType, evt.Value);
-        }
-
-        private void HandleTeamStatIncreaseRequested(TeamStatIncreaseEvent evt)
-        {
-            _operator.IncreaseTeamStat(evt.AddValue);
-        }
-
         private void HandleRestRequested(ConfirmRestEvent evt)
         {
             _conditionHandler.ProcessRest(evt);
@@ -195,6 +168,27 @@ namespace Code.MainSystem.StatSystem.Manager
         #endregion
 
         #region Public API
+        
+        /// <summary>
+        /// 현재 멤버들의 컨디션 리스트를 받아 예상 합주 성공 확률을 반환합니다.
+        /// </summary>
+        /// <param name="memberConditions">참여하는 멤버들의 컨디션 값 리스트</param>
+        /// <returns>0 ~ 100 사이의 성공 확률</returns>
+        public float GetEnsembleSuccessRate(List<float> memberConditions)
+        {
+            return ensembleModule.CalculateSuccessRate(memberConditions);
+        }
+
+        /// <summary>
+        /// 개인 훈련 예상 성공 확률을 가져옵니다.
+        /// </summary>
+        /// <param name="memberType">대상 멤버</param>
+        /// <param name="condition">현재 컨디션 수치</param>
+        public float GetPersonalSuccessRate(MemberType memberType, float condition)
+        {
+            ITraitHolder holder = TraitManager.Instance.GetHolder(memberType);
+            return upgradeModuleModule.GetFinalSuccessRate(condition, holder);
+        }
 
         public BaseStat GetMemberStat(MemberType memberType, StatType statType)
         {
@@ -203,13 +197,13 @@ namespace Code.MainSystem.StatSystem.Manager
 
         public BaseStat GetTeamStat(StatType statType)
         {
-            return _registry.GetTeamStatValue(statType);
+            return _registry.GetTeamStatValue();
         }
 
         public bool PredictMemberPractice(float successRate, ITraitHolder holder)
         {
-            upgradeModule.SetCondition(successRate);
-            return upgradeModule.CanUpgrade(holder);
+            upgradeModuleModule.SetCondition(successRate);
+            return upgradeModuleModule.CanUpgrade(holder);
         }
 
         public ConditionHandler GetConditionHandler()

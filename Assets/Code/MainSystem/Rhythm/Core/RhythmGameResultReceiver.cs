@@ -17,7 +17,7 @@ namespace Code.MainSystem.Rhythm.Core
     public class RhythmGameResultReceiver : MonoBehaviour
     {
         [SerializeField] private RhythmGameDataSenderSO dataSender;
-
+        
         private void Start()
         {
             Debug.Assert(dataSender != null, "RhythmGameDataSenderSO is missing");

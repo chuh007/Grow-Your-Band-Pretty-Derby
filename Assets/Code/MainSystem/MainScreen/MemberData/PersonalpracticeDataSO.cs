@@ -23,10 +23,5 @@ namespace Code.MainSystem.MainScreen.MemberData
         
         public PersonalComment PersonalsuccessComment;
         public PersonalComment PersonalfaillComment;
-        
-        public string ProgressImageAddresableKey;
-        public string IdleImageAddressableKey;
-        public string FaillImageAddressableKey;
-        public string SuccseImageAddressableKey;
     }
 }
