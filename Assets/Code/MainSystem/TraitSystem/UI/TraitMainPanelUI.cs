@@ -1,55 +1,45 @@
-﻿using TMPro;
-using UnityEngine;
-using Code.Core.Bus;
-using Code.MainSystem.MainScreen;
-using Code.MainSystem.StatSystem.Events;
-using Code.MainSystem.StatSystem.Manager;
+﻿using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TraitEvents;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Interface;
+using TMPro;
+using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
     public class TraitMainPanelUI : TraitPanelBase, IUIElement<string>
     {
-        [SerializeField] private SelectRequiredUI selectRequiredUI;
         [SerializeField] private TextMeshProUGUI label;
-        
-        private bool _isOpen;
-
-        private void Awake()
-        {
-            Hide();
-        }
 
         public void EnableFor(string memberType)
         {
-            if (!_isOpen)
-                return;
-            
             if (!System.Enum.TryParse(memberType, out MemberType parsed))
+            {
+                Debug.LogError($"[TraitUI] {memberType} 파싱 실패!");
                 return;
+            }
 
-            _isOpen = false;
             label.SetText($"{parsed} 특성 UI");
-            selectRequiredUI.Close();
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(parsed));
-            Show();
+            
+            Show(); 
         }
 
         public void Disable()
         {
             Hide();
         }
-        
-        public void TraitPanelOpen()
+
+        protected override void Show()
         {
-            Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
-            _isOpen = true;
+            base.Show();
+            Debug.Log("Trait Panel Show!");
         }
 
-        public void TraitPanelClose()
+        protected override void Hide()
         {
-            _isOpen = false;
+            base.Hide();
+            Debug.Log("Trait Panel Hide!");
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Code.MainSystem.MainScreen
     {
         [Header("UI")] 
         [SerializeField] private List<Button> memberButtons;
-        [SerializeField] private SelectRequiredUI selectRequiredUI;
         [SerializeField] private RestResultController restResultController;
         [SerializeField] private HealthBar healthBar;
+        [SerializeField] private GameObject panel;
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
         private UnitDataSO _selectedUnit;
@@ -58,12 +58,13 @@ namespace Code.MainSystem.MainScreen
 
         public void Rest()
         {
-            Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
+            panel.SetActive(true);
             _isOpen = true;
         }
 
         public void Close()
         {
+            panel.SetActive(false);
             _isOpen = false;
             _selectedUnit = null;
         }
@@ -88,8 +89,6 @@ namespace Code.MainSystem.MainScreen
             if (_selectedUnit == null) 
                 return;
     
-            selectRequiredUI.Close();
-    
             float beforeHealth = _selectedUnit.currentCondition;
             float healAmount = _selectedUnit.maxCondition * 0.3f;
             float afterHealth = Mathf.Min(beforeHealth + healAmount, _selectedUnit.maxCondition);
@@ -112,8 +111,7 @@ namespace Code.MainSystem.MainScreen
 
             healthBar.SetHealth(_selectedUnit.currentCondition, _selectedUnit.maxCondition);
 
-            _isOpen = false;
-            _selectedUnit = null;
+            Close();
         }
         
         private void OnConfirmRest(ConfirmRestEvent evt)

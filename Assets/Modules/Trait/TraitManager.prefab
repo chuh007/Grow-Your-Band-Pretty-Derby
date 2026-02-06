@@ -92,50 +92,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.CharacterTrait
   memberType: 3
   maxPoints: 20
---- !u!1 &1714156030516076443
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7063433486215225995}
-  - component: {fileID: 6366588117264567166}
-  m_Layer: 0
-  m_Name: TraitEffectApplicator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7063433486215225995
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714156030516076443}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7174086074461526105}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6366588117264567166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714156030516076443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ec5c57c369b4bf9afa7938420aebc30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Manager.SubClass.TraitEffectApplicator
 --- !u!1 &2028793981678617789
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +442,6 @@ Transform:
   m_Children:
   - {fileID: 6343367606330979414}
   - {fileID: 2703522419587287969}
-  - {fileID: 7063433486215225995}
   - {fileID: 5478000864848882374}
   - {fileID: 5892712501321110677}
   - {fileID: 77855229438766953}
