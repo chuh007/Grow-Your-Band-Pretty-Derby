@@ -6,7 +6,6 @@ using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Encounter;
-using Code.MainSystem.Rhythm.Core;
 using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5218978669115547629}
   - component: {fileID: 2458095661151708282}
   m_Layer: 0
-  m_Name: OutingResultReceiver
+  m_Name: OutingDataController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

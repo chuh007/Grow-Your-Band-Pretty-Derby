@@ -27,3 +27,10 @@ MonoBehaviour:
     target: 15
     type: 2
     turn: 5
+  - titleText: "\uAC1C\uBC1C\uC911"
+    isTargetSet: 1
+    icon: {fileID: 21300000, guid: 79f207fa03251374984180437024066a, type: 3}
+    targetType: 12
+    target: 100
+    type: 2
+    turn: 10

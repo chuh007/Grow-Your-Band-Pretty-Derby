@@ -27,6 +27,8 @@ namespace Code.MainSystem.Encounter
         private Dictionary<EncounterConditionType, List<EncounterDataSO>> encounterData;
         private void Awake()
         {
+
+            
             encounterData = new Dictionary<EncounterConditionType, List<EncounterDataSO>>();
             
             foreach (EncounterConditionType type in Enum.GetValues(typeof(EncounterConditionType)))
@@ -43,6 +45,11 @@ namespace Code.MainSystem.Encounter
             {
                 Instance = this;
                 DontDestroyOnLoad(this);
+                encounterSender.encounterData = null;
+                encounterSender.addedTraits.Clear();
+                encounterSender.changeStats.Clear();
+                rhythmGameDataSender.IsSuccess = false;
+                rhythmGameDataSender.IsFailed = false;
             }
             else
             {
@@ -82,9 +89,13 @@ namespace Code.MainSystem.Encounter
                     () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
                 return;
             }
-            else if(rhythmGameDataSender.IsSuccess)
+            if(rhythmGameDataSender.IsFailed)
             {
-                
+                var data = encounterData[EncounterConditionType.BuskingFall];
+                encounterSender.encounterData = data[0];
+                DOVirtual.DelayedCall(0.5f, 
+                    () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
+                return;
             }
             
             // foreach (var data in encounterData[EncounterConditionType.TurnStart])

@@ -26,7 +26,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 53fac43b991d5954e916940f0e7cdad1, type: 2}
   - {fileID: 11400000, guid: e0619b01af0e1ac4fa4ded34539234af, type: 2}
   maxCondition: 100
-  currentCondition: 59
+  currentCondition: 100
   TeamStat: {fileID: 11400000, guid: 19c37e942ee3da545adcf240f1dd8c3a, type: 2}
   unitActions:
   - {fileID: 11400000, guid: f2b088d95a67e834bbdf91b0deba64d2, type: 2}
