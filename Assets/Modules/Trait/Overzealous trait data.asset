@@ -20,11 +20,19 @@ MonoBehaviour:
   IsRemovable: 1
   Impacts:
   - Target: 0
+    CalcType: 2
+    RequiredTag: 
+  - Target: 0
     CalcType: 0
     RequiredTag: 
+  - Target: 0
+    CalcType: 2
+    RequiredTag: 
   Effects:
-  - 0
+  - 30
+  - 1
+  - 30
   DescriptionEffect: "\uAC1C\uC778 \uD6C8\uB828 \uB610\uB294 \uD569\uC8FC \uC9C4\uD589
     \uD6C4 {0}%\uD655\uB960\uB85C \uD589\uB3D9\uAD8C {1}, \uBAA8\uB4E0 \uCEE8\uB514\uC158
     \uC18C\uBAA8 {2}% \uC99D\uAC00"
-  SpecialLogicClassName: 
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.OverzealousEffect
