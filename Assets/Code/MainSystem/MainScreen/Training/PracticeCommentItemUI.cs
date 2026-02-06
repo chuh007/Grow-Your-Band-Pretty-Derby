@@ -16,15 +16,38 @@ namespace Code.MainSystem.MainScreen.Training
 
         [Header("Typing Settings")]
         [SerializeField] private float typingSpeed = 0.03f;
-        [SerializeField] private float delayBetweenSections = 0.3f; 
+        [SerializeField] private float delayBetweenSections = 0.3f;
+        
+        [Header("Font Settings")]
+        [SerializeField] private bool useHandwritingFont = true;
 
         private CancellationTokenSource _animationCTS;
-        public CommentData _currentData; 
+        public CommentData _currentData;
+        private TMP_FontAsset _handwritingFont;
 
         private void OnDestroy()
         {
             _animationCTS?.Cancel();
             _animationCTS?.Dispose();
+        }
+
+        public void SetHandwritingFont(TMP_FontAsset font)
+        {
+            _handwritingFont = font;
+            
+            if (useHandwritingFont && _handwritingFont != null)
+            {
+                ApplyHandwritingFont();
+            }
+        }
+
+        private void ApplyHandwritingFont()
+        {
+            if (_handwritingFont == null) return;
+            
+            if (titleText != null) titleText.font = _handwritingFont;
+            if (contentText != null) contentText.font = _handwritingFont;
+            if (thoughtsText != null) thoughtsText.font = _handwritingFont;
         }
 
         public void Setup(CommentData data)
@@ -34,6 +57,11 @@ namespace Code.MainSystem.MainScreen.Training
             _animationCTS?.Cancel();
             _animationCTS?.Dispose();
             _animationCTS = new CancellationTokenSource();
+            
+            if (useHandwritingFont && _handwritingFont != null)
+            {
+                ApplyHandwritingFont();
+            }
             
             titleText.text = "";
             contentText.text = "";
@@ -136,9 +164,11 @@ namespace Code.MainSystem.MainScreen.Training
                 }
             }
         }
+
         public void SkipToComplete(CommentData data)
         {
             _animationCTS?.Cancel();
+            
             
             titleText.text = data.title;
             contentText.text = data.content;

@@ -5,6 +5,8 @@ using Code.MainSystem.StatSystem.Manager;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Serialization;
+using TMPro;
 
 namespace Code.MainSystem.MainScreen.MemberData
 {
@@ -14,6 +16,9 @@ namespace Code.MainSystem.MainScreen.MemberData
         public string unitName;
         public MemberType memberType;
         public string spriteAddressableKey;
+        
+        [Header("UI Settings")]
+        public TMP_FontAsset handwritingFont;
         
         [Header("Addressable References")]
         public List<AssetReference> statsReferences;
@@ -25,9 +30,9 @@ namespace Code.MainSystem.MainScreen.MemberData
         public float currentCondition;
         public AssetReference TeamStat;
         
-        [Header("Team Practice Comments")]
-        public TeamPracticeCommentDataSO teamSuccessComment;
-        public TeamPracticeCommentDataSO teamFailComment;
+        [FormerlySerializedAs("teamSuccessComment")] [Header("Team Practice Comments")]
+        public PracticeCommentDataSO successComment;
+        [FormerlySerializedAs("teamFailComment")] public PracticeCommentDataSO failComment;
         
         [NonSerialized] public List<StatData> stats;
         [NonSerialized] public List<PersonalpracticeDataSO> personalPractices;
