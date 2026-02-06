@@ -134,7 +134,7 @@ namespace Code.MainSystem.MainScreen.Training
         private void AddCommentForMember(UnitDataSO unit)
         {
             bool isSuccess = TeamPracticeResultCache.IsSuccess;
-            var commentDataSO = isSuccess ? unit.teamSuccessComment : unit.teamFailComment;
+            var commentDataSO = isSuccess ? unit.successComment : unit.failComment;
 
             if (commentDataSO == null)
             {
