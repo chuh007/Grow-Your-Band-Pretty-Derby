@@ -15,7 +15,6 @@ MonoBehaviour:
   GroupType: 0
   GroupName: "\uADF8\uB8F9 1(\uC774\uB984 \uBBF8\uC815)"
   TraitData:
-  - {fileID: 11400000, guid: 4810b742bd6e10d41bd1dc57f4856954, type: 2}
   - {fileID: 11400000, guid: d26b7679b88f5814b8951c688b174a78, type: 2}
   - {fileID: 11400000, guid: 1d4d5d31d2aee1748ae6634c5a93a1ac, type: 2}
   - {fileID: 11400000, guid: bce770db155beea429f4c1ca32d2f192, type: 2}

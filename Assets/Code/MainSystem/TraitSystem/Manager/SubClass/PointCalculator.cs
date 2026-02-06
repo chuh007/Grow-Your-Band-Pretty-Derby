@@ -13,15 +13,5 @@ namespace Code.MainSystem.TraitSystem.Manager.SubClass
         {
             return traits.Sum(t => t.Data.Point);
         }
-    
-        public int CalculateAfterRemoval(ITraitHolder holder, ActiveTrait toRemove)
-        {
-            return holder.TotalPoint - toRemove.Data.Point;
-        }
-    
-        public int CalculateAfterAdd(ITraitHolder holder, TraitDataSO toAdd)
-        {
-            return holder.TotalPoint + toAdd.Point;
-        }
     }
 }

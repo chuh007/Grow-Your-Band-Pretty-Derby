@@ -8,12 +8,11 @@ using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager.SubClass;
-using Code.MainSystem.Turn;
 using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.TraitSystem.Manager
 {
-    public class TraitManager : MonoBehaviour, ITurnStartComponent, ITurnEndComponent
+    public class TraitManager : MonoBehaviour
     {
         public static TraitManager Instance { get; private set; }
         
@@ -23,7 +22,6 @@ namespace Code.MainSystem.TraitSystem.Manager
         private ITraitValidator _validator;
         private IPointCalculator _pointCalculator;
         private TraitInteraction _interactionManager;
-        private TraitEffectApplicator _effectApplicator;
 
         private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
         
@@ -42,10 +40,6 @@ namespace Code.MainSystem.TraitSystem.Manager
             InitializeDependencies();
             RegisterHolders();
             RegisterEvents();
-            
-            foreach (var holder in _holders.Values)
-                _effectApplicator.ApplyEffects(holder, holder.ActiveTraits, TraitEffectType.Passive);
-            
         }
 
         private void OnDestroy()
@@ -61,7 +55,6 @@ namespace Code.MainSystem.TraitSystem.Manager
             _validator = GetComponentInChildren<ITraitValidator>();
             _pointCalculator = GetComponentInChildren<IPointCalculator>();
             _interactionManager = GetComponentInChildren<TraitInteraction>();
-            _effectApplicator = GetComponentInChildren<TraitEffectApplicator>();
         }
 
         /// <summary>
@@ -84,7 +77,6 @@ namespace Code.MainSystem.TraitSystem.Manager
             Bus<TraitAddRequested>.OnEvent += HandleTraitAddRequested;
             Bus<TraitRemoveRequested>.OnEvent += HandleTraitRemoveRequested;
             Bus<TraitShowRequested>.OnEvent += HandleTraitShowRequested;
-            Bus<ActionApplyEvent>.OnEvent += HandleActionApply;
         }
 
         private void UnregisterEvents()
@@ -92,7 +84,6 @@ namespace Code.MainSystem.TraitSystem.Manager
             Bus<TraitAddRequested>.OnEvent -= HandleTraitAddRequested;
             Bus<TraitRemoveRequested>.OnEvent -= HandleTraitRemoveRequested;
             Bus<TraitShowRequested>.OnEvent -= HandleTraitShowRequested;
-            Bus<ActionApplyEvent>.OnEvent -= HandleActionApply;
         }
 
         #endregion
@@ -191,9 +182,7 @@ namespace Code.MainSystem.TraitSystem.Manager
             }
             else
             {
-                ApplyTraitEffects(holder);
                 _interactionManager.ProcessAllInteractions(holder);
-            
                 ShowTraitList(holder);
             }
         }
@@ -256,15 +245,6 @@ namespace Code.MainSystem.TraitSystem.Manager
         {
             return _holders.TryGetValue(memberType, out var holder) && holder.ActiveTraits.Any(t => t.Data.TraitType == traitType);
         }
-        
-        private void ApplyTraitEffects(ITraitHolder holder)
-        {
-            _effectApplicator.ApplyEffects(
-                holder,
-                holder.ActiveTraits,
-                TraitEffectType.Passive
-            );
-        }
 
         public IReadOnlyList<TraitGroupStatus> GetTeamGroupStatus()
         {
@@ -273,25 +253,6 @@ namespace Code.MainSystem.TraitSystem.Manager
         }
 
         #endregion
-
-        public void TurnStart()
-        {
-            foreach (var holder in _holders.Values)
-                _effectApplicator.ApplyEffects(holder, holder.ActiveTraits, TraitEffectType.OnTurnStart);
-        }
-
-        public void TurnEnd()
-        {
-            foreach (var holder in _holders.Values)
-                _effectApplicator.ApplyEffects(holder, holder.ActiveTraits, TraitEffectType.OnTurnEnd);
-        }
-
-        private void HandleActionApply(ActionApplyEvent evt)
-        {
-            foreach (var holder in _holders.Values)
-                _effectApplicator.ApplyEffects(holder, holder.ActiveTraits, evt.TraitEffectType);
-        }
-
         public void NextScene()
         {
             SceneManager.LoadScene("Lch");

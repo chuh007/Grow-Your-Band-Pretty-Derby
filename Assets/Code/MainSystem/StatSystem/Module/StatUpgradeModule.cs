@@ -3,9 +3,8 @@ using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using Code.MainSystem.StatSystem.Module.Data;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Manager;
-using Code.MainSystem.TraitSystem.TraitEffect;
 
 namespace Code.MainSystem.StatSystem.Module
 {
@@ -55,7 +54,7 @@ namespace Code.MainSystem.StatSystem.Module
             ConditionLevel level = GetConditionLevel(condition); 
             float baseRate = _upgradeData.conditionSuccessRates[(int)level];
             
-            return holder.GetFinalStat<ISuccessRateStat>(baseRate);
+            return holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate);
         }
         
         /// <summary>
@@ -69,17 +68,23 @@ namespace Code.MainSystem.StatSystem.Module
         /// </summary>
         public bool CanUpgrade(ITraitHolder holder)
         {
-            var inspirations
-                = holder.GetModifiers<IInspirationSystem>()
-                .OfType<FailureBreedsSuccessEffect>();
+            var guarantors = holder.GetModifiers<ISuccessGuarantor>();
 
-            if (inspirations.Any(inspiration
-                    => inspiration.ShouldGuaranteeSuccess()))
+            if (guarantors.Any(g => g.ShouldGuarantee()))
                 return true;
             
+            
             float baseRate = GetSuccessRate();
-            float finalRate = holder.GetFinalStat<ISuccessRateStat>(baseRate);
-            return Random.Range(0f, 100f) < finalRate;
+            float finalRate = holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate);
+    
+            bool isSuccess = Random.Range(0f, 100f) < finalRate;
+            
+            foreach (var listener in holder.GetModifiers<IInspirationSystem>())
+                if (!isSuccess)
+                    listener.OnTrainingFailed();
+            
+
+            return isSuccess;
         }
 
         /// <summary>

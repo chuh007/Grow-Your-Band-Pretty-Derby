@@ -1,22 +1,17 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    /// <summary>
-    /// 반짝이는 눈
-    /// </summary>
-    public class ShiningEyesEffect : AbstractTraitEffect, IActionPointBonus
+    public class ShiningEyesEffect : MultiStatModifierEffect
     {
-        public float Chance { get; private set; }
-        public int Amount { get; private set; }
-        
-
-        public override void Initialize(ActiveTrait trait)
+        public void OnTrainingComplete(object conditionState)
         {
-            base.Initialize(trait);
-            Chance = N1(trait);
-            Amount = (int)N2(trait);
+            bool isConditionHigh = conditionState is >= 4; 
+            
+            if (isConditionHigh && Random.Range(0f, 100f) <= GetValue(0))
+            {
+                // TODO: 시스템에 행동권 N2(GetValue(1)) 추가 로직 호출
+            }
         }
     }
 }
