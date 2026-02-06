@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb39f19f2de4a842ab0dffdcc9e6a7b, type: 3}
+  m_Name: TestSongData
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.Data.SongDataSO
+  SongId: TestSong
+  Title: TestSong
+  Bpm: 60
+  BeatCountPerBar: 4
+  GuidelineSpacing: 0
+  MusicClip: {fileID: 8300000, guid: d453ad1018d82ad41836c8b482109cfe, type: 3}

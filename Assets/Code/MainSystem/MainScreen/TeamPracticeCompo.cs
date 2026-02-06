@@ -30,6 +30,9 @@ namespace Code.MainSystem.MainScreen
         [Header("UI")]
         [SerializeField] private Button enterTeamPracticeButton;
         [SerializeField] private Button startPracticeButton;
+        [SerializeField] private TextMeshProUGUI probabilityText;
+        [SerializeField] private Button backButton;
+        [SerializeField] private GameObject teamPanel;
 
         [Header("Member Buttons")]
         [SerializeField] private List<Button> memberButtons;
@@ -39,9 +42,6 @@ namespace Code.MainSystem.MainScreen
 
         [Header("Health Bars")]
         [SerializeField] private HealthBar teamHealthBar;
-
-        [Header("UI")] 
-        [SerializeField] private TextMeshProUGUI probabilityText;
         
         [Header("Team Practice Data")]
         [SerializeField] private AssetReference teamPracticeDataReference;
@@ -63,8 +63,17 @@ namespace Code.MainSystem.MainScreen
             Bus<TeamPracticeResultEvent>.OnEvent += OnPracticeResult;
             enterTeamPracticeButton.onClick.AddListener(OnEnterTeamPractice);
             startPracticeButton.onClick.AddListener(OnClickStartPractice);
+            backButton.onClick.AddListener(OnClickBack);
             
             LoadTeamPracticeData();
+        }
+
+        private void Start()
+        {
+            if (backButton != null)
+            {
+                backButton.gameObject.SetActive(false);
+            }
         }
 
         private void OnDestroy()
@@ -132,6 +141,11 @@ namespace Code.MainSystem.MainScreen
         public void OnMemberButtonClicked(string name)
         {
             if (!Enum.TryParse(name, out MemberType member)) return;
+            if (_unitMap == null || !_unitMap.ContainsKey(member))
+            {
+                Debug.LogWarning($"Unit map not initialized or member {member} not found");
+                return;
+            }
             if (!_isTeamPracticeMode || TrainingManager.Instance.IsMemberTrained(member)) return;
 
             var unit = _unitMap[member];
@@ -244,6 +258,7 @@ namespace Code.MainSystem.MainScreen
         {
             _isTeamPracticeMode = false;
             ResetSelection();
+            teamPanel.gameObject.SetActive(false);
         }
 
         private void ResetSelection()
@@ -262,6 +277,8 @@ namespace Code.MainSystem.MainScreen
         private void UpdateUI()
         {
             startPracticeButton.interactable = _isTeamPracticeMode && _selectedMembers.Count >= 2;
+            backButton.gameObject.SetActive(_isTeamPracticeMode);
+            
             if (_selectedMembers.Count >= 2)
             {
                 var conditions = _selectedMembers.Select(u => u.currentCondition).ToList();

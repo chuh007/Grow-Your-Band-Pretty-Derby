@@ -39,6 +39,7 @@ namespace Code.MainSystem.MainScreen.Training
         private bool _hasSkipped = false;
         private float _lastSkipTime = 0f;
         private bool _isTeamTraining = false;
+        private List<UnitDataSO> _currentUnits;
 
         private readonly List<GameObject> _spawnedStats = new();
         private readonly List<GameObject> _spawnedComments = new();
@@ -92,6 +93,7 @@ namespace Code.MainSystem.MainScreen.Training
             _isPlaying = true;
             _hasSkipped = false;
             _isTeamTraining = isTeamTraining;
+            _currentUnits = allUnits;
             _skipCTS?.Cancel();
             _skipCTS?.Dispose();
             _skipCTS = new CancellationTokenSource();
@@ -205,6 +207,14 @@ namespace Code.MainSystem.MainScreen.Training
                 return;
             }
 
+            TMP_FontAsset handwritingFont = null;
+            if (_currentUnits != null && _currentUnits.Count > 0 && _currentUnits[0].handwritingFont != null)
+            {
+                handwritingFont = _currentUnits[0].handwritingFont;
+            }
+            
+            Debug.Log(handwritingFont);
+
             foreach (var kvp in setupComments)
             {
                 _skipCTS.Token.ThrowIfCancellationRequested();
@@ -215,7 +225,14 @@ namespace Code.MainSystem.MainScreen.Training
                     go.transform.localScale = Vector3.one;
                     go.SetActive(true);
                     
-                    go.GetComponent<PracticeCommentItemUI>().Setup(commentData);
+                    var commentUI = go.GetComponent<PracticeCommentItemUI>();
+                    
+                    if (handwritingFont != null)
+                    {
+                        commentUI.SetHandwritingFont(handwritingFont);
+                    }
+                    
+                    commentUI.Setup(commentData);
                     
                     _spawnedComments.Add(go);
                 }
@@ -249,6 +266,7 @@ namespace Code.MainSystem.MainScreen.Training
             
             _isPlaying = false;
             _hasSkipped = false;
+            _currentUnits = null;
             CommentManager.instance.ClearAllComments();
             
             if (!_isTeamTraining)

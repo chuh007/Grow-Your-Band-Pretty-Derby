@@ -15,6 +15,7 @@ MonoBehaviour:
   unitName: Bass
   memberType: 2
   spriteAddressableKey: Guitar
+  handwritingFont: {fileID: 11400000, guid: 062ae2eb3377f924b8c17423d1250f53, type: 2}
   statsReferences:
   - m_AssetGUID: 4ef2a76c768c0c54abdb1c03c3e3e18d
     m_SubObjectName: 
@@ -84,12 +85,12 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   maxCondition: 100
-  currentCondition: 100
+  currentCondition: 98
   TeamStat:
     m_AssetGUID: 19c37e942ee3da545adcf240f1dd8c3a
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  teamSuccessComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
-  teamFailComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}
+  successComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
+  failComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}

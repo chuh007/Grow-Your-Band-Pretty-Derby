@@ -117,6 +117,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - RhythmGame
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebb16e517a293c64c840f76e0cc3ed37
+    m_Address: RhythmGame/SongData/TestSong
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RhythmGame
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
   m_SchemaSet:

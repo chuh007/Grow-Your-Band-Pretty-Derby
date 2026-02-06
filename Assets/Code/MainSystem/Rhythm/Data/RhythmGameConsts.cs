@@ -16,6 +16,7 @@ namespace Code.MainSystem.Rhythm.Data
         public const string MUSIC_PATH_FORMAT = "RhythmGame/Music/{0}";
         public const string MEMBER_PREFAB_FORMAT = "RhythmGame/Prefab/Member/{0}";
         public const string CHART_PATH_FORMAT = "RhythmGame/Chart/{0}/{1}";
+        public const string SONG_DATA_PATH_FORMAT = "RhythmGame/SongData/{0}";
         
         public static readonly List<MemberGroup> MEMBERS_GROUP = new List<MemberGroup>
         {

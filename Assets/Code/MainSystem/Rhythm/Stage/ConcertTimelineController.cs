@@ -25,11 +25,11 @@ namespace Code.MainSystem.Rhythm.Stage
 
         private void Update()
         {
-            if (!_isPlaying || director == null) return;
+            if (!_isPlaying || director == null || _conductor == null) return;
 
             double currentSongTime = _conductor.SongPosition;
 
-            director.time = currentSongTime;
+            director.time = currentSongTime + _conductor.InputOffset;
 
             director.Evaluate();
         }
