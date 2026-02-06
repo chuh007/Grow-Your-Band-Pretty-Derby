@@ -74,8 +74,40 @@ namespace Code.MainSystem.Rhythm.Core
             if (comboText != null) 
             {
                 comboText.text = evt.CurrentCombo > 0 ? $"{evt.CurrentCombo}" : "";
-                // 콤보 애니메이션 등을 여기에 추가
+                
+                if (evt.CurrentCombo > 1)
+                {
+                    PunchComboText(comboText.transform).Forget();
+                }
             }
+        }
+        
+        private async UniTaskVoid PunchComboText(Transform target)
+        {
+            float duration = Data.RhythmGameBalanceConsts.COMBO_PUNCH_DURATION;
+            float punchScale = Data.RhythmGameBalanceConsts.COMBO_PUNCH_SCALE;
+            Vector3 originalScale = Vector3.one;
+            Vector3 targetScale = Vector3.one * punchScale;
+            
+            float elapsed = 0f;
+            while (elapsed < duration / 2)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / (duration / 2);
+                target.localScale = Vector3.Lerp(originalScale, targetScale, t);
+                await UniTask.Yield(this.GetCancellationTokenOnDestroy());
+            }
+
+            elapsed = 0f;
+            while (elapsed < duration / 2)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / (duration / 2);
+                target.localScale = Vector3.Lerp(targetScale, originalScale, t);
+                await UniTask.Yield(this.GetCancellationTokenOnDestroy());
+            }
+
+            target.localScale = originalScale;
         }
         
         private void OnGameResultReceived(RhythmGameResultEvent evt)

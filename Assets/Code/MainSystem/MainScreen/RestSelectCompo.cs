@@ -16,9 +16,9 @@ namespace Code.MainSystem.MainScreen
     {
         [Header("UI")] 
         [SerializeField] private List<Button> memberButtons;
-        [SerializeField] private SelectRequiredUI selectRequiredUI;
         [SerializeField] private RestResultController restResultController;
         [SerializeField] private HealthBar healthBar;
+        [SerializeField] private GameObject panel;
 
         private Dictionary<MemberType, UnitDataSO> _unitMap;
         private UnitDataSO _selectedUnit;
@@ -54,16 +54,21 @@ namespace Code.MainSystem.MainScreen
                 btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(() => OnClickMember(type));
             }
+            
+            UpdateButtonsState();
         }
 
         public void Rest()
         {
-            Bus<SelectRequiredEvent>.Raise(new SelectRequiredEvent());
+            panel.SetActive(true);
             _isOpen = true;
+            
+            UpdateButtonsState();
         }
 
         public void Close()
         {
+            panel.SetActive(false);
             _isOpen = false;
             _selectedUnit = null;
         }
@@ -88,8 +93,6 @@ namespace Code.MainSystem.MainScreen
             if (_selectedUnit == null) 
                 return;
     
-            selectRequiredUI.Close();
-    
             float beforeHealth = _selectedUnit.currentCondition;
             float healAmount = _selectedUnit.maxCondition * 0.3f;
             float afterHealth = Mathf.Min(beforeHealth + healAmount, _selectedUnit.maxCondition);
@@ -112,8 +115,30 @@ namespace Code.MainSystem.MainScreen
 
             healthBar.SetHealth(_selectedUnit.currentCondition, _selectedUnit.maxCondition);
 
-            _isOpen = false;
-            _selectedUnit = null;
+            Close();
+        }
+        
+        /// <summary>
+        /// 멤버의 행동 완료 여부에 따라 버튼의 활성화 상태와 색상을 업데이트합니다.
+        /// </summary>
+        private void UpdateButtonsState()
+        {
+            if (memberButtons == null) return;
+
+            foreach (var btn in memberButtons)
+            {
+                if (!Enum.TryParse(btn.name, out MemberType type))
+                    continue;
+
+                bool isTrained = TrainingManager.Instance.IsMemberTrained(type);
+                
+                btn.interactable = !isTrained;
+                
+                if (btn.image != null)
+                {
+                    btn.image.color = isTrained ? Color.gray : Color.white;
+                }
+            }
         }
         
         private void OnConfirmRest(ConfirmRestEvent evt)

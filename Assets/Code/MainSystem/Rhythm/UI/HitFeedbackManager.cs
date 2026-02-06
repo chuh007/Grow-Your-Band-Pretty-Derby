@@ -6,6 +6,7 @@ using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.RhythmEvents;
 
 using Code.MainSystem.Rhythm.Data;
+using Unity.Cinemachine;
 
 namespace Code.MainSystem.Rhythm.UI
 {
@@ -16,7 +17,8 @@ namespace Code.MainSystem.Rhythm.UI
         [SerializeField] private AudioSource sfxSource;
         
         [Header("Scene References")]
-        [SerializeField] private Transform hitEffectAnchor; 
+        [SerializeField] private Transform hitEffectAnchor;
+        [SerializeField] private CinemachineImpulseSource impulseSource;
         
         [Header("Settings")]
         [SerializeField] private Vector3 effectScale = Vector3.one;
@@ -32,6 +34,11 @@ namespace Code.MainSystem.Rhythm.UI
             {
                 Debug.LogWarning("[HitFeedbackManager] hitEffectAnchor is not assigned! Using self as fallback.");
                 hitEffectAnchor = this.transform;
+            }
+            
+            if (impulseSource == null)
+            {
+                impulseSource = GetComponent<CinemachineImpulseSource>();
             }
         }
 
@@ -58,6 +65,19 @@ namespace Code.MainSystem.Rhythm.UI
             {
                 PlayHitSound();
                 PlayHitEffect();
+                
+                if (evt.Judgement == JudgementType.Perfect)
+                {
+                    TriggerCameraShake();
+                }
+            }
+        }
+
+        private void TriggerCameraShake()
+        {
+            if (impulseSource != null)
+            {
+                impulseSource.GenerateImpulse(Vector3.down * RhythmGameBalanceConsts.IMPULSE_FORCE_PERFECT);
             }
         }
 

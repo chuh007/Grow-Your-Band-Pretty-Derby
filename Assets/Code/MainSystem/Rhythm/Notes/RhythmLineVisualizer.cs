@@ -1,48 +1,96 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Code.Core.Bus;
-using Code.Core.Bus.GameEvents;
 using Code.MainSystem.Rhythm.Data;
 using Code.Core.Bus.GameEvents.RhythmEvents;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.Rhythm.Notes
 {
     public class RhythmLineVisualizer : MonoBehaviour
     {
         [Header("Line Settings")]
-        [SerializeField] private LineRenderer _lineRenderer;
-        [SerializeField] private Image _lineImage;
-        [SerializeField] private float _scrollSpeed = 1.0f;
+        [SerializeField] private Image lineImage;
+        [SerializeField] private float scrollSpeed = 1.0f;
 
-        [Header("Punch Settings")]
-        [SerializeField] private RectTransform _punchTarget;
-        [SerializeField] private float _punchScale = 1.2f;
-        [SerializeField] private float _punchDuration = 0.15f;
+        [Header("Punch Settings (Note Hit)")]
+        [SerializeField] private RectTransform punchTarget;
+        [SerializeField] private float punchScale = 1.2f;
+        [SerializeField] private float punchDuration = 0.15f;
+
+        [Header("Guideline Pulse Settings (Beat)")]
+        [SerializeField] private GameObject guidelinePrefab;
+        [SerializeField] private Transform container;
+        [SerializeField] private float pulseDuration = 0.12f;
+        
+        [SerializeField] private AnimationCurve pulseCurveStrong = new AnimationCurve(
+            new Keyframe(0f, 0.3f), 
+            new Keyframe(0.2f, 1f), 
+            new Keyframe(1f, 0f)
+        );
+        
+        [SerializeField] private AnimationCurve pulseCurveWeak = new AnimationCurve(
+            new Keyframe(0f, 0.3f), 
+            new Keyframe(0.2f, 1f), 
+            new Keyframe(1f, 0f)
+        );
+
+        private List<Transform> _guidelines = new List<Transform>();
+        
+        public void Initialize(int beatCount)
+        {
+            foreach (var g in _guidelines)
+            {
+                if (g != null) Destroy(g.gameObject);
+            }
+            _guidelines.Clear();
+
+            if (container != null && container.childCount > 0)
+            {
+                for (int i = container.childCount - 1; i >= 0; i--)
+                {
+                    Destroy(container.GetChild(i).gameObject);
+                }
+            }
+
+            if (guidelinePrefab == null || container == null)
+            {
+                Debug.LogWarning("[RhythmLineVisualizer] GuidelinePrefab or Container is not assigned.");
+                return;
+            }
+
+            for (int i = 0; i < beatCount; i++)
+            {
+                GameObject go = Instantiate(guidelinePrefab, container);
+                _guidelines.Add(go.transform);
+            }
+            
+            Debug.Log($"[RhythmLineVisualizer] Initialized with {beatCount} guidelines.");
+        }
 
         private void Start()
         {
             Bus<NoteHitEvent>.OnEvent += HandleNoteHit;
+            Bus<BeatPulseEvent>.OnEvent += HandleBeatPulse;
         }
 
         private void OnDestroy()
         {
             Bus<NoteHitEvent>.OnEvent -= HandleNoteHit;
+            Bus<BeatPulseEvent>.OnEvent -= HandleBeatPulse;
         }
 
         private void Update()
         {
-            float offset = Time.time * _scrollSpeed;
+            float offset = Time.time * scrollSpeed;
             Vector2 textureOffset = new Vector2(-offset, 0);
 
-            if (_lineRenderer != null && _lineRenderer.material != null)
+            if (lineImage != null && lineImage.material != null)
             {
-                _lineRenderer.material.mainTextureOffset = textureOffset;
-            }
-            
-            if (_lineImage != null && _lineImage.material != null)
-            {
-                _lineImage.material.mainTextureOffset = textureOffset;
+                lineImage.material.mainTextureOffset = textureOffset;
             }
         }
 
@@ -55,32 +103,70 @@ namespace Code.MainSystem.Rhythm.Notes
             }
         }
 
-        private IEnumerator PunchRoutine()
+        private void HandleBeatPulse(BeatPulseEvent evt)
         {
-            if (_punchTarget == null) yield break;
+            bool isStrongBeat = evt.BeatIndex % RhythmGameBalanceConsts.BEAT_INTERVAL_STRONG == 0;
+            float targetScale = isStrongBeat ? RhythmGameBalanceConsts.PULSE_SCALE_STRONG : RhythmGameBalanceConsts.PULSE_SCALE_WEAK;
+            AnimationCurve targetCurve = isStrongBeat ? pulseCurveStrong : pulseCurveWeak;
+
+            foreach (var guideline in _guidelines)
+            {
+                if (guideline != null)
+                {
+                    PulseRoutine(guideline, targetScale, targetCurve).Forget();
+                }
+            }
+        }
+
+        private async UniTaskVoid PulseRoutine(Transform target, float targetMaxScale, AnimationCurve curve)
+        {
+            if (target == null) return;
 
             Vector3 originalScale = Vector3.one;
-            Vector3 targetScale = Vector3.one * _punchScale;
-            
             float elapsed = 0f;
-            while (elapsed < _punchDuration / 2)
+
+            while (elapsed < pulseDuration)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / (_punchDuration / 2);
-                _punchTarget.localScale = Vector3.Lerp(originalScale, targetScale, t);
+                float t = elapsed / pulseDuration;
+                float curveValue = curve.Evaluate(t);
+                
+                target.localScale = originalScale * (1f + (targetMaxScale - 1f) * curveValue);
+                await UniTask.Yield(this.GetCancellationTokenOnDestroy());
+            }
+
+            if (target != null)
+            {
+                target.localScale = originalScale;
+            }
+        }
+
+        private IEnumerator PunchRoutine()
+        {
+            if (punchTarget == null) yield break;
+
+            Vector3 originalScale = Vector3.one;
+            Vector3 targetScale = Vector3.one * punchScale;
+            
+            float elapsed = 0f;
+            while (elapsed < punchDuration / 2)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / (punchDuration / 2);
+                punchTarget.localScale = Vector3.Lerp(originalScale, targetScale, t);
                 yield return null;
             }
 
             elapsed = 0f;
-            while (elapsed < _punchDuration / 2)
+            while (elapsed < punchDuration / 2)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / (_punchDuration / 2);
-                _punchTarget.localScale = Vector3.Lerp(targetScale, originalScale, t);
+                float t = elapsed / (punchDuration / 2);
+                punchTarget.localScale = Vector3.Lerp(targetScale, originalScale, t);
                 yield return null;
             }
 
-            _punchTarget.localScale = originalScale;
+            punchTarget.localScale = originalScale;
         }
     }
 }

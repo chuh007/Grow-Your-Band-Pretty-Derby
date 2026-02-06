@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineShot
   DisplayName: 
   VirtualCamera:
-    exposedName: 
+    exposedName: 1edefd4a1dba1f94283e3b89cdec89d2
     defaultValue: {fileID: 0}
 --- !u!114 &-3527931447419726835
 MonoBehaviour:
@@ -30,7 +30,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineShot
   DisplayName: 
   VirtualCamera:
-    exposedName: 
+    exposedName: e9befdb9c98af1348823827aa86fdf56
     defaultValue: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineShot
   DisplayName: 
   VirtualCamera:
-    exposedName: 
+    exposedName: baca43dc764d02f4f852eee09632f37f
     defaultValue: {fileID: 0}
 --- !u!114 &2335731466979525492
 MonoBehaviour:
@@ -83,7 +83,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineShot
   DisplayName: 
   VirtualCamera:
-    exposedName: 
+    exposedName: 1581cc219f142ff49ad26e533a9872a3
     defaultValue: {fileID: 0}
 --- !u!114 &4378708172406928111
 MonoBehaviour:
@@ -189,7 +189,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: RightTopShot
+    m_DisplayName: LeftShot
   - m_Version: 1
     m_Start: 14.458333333333334
     m_ClipIn: 0
@@ -222,7 +222,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: LeftShot
+    m_DisplayName: RightTopShot
   - m_Version: 1
     m_Start: 9.5
     m_ClipIn: 0
