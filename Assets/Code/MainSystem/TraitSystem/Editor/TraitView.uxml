@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement name="Container" style="flex-grow: 1;">
-        <ui:DropdownField label="Condition" name="ConditionDropdown" binding-path="conditionName" />
-        <ui:DropdownField label="Effect" name="EffectDropdown" binding-path="effectName" />
-    </ui:VisualElement>
-</ui:UXML>
