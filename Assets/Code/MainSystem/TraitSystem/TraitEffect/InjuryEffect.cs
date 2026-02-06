@@ -11,12 +11,13 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
         public void OnTurnPassed()
         {
             _elapsedTurns++;
+
+            if (_elapsedTurns < (int)GetValue(2)) 
+                return;
             
-            if (_elapsedTurns >= (int)GetValue(1))
-            {
-                Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_activeTrait.Owner,
-                    _activeTrait.Data.TraitType));
-            }
+            Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_activeTrait.Owner,
+                _activeTrait.Data.TraitType));
+            _elapsedTurns = 0;
         }
     }
 }

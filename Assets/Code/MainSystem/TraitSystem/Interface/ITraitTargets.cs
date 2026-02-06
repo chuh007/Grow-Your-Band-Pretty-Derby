@@ -29,7 +29,4 @@
 
     public interface IFeverScoreStat
     { }
-    
-    internal interface IMentalStat
-    { }
 }

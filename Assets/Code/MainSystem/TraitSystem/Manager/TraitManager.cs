@@ -8,11 +8,12 @@ using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager.SubClass;
+using Code.MainSystem.Turn;
 using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.TraitSystem.Manager
 {
-    public class TraitManager : MonoBehaviour
+    public class TraitManager : MonoBehaviour, ITurnEndComponent
     {
         public static TraitManager Instance { get; private set; }
         
@@ -253,9 +254,18 @@ namespace Code.MainSystem.TraitSystem.Manager
         }
 
         #endregion
+        
         public void NextScene()
         {
             SceneManager.LoadScene("Lch");
+        }
+
+        public void TurnEnd()
+        {
+            foreach (var holder in _holders.Values)
+            {
+               holder.GetModifiers<ITurnProcessListener>().FirstOrDefault()?.OnTurnPassed();
+            }
         }
     }
 }
