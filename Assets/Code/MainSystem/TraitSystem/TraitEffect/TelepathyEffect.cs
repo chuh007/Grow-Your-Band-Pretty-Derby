@@ -1,19 +1,30 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Manager;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     /// <summary>
-    /// 이심전심 특성
+    /// 이신 전심 효과
     /// </summary>
-    public class TelepathyEffect : AbstractTraitEffect, IEnsembleStat, IPercentageModifier<IEnsembleStat>
+    public class TelepathyEffect : MultiStatModifierEffect
     {
-        public float Percentage { get; private set; }
-
-        public override void Initialize(ActiveTrait trait)
+        public override float GetAmount(TraitTarget category, object context = null)
         {
-            base.Initialize(trait);
-            Percentage = N1(trait);
+            bool hasPartner = true;
+            for (int i = 0; i < (int)MemberType.Team; i++)
+            {
+                if (!TraitManager.Instance.HasTrait((MemberType)i, TraitType.Telepathy))
+                    continue;
+                
+                hasPartner = false;
+                break;
+            }
+            
+            if (hasPartner) 
+                return GetValue(0) * (GetValue(1) * 0.01f);
+            
+            return GetValue(0);
         }
     }
 }

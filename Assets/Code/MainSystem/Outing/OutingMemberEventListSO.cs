@@ -13,6 +13,7 @@ namespace Code.MainSystem.Outing
         public OutingPlace place;
         public int weight;
         public bool isImportance;
+        public string description; // 관련 설명
         public DialogueInformationSO dialogue;
     }
     

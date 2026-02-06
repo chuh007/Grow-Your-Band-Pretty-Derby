@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="root" style="flex-direction: row; flex-grow: 1;">
+        <ui:VisualElement style="width: 250px; border-right-width: 1px; border-right-color: rgb(35, 35, 35); background-color: rgb(45, 45, 45);">
+            <ui:Label text="TRAIT LIST" style="-unity-font-style: bold; padding: 5px; background-color: rgb(35, 35, 35);" />
+            <ui:ListView name="trait-list" fixed-item-height="25" style="flex-grow: 1;" />
+            <ui:Button name="add-trait-btn" text="+ New Trait" style="height: 30px; margin: 5px;" />
+        </ui:VisualElement>
+        <ui:ScrollView style="flex-grow: 1; padding: 15px; background-color: rgb(56, 56, 56);">
+            <ui:Label text="Trait Settings" style="-unity-font-style: bold; font-size: 18px; margin-bottom: 10px;" />
+            <ui:GroupBox text="Base Info" name="base-settings" style="margin-bottom: 20px; padding: 10px;">
+                <uie:PropertyField name="field-trait-name" binding-path="TraitName" label="Display Name" />
+                <uie:PropertyField binding-path="Point" label="Cost Point" />
+                <uie:PropertyField binding-path="DescriptionEffect" label="Description" />
+                <ui:EnumField label="Enum" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" name="logic-dropdown-container" />
+            </ui:GroupBox>
+            <ui:Label text="Effects &amp; Impacts" style="-unity-font-style: bold; margin-bottom: 5px;" />
+            <ui:VisualElement style="flex-direction: row; background-color: rgb(40, 40, 40); padding: 5px; border-bottom-width: 1px; border-color: rgb(30, 30, 30);">
+                <ui:Label text="ID" style="width: 30px; -unity-text-align: middle-center;" />
+                <ui:Label text="Value" style="width: 70px; margin-left: 5px;" />
+                <ui:Label text="Target Stat" style="flex-grow: 1; margin-left: 5px;" />
+                <ui:Label text="Calc Type" style="width: 80px; margin-left: 5px;" />
+                <ui:Label text="Required Tag" style="width: 100px; margin-left: 5px;" />
+                <ui:VisualElement style="width: 25px;" />
+            </ui:VisualElement>
+            <ui:ListView name="impact-list" style="flex-grow: 1; min-height: 250px; background-color: rgb(48, 48, 48);" />
+            <ui:Button name="add-pair-btn" text="+ Add New Effect Pair" style="margin-top: 10px; height: 35px; -unity-font-style: bold;" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

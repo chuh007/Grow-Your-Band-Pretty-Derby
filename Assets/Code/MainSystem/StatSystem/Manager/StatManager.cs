@@ -10,6 +10,7 @@ using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager.SubClass;
 using Code.MainSystem.StatSystem.Module;
 using Code.MainSystem.StatSystem.Stats;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.TraitSystem.TraitEffect;
@@ -132,16 +133,16 @@ namespace Code.MainSystem.StatSystem.Manager
                 foreach (var inspiration in
                          holder.GetModifiers<IInspirationSystem>()
                              .OfType<FailureBreedsSuccessEffect>())
-                    inspiration.OnFailure();
+                    inspiration.OnTrainingFailed();
                 return;
             }
 
             float rewardValue = evt.Value;
 
-            rewardValue = holder.GetFinalStat<ITrainingStat>(rewardValue);
+            rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
 
             if (evt.Type == PracticenType.Personal)
-                rewardValue = holder.GetFinalStat<IPracticeStat>(rewardValue);
+                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice,rewardValue);
 
             _operator.IncreaseMemberStat(evt.memberType, evt.statType, rewardValue);
         }

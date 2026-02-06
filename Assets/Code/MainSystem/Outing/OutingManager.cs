@@ -45,7 +45,7 @@ namespace Code.MainSystem.Outing
                 await GameManager.Instance.LoadAddressableAsync<GameObject>("Outing/UI/Result");
             var resultInstance = Instantiate(resultPrefab, uiRoot);
             var resultUI = resultInstance.GetComponent<OutingResultUI>();
-            resultUI.ShowResultUI();
+            resultUI.ShowResultUI("OutingScene");
         }
         
         private void HandleDialogueStatUpgrade(DialogueStatUpgradeEvent evt)

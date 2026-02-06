@@ -20,24 +20,24 @@ namespace Code.MainSystem.Outing
         [SerializeField] private OutingMemberEventListSO[] outingMemberEventLists;
         [SerializeField] private OutingResultSenderSO outingResultSender;
         
-        private Dictionary<(MemberType, OutingPlace), DialogueInformationSO> _memberRealOuting;
+        public Dictionary<(MemberType, OutingPlace), OutingEvent> MemberRealOuting { get; private set; }
 
-        private Dictionary<(MemberType, OutingPlace), List<OutingEvent>> _outingEvents;
+        public Dictionary<(MemberType, OutingPlace), List<OutingEvent>> OutingEvents { get; private set; }
         
         private void Awake()
         {
             Bus<AddOutingEvent>.OnEvent += HandleAddOuting;
             Bus<OutingEndEvent>.OnEvent += HandleOutingEnd;
             
-            _memberRealOuting = new Dictionary<(MemberType, OutingPlace), DialogueInformationSO>();
-            _outingEvents = new Dictionary<(MemberType, OutingPlace), List<OutingEvent>>();
+            MemberRealOuting = new Dictionary<(MemberType, OutingPlace), OutingEvent>();
+            OutingEvents = new Dictionary<(MemberType, OutingPlace), List<OutingEvent>>();
 
             foreach (MemberType type in Enum.GetValues(typeof(MemberType)))
             {
                 foreach (OutingPlace place in Enum.GetValues(typeof(OutingPlace)))
                 {
-                    _memberRealOuting.Add((type, place), null);
-                    _outingEvents.Add((type, place), new List<OutingEvent>());
+                    MemberRealOuting.Add((type, place), default);
+                    OutingEvents.Add((type, place), new List<OutingEvent>());
                 }
             }
             
@@ -45,7 +45,7 @@ namespace Code.MainSystem.Outing
             {
                 foreach (var outingEvent in list.outingEvents)
                 {
-                    _outingEvents[(outingEvent.type, outingEvent.place)].Add(outingEvent);
+                    OutingEvents[(outingEvent.type, outingEvent.place)].Add(outingEvent);
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace Code.MainSystem.Outing
         
         private void HandleAddOuting(AddOutingEvent evt)
         {
-            _outingEvents[(evt.Event.type, evt.Event.place)].Add(evt.Event);
+            OutingEvents[(evt.Event.type, evt.Event.place)].Add(evt.Event);
             // SetMemberOutingData(evt.Event.type, evt.Event.place);
         }
         
@@ -103,13 +103,12 @@ namespace Code.MainSystem.Outing
         private void SetMemberOutingData(MemberType memberType, OutingPlace place)
         {
             int sum = 0;
-            var events = _outingEvents[(memberType, place)];
-            
+            var events = OutingEvents[(memberType, place)];
             foreach (var outingEvent in events)
             {
                 if (outingEvent.isImportance)
                 {
-                    _memberRealOuting[(memberType, place)] = outingEvent.dialogue;
+                    MemberRealOuting[(memberType, place)] = outingEvent;
                     return;
                 }
                 sum += outingEvent.weight;
@@ -122,7 +121,7 @@ namespace Code.MainSystem.Outing
             {
                 if (rand < outingEvent.weight)
                 {
-                    _memberRealOuting[(memberType, place)] = outingEvent.dialogue;
+                    MemberRealOuting[(memberType, place)] = outingEvent;
                     return;
                 }
                 
@@ -130,7 +129,7 @@ namespace Code.MainSystem.Outing
             }
         }
         
-        public DialogueInformationSO GetMemberOutingData(MemberType memberType, OutingPlace place)
-            => _memberRealOuting.GetValueOrDefault((memberType, place));
+        public OutingEvent GetMemberOutingData(MemberType memberType, OutingPlace place)
+            => MemberRealOuting.GetValueOrDefault((memberType, place));
     }
 }

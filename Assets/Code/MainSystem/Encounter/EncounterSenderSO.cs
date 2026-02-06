@@ -7,13 +7,6 @@ using UnityEngine;
 
 namespace Code.MainSystem.Encounter
 {
-    [Serializable]
-    public struct TraitData
-    {
-        public MemberType memberType;
-        public TraitType traitType;
-    }
-    
     /// <summary>
     /// 인카운터 데이터 주고받는 SO
     /// </summary>
@@ -25,6 +18,6 @@ namespace Code.MainSystem.Encounter
         
         [Header("Encounter Result Data")]
         public List<StatVariation> changeStats; // 스텟 변경
-        public List<TraitData> addedTraits; // 추가 특성
+        public List<TraitType> addedTraits; // 추가 특성
     }
 }

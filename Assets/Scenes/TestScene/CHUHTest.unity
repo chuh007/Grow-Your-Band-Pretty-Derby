@@ -6022,6 +6022,7 @@ MonoBehaviour:
   commentPageCanvasGroup: {fileID: 2038329957}
   titleText: {fileID: 1027460157}
   allowSkip: 1
+  skipCooldown: 0.3
   fadeInDuration: 0.3
   fadeOutDuration: 0.3
   fadeEase: 9
@@ -22016,6 +22017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c327a86d7b194f7abd23a32d99a3b621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Encounter.EncounterController
+  currentEncounterList: {fileID: 11400000, guid: df862e8ba05264f4dbf226d390efa935, type: 2}
 --- !u!4 &1935227687
 Transform:
   m_ObjectHideFlags: 0
