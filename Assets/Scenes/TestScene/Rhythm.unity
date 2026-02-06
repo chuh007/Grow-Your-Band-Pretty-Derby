@@ -243,7 +243,6 @@ GameObject:
   m_Component:
   - component: {fileID: 221592815}
   - component: {fileID: 221592814}
-  - component: {fileID: 221592816}
   m_Layer: 0
   m_Name: LeftShot
   m_TagString: Untagged
@@ -309,23 +308,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 16.697, y: 71.948, z: 1.182}
---- !u!114 &221592816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221592813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
-  NoiseProfile: {fileID: 11400000, guid: 20a705aea2d80e0478fb89b6f43d8530, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 1
-  FrequencyGain: 1
-  m_NoiseOffsets: {x: -834.9552, y: 214.63144, z: 687.19653}
 --- !u!1 &223721896
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,7 +618,6 @@ GameObject:
   m_Component:
   - component: {fileID: 403658874}
   - component: {fileID: 403658873}
-  - component: {fileID: 403658875}
   m_Layer: 0
   m_Name: RightLowShot
   m_TagString: Untagged
@@ -702,23 +683,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -9.689, y: -28.919, z: 0.366}
---- !u!114 &403658875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403658872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
-  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 1
-  FrequencyGain: 1
-  m_NoiseOffsets: {x: 809.7129, y: 642.76575, z: -542.4857}
 --- !u!1 &532965593
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +719,7 @@ Camera:
   m_GameObject: {fileID: 532965593}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -1503,7 +1467,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1748109607}
   - component: {fileID: 1748109606}
-  - component: {fileID: 1748109608}
   m_Layer: 0
   m_Name: RightTopShot
   m_TagString: Untagged
@@ -1569,23 +1532,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 48.471, y: -23.331, z: -2.241}
---- !u!114 &1748109608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748109605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
-  NoiseProfile: {fileID: 11400000, guid: b241f91b9ccf8ff489abf204b30d3112, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 1
-  FrequencyGain: 1
-  m_NoiseOffsets: {x: -961.46106, y: 452.75616, z: 378.48138}
 --- !u!1 &1758718039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,7 +1681,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1761574762}
   - component: {fileID: 1761574761}
-  - component: {fileID: 1761574763}
   m_Layer: 0
   m_Name: FrontShot
   m_TagString: Untagged
@@ -1801,23 +1746,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
---- !u!114 &1761574763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761574760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
-  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
-  PivotOffset: {x: 0, y: 0, z: 0}
-  AmplitudeGain: 1
-  FrequencyGain: 1
-  m_NoiseOffsets: {x: 363.8928, y: 380.93848, z: -175.0752}
 --- !u!114 &1837223868 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4352266708586778674, guid: e87e94b592164294a9572419e6c569de, type: 3}
