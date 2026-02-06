@@ -20,6 +20,7 @@
 
     public enum TraitTarget
     {
+        None,
         Ensemble,       // 합주 효과 관련
         Practice,       // 개인 연습 효과 관련
         Condition,      // 컨디션 소모/변화 관련

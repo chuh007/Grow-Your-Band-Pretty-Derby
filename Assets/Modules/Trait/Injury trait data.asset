@@ -12,21 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: Injury trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitID: 1008
   TraitType: 6
   TraitName: "\uBD80\uC0C1"
   TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
-  traitEffectType: 5
   MaxLevel: 10
   Point: 0
   IsRemovable: 1
+  Impacts:
+  - Target: 4
+    CalcType: 3
+    RequiredTag: 
   Effects:
-  - 10
-  - 3
+  - 50
   DescriptionEffect: "\uC81C\uAC70 \uBD88\uAC00, \uBAA8\uB4E0 \uD6C8\uB828\uC758
     \uC131\uACF5\uB960 -{0}%, {1}\uD134 \uACBD\uACFC \uC2DC \uC790\uB3D9\uC73C\uB85C
     \uC81C\uAC70"
-  conditionName: Code.MainSystem.TraitSystem.TraitConditions.AlwaysActiveTraitCondition,
-    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  effectName: Code.MainSystem.TraitSystem.TraitEffect.InjuryEffect, Assembly-CSharp,
-    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.InjuryEffect
