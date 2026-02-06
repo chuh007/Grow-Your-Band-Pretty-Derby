@@ -33,8 +33,10 @@
 
     public enum CalculationType
     {
-        Additive,           //+-
-        Multiplicative,     //X
-        Percentage          //%
+        Additive,       // + (고정치 증가)
+        Subtractive,    // - (고정치 감소)
+        PercentAdd,     // +% (퍼센트 합연산 증가)
+        PercentSub,     // -% (퍼센트 합연산 감소)
+        Multiplicative  // x (최종 곱연산, 보통 축복/디버프 등 독립 계산용)
     }
 }
