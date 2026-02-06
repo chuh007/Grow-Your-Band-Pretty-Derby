@@ -10,7 +10,7 @@ using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
-using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine.AddressableAssets;
@@ -187,24 +187,29 @@ namespace Code.MainSystem.MainScreen
             if (_wasSuccess)
             {
                 var statManager = StatManager.Instance;
+                var traitManager = TraitManager.Instance;
                 var ensembleModule = statManager.GetEnsembleModuleHandler();
                 
-                var mentalBonusProvider = _selectedMembers
-                    .Select(u => TraitManager.Instance.GetHolder(u.memberType))
-                    .FirstOrDefault(holder => holder.GetModifiers<IMentalStat>().Any());
+                bool isMentalPractice = _teamPracticeData.PracticeStatType == StatType.Mental;
+                bool hasEntertainerBonus = isMentalPractice && _selectedMembers.Any(u => traitManager.HasTrait(u.memberType, TraitType.Entertainer));
 
                 foreach (var unit in _selectedMembers)
                 {
-                    float finalStatGain = ensembleModule.ApplyEnsembleBonus(teamStatIncrease, unit.memberType);
+                    var memberType = unit.memberType;
+                    var statType = _teamPracticeData.PracticeStatType;
                     
-                    if (mentalBonusProvider != null && _teamPracticeData.PracticeStatType == StatType.Mental)
+                    float finalStatGain = ensembleModule.ApplyEnsembleBonus(teamStatIncrease, memberType);
+                    
+                    if (hasEntertainerBonus)
                     {
-                        finalStatGain = mentalBonusProvider.GetFinalStat<IMentalStat>(finalStatGain);
+                        var holder = traitManager.GetHolder(memberType);
+                        finalStatGain = holder.GetCalculatedStat(TraitTarget.Mental, finalStatGain);
                     }
 
                     int roundedStatGain = Mathf.RoundToInt(finalStatGain);
-                    statManager.GetMemberStat(unit.memberType, _teamPracticeData.PracticeStatType).PlusValue(roundedStatGain);
-                    TeamPracticeResultCache.StatDeltaDict[(unit.memberType, _teamPracticeData.PracticeStatType)] = roundedStatGain;
+                    statManager.GetMemberStat(memberType, statType).PlusValue(roundedStatGain);
+                    TeamPracticeResultCache.StatDeltaDict[(memberType, statType)] = roundedStatGain;
+    
                     totalTeamStatDelta += finalStatGain;
                 }
             }
