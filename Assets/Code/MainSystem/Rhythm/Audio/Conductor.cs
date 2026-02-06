@@ -26,7 +26,7 @@ namespace Code.MainSystem.Rhythm.Audio
         public double SongPositionInBeats { get; private set; }
         public double SecPerBeat { get; private set; }
         
-        private int _lastBeat = 0;
+        private int _lastReportedBeat = 0;
         private bool _isPlaying = false;
 
         public bool IsPlaying => _isPlaying;
@@ -71,7 +71,7 @@ namespace Code.MainSystem.Rhythm.Audio
             if (_musicController == null) return;
 
             _isPlaying = true;
-            _lastBeat = 0;
+            _lastReportedBeat = -1; // Reset to -1 to catch the 0th beat if necessary
             _musicController.Play();
             
             OnSongStart?.Invoke();
@@ -114,14 +114,14 @@ namespace Code.MainSystem.Rhythm.Audio
 
             SongPositionInBeats = SongPosition / SecPerBeat;
 
-            int currentBeat = (int)SongPositionInBeats;
-            if (currentBeat > _lastBeat)
+            int currentBeatInt = Mathf.FloorToInt((float)SongPositionInBeats);
+            if (currentBeatInt > _lastReportedBeat)
             {
-                _lastBeat = currentBeat;
+                _lastReportedBeat = currentBeatInt;
                 
-                OnBeatPulse?.Invoke(currentBeat);
+                OnBeatPulse?.Invoke(_lastReportedBeat);
                 
-                Bus<BeatPulseEvent>.Raise(new BeatPulseEvent(currentBeat));
+                Bus<BeatPulseEvent>.Raise(new BeatPulseEvent(_lastReportedBeat));
             }
         }
     }

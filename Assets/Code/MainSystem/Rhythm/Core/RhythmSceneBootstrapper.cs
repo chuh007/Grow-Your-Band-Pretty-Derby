@@ -25,11 +25,13 @@ namespace Code.MainSystem.Rhythm.Core
         [Inject] private HitFeedbackManager _hitFeedbackManager;
         [Inject] private JudgementSystem _judgementSystem;
         [Inject] private FeverManager _feverManager; 
+        [Inject] private RhythmLineVisualizer _lineVisualizer;
         
         [SerializeField] private RhythmGameDataSenderSO _dataSender;
         [SerializeField] private CanvasGroup _loadingCanvasGroup;
         [SerializeField] private float _fadeDuration = 0.5f;
 
+        private SongDataSO _loadedSongData;
         private AudioClip _loadedMusic;
         private GameObject _loadedNotePrefab;
         private GameObject _loadedHitEffect;
@@ -160,19 +162,44 @@ namespace Code.MainSystem.Rhythm.Core
                 return;
             }
 
-            string musicKey = string.Format(RhythmGameConsts.MUSIC_PATH_FORMAT, songId);
+            string songDataKey = string.Format(RhythmGameConsts.SONG_DATA_PATH_FORMAT, songId);
+            _loadedSongData = await SafeLoadAssetAsync<SongDataSO>(songDataKey);
+
+            if (_loadedSongData != null)
+            {
+                Debug.Log($"[Bootstrapper] SongData Loaded: {_loadedSongData.Title}, BPM: {_loadedSongData.Bpm}, Beats: {_loadedSongData.BeatCountPerBar}");
+                _conductor.SetBpm(_loadedSongData.Bpm);
+                if (_loadedSongData.MusicClip != null)
+                {
+                    _conductor.SetMusic(_loadedSongData.MusicClip);
+                }
+                else
+                {
+                    Debug.LogError($"[Rhythm] MusicClip is missing in SongDataSO: {songDataKey}");
+                }
+
+                if (_lineVisualizer != null)
+                {
+                    _lineVisualizer.Initialize(_loadedSongData.BeatCountPerBar);
+                }
+            }
+            else
+            {
+                Debug.LogError($"[Rhythm] SongDataSO is missing: {songDataKey}. Attempting legacy music load.");
+                string musicKey = string.Format(RhythmGameConsts.MUSIC_PATH_FORMAT, songId);
+                _loadedMusic = await SafeLoadAssetAsync<AudioClip>(musicKey);
+                if (_loadedMusic != null) _conductor.SetMusic(_loadedMusic);
+                else Debug.LogError($"[Rhythm] Music is missing: {musicKey}");
+            }
+
             string envKey = _dataSender.concertType == ConcertType.Live ? RhythmGameConsts.ENV_LIVE : RhythmGameConsts.ENV_BUSKING;
 
-            _loadedMusic = await SafeLoadAssetAsync<AudioClip>(musicKey);
             _loadedNotePrefab = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.NOTE_BASIC);
             
             _loadedHitEffect = await SafeLoadAssetAsync<GameObject>(RhythmGameConsts.VFX_HIT);
             _loadedEnvPrefab = await SafeLoadAssetAsync<GameObject>(envKey);
 
             var chartData = await ConcertChartBuilder.BuildAsync(_chartLoader, songId, memberRoles);
-
-            if (_loadedMusic != null) _conductor.SetMusic(_loadedMusic);
-            else Debug.LogError($"[Rhythm] Music is missing: {musicKey}");
 
             if (_loadedNotePrefab != null) 
             {
@@ -247,10 +274,15 @@ namespace Code.MainSystem.Rhythm.Core
         {
             Screen.orientation = ScreenOrientation.Portrait;
 
-            if (GameResourceManager.Instance != null)
-            {
-                if (_loadedMusic != null)
-                {
+                        if (GameResourceManager.Instance != null)
+                        {
+                            if (_loadedSongData != null)
+                            {
+                                GameResourceManager.Instance.Release(_loadedSongData);
+                                _loadedSongData = null;
+                            }
+            
+                            if (_loadedMusic != null)                {
                     GameResourceManager.Instance.Release(_loadedMusic);
                     _loadedMusic = null;
                 }
