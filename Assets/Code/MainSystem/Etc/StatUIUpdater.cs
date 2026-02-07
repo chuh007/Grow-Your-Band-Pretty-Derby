@@ -29,11 +29,19 @@ namespace Code.MainSystem.Etc
 
         public void UpdateAll(UnitDataSO unit)
         {
-            if (unit == null || unit.stats == null) return;
+            if (unit == null || unit.stats == null)
+            {
+                Debug.LogError("[StatUIUpdater] UpdateAll: unit or unit.stats is null");
+                return;
+            }
 
             for (int i = 0; i < unit.stats.Count; i++)
             {
-                if (i >= valueTexts.Count || valueTexts[i] == null) continue;
+                if (i >= valueTexts.Count || valueTexts[i] == null)
+                {
+                    Debug.LogWarning($"[StatUIUpdater] valueTexts[{i}] is null or out of range");
+                    continue;
+                }
 
                 var stat = unit.stats[i];
 
@@ -43,28 +51,55 @@ namespace Code.MainSystem.Etc
 
                 if (statData == null)
                 {
-                    Debug.LogError($"Stat is NULL : {stat.statType}");
-                    valueTexts[i].SetText("0 / 0");
+                    Debug.LogError($"[StatUIUpdater] Stat is NULL : {stat.statType}");
+                    valueTexts[i].SetText("0");
                     continue;
                 }
 
-                nameTexts[i].SetText(stat.statName);
-                valueTexts[i].SetText($"{statData.CurrentValue} / {statData.MaxValue}");
+                if (i < nameTexts.Count && nameTexts[i] != null)
+                {
+                    nameTexts[i].SetText(stat.statName);
+                }
                 
-                if (iconImages[i] != null)
+                valueTexts[i].SetText($"{statData.CurrentValue}");
+                
+                if (i < iconImages.Count && iconImages[i] != null)
+                {
                     iconImages[i].sprite = statData.StatIcon;
+                }
             }
-
-            BaseStat teamStatData = statManager.GetTeamStat(unit.teamStat.statType);
-            nameTexts[4].SetText(teamStatData.StatName);
-            valueTexts[4].SetText($"{teamStatData.CurrentValue} / {teamStatData.MaxValue}");
-            if (iconImages[4] != null)
-                iconImages[4].sprite = teamStatData.StatIcon;
+            
+            if (unit.teamStat != null)
+            {
+                BaseStat teamStatData = statManager.GetTeamStat(unit.teamStat.statType);
+                
+                if (teamStatData != null)
+                {
+                    if (4 < nameTexts.Count && nameTexts[4] != null)
+                    {
+                        nameTexts[4].SetText(teamStatData.StatName);
+                    }
+                    
+                    if (4 < valueTexts.Count && valueTexts[4] != null)
+                    {
+                        valueTexts[4].SetText($"{teamStatData.CurrentValue}");
+                    }
+                    
+                    if (4 < iconImages.Count && iconImages[4] != null)
+                    {
+                        iconImages[4].sprite = teamStatData.StatIcon;
+                    }
+                }
+            }
         }
 
         public void PreviewStat(UnitDataSO unit, StatType targetType, float increase)
         {
-            if (unit == null || unit.stats == null) return;
+            if (unit == null || unit.stats == null)
+            {
+                Debug.LogError("[StatUIUpdater] PreviewStat: unit or unit.stats is null");
+                return;
+            }
 
             for (int i = 0; i < unit.stats.Count; i++)
             {
@@ -78,29 +113,35 @@ namespace Code.MainSystem.Etc
 
                 if (statData == null)
                 {
-                    Debug.LogError($"Stat is NULL : {stat.statType}");
+                    Debug.LogError($"[StatUIUpdater] Stat is NULL : {stat.statType}");
                     continue;
                 }
 
                 if (stat.statType == targetType)
                 {
-                    valueTexts[i].SetText($"<color=green>{statData.CurrentValue + increase} (+{increase})</color> / {statData.MaxValue}");
+                    valueTexts[i].SetText($"<color=green>{statData.CurrentValue + increase} (+{increase})</color>");
                 }
                 else
                 {
-                    valueTexts[i].SetText($"{statData.CurrentValue} / {statData.MaxValue}");
+                    valueTexts[i].SetText($"{statData.CurrentValue}");
                 }
             }
-
-            BaseStat teamStatData = statManager.GetTeamStat(unit.teamStat.statType);
             
-            if (unit.teamStat.statType == targetType)
+            if (unit.teamStat != null)
             {
-                valueTexts[4].SetText($"<color=green>{teamStatData.CurrentValue + increase} (+{increase})</color> / {teamStatData.MaxValue}");
-            }
-            else
-            {
-                valueTexts[4].SetText($"{teamStatData.CurrentValue} / {teamStatData.MaxValue}");
+                BaseStat teamStatData = statManager.GetTeamStat(unit.teamStat.statType);
+                
+                if (teamStatData != null && 4 < valueTexts.Count && valueTexts[4] != null)
+                {
+                    if (unit.teamStat.statType == targetType)
+                    {
+                        valueTexts[4].SetText($"<color=green>{teamStatData.CurrentValue + increase} (+{increase})</color>");
+                    }
+                    else
+                    {
+                        valueTexts[4].SetText($"{teamStatData.CurrentValue}");
+                    }
+                }
             }
         }
     }
