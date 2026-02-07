@@ -22,8 +22,33 @@ MonoBehaviour:
   - Target: 4
     CalcType: 3
     RequiredTag: 
+  - Target: 0
+    CalcType: 0
+    RequiredTag: 
+  MemberComments:
+  - MemberType: 0
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 1
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 2
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 3
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 4
+    Title: 
+    Content: 
+    Thoughts: 
   Effects:
   - 50
+  - 2
   DescriptionEffect: "\uC81C\uAC70 \uBD88\uAC00, \uBAA8\uB4E0 \uD6C8\uB828\uC758
     \uC131\uACF5\uB960 -{0}%, {1}\uD134 \uACBD\uACFC \uC2DC \uC790\uB3D9\uC73C\uB85C
     \uC81C\uAC70"

@@ -15,6 +15,7 @@ MonoBehaviour:
   unitName: Vocal
   memberType: 3
   spriteAddressableKey: Guitar
+  handwritingFont: {fileID: 0}
   statsReferences:
   - m_AssetGUID: 4bb5bd465b3f2064eab8c984a2352724
     m_SubObjectName: 
@@ -91,5 +92,5 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  teamSuccessComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
-  teamFailComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}
+  successComment: {fileID: 11400000, guid: 0cd6225ec200fc14eb284b58c93534c1, type: 2}
+  failComment: {fileID: 11400000, guid: 07c9b0d684e97984bb5a5598a365c077, type: 2}

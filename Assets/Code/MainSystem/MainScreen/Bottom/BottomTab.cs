@@ -11,7 +11,6 @@ namespace Code.MainSystem.MainScreen.Bottom
     public class BottomTab : MonoBehaviour
     {
         private int currentModeIndex = 0;
-        [SerializeField] private GameObject mode1Buttons;
         [SerializeField] private GameObject mode2Buttons;
         [SerializeField] private GameObject mode2Panel;
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
@@ -50,7 +49,6 @@ namespace Code.MainSystem.MainScreen.Bottom
             switch (currentMode)
             {
                 case 1:
-                    mode1Buttons.SetActive(true);
                     break;
                 case 2:
                     mode2Buttons.SetActive(true);
@@ -74,7 +72,6 @@ namespace Code.MainSystem.MainScreen.Bottom
             {
                 //다른버튼을 클릭했을때 들어오는 행동들 1.개인연습,2합주,3.휴식,4.외출,5.특성관리,6.??
                 case 1:
-                    mode1Buttons.SetActive(false);
                     personalPracticeCompo.ResetPreview();
                     break;
                 case 2:
