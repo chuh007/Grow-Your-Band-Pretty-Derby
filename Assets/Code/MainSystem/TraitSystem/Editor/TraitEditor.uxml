@@ -1,29 +1,40 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement name="root" style="flex-direction: row; flex-grow: 1;">
-        <ui:VisualElement style="width: 250px; border-right-width: 1px; border-right-color: rgb(35, 35, 35); background-color: rgb(45, 45, 45);">
-            <ui:Label text="TRAIT LIST" style="-unity-font-style: bold; padding: 5px; background-color: rgb(35, 35, 35);" />
+        <ui:VisualElement style="width: 200px; border-right-width: 1px; border-right-color: rgb(35, 35, 35); background-color: rgb(45, 45, 45);">
+            <ui:Label text="특성 리스트" style="-unity-font-style: bold; padding: 8px; background-color: rgb(35, 35, 35);" />
             <ui:ListView name="trait-list" fixed-item-height="25" style="flex-grow: 1;" />
-            <ui:Button name="add-trait-btn" text="+ New Trait" style="height: 30px; margin: 5px;" />
+            <ui:Button name="add-trait-btn" text="+ New Trait" style="height: 35px; margin: 10px;" />
         </ui:VisualElement>
-        <ui:ScrollView style="flex-grow: 1; padding: 15px; background-color: rgb(56, 56, 56);">
-            <ui:Label text="Trait Settings" style="-unity-font-style: bold; font-size: 18px; margin-bottom: 10px;" />
-            <ui:GroupBox text="Base Info" name="base-settings" style="margin-bottom: 20px; padding: 10px;">
-                <uie:PropertyField name="field-trait-name" binding-path="TraitName" label="Display Name" />
-                <uie:PropertyField binding-path="Point" label="Cost Point" />
+        <ui:ScrollView style="flex-grow: 1; padding: 20px; background-color: rgb(56, 56, 56);">
+            <ui:Label text="Trait Settings" style="-unity-font-style: bold; font-size: 20px; margin-bottom: 15px;" />
+            <ui:GroupBox text="Base Info" name="base-settings" style="margin-bottom: 25px; padding: 15px; background-color: rgb(50, 50, 50); border-radius: 5px;">
+                <uie:PropertyField name="field-trait-name" binding-path="TraitName" label="Display Name" style="margin-bottom: 4px;" />
+                <uie:PropertyField binding-path="Point" label="Cost Point" style="margin-bottom: 4px;" />
                 <uie:PropertyField binding-path="DescriptionEffect" label="Description" />
-                <ui:EnumField label="Enum" value="Center" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" name="logic-dropdown-container" />
+                <ui:VisualElement style="margin-top: 15px; border-top-width: 1px; border-color: rgb(80, 80, 80); padding-top: 15px;">
+                    <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <ui:Label text="멤버별 코멘트 지정 " style="-unity-font-style: bold; font-size: 14px;" />
+                        <ui:Button name="gen-comments-btn" text="코멘트 5개 생성" style="height: 25px; padding-left: 10px; padding-right: 10px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; background-color: rgb(45, 45, 45); padding: 4px; border-bottom-width: 1px; border-color: rgb(100, 100, 100);">
+                        <ui:Label text="멤버 타입" style="width: 100px; -unity-font-style: bold; margin-left: 5px;" />
+                        <ui:Label text="코멘트 대사" style="flex-grow: 1; -unity-font-style: bold; margin-left: 10px;" />
+                        <ui:Label text="소감" style="width: 120px; -unity-font-style: bold; margin-left: 10px;" />
+                    </ui:VisualElement>
+                    <ui:ListView name="member-comment-list" fixed-item-height="85" style="min-height: 250px; background-color: rgb(40, 40, 40); border-radius: 0 0 3px 3px; border-width: 0 1px 1px 1px; border-color: rgb(30, 30, 30);" />
+                </ui:VisualElement>
             </ui:GroupBox>
-            <ui:Label text="Effects &amp; Impacts" style="-unity-font-style: bold; margin-bottom: 5px;" />
-            <ui:VisualElement style="flex-direction: row; background-color: rgb(40, 40, 40); padding: 5px; border-bottom-width: 1px; border-color: rgb(30, 30, 30);">
-                <ui:Label text="ID" style="width: 30px; -unity-text-align: middle-center;" />
-                <ui:Label text="Value" style="width: 70px; margin-left: 5px;" />
+            <ui:Label text="Effects &amp; Impacts" style="-unity-font-style: bold; font-size: 16px; margin-bottom: 8px;" />
+            <ui:VisualElement style="flex-direction: row; background-color: rgb(40, 40, 40); padding: 6px; border-bottom-width: 2px; border-color: rgb(100, 100, 100);">
+                <ui:Label text="ID" style="width: 35px; -unity-text-align: middle-left;" />
+                <ui:Label text="Value" style="width: 60px; margin-left: 5px;" />
                 <ui:Label text="Target Stat" style="flex-grow: 1; margin-left: 5px;" />
-                <ui:Label text="Calc Type" style="width: 80px; margin-left: 5px;" />
-                <ui:Label text="Required Tag" style="width: 100px; margin-left: 5px;" />
-                <ui:VisualElement style="width: 25px;" />
+                <ui:Label text="Calc" style="width: 70px; margin-left: 5px;" />
+                <ui:Label text="Tag" style="width: 90px; margin-left: 5px;" />
+                <ui:VisualElement style="width: 30px;" />
             </ui:VisualElement>
-            <ui:ListView name="impact-list" style="flex-grow: 1; min-height: 250px; background-color: rgb(48, 48, 48);" />
-            <ui:Button name="add-pair-btn" text="+ Add New Effect Pair" style="margin-top: 10px; height: 35px; -unity-font-style: bold;" />
+            <ui:ListView name="impact-list" fixed-item-height="30" style="flex-grow: 1; min-height: 200px; background-color: rgb(45, 45, 45);" />
+            <ui:Button name="add-pair-btn" text="+ Add New Effect Pair" style="margin-top: 15px; height: 40px; -unity-font-style: bold; font-size: 14px; margin-bottom: 30px;" />
         </ui:ScrollView>
     </ui:VisualElement>
 </ui:UXML>

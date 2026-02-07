@@ -7,6 +7,7 @@ MonoImporter:
   - m_ViewDataDictionary: {instanceID: 0}
   - mainView: {fileID: 9197481963319205126, guid: b9234789ffdc03944acc14bdd8bb4f73, type: 3}
   - itemView: {fileID: 9197481963319205126, guid: cbdc4be67682cb34b813f72904f30e46, type: 3}
+  - commentView: {fileID: 9197481963319205126, guid: 35eda15a605bff147b58b6bf390ace0b, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
