@@ -140,7 +140,7 @@ namespace Code.MainSystem.TraitSystem.Editor
             SerializedProperty commentProp = so.FindProperty("MemberComments");
             _commentListView.itemsSource = target.MemberComments;
             
-            _commentListView.fixedItemHeight = 85;
+            _commentListView.fixedItemHeight = 120;
             _commentListView.virtualizationMethod = CollectionVirtualizationMethod.FixedHeight;
 
             _commentListView.makeItem = () =>
@@ -156,15 +156,23 @@ namespace Code.MainSystem.TraitSystem.Editor
                 if (i >= commentProp.arraySize) return;
     
                 SerializedProperty prop = commentProp.GetArrayElementAtIndex(i);
-                SerializedProperty typeProp = prop.FindPropertyRelative("memberType");
-                SerializedProperty contentProp = prop.FindPropertyRelative("content");
-                SerializedProperty thoughtProp = prop.FindPropertyRelative("thoughts");
+                SerializedProperty typeProp = prop.FindPropertyRelative("MemberType");
+                SerializedProperty titleProp = prop.FindPropertyRelative("Title");
+                SerializedProperty contentProp = prop.FindPropertyRelative("Content");
+                SerializedProperty thoughtProp = prop.FindPropertyRelative("Thoughts");
                 
                 PropertyField fType = element.Q<PropertyField>("m-type");
                 if (fType != null) 
                 {
                     fType.label = "";
                     fType.BindProperty(typeProp);
+                }
+                
+                PropertyField fTitle = element.Q<PropertyField>("m-title");
+                if (fTitle != null)
+                {
+                    fTitle.label = "";
+                    fTitle.BindProperty(titleProp);
                 }
                 
                 PropertyField fContent = element.Q<PropertyField>("m-content");

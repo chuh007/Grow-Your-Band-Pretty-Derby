@@ -18,10 +18,11 @@
                     </ui:VisualElement>
                     <ui:VisualElement style="flex-direction: row; background-color: rgb(45, 45, 45); padding: 4px; border-bottom-width: 1px; border-color: rgb(100, 100, 100);">
                         <ui:Label text="멤버 타입" style="width: 100px; -unity-font-style: bold; margin-left: 5px;" />
-                        <ui:Label text="코멘트 대사" style="flex-grow: 1; -unity-font-style: bold; margin-left: 10px;" />
-                        <ui:Label text="소감" style="width: 120px; -unity-font-style: bold; margin-left: 10px;" />
+                        <ui:Label text="제목" style="width: 150px; -unity-font-style: bold; margin-left: 8px;" />
+                        <ui:Label text="대사(코멘트)" style="flex-grow: 1; -unity-font-style: bold; margin-left: 8px;" />
+                        <ui:Label text="참고 사항" style="width: 120px; -unity-font-style: bold; margin-left: 8px;" />
                     </ui:VisualElement>
-                    <ui:ListView name="member-comment-list" fixed-item-height="85" style="min-height: 250px; background-color: rgb(40, 40, 40); border-radius: 0 0 3px 3px; border-width: 0 1px 1px 1px; border-color: rgb(30, 30, 30);" />
+                    <ui:ListView name="member-comment-list" fixed-item-height="120" style="min-height: 450px; background-color: rgb(40, 40, 40);" />
                 </ui:VisualElement>
             </ui:GroupBox>
             <ui:Label text="Effects &amp; Impacts" style="-unity-font-style: bold; font-size: 16px; margin-bottom: 8px;" />

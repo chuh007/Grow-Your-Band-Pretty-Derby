@@ -13,15 +13,16 @@ namespace Code.MainSystem.TraitSystem.Data
         public CalculationType CalcType; // 계산 방식
         public string RequiredTag;       // 특정 조건
     }
-    
+
     [Serializable]
     public class MemberCommentEntry
     {
-        public MemberType memberType;
-        [TextArea(3, 5)] public string content; 
-        [TextArea(3, 5)] public string thoughts;
+        public MemberType MemberType;
+        [TextArea(3, 6)] public string Title;
+        [TextArea(3, 6)] public string Content;
+        [TextArea(3, 6)] public string Thoughts;
     }
-    
+
     [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data")]
     public class TraitDataSO : ScriptableObject
     {
