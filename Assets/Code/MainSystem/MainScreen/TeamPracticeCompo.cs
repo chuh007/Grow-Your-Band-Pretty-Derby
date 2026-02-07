@@ -95,6 +95,7 @@ namespace Code.MainSystem.MainScreen
                 if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
                     _teamPracticeData = handle.Result;
+                    Debug.Log("Team practice data loaded successfully");
                 }
                 else
                 {
@@ -180,14 +181,47 @@ namespace Code.MainSystem.MainScreen
 
         private void OnClickStartPractice()
         {
-            if (_selectedMembers.Count < 2) return;
+            if (_selectedMembers.Count < 2)
+            {
+                Debug.LogWarning("Need at least 2 members selected");
+                return;
+            }
             
+            if (_teamPracticeData == null)
+            {
+                Debug.LogError("Cannot start practice: Team practice data not loaded!");
+                return;
+            }
+            
+            Debug.Log($"Starting practice with {_selectedMembers.Count} members");
             Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent(_selectedMembers.Select(t => t.currentCondition).ToList()));
         }
 
         private void BuildResultCache()
         {
-            if (_selectedMembers == null || _selectedMembers.Count == 0) return;
+            Debug.Log("=== BuildResultCache START ===");
+            
+            if (_selectedMembers == null)
+            {
+                Debug.LogError("_selectedMembers is null!");
+                return;
+            }
+            
+            if (_selectedMembers.Count == 0)
+            {
+                Debug.LogError("_selectedMembers is empty!");
+                return;
+            }
+            
+            Debug.Log($"Selected members count: {_selectedMembers.Count}");
+            
+            if (_teamPracticeData == null)
+            {
+                Debug.LogError("Team practice data is not loaded!");
+                return;
+            }
+            
+            Debug.Log("Team practice data is loaded");
             
             float totalConditionBefore = _selectedMembers.Sum(u => u.currentCondition);
             float avgConditionAfter = (totalConditionBefore / _selectedMembers.Count) - teamConditionCost;
@@ -200,15 +234,40 @@ namespace Code.MainSystem.MainScreen
 
             if (_wasSuccess)
             {
+                Debug.Log("Practice was successful, calculating stat gains");
+                
                 var statManager = StatManager.Instance;
+                if (statManager == null)
+                {
+                    Debug.LogError("StatManager.Instance is null!");
+                    return;
+                }
+                
                 var traitManager = TraitManager.Instance;
+                if (traitManager == null)
+                {
+                    Debug.LogError("TraitManager.Instance is null!");
+                    return;
+                }
+                
                 var ensembleModule = statManager.GetEnsembleModuleHandler();
+                if (ensembleModule == null)
+                {
+                    Debug.LogError("Ensemble module is null!");
+                    return;
+                }
                 
                 bool isMentalPractice = _teamPracticeData.PracticeStatType == StatType.Mental;
                 bool hasEntertainerBonus = isMentalPractice && _selectedMembers.Any(u => traitManager.HasTrait(u.memberType, TraitType.Entertainer));
 
                 foreach (var unit in _selectedMembers)
                 {
+                    if (unit == null)
+                    {
+                        Debug.LogError("Unit in _selectedMembers is null!");
+                        continue;
+                    }
+                    
                     var memberType = unit.memberType;
                     var statType = _teamPracticeData.PracticeStatType;
                     
@@ -217,13 +276,22 @@ namespace Code.MainSystem.MainScreen
                     if (hasEntertainerBonus)
                     {
                         var holder = traitManager.GetHolder(memberType);
-                        finalStatGain = holder.GetCalculatedStat(TraitTarget.Mental, finalStatGain);
+                        if (holder != null)
+                        {
+                            finalStatGain = holder.GetCalculatedStat(TraitTarget.Mental, finalStatGain);
+                        }
                     }
 
-                   
                     int roundedStatGain = Mathf.RoundToInt(finalStatGain);
-                    if (statType != StatType.TeamHarmony)
-                        statManager.GetMemberStat(memberType, statType).PlusValue(roundedStatGain);
+                    
+                    var memberStat = statManager.GetTeamStat(statType);
+                    if (memberStat == null)
+                    {
+                        Debug.LogError($"GetMemberStat returned null for {memberType}, {statType}");
+                        continue;
+                    }
+                    
+                    memberStat.PlusValue(roundedStatGain);
                     TeamPracticeResultCache.StatDeltaDict[(memberType, statType)] = roundedStatGain;
     
                     totalTeamStatDelta += finalStatGain;
@@ -232,27 +300,64 @@ namespace Code.MainSystem.MainScreen
             
             UpdateMembersCondition();
             
+            Debug.Log("Getting first unit for team stat");
             var firstUnit = _selectedMembers[0];
-            TeamPracticeResultCache.TeamStat = firstUnit.teamStat;
+            if (firstUnit == null)
+            {
+                Debug.LogError("firstUnit is null!");
+                return;
+            }
+            
+            Debug.Log($"First unit: {firstUnit.memberType}");
+            
+            if (firstUnit.teamStat == null)
+            {
+                Debug.LogError("firstUnit.teamStat is null!");
+            }
+            else
+            {
+                TeamPracticeResultCache.TeamStat = firstUnit.teamStat;
+            }
+            
             TeamPracticeResultCache.TeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
 
             if (TeamPracticeResultCache.TeamStatDelta > 0)
             {
-                StatManager.Instance.GetTeamStat(StatType.TeamHarmony)
-                    .PlusValue(TeamPracticeResultCache.TeamStatDelta);
+                var statManager = StatManager.Instance;
+                if (statManager != null)
+                {
+                    var teamHarmonyStat = statManager.GetTeamStat(StatType.TeamHarmony);
+                    if (teamHarmonyStat != null)
+                    {
+                        teamHarmonyStat.PlusValue(TeamPracticeResultCache.TeamStatDelta);
+                    }
+                    else
+                    {
+                        Debug.LogError("GetTeamStat(TeamHarmony) returned null");
+                    }
+                }
             }
 
             TeamPracticeResultCache.TeamConditionCurrent = avgConditionAfter;
             TeamPracticeResultCache.TeamConditionDelta = -teamConditionCost;
+            
+            Debug.Log("=== BuildResultCache END ===");
         }
 
         private void UpdateMembersCondition()
         {
+            if (_selectedMembers == null) return;
+            
             foreach (var unit in _selectedMembers)
             {
+                if (unit == null) continue;
+                
                 unit.currentCondition = Mathf.Clamp(unit.currentCondition - teamConditionCost, 0, unit.maxCondition);
 
-                TrainingManager.Instance.MarkMemberTrained(unit.memberType);
+                if (TrainingManager.Instance != null)
+                {
+                    TrainingManager.Instance.MarkMemberTrained(unit.memberType);
+                }
             }
         }
 
