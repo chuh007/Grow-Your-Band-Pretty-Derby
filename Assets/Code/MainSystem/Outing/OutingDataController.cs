@@ -4,12 +4,14 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.OutingEvents;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
+using Code.MainSystem.Cutscene.DialogCutscene;
 using Code.MainSystem.Dialogue;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.Turn;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.Outing
@@ -18,7 +20,7 @@ namespace Code.MainSystem.Outing
     public class OutingDataController : MonoBehaviour, ITurnStartComponent
     {
         [SerializeField] private OutingMemberEventListSO[] outingMemberEventLists;
-        [SerializeField] private OutingResultSenderSO outingResultSender;
+        [SerializeField] private DialogCutsceneSenderSO dialogSender;
         
         public Dictionary<(MemberType, OutingPlace), OutingEvent> MemberRealOuting { get; private set; }
 
@@ -27,7 +29,7 @@ namespace Code.MainSystem.Outing
         private void Awake()
         {
             Bus<AddOutingEvent>.OnEvent += HandleAddOuting;
-            Bus<OutingEndEvent>.OnEvent += HandleOutingEnd;
+            Bus<CutsceneEndEvent>.OnEvent += HandleOutingEnd;
             
             MemberRealOuting = new Dictionary<(MemberType, OutingPlace), OutingEvent>();
             OutingEvents = new Dictionary<(MemberType, OutingPlace), List<OutingEvent>>();
@@ -63,7 +65,7 @@ namespace Code.MainSystem.Outing
 
         private void OnDestroy()
         {
-            Bus<OutingEndEvent>.OnEvent -= HandleOutingEnd;
+            Bus<CutsceneEndEvent>.OnEvent -= HandleOutingEnd;
             Bus<AddOutingEvent>.OnEvent -= HandleAddOuting;
         }
         
@@ -73,18 +75,18 @@ namespace Code.MainSystem.Outing
             // SetMemberOutingData(evt.Event.type, evt.Event.place);
         }
         
-        private void HandleOutingEnd(OutingEndEvent evt)
+        private void HandleOutingEnd(CutsceneEndEvent evt)
         {
             Debug.Log("Outing End");
-            foreach (var stat in outingResultSender.changeStats)
+            foreach (var stat in dialogSender.changeStats)
             {
                 Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                    (outingResultSender.targetMember.memberType, stat.targetStat, stat.variation));
+                    (stat.targetMember, stat.targetStat, stat.variation));
             }
-            foreach (var trait in outingResultSender.addedTraits)
+            foreach (var trait in dialogSender.addedTraits)
             {
                 Bus<TraitAddRequested>.Raise(new TraitAddRequested
-                    (outingResultSender.targetMember.memberType, trait));
+                    (trait.targetMember, trait.targetStat));
             }
             Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.MainSystem.Cutscene.DialogCutscene;
 using Code.MainSystem.MainScreen.Training;
 using TMPro;
 using UnityEngine;
@@ -10,7 +11,8 @@ namespace Code.MainSystem.Outing
     public class OutingSelectUI : MonoBehaviour
     {
         [Header("Data")]
-        [SerializeField] private OutingResultSenderSO sender;
+        [SerializeField] private MainScreen.MainScreen mainScreen;
+        [SerializeField] private DialogCutsceneSenderSO sender;
 
         [Header("UI")]
         [SerializeField] private Button enterButton;
@@ -29,8 +31,8 @@ namespace Code.MainSystem.Outing
         private void HandleClick()
         {
             gameObject.SetActive(false);
-            TrainingManager.Instance.MarkMemberTrained(sender.targetMember.memberType);
-            loadButton.SceneLoadAdditive("OutingScene");
+            TrainingManager.Instance.MarkMemberTrained(mainScreen.UnitSelector.CurrentUnit.memberType);
+            loadButton.SceneLoadAdditive("DialogCutscene");
         }
 
         public void SetData(OutingPlace place, string text)

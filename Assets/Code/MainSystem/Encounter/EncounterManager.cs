@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.EncounterEvents;
+using Code.Core.Bus.GameEvents.TraitEvents;
+using Code.MainSystem.Cutscene.DialogCutscene;
 using Code.MainSystem.Rhythm.Core;
+using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.Turn;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.Encounter
@@ -18,7 +22,8 @@ namespace Code.MainSystem.Encounter
     public class EncounterManager : MonoBehaviour, ITurnStartComponent
     {
         [SerializeField] private CurrentEncounterListSO currentEncounterList;
-        [SerializeField] private EncounterSenderSO encounterSender;
+        // 이제 여기서 보내는게 아니라, DialogCutsceneDataManager한테 씬 바꿔달라 요청하는 식으로 해야하는데
+        [SerializeField] private DialogCutsceneSenderSO dialogSender;
         
         [SerializeField] private RhythmGameDataSenderSO rhythmGameDataSender;
         
@@ -45,9 +50,9 @@ namespace Code.MainSystem.Encounter
             {
                 Instance = this;
                 DontDestroyOnLoad(this);
-                encounterSender.encounterData = null;
-                encounterSender.addedTraits.Clear();
-                encounterSender.changeStats.Clear();
+                dialogSender.selectedEvent = null;
+                dialogSender.addedTraits.Clear();
+                dialogSender.changeStats.Clear();
                 //rhythmGameDataSender.IsSuccess = false;
                 //rhythmGameDataSender.IsFailed = false;
             }
@@ -66,37 +71,37 @@ namespace Code.MainSystem.Encounter
         {
             Bus<EncounterCheckEvent>.OnEvent -= HandleEncounterCheck;
         }
-
+        
         private void HandleEncounterCheck(EncounterCheckEvent evt)
         {
-            if (evt.Type == EncounterConditionType.BuskingCaseFall)
-            {
-                var data = encounterData[EncounterConditionType.BuskingCaseFall];
-
-                encounterSender.encounterData = data[0];
-                DOVirtual.DelayedCall(0.5f, 
-                    () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
-            }
+            // if (evt.Type == EncounterConditionType.BuskingCaseFall)
+            // {
+            //     var data = encounterData[EncounterConditionType.BuskingCaseFall];
+            //
+            //     dialogSender.selectedEvent = data[0].dialogue;
+            //     DOVirtual.DelayedCall(0.5f, 
+            //         () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
+            // }
         }
 
         public void TurnStart()
         {
-            if (rhythmGameDataSender.IsSuccess)
-            {
-                var data = encounterData[EncounterConditionType.BuskingSuccess];
-                encounterSender.encounterData = data[0];
-                DOVirtual.DelayedCall(0.5f, 
-                    () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
-                return;
-            }
-            if(rhythmGameDataSender.IsFailed)
-            {
-                var data = encounterData[EncounterConditionType.BuskingFall];
-                encounterSender.encounterData = data[0];
-                DOVirtual.DelayedCall(0.5f, 
-                    () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
-                return;
-            }
+            // if (rhythmGameDataSender.IsSuccess)
+            // {
+            //     var data = encounterData[EncounterConditionType.BuskingSuccess];
+            //     dialogSender.selectedEvent = data[0].dialogue;
+            //     DOVirtual.DelayedCall(0.5f, 
+            //         () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
+            //     return;
+            // }
+            // if(rhythmGameDataSender.IsFailed)
+            // {
+            //     var data = encounterData[EncounterConditionType.BuskingFall];
+            //     dialogSender.selectedEvent = data[0].dialogue;
+            //     DOVirtual.DelayedCall(0.5f, 
+            //         () => SceneManager.LoadScene("EncounterScene", LoadSceneMode.Additive));
+            //     return;
+            // }
             
             // foreach (var data in encounterData[EncounterConditionType.TurnStart])
             // {

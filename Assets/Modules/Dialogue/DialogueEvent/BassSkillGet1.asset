@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e30e51bfead14669b1d5109f387ba401, type: 3}
   m_Name: BassSkillGet1
   m_EditorClassIdentifier: Assembly-CSharp::Code.Core.Bus.GameEvents.DialogueEvents.GetSkillDialogueEventSO
-  traitType: 2
+  traitType:
+    targetMember: 2
+    targetStat: 2

@@ -2,6 +2,7 @@
 using System.Text;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.OutingEvents;
+using Code.MainSystem.Cutscene.DialogCutscene;
 using Code.MainSystem.StatSystem.BaseStats;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -14,7 +15,7 @@ namespace Code.MainSystem.Outing
 {
     public class OutingResultUI : MonoBehaviour
     {
-        [SerializeField] private OutingResultSenderSO resultSender;
+        [SerializeField] private DialogCutsceneSenderSO resultSender;
         [SerializeField] private TextMeshProUGUI resultText;
         [SerializeField] private Button closeButton;
         
@@ -57,7 +58,7 @@ namespace Code.MainSystem.Outing
             // 특성(Traits) 출력 부분은 기존과 동일
             foreach (var skill in resultSender.addedTraits)
             {
-                resultBuilder.Append(string.Format(SKILL_RESULT_FORMAT, skill.ToString()));
+                resultBuilder.Append(string.Format(SKILL_RESULT_FORMAT, skill.targetStat.ToString()));
             }
 
             resultText.SetText(resultBuilder.ToString());
@@ -66,7 +67,7 @@ namespace Code.MainSystem.Outing
         private void CloseOutingScene()
         {
             closeButton.onClick.RemoveAllListeners();
-            Bus<OutingEndEvent>.Raise(new OutingEndEvent());
+            Bus<CutsceneEndEvent>.Raise(new CutsceneEndEvent());
             SceneManager.UnloadSceneAsync(_sceneName);
         }
     }
