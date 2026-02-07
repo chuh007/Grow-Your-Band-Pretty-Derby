@@ -220,8 +220,10 @@ namespace Code.MainSystem.MainScreen
                         finalStatGain = holder.GetCalculatedStat(TraitTarget.Mental, finalStatGain);
                     }
 
+                   
                     int roundedStatGain = Mathf.RoundToInt(finalStatGain);
-                    statManager.GetMemberStat(memberType, statType).PlusValue(roundedStatGain);
+                    if (statType != StatType.TeamHarmony)
+                        statManager.GetMemberStat(memberType, statType).PlusValue(roundedStatGain);
                     TeamPracticeResultCache.StatDeltaDict[(memberType, statType)] = roundedStatGain;
     
                     totalTeamStatDelta += finalStatGain;

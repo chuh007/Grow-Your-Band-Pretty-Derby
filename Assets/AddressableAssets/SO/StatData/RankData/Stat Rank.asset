@@ -13,31 +13,15 @@ MonoBehaviour:
   m_Name: Stat Rank
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.BaseStats.StatRankTable
   Ranks:
-  - RankName: 1
+  - RankName: 9
     Threshold: 0
     RankIconReference:
       m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-  - RankName: 2
-    Threshold: 10
-    RankIconReference:
-      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-  - RankName: 3
-    Threshold: 30
-    RankIconReference:
-      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
-  - RankName: 4
+      m_EditorAssetChanged: 1
+  - RankName: 1
     Threshold: 50
     RankIconReference:
       m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
@@ -45,8 +29,32 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - RankName: 2
+    Threshold: 100
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 3
+    Threshold: 200
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - RankName: 4
+    Threshold: 300
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   - RankName: 5
-    Threshold: 70
+    Threshold: 500
     RankIconReference:
       m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
       m_SubObjectName: 
@@ -54,7 +62,7 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
   - RankName: 6
-    Threshold: 85
+    Threshold: 700
     RankIconReference:
       m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
       m_SubObjectName: 
@@ -62,7 +70,15 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
   - RankName: 7
-    Threshold: 95
+    Threshold: 1000
+    RankIconReference:
+      m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
+  - RankName: 8
+    Threshold: 1500
     RankIconReference:
       m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
       m_SubObjectName: 

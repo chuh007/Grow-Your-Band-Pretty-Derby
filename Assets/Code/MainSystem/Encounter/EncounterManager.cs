@@ -48,8 +48,8 @@ namespace Code.MainSystem.Encounter
                 encounterSender.encounterData = null;
                 encounterSender.addedTraits.Clear();
                 encounterSender.changeStats.Clear();
-                rhythmGameDataSender.IsSuccess = false;
-                rhythmGameDataSender.IsFailed = false;
+                //rhythmGameDataSender.IsSuccess = false;
+                //rhythmGameDataSender.IsFailed = false;
             }
             else
             {

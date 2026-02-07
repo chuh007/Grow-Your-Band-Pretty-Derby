@@ -15,8 +15,8 @@ MonoBehaviour:
   PracticeStatType: 1
   PracticeStatName: "\uBA58\uD0C8"
   PersonalpracticeDescription: 
-  StaminaReduction: 2
-  statIncrease: 10
+  StaminaReduction: 8
+  statIncrease: 17
   PersonalsuccessComment:
     comment: "\uD6C8\uB828\uC798\uB428"
     thoughts: :)
@@ -25,7 +25,3 @@ MonoBehaviour:
     comment: "\uD6C8\uB828\uC548\uB428"
     thoughts: :(
     icon: {fileID: 21300000, guid: 550e4efbeb343734ca390779bae9fab3, type: 3}
-  ProgressImageAddresableKey: Sprites/Guitar/Idle
-  IdleImageAddressableKey: Sprites/Guitar/Idle
-  FaillImageAddressableKey: Sprites/Guitar/Faill
-  SuccseImageAddressableKey: Sprites/Guitar/Succse

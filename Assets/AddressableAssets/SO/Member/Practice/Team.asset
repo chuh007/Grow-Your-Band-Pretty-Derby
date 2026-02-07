@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Team
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.MemberData.PersonalpracticeDataSO
   PracticeStatType: 12
-  PracticeStatName: 
+  PracticeStatName: "\uD569\uC8FC"
   PersonalpracticeDescription: 
-  StaminaReduction: 0
-  statIncrease: 0
+  StaminaReduction: 10
+  statIncrease: 16
   PersonalsuccessComment:
     comment: 
     thoughts: 
@@ -25,7 +25,3 @@ MonoBehaviour:
     comment: 
     thoughts: 
     icon: {fileID: 0}
-  ProgressImageAddresableKey: 
-  IdleImageAddressableKey: 
-  FaillImageAddressableKey: 
-  SuccseImageAddressableKey: 
