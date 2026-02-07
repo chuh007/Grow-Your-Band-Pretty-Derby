@@ -7082,9 +7082,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  selectRequiredUI: {fileID: 1996724990}
   restResultController: {fileID: 1396293158}
   healthBar: {fileID: 508380102}
+  panel: {fileID: 0}
 --- !u!114 &904073744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9122,6 +9122,8 @@ MonoBehaviour:
   mode2Panel: {fileID: 1733053931}
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 904073744}
+  restSelectCompo: {fileID: 0}
+  traitSelectCompo: {fileID: 0}
 --- !u!1 &1354271557
 GameObject:
   m_ObjectHideFlags: 0
