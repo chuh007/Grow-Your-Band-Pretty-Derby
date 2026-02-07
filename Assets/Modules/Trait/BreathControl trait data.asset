@@ -25,6 +25,22 @@ MonoBehaviour:
   - Target: 9
     CalcType: 1
     RequiredTag: 
+  MemberComments:
+  - memberType: 0
+    content: 
+    thoughts: 
+  - memberType: 1
+    content: 
+    thoughts: 
+  - memberType: 2
+    content: 
+    thoughts: 
+  - memberType: 3
+    content: 
+    thoughts: 
+  - memberType: 4
+    content: 
+    thoughts: 
   Effects:
   - 20
   - 10

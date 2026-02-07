@@ -28,6 +28,22 @@ MonoBehaviour:
   - Target: 0
     CalcType: 2
     RequiredTag: 
+  MemberComments:
+  - memberType: 0
+    content: 
+    thoughts: 
+  - memberType: 1
+    content: 
+    thoughts: 
+  - memberType: 2
+    content: 
+    thoughts: 
+  - memberType: 3
+    content: 
+    thoughts: 
+  - memberType: 4
+    content: 
+    thoughts: 
   Effects:
   - 30
   - 1

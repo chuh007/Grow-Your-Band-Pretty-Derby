@@ -22,6 +22,22 @@ MonoBehaviour:
   - Target: 4
     CalcType: 3
     RequiredTag: 
+  MemberComments:
+  - memberType: 0
+    content: 
+    thoughts: 
+  - memberType: 1
+    content: 
+    thoughts: 
+  - memberType: 2
+    content: 
+    thoughts: 
+  - memberType: 3
+    content: 
+    thoughts: 
+  - memberType: 4
+    content: 
+    thoughts: 
   Effects:
   - 50
   DescriptionEffect: "\uC721\uC131: \uD6C8\uB828 \uC2E4\uD328 \uD655\uB960 {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
