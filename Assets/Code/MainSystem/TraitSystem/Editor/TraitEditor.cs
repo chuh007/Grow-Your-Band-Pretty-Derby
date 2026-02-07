@@ -211,9 +211,10 @@ namespace Code.MainSystem.TraitSystem.Editor
             {
                 prop.InsertArrayElementAtIndex(i);
                 var element = prop.GetArrayElementAtIndex(i);
-                element.FindPropertyRelative("memberType").enumValueIndex = i;
-                element.FindPropertyRelative("content").stringValue = "";
-                element.FindPropertyRelative("thoughts").stringValue = "";
+                element.FindPropertyRelative("MemberType").enumValueIndex = i;
+                element.FindPropertyRelative("Content").stringValue = "";
+                element.FindPropertyRelative("Title").stringValue = "";
+                element.FindPropertyRelative("Thoughts").stringValue = "";
             }
 
             _serializedTrait.ApplyModifiedProperties();

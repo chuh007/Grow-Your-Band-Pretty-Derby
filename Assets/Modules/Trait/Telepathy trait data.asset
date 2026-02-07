@@ -26,21 +26,26 @@ MonoBehaviour:
     CalcType: 2
     RequiredTag: 
   MemberComments:
-  - memberType: 0
-    content: 
-    thoughts: 
-  - memberType: 1
-    content: 
-    thoughts: 
-  - memberType: 2
-    content: 
-    thoughts: 
-  - memberType: 3
-    content: 
-    thoughts: 
-  - memberType: 4
-    content: 
-    thoughts: 
+  - MemberType: 0
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 1
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 2
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 3
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 4
+    Title: 
+    Content: 
+    Thoughts: 
   Effects:
   - 50
   - 4
