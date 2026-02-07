@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.TraitEffect;
 
 namespace Code.MainSystem.TraitSystem.Data
@@ -12,7 +13,16 @@ namespace Code.MainSystem.TraitSystem.Data
         public CalculationType CalcType; // 계산 방식
         public string RequiredTag;       // 특정 조건
     }
-    
+
+    [Serializable]
+    public class MemberCommentEntry
+    {
+        public MemberType MemberType;
+        [TextArea(3, 6)] public string Title;
+        [TextArea(3, 6)] public string Content;
+        [TextArea(3, 6)] public string Thoughts;
+    }
+
     [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data")]
     public class TraitDataSO : ScriptableObject
     {
@@ -22,7 +32,10 @@ namespace Code.MainSystem.TraitSystem.Data
         public int MaxLevel;
         public int Point;
         public bool IsRemovable = true;
+        
         public List<StatImpact> Impacts;
+        public List<MemberCommentEntry> MemberComments = new List<MemberCommentEntry>();
+        
         public List<float> Effects = new();
         
         [TextArea] public string DescriptionEffect;
