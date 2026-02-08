@@ -159,8 +159,8 @@ namespace Code.MainSystem.Rhythm.Notes
                 return;
             }
 
-            Vector3 sPos = startPoint != null ? startPoint.position : Vector3.zero;
-            Vector3 ePos = endPoint != null ? endPoint.position : Vector3.zero;
+            Vector3 sPos = startPoint != null ? startPoint.localPosition : Vector3.zero;
+            Vector3 ePos = endPoint != null ? endPoint.localPosition : Vector3.zero;
 
             // TargetTime = 노트의 판정 시간
             // SpawnTime = 이전 노트의 시간 (즉, 출발 시간)
