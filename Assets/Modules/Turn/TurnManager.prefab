@@ -29,8 +29,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1710955152473074958}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &208271456366512651
@@ -46,74 +45,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Turn.TurnManager
   flowSO: {fileID: 11400000, guid: 79cab9437db7d75499fbc71842a55342, type: 2}
-  dataSO: {fileID: 11400000, guid: 8fe1964ec3e36794c99e6ac4dfbab0b1, type: 2}
---- !u!1001 &1555811037702455625
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 441360048386220852}
-    m_Modifications:
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 223.96706
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -941.4042
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1943141726124254728, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_Name
-      value: FlowManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 1943141726124254728, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3321491393440953974, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-      propertyPath: m_SortingOrder
-      value: 20
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
---- !u!4 &1710955152473074958 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 155885735569468487, guid: e7dd94ca4437a1e488130413a610b506, type: 3}
-  m_PrefabInstance: {fileID: 1555811037702455625}
-  m_PrefabAsset: {fileID: 0}

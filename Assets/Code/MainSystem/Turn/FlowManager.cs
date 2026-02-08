@@ -13,6 +13,8 @@ namespace Code.MainSystem.Turn
     /// </summary>
     public class FlowManager : MonoBehaviour
     {
+        [SerializeField] private GoalFlowSO flowSO;
+        
         [SerializeField] private TurnUIController turnUIController;
         
         private List<ITurnStartComponent> _turnStartComponents = new List<ITurnStartComponent>();
@@ -29,7 +31,12 @@ namespace Code.MainSystem.Turn
             
             Bus<TurnEndEvent>.OnEvent += HandleTurnEnd;
         }
-        
+
+        private void Start()
+        {
+            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+        }
+
         private void OnDestroy()
         {
             Bus<TurnEndEvent>.OnEvent -= HandleTurnEnd;
