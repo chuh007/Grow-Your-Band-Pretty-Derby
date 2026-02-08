@@ -18,6 +18,7 @@ namespace Code.MainSystem.Outing
         [SerializeField] private OutingPlace outingPlace;
         
         [SerializeField] private DialogueInformationSO defaultDialogue;
+        [SerializeField][TextArea] private string defaultDescription;
         
         private Outline _outline;
         
@@ -43,10 +44,14 @@ namespace Code.MainSystem.Outing
             if (evt.dialogue == null)
             {
                 sender.selectedEvent = defaultDialogue;
+                selectUI.SetData(defaultDialogue, defaultDescription, outingPlace);
+            }
+            else
+            {
+                selectUI.SetData(evt);
             }
             
             selectUI.gameObject.SetActive(true);
-            selectUI.SetData(evt);
             
         }
 

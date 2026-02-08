@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.CutsceneEvents;
 using Code.MainSystem.Cutscene.DialogCutscene;
+using Code.MainSystem.Dialogue;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.Training;
 using TMPro;
@@ -23,7 +24,7 @@ namespace Code.MainSystem.Outing
         
         [SerializeField] private List<OutingPlaceButton> outingPlaceButtons;
         
-        private OutingEvent _currentOutingEvent;
+        private DialogueInformationSO _current;
         
         private void Awake()
         {
@@ -36,16 +37,26 @@ namespace Code.MainSystem.Outing
             gameObject.SetActive(false);
             TrainingManager.Instance.
                 MarkMemberTrained(MainHelper.Instance.MainScreen.UnitSelector.CurrentUnit.memberType);
-            Bus<DialogCutscenePlayEvent>.Raise(new DialogCutscenePlayEvent(_currentOutingEvent.dialogue));
+            Bus<DialogCutscenePlayEvent>.Raise(new DialogCutscenePlayEvent(_current));
         }
 
         public void SetData(OutingEvent evt)
         {
-            _currentOutingEvent = evt;
+            _current = evt.dialogue;
             descriptionText.SetText(evt.description);
             foreach (var button in outingPlaceButtons)
             {
                 button.ActiveFocus(button.OutingPlace == evt.place);
+            }
+        }
+        
+        public void SetData(DialogueInformationSO dialogue, string description, OutingPlace place)
+        {
+            _current = dialogue;
+            descriptionText.SetText(description);
+            foreach (var button in outingPlaceButtons)
+            {
+                button.ActiveFocus(button.OutingPlace == place);
             }
         }
     }

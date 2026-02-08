@@ -174,6 +174,8 @@ MonoBehaviour:
   forceController: {fileID: 5178219769146920328}
   outingPlace: 3
   defaultDialogue: {fileID: 11400000, guid: 6976695161f2dec4d98af3323d3fe449, type: 2}
+  defaultDescription: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+    \uC54A\uC744 \uAC83 \uAC19\uB2E4."
 --- !u!114 &5561405311131384073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -979,6 +981,8 @@ MonoBehaviour:
   forceController: {fileID: 5178219769146920328}
   outingPlace: 0
   defaultDialogue: {fileID: 11400000, guid: b0355ab948b94f7459b5e329360ff424, type: 2}
+  defaultDescription: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+    \uC54A\uC744 \uAC83 \uAC19\uB2E4."
 --- !u!114 &6287480465267103988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1687,7 +1691,7 @@ Transform:
   m_GameObject: {fileID: 2144796294592854278}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.5, y: -14, z: -10}
+  m_LocalPosition: {x: -20.3, y: -10.7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2313,6 +2317,8 @@ MonoBehaviour:
   forceController: {fileID: 5178219769146920328}
   outingPlace: 4
   defaultDialogue: {fileID: 11400000, guid: 204c5f746e00cb04ea7140da84b748a1, type: 2}
+  defaultDescription: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+    \uC54A\uC744 \uAC83 \uAC19\uB2E4."
 --- !u!114 &5586905137678690786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2592,6 +2598,8 @@ MonoBehaviour:
   forceController: {fileID: 5178219769146920328}
   outingPlace: 2
   defaultDialogue: {fileID: 11400000, guid: d910c91697feba1428a1ca966feeaaed, type: 2}
+  defaultDescription: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+    \uC54A\uC744 \uAC83 \uAC19\uB2E4."
 --- !u!114 &2448603595497021580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4936,6 +4944,8 @@ MonoBehaviour:
   forceController: {fileID: 5178219769146920328}
   outingPlace: 1
   defaultDialogue: {fileID: 11400000, guid: 33734901a607ee94987643ce4a286db4, type: 2}
+  defaultDescription: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+    \uC54A\uC744 \uAC83 \uAC19\uB2E4."
 --- !u!114 &2345126592487900736
 MonoBehaviour:
   m_ObjectHideFlags: 0
