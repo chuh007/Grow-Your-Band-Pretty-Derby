@@ -35,6 +35,11 @@ namespace Code.MainSystem.MainScreen.Training
         [SerializeField] private float skipCooldown = 0.3f;
         [SerializeField] private float autoSkipTimeout = 15f;
 
+        [Header("Page Settings")]
+        [SerializeField] private CanvasGroup commentCanvasGroup;
+        [SerializeField] private float previousPageDisplayDuration = 2f;
+        [SerializeField] private float pageTransitionDuration = 0.5f;
+
         private bool _isPlaying = false;
         private CancellationTokenSource _skipCTS;
         private bool _hasSkipped = false;
@@ -148,7 +153,7 @@ namespace Code.MainSystem.MainScreen.Training
                     statDeltaDict
                 );
                 
-                await CreateComments();
+                await ShowCommentsWithPageFlip();
                 
                 await WaitForClick();
             }
@@ -228,7 +233,106 @@ namespace Code.MainSystem.MainScreen.Training
             Debug.Log($"[PracticeResultWindow] Created stat: {statName} = {currentValue} ({delta:+0;-0})");
         }
 
-        private async UniTask CreateComments()
+        private async UniTask ShowCommentsWithPageFlip()
+        {
+            string memberName = null;
+            if (_currentUnits != null && _currentUnits.Count > 0)
+            {
+                memberName = _currentUnits[0].unitName;
+            }
+
+            var previousComments = CommentManager.instance.GetPreviousCommentsByMember(memberName);
+            var hasPreview = previousComments != null && previousComments.Count > 0;
+
+            if (hasPreview)
+            {
+                await ShowPreviousComments(previousComments);
+                
+                await UniTask.Delay(TimeSpan.FromSeconds(previousPageDisplayDuration), cancellationToken: _skipCTS.Token);
+                
+                await PageFlipTransition();
+                
+                ClearComments();
+            }
+            
+            await CreateCurrentComments();
+        }
+
+        private async UniTask ShowPreviousComments(List<CommentData> previousComments)
+        {
+            Debug.Log("[PracticeResultWindow] Showing previous comments");
+            
+            if (commentCanvasGroup != null)
+                commentCanvasGroup.alpha = 1f;
+
+            TMP_FontAsset handwritingFont = null;
+            if (_currentUnits != null && _currentUnits.Count > 0 && _currentUnits[0].handwritingFont != null)
+            {
+                handwritingFont = _currentUnits[0].handwritingFont;
+            }
+
+            foreach (var commentData in previousComments)
+            {
+                var go = Instantiate(commentItemPrefab, commentParent);
+                go.transform.localScale = Vector3.one;
+                go.SetActive(true);
+                
+                var commentUI = go.GetComponent<PracticeCommentItemUI>();
+                
+                if (handwritingFont != null)
+                {
+                    commentUI.SetHandwritingFont(handwritingFont);
+                }
+                
+                commentUI.ShowInstantly(commentData);
+                
+                _spawnedComments.Add(go);
+            }
+
+            await UniTask.Yield();
+        }
+
+        private async UniTask PageFlipTransition()
+        {
+            Debug.Log("[PracticeResultWindow] Page flip transition starting");
+            
+            float elapsed = 0f;
+            
+            while (elapsed < pageTransitionDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / pageTransitionDuration;
+                
+                if (commentCanvasGroup != null)
+                    commentCanvasGroup.alpha = 1f - t;
+                
+                await UniTask.Yield(_skipCTS.Token);
+            }
+            
+            if (commentCanvasGroup != null)
+                commentCanvasGroup.alpha = 0f;
+            
+            await UniTask.Yield();
+            
+            elapsed = 0f;
+            while (elapsed < pageTransitionDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / pageTransitionDuration;
+                
+                if (commentCanvasGroup != null)
+                    commentCanvasGroup.alpha = t;
+                
+                await UniTask.Yield(_skipCTS.Token);
+            }
+            
+            if (commentCanvasGroup != null)
+                commentCanvasGroup.alpha = 1f;
+            
+            Debug.Log("[PracticeResultWindow] Page flip transition completed");
+        }
+
+        private async UniTask CreateCurrentComments()
         {
             var setupComments = CommentManager.instance.GetSetupComments();
             
@@ -295,20 +399,27 @@ namespace Code.MainSystem.MainScreen.Training
             }
         }
 
+        private void ClearComments()
+        {
+            foreach (var go in _spawnedComments)
+                Destroy(go);
+            _spawnedComments.Clear();
+        }
+
         private void ClearAll()
         {
             foreach (var go in _spawnedStats)
                 Destroy(go);
             _spawnedStats.Clear();
 
-            foreach (var go in _spawnedComments)
-                Destroy(go);
-            _spawnedComments.Clear();
+            ClearComments();
         }
 
         private void EndWindow()
         {
             Debug.Log("[PracticeResultWindow] EndWindow called");
+            
+            CommentManager.instance.SaveCurrentCommentsAsPrevious();
             
             ClearAll();
             gameObject.SetActive(false);

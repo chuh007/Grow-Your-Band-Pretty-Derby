@@ -80,6 +80,44 @@ namespace Code.MainSystem.MainScreen.Training
             PlayTypingAnimation(data, _animationCTS.Token).Forget();
         }
 
+        public void ShowInstantly(CommentData data)
+        {
+            _currentData = data;
+            
+            _animationCTS?.Cancel();
+            _animationCTS?.Dispose();
+            
+            if (useHandwritingFont && _handwritingFont != null)
+            {
+                ApplyHandwritingFont();
+            }
+            
+            titleText.text = data.title;
+            contentText.text = data.content;
+            thoughtsText.text = string.IsNullOrEmpty(data.thoughts) ? "" : data.thoughts;
+
+            for (int i = 0; i < statChangeItems.Count; i++)
+            {
+                if (i < data.statChanges.Count)
+                {
+                    statChangeItems[i].gameObject.SetActive(true);
+                    statChangeItems[i].Setup(data.statChanges[i]);
+                    
+                    var cg = statChangeItems[i].GetComponent<CanvasGroup>();
+                    if (cg == null)
+                        cg = statChangeItems[i].gameObject.AddComponent<CanvasGroup>();
+                    cg.alpha = 1f;
+                    
+                    var rt = statChangeItems[i].GetComponent<RectTransform>();
+                    if (rt != null) rt.localScale = Vector3.one;
+                }
+                else
+                {
+                    statChangeItems[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
         private async UniTaskVoid PlayTypingAnimation(CommentData data, CancellationToken token)
         {
             try
@@ -168,7 +206,6 @@ namespace Code.MainSystem.MainScreen.Training
         public void SkipToComplete(CommentData data)
         {
             _animationCTS?.Cancel();
-            
             
             titleText.text = data.title;
             contentText.text = data.content;
