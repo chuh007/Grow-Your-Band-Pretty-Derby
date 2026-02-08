@@ -65,9 +65,7 @@ namespace Code.MainSystem.MainScreen.Training
             Bus<MemberTrainingStateChangedEvent>.Raise(
                 new MemberTrainingStateChangedEvent(member)
             );
-
         }
-
 
         public void ResetTraining()
         {
@@ -86,7 +84,6 @@ namespace Code.MainSystem.MainScreen.Training
             }
         }
 
-        
         private bool CheckAllMembersTrained()
         {
             foreach (var member in _allMemberTypes)
@@ -111,6 +108,5 @@ namespace Code.MainSystem.MainScreen.Training
                 ResetTraining();
             }
         }
-
     }
 }
