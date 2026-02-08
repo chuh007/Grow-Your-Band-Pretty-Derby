@@ -942,13 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9322c07371b8486c82e79ada37848e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.Training.StatResultUI
-  resultItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  resultItems: []
 --- !u!1 &97933129
 GameObject:
   m_ObjectHideFlags: 0
@@ -5475,7 +5469,7 @@ GameObject:
   - component: {fileID: 720715174}
   m_Layer: 5
   m_Name: Button
-  m_TagString: Untagged
+  m_TagString: PracticeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6939,6 +6933,7 @@ MonoBehaviour:
   - {fileID: 1860788188}
   - {fileID: 983431146}
   - {fileID: 1602141942}
+  practiceButtonsParent: {fileID: 226362704}
   memberCarousel: {fileID: 904073745}
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 904073744}
@@ -7277,7 +7272,7 @@ GameObject:
   - component: {fileID: 983431149}
   m_Layer: 5
   m_Name: Button (3)
-  m_TagString: Untagged
+  m_TagString: PracticeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11014,11 +11009,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.2
+      value: -6.5
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.8
+      value: -14
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
@@ -11460,7 +11455,7 @@ GameObject:
   - component: {fileID: 1494463353}
   m_Layer: 5
   m_Name: Button (1)
-  m_TagString: Untagged
+  m_TagString: PracticeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12229,7 +12224,7 @@ GameObject:
   - component: {fileID: 1602141941}
   m_Layer: 5
   m_Name: Button (5)
-  m_TagString: Untagged
+  m_TagString: PracticeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14233,7 +14228,7 @@ GameObject:
   - component: {fileID: 1860788191}
   m_Layer: 5
   m_Name: Button (2)
-  m_TagString: Untagged
+  m_TagString: PracticeButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
