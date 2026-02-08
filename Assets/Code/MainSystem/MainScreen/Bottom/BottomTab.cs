@@ -15,7 +15,6 @@ namespace Code.MainSystem.MainScreen.Bottom
         [SerializeField] private GameObject mode2Panel;
         [SerializeField] private PersonalPracticeCompo personalPracticeCompo;
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
-        [SerializeField] private RestSelectCompo restSelectCompo;
 
         //연결 약하게할려고 이벤트사용함
         public Action<int> ExitModeEvent; 
@@ -55,7 +54,6 @@ namespace Code.MainSystem.MainScreen.Bottom
                     mode2Panel.SetActive(true);
                     break;
                 case 3:
-                    restSelectCompo.Rest();
                     break;
                 case 4:
                     break;
@@ -80,7 +78,6 @@ namespace Code.MainSystem.MainScreen.Bottom
                     teamPracticeCompo.OnClickBack();
                     break;
                 case 3:
-                    restSelectCompo.Close();
                     break;
                 case 4:
                     break;
