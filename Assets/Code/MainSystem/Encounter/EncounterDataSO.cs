@@ -12,6 +12,8 @@ namespace Code.MainSystem.Encounter
         LiveCaseFall,
         LiveFall,
         LiveSuccess,
+        TrainingEnd,
+        TeamPractice,
         TurnStart, // 턴 시작
         
     }
