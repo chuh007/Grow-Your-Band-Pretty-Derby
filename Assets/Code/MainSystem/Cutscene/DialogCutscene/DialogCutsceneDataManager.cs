@@ -48,6 +48,7 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
         
         private void HandleDialogCutscenePlay(DialogCutscenePlayEvent evt)
         {
+            Debug.Log("DialogCutscenePlay");
             dialogSender.selectedEvent = evt.Dialogue;
             SceneManager.LoadScene("DialogCutscene", LoadSceneMode.Additive);
         }

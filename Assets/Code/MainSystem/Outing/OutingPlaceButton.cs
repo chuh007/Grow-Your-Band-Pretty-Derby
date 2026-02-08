@@ -11,7 +11,6 @@ namespace Code.MainSystem.Outing
 {
     public class OutingPlaceButton : MonoBehaviour
     {
-        [SerializeField] private MainScreen.MainScreen mainScreen;
         [SerializeField] private DialogCutsceneSenderSO sender;
         [SerializeField] private OutingDataController dataController;
         [SerializeField] private OutingSelectUI selectUI;
@@ -32,13 +31,13 @@ namespace Code.MainSystem.Outing
 
         public void Click()
         {
-            if (TrainingManager.Instance.IsMemberTrained(mainScreen.UnitSelector.CurrentUnit.memberType))
+            if (TrainingManager.Instance.IsMemberTrained(MainHelper.Instance.MainScreen.UnitSelector.CurrentUnit.memberType))
                 return;
             
             forceController.SetCamera(outingPlace);
             
             OutingEvent evt = dataController.
-                GetMemberOutingData(mainScreen.UnitSelector.CurrentUnit.memberType, outingPlace);
+                GetMemberOutingData(MainHelper.Instance.MainScreen.UnitSelector.CurrentUnit.memberType, outingPlace);
             sender.selectedEvent = evt.dialogue;
                         
             if (evt.dialogue == null)
@@ -47,7 +46,7 @@ namespace Code.MainSystem.Outing
             }
             
             selectUI.gameObject.SetActive(true);
-            selectUI.SetData(outingPlace, evt.description);
+            selectUI.SetData(evt);
             
         }
 
