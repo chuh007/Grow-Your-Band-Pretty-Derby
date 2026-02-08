@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 using Code.MainSystem.Rhythm.Audio;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.Rhythm.Notes
 {
@@ -11,8 +12,6 @@ namespace Code.MainSystem.Rhythm.Notes
         [SerializeField] private Image visualImage;
         [SerializeField] private CanvasGroup canvasGroup;
 
-        public double TargetTime => _targetTime;
-        
         private Vector3 _startPos;
         private Vector3 _endPos;
         private double _spawnTime;
@@ -24,10 +23,21 @@ namespace Code.MainSystem.Rhythm.Notes
         private bool _isInitialized = false;
         private bool _isHitPulse = false;
 
+        private static Material _forcedUIMaterial;
+
+        public double TargetTime => _targetTime;
+        public bool IsHitPulse => _isHitPulse;
+
         private void Awake()
         {
             if (visualImage == null) visualImage = GetComponentInChildren<Image>();
             if (canvasGroup == null) canvasGroup = GetComponentInChildren<CanvasGroup>();
+            
+            if (_forcedUIMaterial == null)
+            {
+                var shader = Shader.Find("UI/Default");
+                if (shader != null) _forcedUIMaterial = new Material(shader);
+            }
         }
 
         public void Initialize(Conductor conductor, Vector3 start, Vector3 end, double spawnTime, double targetTime, bool isHitPulse, int steps)
@@ -45,23 +55,16 @@ namespace Code.MainSystem.Rhythm.Notes
             _fixedSteps = Mathf.Max(1, steps);
             
             transform.localPosition = _startPos;
+            UpdateVisuals();
             
             _isInitialized = true;
             gameObject.SetActive(true);
             
             if (visualImage != null)
             {
-                visualImage.gameObject.SetActive(true);
                 visualImage.enabled = true;
-                
-                // [안전장치] URP에서 기본 UI 머티리얼이 깨지는 현상 방지
-                if (visualImage.material == null || visualImage.material.name.Contains("Default"))
-                {
-                    visualImage.material = new Material(Shader.Find("UI/Default"));
-                }
+                visualImage.gameObject.SetActive(true);
             }
-            
-            UpdateVisuals();
         }
 
         private void Update()
@@ -73,7 +76,7 @@ namespace Code.MainSystem.Rhythm.Notes
             if (_duration <= 0)
             {
                 transform.localPosition = _endPos;
-                if (currentSongTime > _targetTime + 0.5f) gameObject.SetActive(false);
+                if (currentSongTime > _targetTime + 0.1f) Deactivate();
                 return;
             }
 
@@ -81,14 +84,8 @@ namespace Code.MainSystem.Rhythm.Notes
 
             if (t >= 1.0f)
             {
-                if (currentSongTime > _targetTime + 0.5f)
-                {
-                    gameObject.SetActive(false); 
-                }
-                else
-                {
-                    transform.localPosition = _endPos;
-                }
+                transform.localPosition = _endPos;
+                if (currentSongTime > _targetTime + 0.1f) Deactivate();
             }
             else
             {
@@ -111,17 +108,19 @@ namespace Code.MainSystem.Rhythm.Notes
         {
             if (visualImage == null) return;
 
-            // 자식 오브젝트(Visual) 트랜스폼 유지
             visualImage.rectTransform.localScale = Vector3.one;
             visualImage.rectTransform.localPosition = Vector3.zero;
-            
-            // 프리팹에서 설정한 크기를 유지하고 싶다면 아래 라인을 주석 처리하거나 적절한 크기로 조절하세요.
-            // visualImage.rectTransform.sizeDelta = new Vector2(100, 100);
+            visualImage.rectTransform.sizeDelta = new Vector2(100, 100);
             
             if (visualImage.canvasRenderer != null)
             {
                 visualImage.canvasRenderer.cullTransparentMesh = false;
                 visualImage.canvasRenderer.SetAlpha(1f);
+            }
+
+            if (_forcedUIMaterial != null && visualImage.material != _forcedUIMaterial)
+            {
+                visualImage.material = _forcedUIMaterial;
             }
 
             if (_isHitPulse)
