@@ -55,21 +55,6 @@ namespace Code.MainSystem.MainScreen.Training
             gameObject.SetActive(false);
         }
 
-        private void Update()
-        {
-            if (_isPlaying && allowSkip && !_hasSkipped)
-            {
-                if (Input.GetKeyDown(KeyCode.Space) || 
-                    Input.GetKeyDown(KeyCode.Return) || 
-                    Input.GetKeyDown(KeyCode.KeypadEnter) ||
-                    Input.GetMouseButtonDown(0))
-                {
-                    Debug.Log("[PracticeResultWindow] Skip triggered by input");
-                    TriggerSkip();
-                }
-            }
-        }
-
         public void OnPointerDown(PointerEventData eventData)
         {
             Debug.Log("[PracticeResultWindow] OnPointerDown called");
@@ -182,12 +167,13 @@ namespace Code.MainSystem.MainScreen.Training
         {
             if (!Mathf.Approximately(conditionDelta, 0f))
             {
-                await CreateStatItemWithGauge("컨디션", Mathf.RoundToInt(conditionCurrent), conditionDelta, deltaIcon);
+                await CreateStatItemWithGauge("컨디션", Mathf.RoundToInt(conditionCurrent), conditionDelta, deltaIcon, null);
             }
             
             if (teamStat != null && !Mathf.Approximately(teamStatDelta, 0f))
             {
-                await CreateStatItemWithGauge(teamStat.statName, Mathf.RoundToInt(teamStatCurrentValue), teamStatDelta, deltaIcon);
+                BaseStat baseStat = statManager.GetTeamStat(StatType.TeamHarmony);
+                await CreateStatItemWithGauge(teamStat.statName, Mathf.RoundToInt(teamStatCurrentValue), teamStatDelta, deltaIcon, baseStat);
             }
             
             foreach (var unit in allUnits)
@@ -201,13 +187,13 @@ namespace Code.MainSystem.MainScreen.Training
 
                     if (delta != 0)
                     {
-                        await CreateStatItemWithGauge(stat.statName, baseStat.CurrentValue, delta, normalIcon);
+                        await CreateStatItemWithGauge(stat.statName, baseStat.CurrentValue, delta, normalIcon, baseStat);
                     }
                 }
             }
         }
 
-        private async UniTask CreateStatItemWithGauge(string statName, int currentValue, float delta, Sprite icon)
+        private async UniTask CreateStatItemWithGauge(string statName, int currentValue, float delta, Sprite icon, BaseStat baseStat = null)
         {
             var go = Instantiate(statItemPrefab, statParent);
             go.transform.localScale = Vector3.one;
@@ -220,17 +206,17 @@ namespace Code.MainSystem.MainScreen.Training
                 
                 try
                 {
-                    await statUI.AnimateToValue(icon, currentValue, 0.5f, _skipCTS.Token);
+                    await statUI.AnimateToValue(icon, currentValue, 0.5f, _skipCTS.Token, baseStat);
                 }
                 catch (System.OperationCanceledException)
                 {
-                    statUI.ForceSetValue(icon, currentValue);
+                    statUI.ForceSetValue(icon, currentValue, baseStat);
                 }
             }
             
             _spawnedStats.Add(go);
 
-            Debug.Log($"[PracticeResultWindow] Created stat: {statName} = {currentValue} ({delta:+0;-0})");
+            Debug.Log($"[PracticeResultWindow] Created stat: {statName} = {currentValue} ({delta:+0;-0}), HasBaseStat={baseStat != null}");
         }
 
         private async UniTask ShowCommentsWithPageFlip()
