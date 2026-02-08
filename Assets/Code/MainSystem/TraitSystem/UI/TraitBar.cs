@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Code.Core;
+using TMPro;
 using UnityEngine;
 using Code.Core.Bus;
 using UnityEngine.UI;
@@ -16,12 +17,19 @@ namespace Code.MainSystem.TraitSystem.UI
         
         private ActiveTrait _currentItem;
 
-        public void EnableFor(ActiveTrait item)
+        public async void EnableFor(ActiveTrait item)
         {
             _currentItem = item;
-            iconImage.sprite = _currentItem.Data.TraitIcon;
+
+
+            Sprite sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(_currentItem.Data.IconAddress);
+            if (sprite is not null && iconImage is not null)
+                iconImage.sprite = sprite;
+            
             nameText.SetText(_currentItem.Data.TraitName);
-            levelPointText.SetText(_currentItem.Data.MaxLevel == -1 ? $"{_currentItem.Data.Point}" : $"{_currentItem.Data.Point} / {_currentItem.CurrentLevel}.Lv");
+            levelPointText.SetText(_currentItem.Data.MaxLevel == -1
+                ? $"{_currentItem.Data.Point}"
+                : $"{_currentItem.Data.Point} / {_currentItem.CurrentLevel}.Lv");
             gameObject.SetActive(true);
         }
 

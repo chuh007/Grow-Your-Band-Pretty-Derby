@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Code.Core;
+using TMPro;
 using UnityEngine;
 using Code.Core.Bus;
 using UnityEngine.UI;
@@ -24,9 +25,12 @@ namespace Code.MainSystem.TraitSystem.UI
             checkButton.onClick.AddListener(OnCheck);
         }
 
-        public void EnableFor(ActiveTrait trait, int prevLevel)
+        public async void EnableFor(ActiveTrait trait, int prevLevel)
         {
-            iconImage.sprite = trait.Data.TraitIcon;
+            Sprite sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(trait.Data.IconAddress);
+            if (sprite is not null && iconImage is not null)
+                iconImage.sprite = sprite;
+
             nameText.SetText(trait.Data.TraitName);
             descriptionText.SetText($"Lv.{prevLevel} -> Lv.{trait.CurrentLevel}\n특성이 강화되었습니다.");
             Bus<TraitShowResponded>.Raise(new TraitShowResponded(_traitManager.GetHolder(_traitManager.CurrentMember)));

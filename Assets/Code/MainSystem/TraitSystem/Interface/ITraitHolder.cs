@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Runtime;
 
@@ -6,6 +7,8 @@ namespace Code.MainSystem.TraitSystem.Interface
 {
     public interface ITraitHolder : IModifierProvider
     {
+        public MemberType MemberType { get; }
+        
         int TotalPoint { get; }
         int MaxPoints { get; }
         IReadOnlyList<ActiveTrait> ActiveTraits { get; }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.TraitEffect;
+using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.TraitSystem.Data
 {
@@ -29,7 +30,10 @@ namespace Code.MainSystem.TraitSystem.Data
     {
         public TraitType TraitType;
         public string TraitName;
-        public Sprite TraitIcon;
+        
+        public AssetReferenceSprite TraitIcon;
+        public string IconAddress;
+        
         public int MaxLevel;
         public int Point;
         public bool IsRemovable = true;

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Code.Core;
+using TMPro;
 using UnityEngine;
 using Code.Core.Bus;
 using UnityEngine.UI;
@@ -47,12 +48,15 @@ namespace Code.MainSystem.TraitSystem.UI
             Hide();
         }
 
-        private void UpdateUI()
+        private async void UpdateUI()
         {
             if (_currentTrait?.Data is null)
                 return;
 
-            iconImage.sprite = _currentTrait.Data.TraitIcon;
+            Sprite sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(_currentTrait.Data.IconAddress);
+                
+            if (sprite is not null && iconImage is not null)
+                iconImage.sprite = sprite;
             
             string pointText = _currentTrait.Data.MaxLevel == -1 ? "" : $"Lv.{_currentTrait.CurrentLevel}";
             levelPointText.SetText(pointText);

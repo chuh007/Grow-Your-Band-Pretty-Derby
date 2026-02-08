@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Code.Core;
+using Code.Core.Addressable;
 using Code.MainSystem.TraitSystem.Interface;
 using UnityEngine;
 
@@ -6,20 +10,23 @@ namespace Code.MainSystem.TraitSystem.Data
 {
     public class TraitDatabase : MonoBehaviour, ITraitDatabase
     {
-        [SerializeField] private List<TraitDataSO> traits;
-
-        private Dictionary<TraitType, TraitDataSO> _map;
-
-        private void Awake()
+        [SerializeField] private string traitLabel;
+        public bool IsInitialized { get; private set; }
+        
+        private Dictionary<TraitType, TraitDataSO> _map = new();
+        
+        public async Task InitializeAsync()
         {
-            _map = new Dictionary<TraitType, TraitDataSO>();
-            foreach (var trait in traits)
+            List<TraitDataSO> allTraits = await GameManager.Instance.LoadAllAddressablesAsync<TraitDataSO>(traitLabel);
+
+            _map.Clear();
+            foreach (var trait in allTraits.Where(trait => trait != null))
                 _map[trait.TraitType] = trait;
         }
 
         public TraitDataSO Get(TraitType traitType)
         {
-            return _map[traitType];
+            return _map.GetValueOrDefault(traitType);
         }
     }
 }
