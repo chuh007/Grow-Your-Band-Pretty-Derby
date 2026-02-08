@@ -7,20 +7,14 @@ using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class TraitMainPanelUI : TraitPanelBase, IUIElement<string>
+    public class TraitMainPanelUI : TraitPanelBase, IUIElement<MemberType>
     {
         [SerializeField] private TextMeshProUGUI label;
 
-        public void EnableFor(string memberType)
+        public void EnableFor(MemberType memberType)
         {
-            if (!System.Enum.TryParse(memberType, out MemberType parsed))
-            {
-                Debug.LogError($"[TraitUI] {memberType} 파싱 실패!");
-                return;
-            }
-
-            label.SetText($"{parsed} 특성 UI");
-            Bus<TraitShowRequested>.Raise(new TraitShowRequested(parsed));
+            label.SetText($"{memberType} 특성 UI");
+            Bus<TraitShowRequested>.Raise(new TraitShowRequested(memberType));
             
             Show(); 
         }
