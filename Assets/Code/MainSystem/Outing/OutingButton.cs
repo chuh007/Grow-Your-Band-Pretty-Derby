@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.OutingEvents;
+using Code.MainSystem.Cutscene.DialogCutscene;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Code.MainSystem.Outing
     // 외출 버튼에 달아놓는 컴포넌트
     public class OutingButton : MonoBehaviour
     {
-        [SerializeField] private OutingResultSenderSO sender;
+        [SerializeField] private DialogCutsceneSenderSO sender;
         [SerializeField] private MainScreen.MainScreen mainScreen;
         
         private Button _button;
@@ -39,7 +40,6 @@ namespace Code.MainSystem.Outing
             if (TrainingManager.Instance.IsMemberTrained(mainScreen.UnitSelector.CurrentUnit.memberType))
                 return;
             
-            sender.targetMember = mainScreen.UnitSelector.CurrentUnit;
             Bus<OutingUnitSelectEvent>.Raise(new OutingUnitSelectEvent(mainScreen.UnitSelector.CurrentUnit));
         }
     }

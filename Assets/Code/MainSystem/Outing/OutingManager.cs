@@ -3,6 +3,7 @@ using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.DialogueEvents;
+using Code.MainSystem.Cutscene.DialogCutscene;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -14,7 +15,7 @@ namespace Code.MainSystem.Outing
     /// </summary>
     public class OutingManager : MonoBehaviour
     {
-        [SerializeField] private OutingResultSenderSO resultSender;
+        [SerializeField] private DialogCutsceneSenderSO resultSender;
         [SerializeField] private Transform uiRoot;
         
         private void Awake()

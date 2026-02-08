@@ -105,12 +105,17 @@ namespace Code.MainSystem.Rhythm.Notes
 
         private void HandleBeatPulse(BeatPulseEvent evt)
         {
+            if (_guidelines == null || _guidelines.Count == 0) return;
+
             bool isStrongBeat = evt.BeatIndex % RhythmGameBalanceConsts.BEAT_INTERVAL_STRONG == 0;
             float targetScale = isStrongBeat ? RhythmGameBalanceConsts.PULSE_SCALE_STRONG : RhythmGameBalanceConsts.PULSE_SCALE_WEAK;
             AnimationCurve targetCurve = isStrongBeat ? pulseCurveStrong : pulseCurveWeak;
 
-            foreach (var guideline in _guidelines)
+            // 현재 비트에 해당하는 보조선 하나만 움찔하게
+            int index = evt.BeatIndex % _guidelines.Count;
+            if (index >= 0 && index < _guidelines.Count)
             {
+                var guideline = _guidelines[index];
                 if (guideline != null)
                 {
                     PulseRoutine(guideline, targetScale, targetCurve).Forget();

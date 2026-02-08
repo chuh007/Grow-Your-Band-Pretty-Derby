@@ -49,7 +49,13 @@ namespace Code.MainSystem.StatSystem.BaseStats.Editor
             _memberEnumField.Init(_currentMember);
 
             _assetListView.makeItem = () => new Label();
-            _assetListView.bindItem = (e, i) => ((Label)e).text = _filteredAssets[i].name;
+
+            _assetListView.bindItem = (e, i) =>
+            {
+                var asset = _filteredAssets[i];
+                ((Label)e).text = string.IsNullOrEmpty(asset.statName) ? asset.name : asset.statName;
+            };
+
             _assetListView.itemsSource = _filteredAssets;
         }
 

@@ -2,12 +2,12 @@
     <ui:VisualElement name="StatRankContainer" style="flex-grow: 1; padding: 10px;">
         <ui:VisualElement name="EnumContainer" style="padding-bottom: 10px; margin-bottom: 10px; border-bottom-width: 1px; border-bottom-color: rgb(71, 71, 71); flex-direction: row; height: 150px;">
             <ui:VisualElement name="EnumElement" style="width: 200px; margin-right: 10px;">
-                <ui:Label text="Current Enum Values" name="CurrentEnumTitle" style="-unity-font-style: bold;" />
+                <ui:Label text="현재 랭크 타입들" name="CurrentEnumTitle" style="-unity-font-style: bold;" />
                 <ui:ListView name="EnumListView" style="flex-grow: 1; border-width: 1px; border-color: rgb(128, 128, 128);" />
             </ui:VisualElement>
             <ui:VisualElement name="ControlElement" style="flex-grow: 1; justify-content: center;">
-                <ui:Label text="Enum Control" name="ControlTitle" style="-unity-font-style: bold; margin-bottom: 5px;" />
-                <ui:TextField label="Rank Name" name="EnumInputField" />
+                <ui:Label text="랭크 타입 설정 " name="ControlTitle" style="-unity-font-style: bold; margin-bottom: 5px;" />
+                <ui:TextField label="랭크 이름 " name="EnumInputField" />
                 <ui:VisualElement name="ButtonContainer" style="flex-direction: row; margin-top: 5px;">
                     <ui:Button text="랭크 추가" name="AddEnumButton" style="flex-grow: 1;" />
                     <ui:Button text="랭크 삭제" name="RemoveEnumButton" style="flex-grow: 1;" />
@@ -17,7 +17,7 @@
         </ui:VisualElement>
         <ui:TwoPaneSplitView fixed-pane-initial-dimension="200" name="RankDataContainer" style="flex-grow: 1;">
             <ui:VisualElement style="flex-grow: 1; padding: 5px; background-color: rgb(45, 45, 45);">
-                <ui:Label text="Rank Data List" style="-unity-font-style: bold; margin-bottom: 5px;" />
+                <ui:Label text="스탯 랭크 리스트" style="-unity-font-style: bold; margin-bottom: 5px;" />
                 <ui:ListView name="AssetListView" style="flex-grow: 1; margin-bottom: 5px;" />
                 <ui:VisualElement style="flex-direction: row; justify-content: space-between;">
                     <ui:Button text="데이터 추가" name="AddAssetButton" style="flex-grow: 1; height: 25px;" />
@@ -25,7 +25,7 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 1; padding: 10px;">
-                <ui:Label text="Rank Data Detail" style="-unity-font-style: bold; margin-bottom: 10px;" />
+                <ui:Label text="상세 설정" style="-unity-font-style: bold; margin-bottom: 10px;" />
                 <ui:ScrollView name="DetailContainer" style="flex-grow: 1;" />
             </ui:VisualElement>
         </ui:TwoPaneSplitView>

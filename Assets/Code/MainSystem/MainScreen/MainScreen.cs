@@ -8,7 +8,6 @@ using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
-using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.Turn;
 using TMPro;
@@ -38,7 +37,6 @@ namespace Code.MainSystem.MainScreen
         private PersonalPracticeCompo personalPracticeCompo;
 
         [SerializeField] private TeamPracticeCompo teamPracticeCompo;
-        [SerializeField] private RestSelectCompo restSelectCompo;
 
         public UnitSelector UnitSelector { get; private set; }
 
@@ -152,11 +150,6 @@ namespace Code.MainSystem.MainScreen
             if (teamPracticeCompo != null)
             {
                 teamPracticeCompo.CacheUnits(_loadedUnits);
-            }
-
-            if (restSelectCompo != null)
-            {
-                restSelectCompo.CacheUnits(_loadedUnits);
             }
 
             Debug.Log("[MainScreen] LoadUnitsAsync completed");
