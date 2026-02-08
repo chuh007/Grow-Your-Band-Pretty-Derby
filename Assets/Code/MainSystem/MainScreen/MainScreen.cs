@@ -5,17 +5,19 @@ using System.Threading.Tasks;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.Turn;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Code.MainSystem.MainScreen
 {
-    public class MainScreen : MonoBehaviour
+    public class MainScreen : MonoBehaviour, ITurnStartComponent
     {
         [Header("Addressables Keys/Labels")] [SerializeField]
         private string unitLabel = "Units";
@@ -193,25 +195,17 @@ namespace Code.MainSystem.MainScreen
         {
             teamPanel.gameObject.SetActive(true);
         }
-
+        
         private void UpdateButton()
         {
-            if (_currentUnit == null || practiceBtns == null || practiceBtns.Count < 5) return;
 
             bool isCurrentMemberActed = _memberActionCounts[_currentUnit.memberType];
 
-            if (practiceBtns[0] != null) practiceBtns[0].interactable = !isCurrentMemberActed;
-            if (practiceBtns[1] != null) practiceBtns[1].interactable = !isCurrentMemberActed;
-            if (practiceBtns[2] != null) practiceBtns[2].interactable = !isCurrentMemberActed;
-            if (practiceBtns[3] != null) practiceBtns[3].interactable = !isCurrentMemberActed;
-            if (practiceBtns[4] != null) practiceBtns[4].interactable = _isbuskingAvailable;
-        }
-
-        public void ResetActions()
-        {
-            InitializeActionCounts();
-            _isbuskingAvailable = true;
-            UpdateButton();
+             practiceBtns[0].interactable = !isCurrentMemberActed;
+            practiceBtns[1].interactable = !isCurrentMemberActed;
+             practiceBtns[2].interactable = !isCurrentMemberActed;
+            practiceBtns[3].interactable = !isCurrentMemberActed;
+            practiceBtns[4].interactable = _isbuskingAvailable;
         }
 
         #endregion
@@ -367,6 +361,28 @@ namespace Code.MainSystem.MainScreen
                     Debug.LogError("[MainScreen] _loadedUnits is null");
                 }
             }
+        }
+        
+        public void TurnStart()
+        {
+            Debug.Log("[MainScreen] TurnStart called - resetting actions");
+    
+            InitializeActionCounts();
+            _isbuskingAvailable = true;
+            
+            if (practiceBtns != null)
+            {
+                for (int i = 0; i < practiceBtns.Count; i++)
+                {
+                    if (practiceBtns[i] != null)
+                    {
+                        practiceBtns[i].interactable = true;
+                        Debug.Log($"[MainScreen] Force enabled button {i}: {practiceBtns[i].name}");
+                    }
+                }
+            }
+    
+            UpdateButton();
         }
     }
 }

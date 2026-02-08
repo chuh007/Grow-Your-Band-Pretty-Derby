@@ -3853,6 +3853,9 @@ MonoBehaviour:
   allowSkip: 1
   skipCooldown: 0.3
   autoSkipTimeout: 15
+  commentCanvasGroup: {fileID: 1373290453}
+  previousPageDisplayDuration: 2
+  pageTransitionDuration: 0.5
 --- !u!225 &500154539
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -5823,6 +5826,7 @@ GameObject:
   - component: {fileID: 735858189}
   - component: {fileID: 735858193}
   - component: {fileID: 735858192}
+  - component: {fileID: 735858194}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -5955,6 +5959,18 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
+--- !u!225 &735858194
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735858187}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &751098721
 GameObject:
   m_ObjectHideFlags: 0
@@ -10395,6 +10411,7 @@ GameObject:
   - component: {fileID: 1373290450}
   - component: {fileID: 1373290451}
   - component: {fileID: 1373290452}
+  - component: {fileID: 1373290453}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -10461,6 +10478,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!225 &1373290453
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373290449}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &1377366956 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7628652644854046910, guid: f21ed45508879dc489ae5bc21be458b0, type: 3}
@@ -11308,11 +11337,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2
+      value: -9.2
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.1
+      value: 4.8
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x

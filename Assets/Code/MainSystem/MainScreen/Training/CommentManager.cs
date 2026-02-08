@@ -13,6 +13,7 @@ namespace Code.MainSystem.MainScreen.Training
         public static CommentManager instance;
 
         private readonly List<CommentData> _pendingComments = new();
+        private Dictionary<string, List<CommentData>> _previousCommentsByMember = new();
         private bool _isTeamTraining = false;
         private Dictionary<string, List<CommentData>> _setupComments;
 
@@ -21,6 +22,7 @@ namespace Code.MainSystem.MainScreen.Training
             if (instance == null)
             {
                 instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -64,6 +66,28 @@ namespace Code.MainSystem.MainScreen.Training
             return _setupComments;
         }
 
+        public List<CommentData> GetPreviousCommentsByMember(string memberName)
+        {
+            if (_previousCommentsByMember.ContainsKey(memberName))
+            {
+                return _previousCommentsByMember[memberName];
+            }
+            return null;
+        }
+
+        public void SaveCurrentCommentsAsPrevious()
+        {
+            if (_setupComments != null && _setupComments.Count > 0)
+            {
+                foreach (var kvp in _setupComments)
+                {
+                    _previousCommentsByMember[kvp.Key] = new List<CommentData>(kvp.Value);
+                }
+                
+                Debug.Log($"[CommentManager] Saved comments for {_previousCommentsByMember.Count} members as previous");
+            }
+        }
+
         public void ClearAllComments()
         {
             _pendingComments.Clear();
@@ -71,6 +95,12 @@ namespace Code.MainSystem.MainScreen.Training
             _isTeamTraining = false;
             
             Debug.Log("[CommentManager] All comments force cleared");
+        }
+
+        public void ClearPreviousComments()
+        {
+            _previousCommentsByMember.Clear();
+            Debug.Log("[CommentManager] Previous comments cleared");
         }
     }
 }
