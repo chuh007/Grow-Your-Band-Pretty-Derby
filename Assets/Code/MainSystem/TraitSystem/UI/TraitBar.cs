@@ -8,7 +8,7 @@ using Code.MainSystem.TraitSystem.Interface;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
-    public class TraitBar : MonoBehaviour, IUIElement<ActiveTrait>
+    public class TraitBar : TraitPanelBase, IUIElement<ActiveTrait>
     {
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI nameText;
@@ -16,12 +16,15 @@ namespace Code.MainSystem.TraitSystem.UI
         
         private ActiveTrait _currentItem;
 
-        public void EnableFor(ActiveTrait item)
+        public async void EnableFor(ActiveTrait item)
         {
             _currentItem = item;
-            iconImage.sprite = _currentItem.Data.TraitIcon;
+
+            await SetIconSafeAsync(iconImage, item.Data.TraitIcon);
             nameText.SetText(_currentItem.Data.TraitName);
-            levelPointText.SetText(_currentItem.Data.MaxLevel == -1 ? $"{_currentItem.Data.Point}" : $"{_currentItem.Data.Point} / {_currentItem.CurrentLevel}.Lv");
+            levelPointText.SetText(_currentItem.Data.MaxLevel == -1
+                ? $"{_currentItem.Data.Point}"
+                : $"{_currentItem.Data.Point} / {_currentItem.CurrentLevel}.Lv");
             gameObject.SetActive(true);
         }
 

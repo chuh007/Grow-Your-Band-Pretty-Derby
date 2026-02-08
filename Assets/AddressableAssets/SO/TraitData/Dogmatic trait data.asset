@@ -10,17 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
-  m_Name: AttentionGain trait data
+  m_Name: Dogmatic trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 12
-  TraitName: "\uC8FC\uBAA9\uB3C4 \uC0C1\uC2B9"
-  TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
+  TraitType: 8
+  TraitName: "\uB3C5\uC120\uC801"
+  TraitIcon:
+    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  IconAddress: Icon_Dogmatic trait data
   MaxLevel: 10
-  Point: 4
-  IsRemovable: 0
+  Point: -5
+  IsRemovable: 1
   Impacts:
-  - Target: 8
-    CalcType: 2
+  - Target: 1
+    CalcType: 3
     RequiredTag: 
   MemberComments:
   - MemberType: 0
@@ -44,7 +50,6 @@ MonoBehaviour:
     Content: 
     Thoughts: 
   Effects:
-  - 20
-  DescriptionEffect: "\uB9AC\uB4EC \uAC8C\uC784: \uD53C\uBC84 \uD0C0\uC784 \uC9C0\uC18D\uC2DC\uAC04
-    {0}% \uC99D\uAC00\r\n"
+  - 50
+  DescriptionEffect: "\uD569\uC8FC\uC758 \uD6A8\uACFC {0}%"
   SpecialLogicClassName: 

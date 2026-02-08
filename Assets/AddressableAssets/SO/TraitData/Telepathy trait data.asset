@@ -10,17 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
-  m_Name: Focus trait data
+  m_Name: Telepathy trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 10
-  TraitName: "\uC9D1\uC911\uB825"
-  TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
+  TraitType: 1
+  TraitName: "\uC774\uC2EC\uC804\uC2EC"
+  TraitIcon:
+    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  IconAddress: Icon_Telepathy trait data
   MaxLevel: 10
-  Point: 8
-  IsRemovable: 0
+  Point: 5
+  IsRemovable: 1
   Impacts:
-  - Target: 4
-    CalcType: 3
+  - Target: 0
+    CalcType: 2
+    RequiredTag: 
+  - Target: 0
+    CalcType: 2
     RequiredTag: 
   MemberComments:
   - MemberType: 0
@@ -45,6 +54,9 @@ MonoBehaviour:
     Thoughts: 
   Effects:
   - 50
-  DescriptionEffect: "\uC721\uC131: \uD6C8\uB828 \uC2E4\uD328 \uD655\uB960 {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
-    \uAC8C\uC784: Miss \uD310\uC815\uC744 Good\uC73C\uB85C \uBCF4\uC815"
-  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.FocusEffect
+  - 4
+  DescriptionEffect: "\uD569\uC8FC \uBA64\uBC84\uAC00 2\uC778\uC778 \uACBD\uC6B0
+    \uD569\uC8FC\uC758 \uD6A8\uACFC +{0}%, \n\uB098\uBA38\uC9C0 \uD55C\uBA85\uC758
+    \uBA64\uBC84\uB3C4 \u2018\uC774\uC2EC\uC804\uC2EC\u2019\uC744 \uBCF4\uC720\uD55C
+    \uACBD\uC6B0 +{0} X {1}%\uB85C \uBCC0\uACBD"
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.TelepathyEffect
