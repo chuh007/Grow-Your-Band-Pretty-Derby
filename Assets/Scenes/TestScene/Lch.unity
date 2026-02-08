@@ -6974,7 +6974,6 @@ GameObject:
   - component: {fileID: 904073737}
   - component: {fileID: 904073741}
   - component: {fileID: 904073742}
-  - component: {fileID: 904073743}
   - component: {fileID: 904073744}
   - component: {fileID: 904073745}
   m_Layer: 5
@@ -7115,7 +7114,6 @@ MonoBehaviour:
   memberCarousel: {fileID: 904073745}
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 904073744}
-  restSelectCompo: {fileID: 904073743}
 --- !u!114 &904073742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7149,27 +7147,6 @@ MonoBehaviour:
   practicePanel: {fileID: 777750731}
   animationDuration: 0.3
   expandHeight: 200
---- !u!114 &904073743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 904073736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d1c6b802a4141a48e32766371a7294b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.StatSystem.UI.RestCompo
-  memberButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  restResultController: {fileID: 1396293158}
-  healthBar: {fileID: 508380102}
-  panel: {fileID: 0}
 --- !u!114 &904073744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10263,7 +10240,6 @@ MonoBehaviour:
   mode2Panel: {fileID: 1733053931}
   personalPracticeCompo: {fileID: 904073742}
   teamPracticeCompo: {fileID: 904073744}
-  restSelectCompo: {fileID: 0}
 --- !u!1 &1354271557
 GameObject:
   m_ObjectHideFlags: 0
@@ -11308,11 +11284,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2
+      value: -9.2
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.1
+      value: 4.8
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
@@ -12506,7 +12482,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 904073743}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.RestSelectCompo, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -14714,6 +14690,7 @@ GameObject:
   - component: {fileID: 1860788189}
   - component: {fileID: 1860788188}
   - component: {fileID: 1860788187}
+  - component: {fileID: 1860788191}
   m_Layer: 5
   m_Name: Button (2)
   m_TagString: Untagged
@@ -14804,31 +14781,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1860788189}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1334975055}
-        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.Bottom.BottomTab, Assembly-CSharp
-        m_MethodName: SwitchMode
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 904073743}
-        m_TargetAssemblyTypeName: Code.MainSystem.MainScreen.RestSelectCompo, Assembly-CSharp
-        m_MethodName: Rest
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1860788189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14867,6 +14820,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860788185}
   m_CullTransparentMesh: 1
+--- !u!114 &1860788191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860788185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1c6b802a4141a48e32766371a7294b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.MainScreen.RestSelectButton
+  restDialogues: []
+  mainScreen: {fileID: 904073741}
 --- !u!1 &1879804240
 GameObject:
   m_ObjectHideFlags: 0
