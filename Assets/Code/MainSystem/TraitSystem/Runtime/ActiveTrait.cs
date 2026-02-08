@@ -28,6 +28,9 @@ namespace Code.MainSystem.TraitSystem.Runtime
             TraitEffect.Initialize(this);
         }
 
+        public MemberTraitComment GetMemberTraitComment()
+            => Data.MemberComments.FirstOrDefault(m => m.MemberType == Owner);
+
         public void LevelUp()
         {
             if (CurrentLevel >= Data.MaxLevel)

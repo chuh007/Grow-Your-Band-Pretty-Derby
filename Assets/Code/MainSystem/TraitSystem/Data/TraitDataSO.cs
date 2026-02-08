@@ -15,7 +15,7 @@ namespace Code.MainSystem.TraitSystem.Data
     }
 
     [Serializable]
-    public class MemberCommentEntry
+    public class MemberTraitComment
     {
         public MemberType MemberType;
         [TextArea(3, 6)] public string Title;
@@ -34,7 +34,7 @@ namespace Code.MainSystem.TraitSystem.Data
         public bool IsRemovable = true;
         
         public List<StatImpact> Impacts;
-        public List<MemberCommentEntry> MemberComments = new List<MemberCommentEntry>();
+        public List<MemberTraitComment> MemberComments = new List<MemberTraitComment>();
         
         public List<float> Effects = new();
         
