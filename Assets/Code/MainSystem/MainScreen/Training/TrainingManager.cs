@@ -32,18 +32,14 @@ namespace Code.MainSystem.MainScreen.Training
                 DontDestroyOnLoad(gameObject);
                 Instance = this;
                 Bus<CheckTurnEnd>.OnEvent += HandleCheckTurnEnd;
+                foreach (var type in _allMemberTypes)
+                {
+                    _trainedMembers.Add(type, 1);
+                }
             }
             else
             {
                 Destroy(gameObject);
-            }
-        }
-
-        private void Start()
-        {
-            foreach (var type in _allMemberTypes)
-            {
-                _trainedMembers.Add(type, 1);
             }
         }
         

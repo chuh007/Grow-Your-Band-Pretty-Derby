@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.TurnEvents;
+using Code.MainSystem.MainScreen.Training;
+using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.Turn.UI;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Code.MainSystem.Turn
@@ -13,27 +16,24 @@ namespace Code.MainSystem.Turn
     /// </summary>
     public class FlowManager : MonoBehaviour
     {
-        [SerializeField] private GoalFlowSO flowSO;
-        
         [SerializeField] private TurnUIController turnUIController;
         
         private List<ITurnStartComponent> _turnStartComponents = new List<ITurnStartComponent>();
         private List<ITurnEndComponent> _turnEndComponents = new List<ITurnEndComponent>();
         private void Awake()
         {
-            // 좀 마음에 안들긴 하다. 근데 직렬화필드로 빼는거 귀찮음
+            Bus<TurnEndEvent>.OnEvent += HandleTurnEnd;
+        }
+
+        private async void Start()
+        {
+            await UniTask.NextFrame(); // 1프레임 기다려서 싱글턴들이 정리하는거 기다린다.
             _turnStartComponents = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .OfType<ITurnStartComponent>()
                 .ToList();
             _turnEndComponents = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .OfType<ITurnEndComponent>()
                 .ToList();
-            
-            Bus<TurnEndEvent>.OnEvent += HandleTurnEnd;
-        }
-
-        private void Start()
-        {
             Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
 
@@ -44,7 +44,6 @@ namespace Code.MainSystem.Turn
 
         private async void HandleTurnEnd(TurnEndEvent evt)
         {
-            Debug.Log("HandleTurnEnd");
             // 턴 종료시 할 일 수행.
             foreach (var compo in _turnEndComponents)
             {

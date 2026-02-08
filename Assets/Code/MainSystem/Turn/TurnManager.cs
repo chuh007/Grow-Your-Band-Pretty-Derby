@@ -14,6 +14,7 @@ using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.Turn
 {
+    [DefaultExecutionOrder(-100)]
     public class TurnManager : MonoBehaviour, ITurnEndComponent, ITurnStartComponent
     {
         [Header("Data")]
@@ -48,7 +49,7 @@ namespace Code.MainSystem.Turn
             }
             else
             {
-                Destroy(gameObject);
+                Destroy(this);
             }
 
         }
@@ -142,9 +143,9 @@ namespace Code.MainSystem.Turn
         
         public void TurnEnd()
         {
-            if (RemainingTurn > 0)
+            RemainingTurn--;
+            if (RemainingTurn <= 0)
             {
-                RemainingTurn--;
                 if (flowSO != null && _currentGoalIndex < flowSO.goals.Count)
                 {
                     UpdateTarget();
