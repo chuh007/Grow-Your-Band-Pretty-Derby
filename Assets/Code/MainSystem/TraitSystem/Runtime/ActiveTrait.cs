@@ -29,7 +29,7 @@ namespace Code.MainSystem.TraitSystem.Runtime
         }
 
         public MemberTraitComment GetMemberTraitComment()
-            => Data.MemberComments.FirstOrDefault(m => m.MemberType == Owner);
+            => Data.GetComment(Owner);
 
         public void LevelUp()
         {

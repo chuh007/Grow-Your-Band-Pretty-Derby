@@ -7,6 +7,7 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
+using Code.MainSystem.TraitSystem.TraitExtensionMethod;
 
 namespace Code.MainSystem.TraitSystem.Data
 {
@@ -70,13 +71,13 @@ namespace Code.MainSystem.TraitSystem.Data
             return _modifiers.OfType<T>();
         }
 
-        public void RegisterModifier(object modifier)
+        private void RegisterModifier(object modifier)
         {
             if (!_modifiers.Contains(modifier))
                 _modifiers.Add(modifier);
         }
 
-        public void UnregisterModifier(object modifier)
+        private void UnregisterModifier(object modifier)
         {
             _modifiers.Remove(modifier);
         }
