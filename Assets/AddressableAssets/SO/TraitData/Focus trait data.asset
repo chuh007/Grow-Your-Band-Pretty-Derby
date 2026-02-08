@@ -10,20 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
-  m_Name: BreathControl trait data
+  m_Name: Focus trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 13
-  TraitName: "\uD638\uD761 \uC870\uC808"
-  TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
+  TraitType: 10
+  TraitName: "\uC9D1\uC911\uB825"
+  TraitIcon:
+    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  IconAddress: Icon_Focus trait data
   MaxLevel: 10
-  Point: 6
+  Point: 8
   IsRemovable: 0
   Impacts:
-  - Target: 3
+  - Target: 4
     CalcType: 3
-    RequiredTag: 
-  - Target: 9
-    CalcType: 1
     RequiredTag: 
   MemberComments:
   - MemberType: 0
@@ -47,9 +50,7 @@ MonoBehaviour:
     Content: 
     Thoughts: 
   Effects:
-  - 20
-  - 10
-  DescriptionEffect: "\uC721\uC131: \uCEE8\uB514\uC158 \uBCC0\uD654 \uD3ED {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
-    \uAC8C\uC784: \uBBF8\uC2A4 \uC774\uD6C4 \uD53C\uBC84 \uD0C0\uC784 \uD544\uC694
-    \uC785\uB825 {1} \uAC10\uC18C"
-  SpecialLogicClassName: 
+  - 50
+  DescriptionEffect: "\uC721\uC131: \uD6C8\uB828 \uC2E4\uD328 \uD655\uB960 {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
+    \uAC8C\uC784: Miss \uD310\uC815\uC744 Good\uC73C\uB85C \uBCF4\uC815"
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.FocusEffect

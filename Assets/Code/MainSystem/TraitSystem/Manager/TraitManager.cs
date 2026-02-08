@@ -27,7 +27,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
         
 
-        private void Awake()
+        private async void Awake()
         {
             if (Instance != null && Instance != this)
             {
@@ -39,7 +39,8 @@ namespace Code.MainSystem.TraitSystem.Manager
             DontDestroyOnLoad(gameObject);
             
             InitializeDependencies();
-            RegisterHolders();
+            if (_database is TraitDatabase traitDb)
+                await traitDb.InitializeAsync();
             RegisterEvents();
         }
 
@@ -59,14 +60,16 @@ namespace Code.MainSystem.TraitSystem.Manager
         }
 
         /// <summary>
-        /// Scene에 있는 모든 CharacterTrait를 등록
+        /// CharacterTrait를 등록
         /// </summary>
-        private void RegisterHolders()
+        public void RegisterHolder(ITraitHolder holder)
         {
-            var holders = FindObjectsByType<CharacterTrait>(FindObjectsSortMode.None);
-            
-            foreach (var holder in holders)
-                _holders.TryAdd(holder.MemberType, holder);
+            _holders[holder.MemberType] = holder;
+        }
+        
+        public void UnregisterHolder(MemberType type)
+        {
+            _holders.Remove(type);
         }
 
         #endregion
