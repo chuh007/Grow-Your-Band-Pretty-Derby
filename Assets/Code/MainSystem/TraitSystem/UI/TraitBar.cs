@@ -1,5 +1,4 @@
-﻿using Code.Core.Addressable;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using Code.Core.Bus;
 using UnityEngine.UI;

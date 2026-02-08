@@ -9,49 +9,28 @@
         <ui:ScrollView style="flex-grow: 1; padding: 20px; background-color: rgb(56, 56, 56);">
             <ui:Label text="특성 상세 설정" style="-unity-font-style: bold; font-size: 20px; margin-bottom: 15px;" />
             
-            <ui:GroupBox text="Base Settings &amp; Addressables" name="base-settings" style="margin-bottom: 25px; padding: 15px; background-color: rgb(50, 50, 50); border-radius: 5px;">
-                <uie:PropertyField name="field-trait-name" binding-path="TraitName" label="Display Name" style="margin-bottom: 4px;" />
-                <uie:PropertyField binding-path="TraitType" label="Trait Type" style="margin-bottom: 4px;" />
-                <uie:PropertyField binding-path="Point" label="Cost Point" style="margin-bottom: 4px;" />
+            <ui:GroupBox text="Base Settings" name="base-settings" style="margin-bottom: 25px; padding: 15px; background-color: rgb(50, 50, 50); border-radius: 5px;">
+                <uie:PropertyField binding-path="TraitName" label="Display Name" />
+                <uie:PropertyField binding-path="TraitType" label="Trait Type" />
                 
-                <ui:VisualElement style="margin-top: 10px; padding: 10px; background-color: rgb(40, 40, 40); border-radius: 3px; border-width: 1px; border-color: rgb(70, 70, 70);">
-                    <ui:Label text="Addressables Settings" style="-unity-font-style: bold; margin-bottom: 5px; color: rgb(0, 200, 255);" />
-                    
-                    <uie:PropertyField name="field-icon-address" binding-path="IconAddress" label="Icon Address" tooltip="Addressables에 등록된 Sprite의 주소를 입력하세요." />
-                    
-                    <ui:VisualElement style="flex-direction: row; margin-top: 5px; justify-content: flex-end;">
-                        <ui:Button name="sync-icon-btn" text="에셋 이름으로 아이콘 주소 맞추기" style="font-size: 10px; height: 20px;" />
-                    </ui:VisualElement>
-                    
-                    <ui:VisualElement name="logic-dropdown-container" style="margin-top: 10px;" />
+                <ui:VisualElement style="margin-top: 5px; margin-bottom: 5px; min-height: 22px;">
+                    <uie:PropertyField binding-path="TraitIcon" label="Trait Icon Asset" />
                 </ui:VisualElement>
-
+                
+                <uie:PropertyField binding-path="Point" label="Cost Point" />
+                <ui:VisualElement name="logic-dropdown-container" style="margin-top: 10px;" />
                 <uie:PropertyField binding-path="DescriptionEffect" label="Effect Description" style="margin-top: 10px;" />
             </ui:GroupBox>
 
             <ui:VisualElement style="margin-bottom: 25px;">
                 <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <ui:Label text="멤버별 코멘트 지정" style="-unity-font-style: bold; font-size: 16px;" />
-                    <ui:Button name="gen-comments-btn" text="코멘트 5개 자동 생성" style="height: 25px; padding-left: 10px; padding-right: 10px;" />
+                    <ui:Button name="gen-comments-btn" text="코멘트 5개 자동 생성" style="height: 25px;" />
                 </ui:VisualElement>
-                <ui:VisualElement style="flex-direction: row; background-color: rgb(45, 45, 45); padding: 4px; border-bottom-width: 1px; border-color: rgb(100, 100, 100);">
-                    <ui:Label text="멤버 타입" style="width: 100px; -unity-font-style: bold;" />
-                    <ui:Label text="타이틀" style="width: 150px; -unity-font-style: bold;" />
-                    <ui:Label text="대사" style="flex-grow: 1; -unity-font-style: bold;" />
-                    <ui:Label text="소감" style="width: 120px; -unity-font-style: bold;" />
-                </ui:VisualElement>
-                <ui:ListView name="member-comment-list" fixed-item-height="120" style="min-height: 400px; background-color: rgb(40, 40, 40);" />
+                <ui:ListView name="member-comment-list" style="min-height: 400px; background-color: rgb(40, 40, 40);" />
             </ui:VisualElement>
 
             <ui:Label text="특성 수치 효과 (Impacts)" style="-unity-font-style: bold; font-size: 16px; margin-bottom: 8px;" />
-            <ui:VisualElement style="flex-direction: row; background-color: rgb(40, 40, 40); padding: 6px; border-bottom-width: 2px; border-color: rgb(100, 100, 100);">
-                <ui:Label text="ID" style="width: 35px;" />
-                <ui:Label text="Value" style="width: 60px; margin-left: 5px;" />
-                <ui:Label text="Target Stat" style="flex-grow: 1; margin-left: 5px;" />
-                <ui:Label text="Calc" style="width: 70px; margin-left: 5px;" />
-                <ui:Label text="Tag" style="width: 90px; margin-left: 5px;" />
-                <ui:VisualElement style="width: 30px;" />
-            </ui:VisualElement>
             <ui:ListView name="impact-list" fixed-item-height="30" style="min-height: 150px; background-color: rgb(45, 45, 45);" />
             <ui:Button name="add-pair-btn" text="새로운 효과 수치 추가" style="margin-top: 10px; height: 40px; -unity-font-style: bold;" />
         </ui:ScrollView>

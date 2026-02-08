@@ -127,9 +127,6 @@ namespace Code.MainSystem.TraitSystem.Editor
             _serializedTrait = new SerializedObject(target);
             _detailPanel.Bind(_serializedTrait);
             
-            SetupIconAddressField(target);
-            SetupAddressableButtons(_detailPanel, target);
-            
             SetupSpecialLogicDropdown(target);
             SetupMemberComments(target, _serializedTrait);
 
@@ -137,40 +134,6 @@ namespace Code.MainSystem.TraitSystem.Editor
             _impactListView.Rebuild();
 
             _detailPanel.TrackSerializedObjectValue(_serializedTrait, _ => { _traitListView.RefreshItems(); });
-        }
-
-        private void SetupAddressableButtons(VisualElement detailPanel, TraitDataSO target)
-        {
-            Button syncBtn = detailPanel.Q<Button>("sync-icon-btn");
-            if (syncBtn != null)
-            {
-                syncBtn.clicked += () => {
-                    _serializedTrait.Update();
-                    // 에셋 이름이 "Berserk"라면 아이콘 주소를 "Icon_Berserk"로 자동 입력
-                    var iconAddrProp = _serializedTrait.FindProperty("IconAddress");
-                    iconAddrProp.stringValue = $"Icon_{target.name}";
-                    _serializedTrait.ApplyModifiedProperties();
-                    Debug.Log($"Icon Address synced to: Icon_{target.name}");
-                };
-            }
-        }
-
-        private void SetupIconAddressField(TraitDataSO target)
-        {
-            VisualElement container = _detailPanel.Q<VisualElement>("icon-address-container");
-            if (container == null) return;
-            container.Clear();
-            
-            PropertyField iconAddrField = new PropertyField(_serializedTrait.FindProperty("IconAddress"), "Icon Address");
-            iconAddrField.Bind(_serializedTrait);
-            container.Add(iconAddrField);
-            
-            Button syncBtn = new Button(() => {
-                _serializedTrait.Update();
-                _serializedTrait.FindProperty("IconAddress").stringValue = $"Icon_{target.name}";
-                _serializedTrait.ApplyModifiedProperties();
-            }) { text = "Auto Sync Icon Name" };
-            container.Add(syncBtn);
         }
         
         private void SetupMemberComments(TraitDataSO target, SerializedObject so)
