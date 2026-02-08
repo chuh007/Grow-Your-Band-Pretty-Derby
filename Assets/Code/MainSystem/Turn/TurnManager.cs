@@ -142,7 +142,6 @@ namespace Code.MainSystem.Turn
         
         public void TurnEnd()
         {
-            Debug.Log("TurnEnd");
             if (RemainingTurn > 0)
             {
                 RemainingTurn--;

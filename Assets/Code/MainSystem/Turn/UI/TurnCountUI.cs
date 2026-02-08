@@ -13,6 +13,7 @@ namespace Code.MainSystem.Turn.UI
         private void Start()
         {
             TurnManager.Instance.TurnChanged += HandleTurnChange;
+            HandleTurnChange(TurnManager.Instance.RemainingTurn);
         }
 
         private void OnDestroy()
