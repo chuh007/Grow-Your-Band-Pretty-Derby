@@ -1,19 +1,17 @@
-﻿using System;
-using Code.Core;
+﻿using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.DialogueEvents;
-using Code.MainSystem.Cutscene.DialogCutscene;
+using Code.MainSystem.Outing;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Code.MainSystem.Outing
+namespace Code.MainSystem.Cutscene.DialogCutscene
 {
     /// <summary>
-    /// 외출 씬 작업 담당하는 메니저(싱글턴 아님)
+    /// DialogCutscene에서 다이얼로그의 시작과 끝, 결과창 띄우기 등을 담당
     /// </summary>
-    public class OutingManager : MonoBehaviour
+    public class DialogCutsceneController : MonoBehaviour
     {
         [SerializeField] private DialogCutsceneSenderSO resultSender;
         [SerializeField] private Transform uiRoot;
@@ -46,7 +44,7 @@ namespace Code.MainSystem.Outing
                 await GameManager.Instance.LoadAddressableAsync<GameObject>("Outing/UI/Result");
             var resultInstance = Instantiate(resultPrefab, uiRoot);
             var resultUI = resultInstance.GetComponent<OutingResultUI>();
-            resultUI.ShowResultUI("OutingScene");
+            resultUI.ShowResultUI("DialogCutscene");
         }
         
         private void HandleDialogueStatUpgrade(DialogueStatUpgradeEvent evt)

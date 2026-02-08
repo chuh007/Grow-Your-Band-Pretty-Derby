@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e30e51bfead14669b1d5109f387ba401, type: 3}
   m_Name: PianoSkillGet1
   m_EditorClassIdentifier: Assembly-CSharp::Code.Core.Bus.GameEvents.DialogueEvents.GetSkillDialogueEventSO
-  traitType: 8
+  traitType:
+    targetMember: 4
+    targetStat: 8

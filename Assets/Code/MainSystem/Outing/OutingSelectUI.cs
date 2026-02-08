@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.CutsceneEvents;
+using Code.MainSystem.Cutscene.DialogCutscene;
+using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.Training;
 using TMPro;
 using UnityEngine;
@@ -10,7 +14,7 @@ namespace Code.MainSystem.Outing
     public class OutingSelectUI : MonoBehaviour
     {
         [Header("Data")]
-        [SerializeField] private OutingResultSenderSO sender;
+        [SerializeField] private DialogCutsceneSenderSO sender;
 
         [Header("UI")]
         [SerializeField] private Button enterButton;
@@ -19,6 +23,7 @@ namespace Code.MainSystem.Outing
         
         [SerializeField] private List<OutingPlaceButton> outingPlaceButtons;
         
+        private OutingEvent _currentOutingEvent;
         
         private void Awake()
         {
@@ -29,16 +34,18 @@ namespace Code.MainSystem.Outing
         private void HandleClick()
         {
             gameObject.SetActive(false);
-            TrainingManager.Instance.MarkMemberTrained(sender.targetMember.memberType);
-            loadButton.SceneLoadAdditive("OutingScene");
+            TrainingManager.Instance.
+                MarkMemberTrained(MainHelper.Instance.MainScreen.UnitSelector.CurrentUnit.memberType);
+            Bus<DialogCutscenePlayEvent>.Raise(new DialogCutscenePlayEvent(_currentOutingEvent.dialogue));
         }
 
-        public void SetData(OutingPlace place, string text)
+        public void SetData(OutingEvent evt)
         {
-            descriptionText.SetText(text);
+            _currentOutingEvent = evt;
+            descriptionText.SetText(evt.description);
             foreach (var button in outingPlaceButtons)
             {
-                button.ActiveFocus(button.OutingPlace == place);
+                button.ActiveFocus(button.OutingPlace == evt.place);
             }
         }
     }

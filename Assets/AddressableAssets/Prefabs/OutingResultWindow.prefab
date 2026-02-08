@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b063c77a580d4253994335e426517292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Outing.OutingResultUI
-  resultSender: {fileID: 11400000, guid: 815831f462bc19446b551954b642577b, type: 2}
+  resultSender: {fileID: 11400000, guid: ad4425d6178a484498e82912608c7424, type: 2}
   resultText: {fileID: 3588037335806119751}
   closeButton: {fileID: 983846560006076745}
 --- !u!1 &6752760107237810862

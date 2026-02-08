@@ -3,9 +3,11 @@ using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.DialogueEvents;
+using Code.MainSystem.Cutscene.DialogCutscene;
 using Code.MainSystem.Outing;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.Encounter
 {
@@ -14,7 +16,7 @@ namespace Code.MainSystem.Encounter
     /// </summary>
     public class EncounterController : MonoBehaviour
     {
-        [SerializeField] private EncounterSenderSO encounterSender;
+        [SerializeField] private DialogCutsceneSenderSO dialogSender;
         [SerializeField] private Transform uiRoot;
         
         private void Awake()
@@ -34,18 +36,18 @@ namespace Code.MainSystem.Encounter
         private void Start()
         {
             Bus<DialogueStartEvent>.Raise(
-                new DialogueStartEvent(encounterSender.encounterData.dialogue, "")); // 여기 string은 뭐하는거람
+                new DialogueStartEvent(dialogSender.selectedEvent, "")); // 여기 string은 뭐하는거람
         }
         
         private void HandleDialogueStatUpgrade(DialogueStatUpgradeEvent evt)
         {
-            encounterSender.changeStats.Add
+            dialogSender.changeStats.Add
                 (new StatVariation{targetStat = evt.StatType, variation = evt.StatValue});
         }
 
         private void HandleDialogueSkillGet(DialogueGetSkillEvent evt)
         {
-            encounterSender.addedTraits.Add(evt.TraitType);
+            dialogSender.addedTraits.Add(evt.TraitType);
         }
 
         private void HandleDialogueEnd(DialogueEndEvent evt)
