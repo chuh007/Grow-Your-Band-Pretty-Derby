@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6224545616236954159}
-  - component: {fileID: 4811217386053917523}
   - component: {fileID: 464728498398339904}
   m_Layer: 5
   m_Name: Pulse
@@ -38,14 +37,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4811217386053917523
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 18385444772135083}
-  m_CullTransparentMesh: 1
 --- !u!114 &464728498398339904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,9 +48,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 645f2029dfed9224ab6de47596a7a8bc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.RhythmPulse
-  _visualImage: {fileID: 853997435157725065}
-  _canvasGroup: {fileID: 1034745461450622733}
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Rhythm.Notes.RhythmPulse
+  visualImage: {fileID: 853997435157725065}
+  canvasGroup: {fileID: 0}
 --- !u!1 &985250214718847740
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,7 +62,6 @@ GameObject:
   - component: {fileID: 4160316519676632833}
   - component: {fileID: 8880685939235633934}
   - component: {fileID: 853997435157725065}
-  - component: {fileID: 1034745461450622733}
   m_Layer: 5
   m_Name: Visual
   m_TagString: Untagged
@@ -105,7 +95,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 985250214718847740}
-  m_CullTransparentMesh: 1
+  m_CullTransparentMesh: 0
 --- !u!114 &853997435157725065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,15 +126,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &1034745461450622733
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 985250214718847740}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
