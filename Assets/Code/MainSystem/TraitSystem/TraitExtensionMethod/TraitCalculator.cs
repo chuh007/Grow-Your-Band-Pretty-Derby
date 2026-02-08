@@ -1,9 +1,9 @@
 ﻿using Code.MainSystem.TraitSystem.Data;
-using UnityEngine;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.TraitEffect;
+using UnityEngine;
 
-namespace Code.MainSystem.TraitSystem.Manager
+namespace Code.MainSystem.TraitSystem.TraitExtensionMethod
 {
     public static class TraitCalculator
     {
