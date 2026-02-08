@@ -5,14 +5,14 @@ namespace Code.MainSystem.Encounter
 {
     public enum EncounterConditionType
     {
-        TurnStart = 0, // 턴 시작
-        StatCaseFall = 1, // 스텟 검사
-        BuskingCaseFall = 2, // 버스킹 조건 불만족
-        BuskingFall = 3, // 버스킹 클리어 실패
-        BuskingSuccess = 4, // 버스킹 성공
-        LiveCaseFall = 5,
-        LiveFall = 6,
-        LiveSuccess = 7,
+        BuskingCaseFall, // 버스킹 조건 불만족
+        BuskingFall, // 버스킹 클리어 실패
+        BuskingSuccess, // 버스킹 성공
+        StatCaseFall, // 스텟 검사
+        LiveCaseFall,
+        LiveFall,
+        LiveSuccess,
+        TurnStart, // 턴 시작
         
     }
     
