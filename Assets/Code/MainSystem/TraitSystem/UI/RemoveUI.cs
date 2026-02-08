@@ -67,14 +67,15 @@ namespace Code.MainSystem.TraitSystem.UI
             ClearUI();
         }
 
-        private void UpdateUI()
+        private async void UpdateUI()
         {
             if (_currentTrait?.Data is null || _currentHolder == null)
                 return;
-
-            iconImage.sprite = _currentTrait.Data.TraitIcon;
-            nameText.SetText($"{_currentTrait.Data.TraitName}");
             
+            await SetIconSafeAsync(iconImage, _currentTrait.Data.TraitIcon);
+
+            nameText.SetText($"{_currentTrait.Data.TraitName}");
+
             int afterPoint = _currentHolder.TotalPoint - _currentTrait.Data.Point;
             string pointInfo = "삭제 후 특성 포인트\n " +
                                $"{_currentHolder.TotalPoint} / {_currentHolder.MaxPoints} ->  {afterPoint} / {_currentHolder.MaxPoints}";

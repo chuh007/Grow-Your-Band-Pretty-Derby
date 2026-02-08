@@ -24,9 +24,10 @@ namespace Code.MainSystem.TraitSystem.UI
             checkButton.onClick.AddListener(OnCheck);
         }
 
-        public void EnableFor(ActiveTrait trait, int prevLevel)
+        public async void EnableFor(ActiveTrait trait, int prevLevel)
         {
-            iconImage.sprite = trait.Data.TraitIcon;
+            await SetIconSafeAsync(iconImage, trait.Data.TraitIcon);
+
             nameText.SetText(trait.Data.TraitName);
             descriptionText.SetText($"Lv.{prevLevel} -> Lv.{trait.CurrentLevel}\n특성이 강화되었습니다.");
             Bus<TraitShowResponded>.Raise(new TraitShowResponded(_traitManager.GetHolder(_traitManager.CurrentMember)));

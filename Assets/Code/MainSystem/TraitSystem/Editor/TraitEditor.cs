@@ -4,6 +4,8 @@ using System.Linq;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.TraitEffect;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -23,6 +25,8 @@ namespace Code.MainSystem.TraitSystem.Editor
         private ListView _impactListView;
         private ListView _commentListView;
         private VisualElement _detailPanel;
+        
+        private const string TraitDataPath = "Assets/AddressableAssets/SO/TraitData";
 
         [MenuItem("Tools/Trait/Trait Editor")]
         public static void ShowWindow() 
@@ -122,7 +126,7 @@ namespace Code.MainSystem.TraitSystem.Editor
             _detailPanel.style.display = DisplayStyle.Flex;
             _serializedTrait = new SerializedObject(target);
             _detailPanel.Bind(_serializedTrait);
-
+            
             SetupSpecialLogicDropdown(target);
             SetupMemberComments(target, _serializedTrait);
 
@@ -130,7 +134,7 @@ namespace Code.MainSystem.TraitSystem.Editor
             _impactListView.Rebuild();
 
             _detailPanel.TrackSerializedObjectValue(_serializedTrait, _ => { _traitListView.RefreshItems(); });
-        } 
+        }
         
         private void SetupMemberComments(TraitDataSO target, SerializedObject so)
         {
@@ -297,15 +301,45 @@ namespace Code.MainSystem.TraitSystem.Editor
 
         private void CreateNewTrait()
         {
-            string path = EditorUtility.SaveFilePanelInProject("New Trait", "NewTrait", "asset", "Save Trait");
-            if (string.IsNullOrEmpty(path))
-                return;
-
+            if (!AssetDatabase.IsValidFolder(TraitDataPath))
+            {
+                System.IO.Directory.CreateDirectory(TraitDataPath);
+                AssetDatabase.Refresh();
+            }
+            
+            string fileName = "NewTrait";
+            string fullPath = $"{TraitDataPath}/{fileName}.asset";
+            fullPath = AssetDatabase.GenerateUniqueAssetPath(fullPath);
+            
             TraitDataSO asset = CreateInstance<TraitDataSO>();
-            AssetDatabase.CreateAsset(asset, path);
+            AssetDatabase.CreateAsset(asset, fullPath);
             AssetDatabase.SaveAssets();
+            
+            RegisterAddressable(asset);
+            
             RefreshTraitList();
-            _traitListView.selectedIndex = _traits.IndexOf(asset);
+            
+            int newIndex = _traits.IndexOf(asset);
+            _traitListView.SetSelection(newIndex);
+        }
+
+        private void RegisterAddressable(TraitDataSO asset)
+        {
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
+            if (settings == null) return;
+            
+            AddressableAssetGroup group = settings.FindGroup("TraitData");
+            if (group == null) 
+                group = settings.CreateGroup("TraitData", false, false, false, settings.DefaultGroup.Schemas);
+
+            string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(asset));
+            var entry = settings.CreateOrMoveEntry(guid, group);
+            entry.address = asset.name; // 주소를 에셋 이름과 동일하게 설정
+            
+            entry.SetLabel("Trait", true);
+
+            settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, entry, true);
+            AssetDatabase.SaveAssets();
         }
     }
 }

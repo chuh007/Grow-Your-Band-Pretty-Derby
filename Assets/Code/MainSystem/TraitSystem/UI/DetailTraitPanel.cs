@@ -47,12 +47,12 @@ namespace Code.MainSystem.TraitSystem.UI
             Hide();
         }
 
-        private void UpdateUI()
+        private async void UpdateUI()
         {
             if (_currentTrait?.Data is null)
                 return;
 
-            iconImage.sprite = _currentTrait.Data.TraitIcon;
+            await SetIconSafeAsync(iconImage, _currentTrait.Data.TraitIcon);
             
             string pointText = _currentTrait.Data.MaxLevel == -1 ? "" : $"Lv.{_currentTrait.CurrentLevel}";
             levelPointText.SetText(pointText);

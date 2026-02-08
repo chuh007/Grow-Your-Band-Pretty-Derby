@@ -12,6 +12,9 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public int MinValue { get; private set; }
         public int MaxValue { get; private set; }
         public Sprite StatIcon { get; private set; }
+        public StatRankTable RankTable { get; private set; } 
+        
+        
 
         public StatRankType CurrentRankName =>
             RankTable != null ? RankTable.GetRankName(CurrentValue) : StatRankType.None;
@@ -19,8 +22,6 @@ namespace Code.MainSystem.StatSystem.BaseStats
         public Sprite CurrentRankIcon =>
             RankTable?.GetRankIcon(CurrentValue) is { } iconRef && iconRef.RuntimeKeyIsValid()
                 ? GameResourceManager.Instance.Load<Sprite>(iconRef.RuntimeKey.ToString()) : null;
-
-        private StatRankTable RankTable { get; set; }
 
         public BaseStat(StatData data)
         {

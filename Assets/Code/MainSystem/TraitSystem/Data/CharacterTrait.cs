@@ -27,6 +27,11 @@ namespace Code.MainSystem.TraitSystem.Data
         public bool IsAdjusting { get; private set; }
         public TraitDataSO PendingTrait { get; private set; }
 
+        private void Start()
+        {
+            TraitManager.Instance.RegisterHolder(this);
+        }
+
         public void AddTrait(TraitDataSO data)
         {
             if (data is null) return;
@@ -80,6 +85,11 @@ namespace Code.MainSystem.TraitSystem.Data
         private void UnregisterModifier(object modifier)
         {
             _modifiers.Remove(modifier);
+        }
+        
+        private void OnDestroy()
+        {
+            TraitManager.Instance.UnregisterHolder(memberType);
         }
     }
 }

@@ -29,6 +29,9 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private Image characterIcon;
         [SerializeField] private GameObject teamPanel;
         [SerializeField] private List<Button> practiceBtns;
+        
+        [Header("Button References")]
+        [SerializeField] private Transform practiceButtonsParent; 
 
         [Header("Member Carousel")] [SerializeField]
         private MemberCarousel memberCarousel;
@@ -56,6 +59,8 @@ namespace Code.MainSystem.MainScreen
             {
                 InitializeActionCounts();
                 await LoadUnitsAsync();
+
+                ForceEnableAllButtons();
             }
             catch (Exception e)
             {
@@ -66,11 +71,15 @@ namespace Code.MainSystem.MainScreen
 
         private void OnEnable()
         {
+            Debug.Log("[MainScreen] OnEnable called");
             Bus<MemberTrainingStateChangedEvent>.OnEvent += OnMemberTrainingStateChanged;
+            
+            Invoke(nameof(ForceEnableAllButtons), 0.1f);
         }
 
         private void OnDisable()
         {
+            Debug.Log("[MainScreen] OnDisable called");
             Bus<MemberTrainingStateChangedEvent>.OnEvent -= OnMemberTrainingStateChanged;
         }
 
@@ -155,6 +164,33 @@ namespace Code.MainSystem.MainScreen
             Debug.Log("[MainScreen] LoadUnitsAsync completed");
         }
 
+        /// <summary>
+        /// 모든 버튼을 강제로 활성화
+        /// </summary>
+        private void ForceEnableAllButtons()
+        {
+            Debug.Log("[MainScreen] ForceEnableAllButtons called");
+            
+            if (practiceBtns == null || practiceBtns.Count == 0)
+            {
+                Debug.LogError("[MainScreen] practiceBtns is null or empty!");
+                return;
+            }
+
+            for (int i = 0; i < practiceBtns.Count; i++)
+            {
+                if (practiceBtns[i] != null)
+                {
+                    practiceBtns[i].interactable = true;
+                    Debug.Log($"[MainScreen] Button {i} ({practiceBtns[i].name}) FORCE ENABLED");
+                }
+                else
+                {
+                    Debug.LogError($"[MainScreen] Button at index {i} is null!");
+                }
+            }
+        }
+
         #endregion
 
         #region Event Handling
@@ -191,14 +227,50 @@ namespace Code.MainSystem.MainScreen
         
         private void UpdateButton()
         {
+            if (practiceBtns == null)
+            {
+                Debug.LogError("[MainScreen] practiceBtns is null in UpdateButton");
+                return;
+            }
+            
+            if (practiceBtns.Count < 5)
+            {
+                Debug.LogError($"[MainScreen] Not enough buttons. Expected 5, got {practiceBtns.Count}");
+                return;
+            }
 
-            bool isCurrentMemberActed = _memberActionCounts[_currentUnit.memberType];
+            if (_currentUnit == null)
+            {
+                Debug.LogWarning("[MainScreen] _currentUnit is null in UpdateButton");
+                return;
+            }
 
-             practiceBtns[0].interactable = !isCurrentMemberActed;
-            practiceBtns[1].interactable = !isCurrentMemberActed;
-             practiceBtns[2].interactable = !isCurrentMemberActed;
-            practiceBtns[3].interactable = !isCurrentMemberActed;
-            practiceBtns[4].interactable = _isbuskingAvailable;
+            bool isCurrentMemberActed = _memberActionCounts.ContainsKey(_currentUnit.memberType) 
+                ? _memberActionCounts[_currentUnit.memberType] 
+                : false;
+            
+            for (int i = 0; i < 4; i++)
+            {
+                if (practiceBtns[i] != null)
+                {
+                    practiceBtns[i].interactable = !isCurrentMemberActed;
+                    Debug.Log($"[MainScreen] Button {i} ({practiceBtns[i].name}) set to: {!isCurrentMemberActed}");
+                }
+                else
+                {
+                    Debug.LogError($"[MainScreen] Button {i} is null!");
+                }
+            }
+            
+            if (practiceBtns[4] != null)
+            {
+                practiceBtns[4].interactable = _isbuskingAvailable;
+                Debug.Log($"[MainScreen] Busking button ({practiceBtns[4].name}) set to: {_isbuskingAvailable}");
+            }
+            else
+            {
+                Debug.LogError("[MainScreen] Busking button (index 4) is null!");
+            }
         }
 
         #endregion
@@ -363,19 +435,7 @@ namespace Code.MainSystem.MainScreen
             InitializeActionCounts();
             _isbuskingAvailable = true;
             
-            if (practiceBtns != null)
-            {
-                for (int i = 0; i < practiceBtns.Count; i++)
-                {
-                    if (practiceBtns[i] != null)
-                    {
-                        practiceBtns[i].interactable = true;
-                        Debug.Log($"[MainScreen] Force enabled button {i}: {practiceBtns[i].name}");
-                    }
-                }
-            }
-    
-            UpdateButton();
+            ForceEnableAllButtons();
         }
     }
 }
