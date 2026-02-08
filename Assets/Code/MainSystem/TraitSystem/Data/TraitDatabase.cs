@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Code.Core;
-using Code.Core.Addressable;
 using Code.MainSystem.TraitSystem.Interface;
 using UnityEngine;
 

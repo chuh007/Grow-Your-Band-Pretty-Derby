@@ -10,19 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
-  m_Name: Injury trait data
+  m_Name: Entertainer trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 6
-  TraitName: "\uBD80\uC0C1"
-  TraitIcon: {fileID: 21300000, guid: b8cde0148568e5c46991e889cfc06f50, type: 3}
+  TraitType: 9
+  TraitName: "\uB9CC\uB2F4\uAC00"
+  TraitIcon:
+    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  IconAddress: Icon_Entertainer trait data
   MaxLevel: 10
-  Point: 0
+  Point: 7
   IsRemovable: 1
   Impacts:
-  - Target: 4
-    CalcType: 3
-    RequiredTag: 
-  - Target: 0
+  - Target: 6
     CalcType: 0
     RequiredTag: 
   MemberComments:
@@ -47,9 +50,7 @@ MonoBehaviour:
     Content: 
     Thoughts: 
   Effects:
-  - 50
-  - 2
-  DescriptionEffect: "\uC81C\uAC70 \uBD88\uAC00, \uBAA8\uB4E0 \uD6C8\uB828\uC758
-    \uC131\uACF5\uB960 -{0}%, {1}\uD134 \uACBD\uACFC \uC2DC \uC790\uB3D9\uC73C\uB85C
-    \uC81C\uAC70"
-  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.InjuryEffect
+  - 5
+  DescriptionEffect: "\uD569\uC8FC \uC2DC \uBAA8\uB4E0 \uBA64\uBC84\uC758 \uBA58\uD0C8
+    \uB2A5\uB825\uCE58 {0}"
+  SpecialLogicClassName: 

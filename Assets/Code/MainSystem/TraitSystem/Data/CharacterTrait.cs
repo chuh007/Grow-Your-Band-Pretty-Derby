@@ -27,7 +27,7 @@ namespace Code.MainSystem.TraitSystem.Data
         public bool IsAdjusting { get; private set; }
         public TraitDataSO PendingTrait { get; private set; }
 
-        private void OnEnable()
+        private void Start()
         {
             TraitManager.Instance.RegisterHolder(this);
         }
