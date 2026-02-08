@@ -1,4 +1,4 @@
-﻿using Code.Core;
+﻿using Code.Core.Addressable;
 using TMPro;
 using UnityEngine;
 using Code.Core.Bus;
@@ -53,10 +53,7 @@ namespace Code.MainSystem.TraitSystem.UI
             if (_currentTrait?.Data is null)
                 return;
 
-            Sprite sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(_currentTrait.Data.IconAddress);
-                
-            if (sprite is not null && iconImage is not null)
-                iconImage.sprite = sprite;
+            await SetIconSafeAsync(iconImage, _currentTrait.Data.TraitIcon);
             
             string pointText = _currentTrait.Data.MaxLevel == -1 ? "" : $"Lv.{_currentTrait.CurrentLevel}";
             levelPointText.SetText(pointText);

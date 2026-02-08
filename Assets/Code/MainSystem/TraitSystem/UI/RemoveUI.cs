@@ -1,4 +1,4 @@
-﻿using Code.Core;
+﻿using Code.Core.Addressable;
 using TMPro;
 using UnityEngine;
 using Code.Core.Bus;
@@ -73,10 +73,7 @@ namespace Code.MainSystem.TraitSystem.UI
             if (_currentTrait?.Data is null || _currentHolder == null)
                 return;
             
-            Sprite sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(_currentTrait.Data.IconAddress);
-
-            if (sprite is not null && iconImage is not null)
-                iconImage.sprite = sprite;
+            await SetIconSafeAsync(iconImage, _currentTrait.Data.TraitIcon);
 
             nameText.SetText($"{_currentTrait.Data.TraitName}");
 

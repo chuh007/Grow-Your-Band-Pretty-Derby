@@ -1,4 +1,4 @@
-﻿using Code.Core;
+﻿using Code.Core.Addressable;
 using TMPro;
 using UnityEngine;
 using Code.Core.Bus;
@@ -27,9 +27,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
         public async void EnableFor(ActiveTrait trait, int prevLevel)
         {
-            Sprite sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(trait.Data.IconAddress);
-            if (sprite is not null && iconImage is not null)
-                iconImage.sprite = sprite;
+            await SetIconSafeAsync(iconImage, trait.Data.TraitIcon);
 
             nameText.SetText(trait.Data.TraitName);
             descriptionText.SetText($"Lv.{prevLevel} -> Lv.{trait.CurrentLevel}\n특성이 강화되었습니다.");

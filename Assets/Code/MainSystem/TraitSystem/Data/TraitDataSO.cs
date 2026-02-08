@@ -32,7 +32,6 @@ namespace Code.MainSystem.TraitSystem.Data
         public string TraitName;
         
         public AssetReferenceSprite TraitIcon;
-        public string IconAddress;
         
         public int MaxLevel;
         public int Point;
