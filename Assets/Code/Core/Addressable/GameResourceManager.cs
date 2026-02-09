@@ -55,11 +55,17 @@ namespace Code.Core.Addressable
         {
             if (_resourceDict.TryGetValue(key, out var resource))
                 return resource as T;
-
+            
+            if (_loadHandleDict.TryGetValue(key, out var existingHandle))
+                return await existingHandle.Convert<T>().Task;
+            
             AsyncOperationHandle<T> opHandle = Addressables.LoadAssetAsync<T>(key);
+            
+            _loadHandleDict.Add(key, opHandle);
+
             T result = await opHandle.Task;
             _resourceDict.Add(key, result);
-            _loadHandleDict.Add(key, opHandle);
+    
             return result;
         }
 
