@@ -52,7 +52,24 @@ namespace Code.MainSystem.TraitSystem.Data
 
             _activeTraits.Remove(trait);
         }
-        
+
+        public void RestoreTraits(IEnumerable<ActiveTrait> traits)
+        {
+            if (traits == null)
+                return;
+            
+            _activeTraits.Clear();
+            _modifiers.Clear();
+            
+            foreach (var trait in traits)
+            {
+                _activeTraits.Add(trait);
+                
+                if (trait.TraitEffect != null)
+                    RegisterModifier(trait.TraitEffect);
+            }
+        }
+
         public void BeginAdjustment(TraitDataSO pendingTrait)
         {
             IsAdjusting = true;
