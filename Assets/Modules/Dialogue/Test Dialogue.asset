@@ -24,6 +24,10 @@ MonoBehaviour:
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
+    <Choices>k__BackingField:
+    - <ChoiceText>k__BackingField: 
+      <NextNodeIndex>k__BackingField: 0
+      <Events>k__BackingField: []
   - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: d766355927ca165488c156c650949062, type: 2}
     <DialogueDetail>k__BackingField: "\uC2A4\uD15F\uC774 \uC624\uB985\uB2C8\uB2E4.
       \uC0C1\uC2B9"
@@ -32,3 +36,4 @@ MonoBehaviour:
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField:
     - {fileID: 11400000, guid: ae2eb61b323083a439a859dbd5903cdd, type: 2}
+    <Choices>k__BackingField: []
