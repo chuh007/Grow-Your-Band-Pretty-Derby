@@ -123,7 +123,7 @@ namespace Code.MainSystem.MainScreen.Training
             Debug.Log("[TeamPracticeCutsceneController] 모든 결과 확인 완료");
             
             Debug.Log("[TeamPracticeCutsceneController] Raising CheckTurnEnd event");
-            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+            // Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
             
             await UniTask.Delay(500);
             

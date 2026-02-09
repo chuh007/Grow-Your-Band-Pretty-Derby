@@ -30,6 +30,9 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private GameObject teamPanel;
         [SerializeField] private List<Button> practiceBtns;
 
+        [Header("Button References")] [SerializeField]
+        private Transform practiceButtonsParent;
+
         [Header("Member Carousel")] [SerializeField]
         private MemberCarousel memberCarousel;
 
@@ -43,7 +46,7 @@ namespace Code.MainSystem.MainScreen
         private StatUIUpdater _statUIUpdater;
         private List<UnitDataSO> _loadedUnits;
         private UnitDataSO _currentUnit;
-        
+
         private Dictionary<MemberType, bool> _memberActionCounts = new();
         private bool _isbuskingAvailable = true;
 
@@ -56,6 +59,8 @@ namespace Code.MainSystem.MainScreen
             {
                 InitializeActionCounts();
                 await LoadUnitsAsync();
+
+                ForceEnableAllButtons();
             }
             catch (Exception e)
             {
@@ -66,11 +71,15 @@ namespace Code.MainSystem.MainScreen
 
         private void OnEnable()
         {
+            Debug.Log("[MainScreen] OnEnable called");
             Bus<MemberTrainingStateChangedEvent>.OnEvent += OnMemberTrainingStateChanged;
+
+            Invoke(nameof(ForceEnableAllButtons), 0.1f);
         }
 
         private void OnDisable()
         {
+            Debug.Log("[MainScreen] OnDisable called");
             Bus<MemberTrainingStateChangedEvent>.OnEvent -= OnMemberTrainingStateChanged;
         }
 
@@ -155,6 +164,33 @@ namespace Code.MainSystem.MainScreen
             Debug.Log("[MainScreen] LoadUnitsAsync completed");
         }
 
+        /// <summary>
+        /// 모든 버튼을 강제로 활성화
+        /// </summary>
+        private void ForceEnableAllButtons()
+        {
+            Debug.Log("[MainScreen] ForceEnableAllButtons called");
+
+            if (practiceBtns == null || practiceBtns.Count == 0)
+            {
+                Debug.LogError("[MainScreen] practiceBtns is null or empty!");
+                return;
+            }
+
+            for (int i = 0; i < practiceBtns.Count; i++)
+            {
+                if (practiceBtns[i] != null)
+                {
+                    practiceBtns[i].interactable = true;
+                    Debug.Log($"[MainScreen] Button {i} ({practiceBtns[i].name}) FORCE ENABLED");
+                }
+                else
+                {
+                    Debug.LogError($"[MainScreen] Button at index {i} is null!");
+                }
+            }
+        }
+
         #endregion
 
         #region Event Handling
@@ -188,17 +224,46 @@ namespace Code.MainSystem.MainScreen
         {
             teamPanel.gameObject.SetActive(true);
         }
-        
+
         private void UpdateButton()
         {
+            if (practiceBtns == null)
+            {
+                return;
+            }
 
-            bool isCurrentMemberActed = _memberActionCounts[_currentUnit.memberType];
+            if (practiceBtns.Count < 5)
+            {
+                return;
+            }
 
-             practiceBtns[0].interactable = !isCurrentMemberActed;
-            practiceBtns[1].interactable = !isCurrentMemberActed;
-             practiceBtns[2].interactable = !isCurrentMemberActed;
-            practiceBtns[3].interactable = !isCurrentMemberActed;
-            practiceBtns[4].interactable = _isbuskingAvailable;
+            if (_currentUnit == null)
+            {
+                return;
+            }
+
+            bool isCurrentMemberActed = _memberActionCounts.ContainsKey(_currentUnit.memberType)
+                ? _memberActionCounts[_currentUnit.memberType]
+                : false;
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (practiceBtns[i] != null)
+                {
+                    practiceBtns[i].interactable = !isCurrentMemberActed;
+                }
+                else
+                {
+                }
+            }
+
+            if (practiceBtns[4] != null)
+            {
+                practiceBtns[4].interactable = _isbuskingAvailable;
+            }
+            else
+            {
+            }
         }
 
         #endregion
@@ -355,14 +420,14 @@ namespace Code.MainSystem.MainScreen
                 }
             }
         }
-        
+
         public void TurnStart()
         {
             Debug.Log("[MainScreen] TurnStart called - resetting actions");
-    
+
             InitializeActionCounts();
             _isbuskingAvailable = true;
-            
+
             if (practiceBtns != null)
             {
                 for (int i = 0; i < practiceBtns.Count; i++)
@@ -374,7 +439,7 @@ namespace Code.MainSystem.MainScreen
                     }
                 }
             }
-    
+
             UpdateButton();
         }
     }

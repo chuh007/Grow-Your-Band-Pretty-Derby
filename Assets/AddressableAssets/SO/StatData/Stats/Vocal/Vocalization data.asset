@@ -18,13 +18,13 @@ MonoBehaviour:
   minValue: 0
   maxValue: 1500
   statIcon:
-    m_AssetGUID: 
+    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   rankTable:
-    m_AssetGUID: 
+    m_AssetGUID: 832877aae9f961a41bc136d1da22cde3
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
