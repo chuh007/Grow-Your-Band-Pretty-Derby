@@ -11,7 +11,6 @@ namespace Code.MainSystem.MainScreen.Training
     public class StatResultItemUI : MonoBehaviour
     {
         [SerializeField] private Image leftIcon;
-        [SerializeField] private Image rightIcon;
         [SerializeField] private TextMeshProUGUI statNameText;
         [SerializeField] private TextMeshProUGUI valueText;
         [SerializeField] private Transform gaugeFill;
@@ -23,12 +22,9 @@ namespace Code.MainSystem.MainScreen.Training
         private Tween _gaugeTween;
         private Tween _valueTween;
 
-        public void SetInitialData(string statName, Sprite right)
+        public void SetInitialData(string statName)
         {
             statNameText.text = statName;
-
-            if (rightIcon != null)
-                rightIcon.sprite = right;
 
             if (valueText != null)
                 valueText.text = "";
@@ -49,9 +45,6 @@ namespace Code.MainSystem.MainScreen.Training
             
             if (leftIcon != null)
                 leftIcon.sprite = null;
-
-            if (rightIcon != null)
-                rightIcon.sprite = null;
             
             if (gaugeFill != null)
                 gaugeFill.localScale = new Vector3(0f, 1f, 1f);
@@ -225,7 +218,7 @@ namespace Code.MainSystem.MainScreen.Training
             if (nextRankThreshold.HasValue)
             {
                 int remaining = nextRankThreshold.Value - currentValue;
-                nextRankText.text = $"다음 렙까지 {remaining}";
+                nextRankText.text = $"다음 등급까지 {remaining}";
                 
                 Debug.Log($"[StatResultItemUI] {baseStat.StatName}: 현재값={currentValue}, 다음등급={nextRankThreshold.Value}, 남은값={remaining}");
             }

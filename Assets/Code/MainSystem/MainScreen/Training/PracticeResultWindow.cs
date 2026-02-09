@@ -22,10 +22,9 @@ namespace Code.MainSystem.MainScreen.Training
         [Header("Parents")]
         [SerializeField] private Transform statParent;
         [SerializeField] private Transform commentParent;
-
-        [Header("Icons")]
-        [SerializeField] private Sprite normalIcon;
-        [SerializeField] private Sprite deltaIcon;
+        
+        [Header("Icon")]
+        [SerializeField] private Sprite conditonIcon;
 
         [Header("Title")]
         [SerializeField] private TextMeshProUGUI titleText;
@@ -167,13 +166,13 @@ namespace Code.MainSystem.MainScreen.Training
         {
             if (!Mathf.Approximately(conditionDelta, 0f))
             {
-                await CreateStatItemWithGauge("컨디션", Mathf.RoundToInt(conditionCurrent), conditionDelta, deltaIcon, null);
+                await CreateStatItemWithGauge("컨디션", Mathf.RoundToInt(conditionCurrent), conditionDelta, conditonIcon, null);
             }
             
             if (teamStat != null && !Mathf.Approximately(teamStatDelta, 0f))
             {
                 BaseStat baseStat = statManager.GetTeamStat(StatType.TeamHarmony);
-                await CreateStatItemWithGauge(teamStat.statName, Mathf.RoundToInt(teamStatCurrentValue), teamStatDelta, deltaIcon, baseStat);
+                await CreateStatItemWithGauge(teamStat.statName, Mathf.RoundToInt(teamStatCurrentValue), teamStatDelta, baseStat.CurrentRankIcon, baseStat);
             }
             
             foreach (var unit in allUnits)
@@ -187,7 +186,7 @@ namespace Code.MainSystem.MainScreen.Training
 
                     if (delta != 0)
                     {
-                        await CreateStatItemWithGauge(stat.statName, baseStat.CurrentValue, delta, normalIcon, baseStat);
+                        await CreateStatItemWithGauge(stat.statName, baseStat.CurrentValue, delta, baseStat.CurrentRankIcon, baseStat);
                     }
                 }
             }
@@ -202,7 +201,7 @@ namespace Code.MainSystem.MainScreen.Training
             var statUI = go.GetComponent<StatResultItemUI>();
             if (statUI != null)
             {
-                statUI.SetInitialData(statName, icon);
+                statUI.SetInitialData(statName);
                 
                 try
                 {
