@@ -3650,8 +3650,7 @@ MonoBehaviour:
   commentItemPrefab: {fileID: 4166418543201159142, guid: 263a85b2b3ceff84eb3a45ccc341cd18, type: 3}
   statParent: {fileID: 1703333482}
   commentParent: {fileID: 1373290450}
-  normalIcon: {fileID: 21300000, guid: ca463b2e30202f041bfc14e8bda91e76, type: 3}
-  deltaIcon: {fileID: 21300000, guid: 550e4efbeb343734ca390779bae9fab3, type: 3}
+  conditonIcon: {fileID: 21300000, guid: bdd0090febc91c245880091cea98e5bd, type: 3}
   titleText: {fileID: 1027460157}
   allowSkip: 1
   skipCooldown: 0.3
@@ -11154,11 +11153,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.5
+      value: -9.2
       objectReference: {fileID: 0}
     - target: {fileID: 7233578821569499285, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -14
+      value: 4.8
       objectReference: {fileID: 0}
     - target: {fileID: 7253855170569403357, guid: 6c32dda6f03787a45ad6210de92d8813, type: 3}
       propertyPath: m_AnchorMax.x
