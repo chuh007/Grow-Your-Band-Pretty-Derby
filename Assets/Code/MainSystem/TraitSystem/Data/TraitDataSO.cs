@@ -32,8 +32,7 @@ namespace Code.MainSystem.TraitSystem.Data
         public string TraitName;
         
         public AssetReferenceSprite TraitIcon;
-        
-        public int MaxLevel;
+
         public int Point;
         public bool IsRemovable = true;
         

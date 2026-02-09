@@ -152,22 +152,7 @@ namespace Code.MainSystem.TraitSystem.Manager
             var existingTrait = holder.ActiveTraits
                 .FirstOrDefault(t => t.Data.TraitType == newTrait.TraitType);
             
-            if (existingTrait != null)
-            {
-                if (existingTrait.Data.MaxLevel == -1 ||
-                    existingTrait.CurrentLevel >= existingTrait.Data.MaxLevel)
-                    return;
-
-                var prevLevel = existingTrait.CurrentLevel;
-                existingTrait.LevelUp();
-
-                Bus<TraitUpgraded>.Raise(new TraitUpgraded(CurrentMember, existingTrait, prevLevel));
-
-                ShowTraitList(holder);
-                return;
-            }
-
-            if (holder.IsAdjusting)
+            if (existingTrait != null || holder.IsAdjusting)
                 return;
 
             holder.AddTrait(newTrait);

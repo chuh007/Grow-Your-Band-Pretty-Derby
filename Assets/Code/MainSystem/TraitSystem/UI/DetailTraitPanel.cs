@@ -17,7 +17,6 @@ namespace Code.MainSystem.TraitSystem.UI
         
         [Header("UI Elements")]
         [SerializeField] private Image iconImage;
-        [SerializeField] private TextMeshProUGUI levelPointText;
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private Button removeButton;
         
@@ -53,9 +52,6 @@ namespace Code.MainSystem.TraitSystem.UI
                 return;
 
             await SetIconSafeAsync(iconImage, _currentTrait.Data.TraitIcon);
-            
-            string pointText = _currentTrait.Data.MaxLevel == -1 ? "" : $"Lv.{_currentTrait.CurrentLevel}";
-            levelPointText.SetText(pointText);
             
             descriptionText.SetText(_currentTrait.GetFormattedDescription());
 
