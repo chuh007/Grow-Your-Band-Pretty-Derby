@@ -25,6 +25,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         private TraitInteraction _interactionManager;
 
         private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
+        private readonly Dictionary<MemberType, List<ActiveTrait>> _traitDataStorage = new();
         
 
         private async void Awake()
@@ -65,6 +66,13 @@ namespace Code.MainSystem.TraitSystem.Manager
         public void RegisterHolder(ITraitHolder holder)
         {
             _holders[holder.MemberType] = holder;
+
+            // 만약 이 멤버의 기존 데이터가 있다면 복구해줌
+            if (_traitDataStorage.TryGetValue(holder.MemberType, out var savedTraits))
+            {
+                // holder(CharacterTrait)에게 기존 데이터를 전달하는 메서드가 필요합니다.
+                holder.RestoreTraits(savedTraits);
+            }
         }
 
         #endregion
@@ -149,30 +157,15 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private void TryAddTrait(ITraitHolder holder, TraitDataSO newTrait)
         {
-            var existingTrait = holder.ActiveTraits
+            ActiveTrait existingTrait = holder.ActiveTraits
                 .FirstOrDefault(t => t.Data.TraitType == newTrait.TraitType);
             
-            if (existingTrait != null)
-            {
-                if (existingTrait.Data.MaxLevel == -1 ||
-                    existingTrait.CurrentLevel >= existingTrait.Data.MaxLevel)
-                    return;
-
-                var prevLevel = existingTrait.CurrentLevel;
-                existingTrait.LevelUp();
-
-                Bus<TraitUpgraded>.Raise(new TraitUpgraded(CurrentMember, existingTrait, prevLevel));
-
-                ShowTraitList(holder);
-                return;
-            }
-
-            if (holder.IsAdjusting)
+            if (existingTrait != null || holder.IsAdjusting)
                 return;
 
             holder.AddTrait(newTrait);
 
-            var newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
+            int newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
         
             if (newTotal > holder.MaxPoints)
             {
@@ -184,6 +177,8 @@ namespace Code.MainSystem.TraitSystem.Manager
                 _interactionManager.ProcessAllInteractions(holder);
                 ShowTraitList(holder);
             }
+            
+            _traitDataStorage[holder.MemberType] = holder.ActiveTraits.ToList();
         }
         
         /// <summary>
