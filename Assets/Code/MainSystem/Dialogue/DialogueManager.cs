@@ -21,6 +21,7 @@ namespace Code.MainSystem.Dialogue
             Bus<ContinueDialogueEvent>.OnEvent += OnContinueDialogue;
             Bus<DialogueSkipEvent>.OnEvent += OnDialogueSkip;
             Bus<DialogueStartEvent>.OnEvent += OnDialogueStart;
+            Bus<DialogueChoiceSelectedEvent>.OnEvent += OnChoiceSelected;
         }
 
         private void OnDisable()
@@ -28,6 +29,7 @@ namespace Code.MainSystem.Dialogue
             Bus<ContinueDialogueEvent>.OnEvent -= OnContinueDialogue;
             Bus<DialogueSkipEvent>.OnEvent -= OnDialogueSkip;
             Bus<DialogueStartEvent>.OnEvent -= OnDialogueStart;
+            Bus<DialogueChoiceSelectedEvent>.OnEvent -= OnChoiceSelected;
         }
 
         private void OnDialogueStart(DialogueStartEvent evt)
@@ -52,24 +54,7 @@ namespace Code.MainSystem.Dialogue
             _acceptingInput = false;
             StartCoroutine(EnableInputAfterFrame());
 
-            var firstNode = _dialogueInformationSO.DialogueDetails[_dialogueIndex];
-            if (firstNode.Events != null)
-            {
-                foreach (var eventSO in firstNode.Events)
-                {
-                    eventSO.RaiseDialogueEvent();
-                }
-            }
-            
-            int bgIndex = firstNode.BackgroundIndex;
-            if (bgIndex < 0 || bgIndex >= _dialogueInformationSO.DialogueBackground.Count)
-            {
-                Debug.LogError($"Invalid background index {bgIndex} in dialogue node {_dialogueIndex}. Using index 0 as fallback.");
-                bgIndex = 0;
-            }
-            
-            var eventData = new DialogueProgressEvent(firstNode, _dialogueInformationSO.DialogueBackground[bgIndex]);
-            Bus<DialogueProgressEvent>.Raise(eventData);
+            ProcessCurrentNode();
         }
 
         private void OnContinueDialogue(ContinueDialogueEvent e)
@@ -91,6 +76,41 @@ namespace Code.MainSystem.Dialogue
                 return;
             }
 
+            ProcessCurrentNode();
+        }
+
+        private void OnChoiceSelected(DialogueChoiceSelectedEvent evt)
+        {
+            if (_state != DialogueState.Active) return;
+
+            if (evt.Events != null)
+            {
+                foreach (var eventSO in evt.Events)
+                {
+                    eventSO.RaiseDialogueEvent();
+                }
+            }
+
+            int nextIndex = evt.NextNodeIndex;
+            if (nextIndex < 0)
+            {
+                nextIndex = _dialogueIndex + 1;
+            }
+
+            _dialogueIndex = nextIndex;
+
+            if (_dialogueIndex >= _dialogueInformationSO.DialogueDetails.Count)
+            {
+                EndDialogue();
+                return;
+            }
+
+            _acceptingInput = true;
+            ProcessCurrentNode();
+        }
+
+        private void ProcessCurrentNode()
+        {
             var currentNode = _dialogueInformationSO.DialogueDetails[_dialogueIndex];
             
             if (currentNode.Events != null)
@@ -104,13 +124,18 @@ namespace Code.MainSystem.Dialogue
             int bgIndex = currentNode.BackgroundIndex;
             if (bgIndex < 0 || bgIndex >= _dialogueInformationSO.DialogueBackground.Count)
             {
-                Debug.LogError($"Invalid background index {bgIndex} in dialogue node {_dialogueIndex}. Dialogue will end.");
-                EndDialogue();
-                return;
+                Debug.LogError($"Invalid background index {bgIndex} in dialogue node {_dialogueIndex}. Using index 0 as fallback.");
+                bgIndex = 0;
             }
-
+            
             var eventData = new DialogueProgressEvent(currentNode, _dialogueInformationSO.DialogueBackground[bgIndex]);
             Bus<DialogueProgressEvent>.Raise(eventData);
+
+            if (currentNode.Choices != null && currentNode.Choices.Count > 0)
+            {
+                _acceptingInput = false;
+                Bus<DialogueShowChoiceEvent>.Raise(new DialogueShowChoiceEvent(currentNode.Choices));
+            }
         }
 
         private void OnDialogueSkip(DialogueSkipEvent e)
@@ -133,6 +158,16 @@ namespace Code.MainSystem.Dialogue
         private IEnumerator EnableInputAfterFrame()
         { 
             yield return new WaitForEndOfFrame();
+            
+            if (_dialogueInformationSO != null && _dialogueIndex >= 0 && _dialogueIndex < _dialogueInformationSO.DialogueDetails.Count)
+            {
+                var node = _dialogueInformationSO.DialogueDetails[_dialogueIndex];
+                if (node.Choices != null && node.Choices.Count > 0)
+                {
+                    yield break;
+                }
+            }
+            
             _acceptingInput = true;
         }
     }
