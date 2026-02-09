@@ -29,7 +29,7 @@ namespace Code.MainSystem.TraitSystem.UI
         /// </summary>
         protected async Task SetIconSafeAsync(Image iconImage, AssetReferenceSprite iconRef)
         {
-            if (iconImage == null)
+            if (iconImage is null)
                 return;
             
             if (iconRef == null || !iconRef.RuntimeKeyIsValid())
@@ -42,7 +42,7 @@ namespace Code.MainSystem.TraitSystem.UI
             GameResourceManager manager = GameResourceManager.Instance;
             
             Sprite cachedSprite = manager.Load<Sprite>(key);
-            if (cachedSprite != null)
+            if (cachedSprite is not null)
             {
                 iconImage.sprite = cachedSprite;
                 return;
@@ -51,7 +51,7 @@ namespace Code.MainSystem.TraitSystem.UI
             try
             {
                 Sprite sprite = await manager.LoadAsync<Sprite>(key);
-                if (sprite != null && iconImage != null)
+                if (sprite is not null)
                 {
                     iconImage.sprite = sprite;
                 }

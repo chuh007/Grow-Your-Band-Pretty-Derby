@@ -149,7 +149,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private void TryAddTrait(ITraitHolder holder, TraitDataSO newTrait)
         {
-            var existingTrait = holder.ActiveTraits
+            ActiveTrait existingTrait = holder.ActiveTraits
                 .FirstOrDefault(t => t.Data.TraitType == newTrait.TraitType);
             
             if (existingTrait != null || holder.IsAdjusting)
@@ -157,7 +157,7 @@ namespace Code.MainSystem.TraitSystem.Manager
 
             holder.AddTrait(newTrait);
 
-            var newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
+            int newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
         
             if (newTotal > holder.MaxPoints)
             {
