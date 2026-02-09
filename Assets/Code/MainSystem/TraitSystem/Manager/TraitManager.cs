@@ -66,11 +66,6 @@ namespace Code.MainSystem.TraitSystem.Manager
         {
             _holders[holder.MemberType] = holder;
         }
-        
-        public void UnregisterHolder(MemberType type)
-        {
-            _holders.Remove(type);
-        }
 
         #endregion
 

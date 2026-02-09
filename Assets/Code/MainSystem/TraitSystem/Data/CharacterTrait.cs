@@ -86,10 +86,5 @@ namespace Code.MainSystem.TraitSystem.Data
         {
             _modifiers.Remove(modifier);
         }
-        
-        private void OnDestroy()
-        {
-            TraitManager.Instance.UnregisterHolder(memberType);
-        }
     }
 }
