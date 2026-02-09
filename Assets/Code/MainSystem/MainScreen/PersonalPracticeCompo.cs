@@ -297,8 +297,6 @@ namespace Code.MainSystem.MainScreen
 
             HideAllArrows();
             HideProbabilityText();
-
-            UpdateButtonsState();
             
             Debug.Log($"[PersonalPracticeCompo] Init completed for {unit.unitName}");
         }
@@ -397,7 +395,6 @@ namespace Code.MainSystem.MainScreen
 
                 HideAllArrows();
                 HideProbabilityText();
-                UpdateButtonsState();
                 
                 CollapsePanel();
                 return;
@@ -421,25 +418,6 @@ namespace Code.MainSystem.MainScreen
         #endregion
 
         #region UI Helpers
-
-        private void UpdateButtonsState()
-        {
-            if (_currentUnit == null || practiceButtons == null) return;
-
-            bool trained = TrainingManager.Instance.IsMemberTrained(_currentUnit.memberType);
-
-            foreach (var btn in practiceButtons)
-            {
-                if (btn != null)
-                {
-                    btn.interactable = !trained;
-                    if (btn.image != null)
-                    {
-                        btn.image.color = trained ? Color.gray : Color.white;
-                    }
-                }
-            }
-        }
 
         private void ShowArrow(int index)
         {
