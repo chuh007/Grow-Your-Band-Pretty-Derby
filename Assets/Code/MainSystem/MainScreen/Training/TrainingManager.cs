@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Training
 {
-    public class TrainingManager : MonoBehaviour, ITurnStartComponent
+    public class TrainingManager : MonoBehaviour
     {
         private Dictionary<MemberType, int> _trainedMembers = new();
         private bool _teamTrained = false;
@@ -89,11 +89,6 @@ namespace Code.MainSystem.MainScreen.Training
             }
             
             return true;
-        }
-        
-        public void TurnStart()
-        {
-            ResetTraining();
         }
         
         private void HandleCheckTurnEnd(CheckTurnEnd evt)
