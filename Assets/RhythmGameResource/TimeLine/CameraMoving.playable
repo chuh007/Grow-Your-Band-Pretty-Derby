@@ -116,7 +116,7 @@ MonoBehaviour:
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: -1
+    m_BlendOutDuration: 1.708333333333333
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -158,15 +158,15 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: FrontShot
   - m_Version: 1
-    m_Start: 6.125
+    m_Start: 4.416666666666667
     m_ClipIn: 0
     m_Asset: {fileID: -5860036848976410968}
-    m_Duration: 4.833333333333334
+    m_Duration: 6.541666666666667
     m_TimeScale: 1
     m_ParentTrack: {fileID: 4378708172406928111}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: -1
+    m_BlendInDuration: 1.708333333333333
     m_BlendOutDuration: 1.458333333333334
     m_MixInCurve:
       serializedVersion: 2
