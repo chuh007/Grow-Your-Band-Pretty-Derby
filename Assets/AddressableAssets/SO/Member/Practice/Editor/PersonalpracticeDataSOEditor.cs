@@ -6,7 +6,7 @@ using Code.MainSystem.StatSystem.BaseStats;
 namespace Code.MainSystem.MainScreen.MemberData
 {
     [CustomEditor(typeof(PersonalpracticeDataSO))]
-    public class PersonalpracticeDataSOEditor : Editor
+    public class PersonalpracticeDataSOEditor : UnityEditor.Editor
     {
         private SerializedProperty practiceStatType;
         private SerializedProperty practiceStatName;
