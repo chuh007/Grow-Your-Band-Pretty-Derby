@@ -65,7 +65,7 @@ namespace Code.MainSystem.Etc
                 
                 if (i < iconImages.Count && iconImages[i] != null)
                 {
-                    iconImages[i].sprite = statData.StatIcon;
+                    iconImages[i].sprite = statData.CurrentRankIcon;
                 }
             }
             
@@ -87,7 +87,7 @@ namespace Code.MainSystem.Etc
                     
                     if (4 < iconImages.Count && iconImages[4] != null)
                     {
-                        iconImages[4].sprite = teamStatData.StatIcon;
+                        iconImages[4].sprite = teamStatData.CurrentRankIcon;
                     }
                 }
             }

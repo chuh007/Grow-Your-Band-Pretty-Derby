@@ -23,7 +23,7 @@ namespace Code.MainSystem.MainScreen.Training
                 var ui = resultItems[i];
                 var data = statResults[i];
 
-                ui.SetInitialData(data.statName, data.rightIcon); 
+                ui.SetInitialData(data.statName); 
                 await ui.AnimateToValue(data.leftIcon, data.currentValue).AttachExternalCancellation(token); 
                 await UniTask.Delay(200, cancellationToken: token);
             }
@@ -39,7 +39,7 @@ namespace Code.MainSystem.MainScreen.Training
                 if (i < statResults.Count)
                 {
                     var data = statResults[i];
-                    ui.SetInitialData(data.statName, data.rightIcon);
+                    ui.SetInitialData(data.statName);
                     ui.ForceSetValue(data.leftIcon, data.currentValue);
                 }
                 else
