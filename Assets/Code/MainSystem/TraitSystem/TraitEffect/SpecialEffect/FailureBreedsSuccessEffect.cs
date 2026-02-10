@@ -1,8 +1,11 @@
 ﻿using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 
-namespace Code.MainSystem.TraitSystem.TraitEffect
+namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
+    /// <summary>
+    /// 실패는 성공의 어머니 효과
+    /// </summary>
     public class FailureBreedsSuccessEffect : MultiStatModifierEffect, IInspirationSystem, ISuccessGuarantor
     {
         private float _currentInspiration;

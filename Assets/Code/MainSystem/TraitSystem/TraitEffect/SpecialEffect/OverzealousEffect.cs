@@ -1,5 +1,8 @@
-﻿namespace Code.MainSystem.TraitSystem.TraitEffect
+﻿namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
+    /// <summary>
+    /// 지나친 열정 효과
+    /// </summary>
     public class OverzealousEffect : MultiStatModifierEffect
     {
         public void OnTrainingComplete(object context)

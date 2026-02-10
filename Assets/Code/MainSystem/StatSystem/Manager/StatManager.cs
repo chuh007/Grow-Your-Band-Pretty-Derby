@@ -14,6 +14,7 @@ using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using Code.MainSystem.TraitSystem.TraitEffect;
+using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using UnityEngine.Serialization;
 
 namespace Code.MainSystem.StatSystem.Manager
