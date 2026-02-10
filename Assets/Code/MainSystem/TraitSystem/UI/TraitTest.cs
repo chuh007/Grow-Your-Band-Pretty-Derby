@@ -15,7 +15,6 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private TextMeshProUGUI label;
         [Inject] TraitManager _manager;
         [SerializeField] private MemberType memberType;
-        [SerializeField] private TraitType traitType;
         
         public void ShowList()
         {
