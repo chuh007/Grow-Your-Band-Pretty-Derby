@@ -15,17 +15,55 @@ MonoBehaviour:
   m_GroupName: Resting
   m_GUID: 3b0fb292ca7aada4c9ac692acb1baa0e
   m_SerializeEntries:
-  - m_GUID: 0f21756079005794db2988121e48d076
-    m_Address: Rest/SD/Idle
+  - m_GUID: 57affc92858bbd34e8155a0b2d48a414
+    m_Address: Vocal dialogue
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - Rest
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1efe976e8faad0c4c9ce5948ebcb0a0a
-    m_Address: Rest/UI/Result
+  - m_GUID: 67e6ac3a737ff464d8b4f0ea6be0be9e
+    m_Address: Piano dialogue
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - Rest
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84a035058d3ee304091e9d256296453f
+    m_Address: Drums dialogue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ec60a04c53bb284f9b3fabaee3e41ee
+    m_Address: Bass dialogue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c88078ee2b7fb594bb0f9c9cde049218
+    m_Address: Paino
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e23b05cb94b15d742ba370849325525e
+    m_Address: Guitar dialogue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2ad039597cfe9c40a54a7f5fd272e10
+    m_Address: Rest dialogue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6ffd3ec55a1f074bb9d32755e928145
+    m_Address: Guitar rest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb0790bcef78f16448685b1ddf01d6aa
+    m_Address: Bass rest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ffb7dff6b16baf2468d5ccb28e63280c
+    m_Address: Vocal rest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
