@@ -7,10 +7,10 @@ namespace Code.MainSystem.TraitSystem.TraitExtensionMethod
 {
     public static class TraitComment
     {
-        public static MemberTraitComment GetCommentForMember(this ITraitHolder holder, string id, MemberType member)
+        public static MemberTraitComment GetCommentForMember(this ITraitHolder holder, int id, MemberType member)
         {
             return holder.ActiveTraits
-                .FirstOrDefault(t => t.Data.TraitID == id)?
+                .FirstOrDefault(t => t.Data.IDHash == id)?
                 .GetMemberTraitComment();
         }
     }

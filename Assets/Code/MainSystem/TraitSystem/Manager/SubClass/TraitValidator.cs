@@ -25,7 +25,7 @@ namespace Code.MainSystem.TraitSystem.Manager.SubClass
     {
         public ValidationResult CanAdd(ITraitHolder holder, TraitDataSO trait)
         {
-            if (holder.ActiveTraits.Any(t => t.Data.TraitID == trait.TraitID))
+            if (holder.ActiveTraits.Any(t => t.Data.IDHash == trait.IDHash))
                 return ValidationResult.Fail("이미 보유 중인 특성입니다.");
 
             // 최대 개수 체크 (99개)

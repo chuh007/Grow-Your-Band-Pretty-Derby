@@ -14,7 +14,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
             bool hasPartner = true;
             for (int i = 0; i < (int)MemberType.Team; i++)
             {
-                if (!TraitManager.Instance.HasTrait((MemberType)i, (string)context))
+                if (!TraitManager.Instance.HasTrait((MemberType)i, (int)context))
                     continue;
                 
                 hasPartner = false;

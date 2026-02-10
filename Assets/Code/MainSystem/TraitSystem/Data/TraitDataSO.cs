@@ -28,9 +28,10 @@ namespace Code.MainSystem.TraitSystem.Data
     [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data")]
     public class TraitDataSO : ScriptableObject
     {
-        public string TraitID => name;
-        public string TraitName;
+        public int IDHash => _idHash == 0 ? _idHash = name.GetHashCode() : _idHash;
+        private int _idHash;
         
+        public string TraitName;
         public AssetReferenceSprite TraitIcon;
 
         public int Point;

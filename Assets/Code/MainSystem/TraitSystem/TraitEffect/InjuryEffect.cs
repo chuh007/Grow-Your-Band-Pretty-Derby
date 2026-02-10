@@ -16,7 +16,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
                 return;
             
             Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_activeTrait.Owner,
-                _activeTrait.Data.TraitID));
+                _activeTrait.Data.IDHash));
             _elapsedTurns = 0;
         }
     }

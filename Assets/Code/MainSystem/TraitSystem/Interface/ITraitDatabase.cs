@@ -4,6 +4,6 @@ namespace Code.MainSystem.TraitSystem.Interface
 {
     public interface ITraitDatabase
     {
-        TraitDataSO Get(string traitID);
+        TraitDataSO Get(int traitID);
     }
 }

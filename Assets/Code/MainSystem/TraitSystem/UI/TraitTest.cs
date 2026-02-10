@@ -25,7 +25,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
         public void AddTrait()
         {
-            Bus<TraitAddRequested>.Raise(new TraitAddRequested(_manager.CurrentMember, traitData.TraitID));
+            Bus<TraitAddRequested>.Raise(new TraitAddRequested(_manager.CurrentMember, traitData.IDHash));
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(_manager.CurrentMember));
         }
     }
