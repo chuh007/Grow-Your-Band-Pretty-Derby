@@ -7,6 +7,7 @@ using Code.MainSystem.Dialogue;
 using Member.LS.Code.Dialogue;
 using Member.LS.Code.Dialogue.Character;
 using Code.MainSystem.Dialogue.DialogueEvent;
+using UnityEngine.AddressableAssets;
 
 namespace Code.Editor.Dialogue
 {
@@ -634,7 +635,7 @@ namespace Code.Editor.Dialogue
                 
                 if (GUILayout.Button("➕ 배경 추가"))
                 {
-                    bgProp.arraySize++;
+                    bgProp.InsertArrayElementAtIndex(bgProp.arraySize);
                 }
             }
             EditorGUILayout.EndVertical();
@@ -708,8 +709,21 @@ namespace Code.Editor.Dialogue
             string preview = dialogueProp != null ? dialogueProp.stringValue : "";
             if (preview.Length > 20) preview = preview.Substring(0, 20) + "...";
             
-            CharacterInformationSO character = characterProp?.objectReferenceValue as CharacterInformationSO;
-            string characterName = character != null ? character.CharacterName : "없음";
+            // AssetReference 처리
+            string characterName = "없음";
+            if (characterProp != null)
+            {
+                // AssetReferenceT는 직접 참조를 가져올 수 없으므로 editorAsset을 사용
+                var editorAssetProp = characterProp.FindPropertyRelative("m_EditorAsset");
+                if (editorAssetProp != null && editorAssetProp.objectReferenceValue != null)
+                {
+                    CharacterInformationSO character = editorAssetProp.objectReferenceValue as CharacterInformationSO;
+                    if (character != null)
+                    {
+                        characterName = character.CharacterName;
+                    }
+                }
+            }
             
             bool isSelected = _selectedNodeIndex == index;
             Color bgColor = isSelected ? new Color(0.3f, 0.5f, 0.8f, 0.5f) : Color.clear;
@@ -804,57 +818,88 @@ namespace Code.Editor.Dialogue
             EditorGUILayout.EndScrollView();
         }
 
-        /// <summary>
-        /// 노드 기본 정보 (캐릭터, 감정, 배경, 네임태그)
-        /// </summary>
-        private void DrawNodeBasicInfo(SerializedProperty node)
+      /// <summary>
+/// 노드 기본 정보 (캐릭터, 감정, 배경, 네임태그)
+/// </summary>
+private void DrawNodeBasicInfo(SerializedProperty node)
+{
+    EditorGUILayout.LabelField("📌 기본 정보", EditorStyles.boldLabel);
+    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+    {
+        var characterProp = node.FindPropertyRelative("<CharacterInformSO>k__BackingField");
+        if (characterProp == null) characterProp = node.FindPropertyRelative("CharacterInformSO");
+        
+        var emotionProp = node.FindPropertyRelative("<CharacterEmotion>k__BackingField");
+        if (emotionProp == null) emotionProp = node.FindPropertyRelative("CharacterEmotion");
+        
+        var nameTagProp = node.FindPropertyRelative("<NameTagPosition>k__BackingField");
+        if (nameTagProp == null) nameTagProp = node.FindPropertyRelative("NameTagPosition");
+        
+        var bgIndexProp = node.FindPropertyRelative("<BackgroundIndex>k__BackingField");
+        if (bgIndexProp == null) bgIndexProp = node.FindPropertyRelative("BackgroundIndex");
+        
+        EditorGUILayout.PropertyField(characterProp, new GUIContent("캐릭터"));
+        
+        EditorGUILayout.BeginHorizontal();
         {
-            EditorGUILayout.LabelField("📌 기본 정보", EditorStyles.boldLabel);
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.PropertyField(emotionProp, new GUIContent("감정"), GUILayout.Width(position.width * 0.5f));
+            
+            // 캐릭터 미리보기 (AssetReference에서 에디터 에셋 가져오기)
+            var editorAssetProp = characterProp?.FindPropertyRelative("m_EditorAsset");
+            CharacterInformationSO character = editorAssetProp?.objectReferenceValue as CharacterInformationSO;
+            if (character != null && emotionProp != null && character.CharacterEmotions != null)
             {
-                var characterProp = node.FindPropertyRelative("<CharacterInformSO>k__BackingField");
-                if (characterProp == null) characterProp = node.FindPropertyRelative("CharacterInformSO");
-                
-                var emotionProp = node.FindPropertyRelative("<CharacterEmotion>k__BackingField");
-                if (emotionProp == null) emotionProp = node.FindPropertyRelative("CharacterEmotion");
-                
-                var nameTagProp = node.FindPropertyRelative("<NameTagPosition>k__BackingField");
-                if (nameTagProp == null) nameTagProp = node.FindPropertyRelative("NameTagPosition");
-                
-                var bgIndexProp = node.FindPropertyRelative("<BackgroundIndex>k__BackingField");
-                if (bgIndexProp == null) bgIndexProp = node.FindPropertyRelative("BackgroundIndex");
-                
-                EditorGUILayout.PropertyField(characterProp, new GUIContent("캐릭터"));
-                
-                EditorGUILayout.BeginHorizontal();
+                CharacterEmotionType emotion = (CharacterEmotionType)emotionProp.enumValueIndex;
+                if (character.CharacterEmotions.TryGetValue(emotion, out var spriteRef) && spriteRef != null)
                 {
-                    EditorGUILayout.PropertyField(emotionProp, new GUIContent("감정"), GUILayout.Width(position.width * 0.5f));
+                    // AssetReferenceSprite에서 에디터 에셋 가져오기
+                    var emotionSerializedObj = new UnityEditor.SerializedObject(character);
+                    var emotionsDict = emotionSerializedObj.FindProperty("<CharacterEmotions>k__BackingField");
+                    if (emotionsDict == null) emotionsDict = emotionSerializedObj.FindProperty("CharacterEmotions");
                     
-                    // 캐릭터 미리보기
-                    CharacterInformationSO character = characterProp?.objectReferenceValue as CharacterInformationSO;
-                    if (character != null && emotionProp != null)
+                    if (emotionsDict != null)
                     {
-                        CharacterEmotionType emotion = (CharacterEmotionType)emotionProp.enumValueIndex;
-                        if (character.CharacterEmotions != null && character.CharacterEmotions.TryGetValue(emotion, out Sprite sprite))
+                        // SerializedDictionary의 경우 _keys와 _values 배열로 저장됨
+                        var keys = emotionsDict.FindPropertyRelative("_keys");
+                        var values = emotionsDict.FindPropertyRelative("_values");
+                        
+                        if (keys != null && values != null)
                         {
-                            if (sprite != null)
+                            for (int i = 0; i < keys.arraySize; i++)
                             {
-                                Rect previewRect = GUILayoutUtility.GetRect(PREVIEW_SIZE, PREVIEW_SIZE);
-                                GUI.Box(previewRect, "");
-                                GUI.DrawTexture(previewRect, sprite.texture, ScaleMode.ScaleToFit);
+                                var key = keys.GetArrayElementAtIndex(i);
+                                if (key.enumValueIndex == (int)emotion)
+                                {
+                                    var value = values.GetArrayElementAtIndex(i);
+                                    var spriteEditorAsset = value.FindPropertyRelative("m_EditorAsset");
+                                    
+                                    if (spriteEditorAsset != null && spriteEditorAsset.objectReferenceValue != null)
+                                    {
+                                        Sprite sprite = spriteEditorAsset.objectReferenceValue as Sprite;
+                                        if (sprite != null)
+                                        {
+                                            Rect previewRect = GUILayoutUtility.GetRect(PREVIEW_SIZE, PREVIEW_SIZE);
+                                            GUI.Box(previewRect, "");
+                                            GUI.DrawTexture(previewRect, sprite.texture, ScaleMode.ScaleToFit);
+                                        }
+                                    }
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-                EditorGUILayout.EndHorizontal();
-                
-                EditorGUILayout.PropertyField(nameTagProp, new GUIContent("네임태그 위치"));
-                
-                // 배경 선택 (드롭다운)
-                DrawBackgroundSelector(bgIndexProp);
             }
-            EditorGUILayout.EndVertical();
         }
+        EditorGUILayout.EndHorizontal();
+        
+        EditorGUILayout.PropertyField(nameTagProp, new GUIContent("네임태그 위치"));
+        
+        // 배경 선택 (드롭다운)
+        DrawBackgroundSelector(bgIndexProp);
+    }
+    EditorGUILayout.EndVertical();
+}
 
         /// <summary>
         /// 배경 선택 드롭다운
@@ -884,7 +929,9 @@ namespace Code.Editor.Dialogue
                 string[] bgOptions = new string[bgProp.arraySize];
                 for (int i = 0; i < bgProp.arraySize; i++)
                 {
-                    var bg = bgProp.GetArrayElementAtIndex(i).objectReferenceValue;
+                    var bgElement = bgProp.GetArrayElementAtIndex(i);
+                    var editorAssetProp = bgElement.FindPropertyRelative("m_EditorAsset");
+                    var bg = editorAssetProp != null ? editorAssetProp.objectReferenceValue : null;
                     bgOptions[i] = bg != null ? $"[{i}] {bg.name}" : $"[{i}] 없음";
                 }
                 
@@ -895,10 +942,11 @@ namespace Code.Editor.Dialogue
                 }
                 
                 // 배경 미리보기
-                var bgElement = bgProp.GetArrayElementAtIndex(currentBg);
-                if (bgElement.objectReferenceValue != null)
+                var bgElementCurrent = bgProp.GetArrayElementAtIndex(currentBg);
+                var editorAsset = bgElementCurrent.FindPropertyRelative("m_EditorAsset");
+                if (editorAsset != null && editorAsset.objectReferenceValue != null)
                 {
-                    Sprite sprite = bgElement.objectReferenceValue as Sprite;
+                    Sprite sprite = editorAsset.objectReferenceValue as Sprite;
                     if (sprite != null)
                     {
                         Rect previewRect = GUILayoutUtility.GetRect(PREVIEW_SIZE, PREVIEW_SIZE);
@@ -960,7 +1008,7 @@ namespace Code.Editor.Dialogue
                 
                 if (GUILayout.Button("➕ 이벤트 추가"))
                 {
-                    eventsProp.arraySize++;
+                    eventsProp.InsertArrayElementAtIndex(eventsProp.arraySize);
                 }
             }
             EditorGUILayout.EndVertical();
@@ -989,7 +1037,7 @@ namespace Code.Editor.Dialogue
                 {
                     if (GUILayout.Button("➕ 선택지 추가"))
                     {
-                        choicesProp.arraySize++;
+                        choicesProp.InsertArrayElementAtIndex(choicesProp.arraySize);
                         var newChoice = choicesProp.GetArrayElementAtIndex(choicesProp.arraySize - 1);
                         
                         var textProp = newChoice.FindPropertyRelative("<ChoiceText>k__BackingField");
@@ -1003,7 +1051,7 @@ namespace Code.Editor.Dialogue
                     
                     if (choicesProp.arraySize > 0 && GUILayout.Button("➖ 마지막 제거"))
                     {
-                        choicesProp.arraySize--;
+                        choicesProp.DeleteArrayElementAtIndex(choicesProp.arraySize - 1);
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -1064,7 +1112,7 @@ namespace Code.Editor.Dialogue
                 // 선택지 이벤트
                 if (eventsProp != null)
                 {
-                    EditorGUILayout.PropertyField(eventsProp, new GUIContent($"이벤트 ({eventsProp.arraySize})"), false);
+                    EditorGUILayout.PropertyField(eventsProp, new GUIContent($"이벤트 ({eventsProp.arraySize})"), true);
                 }
             }
             EditorGUILayout.EndVertical();
@@ -1076,14 +1124,13 @@ namespace Code.Editor.Dialogue
         private void AddNewNode(SerializedProperty nodesProp)
         {
             int newIndex = nodesProp.arraySize;
-            nodesProp.arraySize++;
+            nodesProp.InsertArrayElementAtIndex(newIndex);
             
             var newNode = nodesProp.GetArrayElementAtIndex(newIndex);
             
             // 프로퍼티 초기화
             var charProp = newNode.FindPropertyRelative("<CharacterInformSO>k__BackingField");
             if (charProp == null) charProp = newNode.FindPropertyRelative("CharacterInformSO");
-            if (charProp != null) charProp.objectReferenceValue = null;
             
             var dialogueProp = newNode.FindPropertyRelative("<DialogueDetail>k__BackingField");
             if (dialogueProp == null) dialogueProp = newNode.FindPropertyRelative("DialogueDetail");

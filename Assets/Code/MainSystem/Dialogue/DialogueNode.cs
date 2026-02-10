@@ -3,18 +3,19 @@ using Code.MainSystem.Dialogue.DialogueEvent;
 using Member.LS.Code.Dialogue;
 using Member.LS.Code.Dialogue.Character;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Code.MainSystem.Dialogue
 {
     [System.Serializable]
     public struct DialogueNode
     {
-        [field: SerializeField] public CharacterInformationSO CharacterInformSO { get; private set; }
+        [field: SerializeField] public AssetReferenceT<CharacterInformationSO> CharacterInformSO { get; private set; }
         [field: SerializeField, TextArea] public string DialogueDetail { get; private set; }
         [field: SerializeField] public NameTagPositionType NameTagPosition { get; private set; }
         [field: SerializeField] public int BackgroundIndex { get; private set; }
         [field: SerializeField] public CharacterEmotionType CharacterEmotion { get; private set; }
-        [field: SerializeField] public List<BaseDialogueEventSO> Events { get; private set; }
+        [field: SerializeField] public List<AssetReferenceT<BaseDialogueEventSO>> Events { get; private set; }
         [field: SerializeField] public List<DialogueChoice> Choices { get; private set; }
     }
 
@@ -34,6 +35,6 @@ namespace Code.MainSystem.Dialogue
         /// <summary>
         /// 선택 시 발생할 이벤트 리스트
         /// </summary>
-        [field: SerializeField] public List<BaseDialogueEventSO> Events { get; private set; }
+        [field: SerializeField] public List<AssetReferenceT<BaseDialogueEventSO>> Events { get; private set; }
     }
 }

@@ -1,8 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.MainSystem.Dialogue.DialogueEvent;
 using Member.LS.Code.Dialogue;
+using Member.LS.Code.Dialogue.Character;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Code.MainSystem.Dialogue
 {
@@ -15,6 +20,8 @@ namespace Code.MainSystem.Dialogue
 
         private int _dialogueIndex = -1;
         private bool _acceptingInput = false;
+        private AsyncOperationHandle<Sprite> _currentSpriteHandle;
+        private List<AsyncOperationHandle> _loadedHandles = new List<AsyncOperationHandle>();
 
         private void OnEnable()
         {
@@ -30,6 +37,9 @@ namespace Code.MainSystem.Dialogue
             Bus<DialogueSkipEvent>.OnEvent -= OnDialogueSkip;
             Bus<DialogueStartEvent>.OnEvent -= OnDialogueStart;
             Bus<DialogueChoiceSelectedEvent>.OnEvent -= OnChoiceSelected;
+            
+            ReleaseCurrentSprite();
+            ReleaseAllHandles();
         }
 
         private void OnDialogueStart(DialogueStartEvent evt)
@@ -54,7 +64,7 @@ namespace Code.MainSystem.Dialogue
             _acceptingInput = false;
             StartCoroutine(EnableInputAfterFrame());
 
-            ProcessCurrentNode();
+            yield return StartCoroutine(ProcessCurrentNodeAsync());
         }
 
         private void OnContinueDialogue(ContinueDialogueEvent e)
@@ -76,18 +86,34 @@ namespace Code.MainSystem.Dialogue
                 return;
             }
 
-            ProcessCurrentNode();
+            StartCoroutine(ProcessCurrentNodeAsync());
         }
 
         private void OnChoiceSelected(DialogueChoiceSelectedEvent evt)
         {
             if (_state != DialogueState.Active) return;
 
-            if (evt.Events != null)
+            StartCoroutine(ProcessChoiceEventsAsync(evt));
+        }
+
+        private IEnumerator ProcessChoiceEventsAsync(DialogueChoiceSelectedEvent evt)
+        {
+            if (evt.Events != null && evt.Events.Count > 0)
             {
-                foreach (var eventSO in evt.Events)
+                foreach (var eventRef in evt.Events)
                 {
-                    eventSO.RaiseDialogueEvent();
+                    var eventHandle = eventRef.LoadAssetAsync();
+                    _loadedHandles.Add(eventHandle);
+                    yield return eventHandle;
+
+                    if (eventHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        eventHandle.Result.RaiseDialogueEvent();
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to load dialogue event from choice");
+                    }
                 }
             }
 
@@ -102,22 +128,50 @@ namespace Code.MainSystem.Dialogue
             if (_dialogueIndex >= _dialogueInformationSO.DialogueDetails.Count)
             {
                 EndDialogue();
-                return;
+                yield break;
             }
 
             _acceptingInput = true;
-            ProcessCurrentNode();
+            yield return StartCoroutine(ProcessCurrentNodeAsync());
         }
 
-        private void ProcessCurrentNode()
+        private IEnumerator ProcessCurrentNodeAsync()
         {
             var currentNode = _dialogueInformationSO.DialogueDetails[_dialogueIndex];
             
-            if (currentNode.Events != null)
+            if (currentNode.Events != null && currentNode.Events.Count > 0)
             {
-                foreach (var eventSO in currentNode.Events)
+                foreach (var eventRef in currentNode.Events)
                 {
-                    eventSO.RaiseDialogueEvent();
+                    var eventHandle = eventRef.LoadAssetAsync();
+                    _loadedHandles.Add(eventHandle);
+                    yield return eventHandle;
+
+                    if (eventHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        eventHandle.Result.RaiseDialogueEvent();
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to load dialogue event from node");
+                    }
+                }
+            }
+            
+            CharacterInformationSO characterInfo = null;
+            if (currentNode.CharacterInformSO != null && currentNode.CharacterInformSO.RuntimeKeyIsValid())
+            {
+                var charHandle = currentNode.CharacterInformSO.LoadAssetAsync();
+                _loadedHandles.Add(charHandle);
+                yield return charHandle;
+
+                if (charHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    characterInfo = charHandle.Result;
+                }
+                else
+                {
+                    Debug.LogError("Failed to load character information");
                 }
             }
             
@@ -128,13 +182,25 @@ namespace Code.MainSystem.Dialogue
                 bgIndex = 0;
             }
             
-            var eventData = new DialogueProgressEvent(currentNode, _dialogueInformationSO.DialogueBackground[bgIndex]);
-            Bus<DialogueProgressEvent>.Raise(eventData);
+            ReleaseCurrentSprite();
+            
+            _currentSpriteHandle = _dialogueInformationSO.DialogueBackground[bgIndex].LoadAssetAsync<Sprite>();
+            yield return _currentSpriteHandle;
 
-            if (currentNode.Choices != null && currentNode.Choices.Count > 0)
+            if (_currentSpriteHandle.Status == AsyncOperationStatus.Succeeded)
             {
-                _acceptingInput = false;
-                Bus<DialogueShowChoiceEvent>.Raise(new DialogueShowChoiceEvent(currentNode.Choices));
+                var eventData = new DialogueProgressEvent(currentNode, _currentSpriteHandle.Result);
+                Bus<DialogueProgressEvent>.Raise(eventData);
+
+                if (currentNode.Choices != null && currentNode.Choices.Count > 0)
+                {
+                    _acceptingInput = false;
+                    Bus<DialogueShowChoiceEvent>.Raise(new DialogueShowChoiceEvent(currentNode.Choices));
+                }
+            }
+            else
+            {
+                Debug.LogError($"Failed to load background sprite at index {bgIndex}");
             }
         }
 
@@ -148,11 +214,33 @@ namespace Code.MainSystem.Dialogue
         private void EndDialogue()
         {
             StopAllCoroutines();
+            ReleaseCurrentSprite();
+            ReleaseAllHandles();
             Bus<DialogueEndEvent>.Raise(new DialogueEndEvent());
             _dialogueIndex = -1;
             _dialogueInformationSO = null;
             _state = DialogueState.Idle;
             _acceptingInput = false;
+        }
+        
+        private void ReleaseCurrentSprite()
+        {
+            if (_currentSpriteHandle.IsValid())
+            {
+                Addressables.Release(_currentSpriteHandle);
+            }
+        }
+
+        private void ReleaseAllHandles()
+        {
+            foreach (var handle in _loadedHandles)
+            {
+                if (handle.IsValid())
+                {
+                    Addressables.Release(handle);
+                }
+            }
+            _loadedHandles.Clear();
         }
         
         private IEnumerator EnableInputAfterFrame()
