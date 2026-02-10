@@ -2,11 +2,12 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
 
 namespace Member.LS.Code.Dialogue.Character
 {
     [Serializable]
-    public sealed class CharacterImageDict : SerializedDictionary<CharacterEmotionType, Sprite>
+    public sealed class CharacterImageDict : SerializedDictionary<CharacterEmotionType, AssetReferenceSprite>
     {
     }
 
