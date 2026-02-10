@@ -4,17 +4,17 @@ namespace Code.Core.Bus.GameEvents
 {
     public struct StatIncreaseDecreaseEvent : IEvent
     {
-        public bool increase; // true면 증가 false는 감소
-        public string amount;
-        public Sprite statIcon;
-        public string statName;
+        public bool Increase; // true면 증가 false는 감소
+        public string Amount;
+        public Sprite StatIcon;
+        public string StatName;
 
         public StatIncreaseDecreaseEvent(bool increase, string amount, Sprite statIcon, string statName)
         {
-            this.increase = increase;
-            this.amount = amount;
-            this.statIcon = statIcon;
-            this.statName = statName;
+            this.Increase = increase;
+            this.Amount = amount;
+            this.StatIcon = statIcon;
+            this.StatName = statName;
         }
     }
 
