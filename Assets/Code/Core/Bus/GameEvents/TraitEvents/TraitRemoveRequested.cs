@@ -15,17 +15,17 @@ namespace Code.Core.Bus.GameEvents.TraitEvents
         /// <summary>
         /// 제거하려는 특성의 타입
         /// </summary>
-        public readonly TraitType TraitType;
+        public readonly string TraitID;
 
         /// <summary>
         /// 특성을 제거 하고 싶은 멤버와 제거 하고 싶은 특성
         /// </summary>
         /// <param name="memberType">특성을 제거 하고 싶은 멤버</param>
         /// <param name="traitType">제거 하고 싶은 특성</param>
-        public TraitRemoveRequested(MemberType memberType, TraitType traitType)
+        public TraitRemoveRequested(MemberType memberType, string traitID)
         {
             MemberType = memberType;
-            TraitType = traitType;
+            TraitID = traitID;
         }
     }
 }

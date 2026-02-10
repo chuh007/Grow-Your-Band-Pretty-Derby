@@ -15,17 +15,23 @@ namespace Code.Core.Bus.GameEvents.TraitEvents
         /// <summary>
         /// 추가하려는 특성의 타입
         /// </summary>
-        public readonly TraitType TraitType;
+        public readonly string TraitID;
         
         /// <summary>
         /// 특성을 추가 하고 싶은 멤버와 추가 하고 싶은 특성
         /// </summary>
         /// <param name="memberType">특성을 추가 하고 싶은 멤버</param>
         /// <param name="traitType">추가 하고 싶은 특성</param>
-        public TraitAddRequested(MemberType memberType, TraitType traitType)
+        public TraitAddRequested(MemberType memberType, string traitID)
         {
             MemberType = memberType;
-            TraitType = traitType;
+            TraitID = traitID;
+        }
+        
+        public TraitAddRequested(MemberType memberType, TraitType traitID)
+        {
+            MemberType = memberType;
+            TraitID = traitID.ToString();
         }
     }
 }

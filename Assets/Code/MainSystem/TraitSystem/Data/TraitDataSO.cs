@@ -28,7 +28,7 @@ namespace Code.MainSystem.TraitSystem.Data
     [CreateAssetMenu(fileName = "Trait data", menuName = "SO/Trait/Trait data")]
     public class TraitDataSO : ScriptableObject
     {
-        public TraitType TraitType;
+        public string TraitID => name;
         public string TraitName;
         
         public AssetReferenceSprite TraitIcon;

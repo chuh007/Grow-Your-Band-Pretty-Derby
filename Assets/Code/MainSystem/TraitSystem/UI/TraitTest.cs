@@ -11,6 +11,7 @@ namespace Code.MainSystem.TraitSystem.UI
 {
     public class TraitTest : MonoBehaviour
     {
+        [SerializeField] private TraitDataSO traitData;
         [SerializeField] private TextMeshProUGUI label;
         [Inject] TraitManager _manager;
         [SerializeField] private MemberType memberType;
@@ -24,7 +25,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
         public void AddTrait()
         {
-            Bus<TraitAddRequested>.Raise(new TraitAddRequested(_manager.CurrentMember, traitType));
+            Bus<TraitAddRequested>.Raise(new TraitAddRequested(_manager.CurrentMember, traitData.TraitID));
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(_manager.CurrentMember));
         }
     }
