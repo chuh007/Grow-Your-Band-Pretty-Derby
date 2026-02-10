@@ -38,6 +38,7 @@ namespace Code.MainSystem.TraitSystem.Data
         
         public List<StatImpact> Impacts;
         public List<MemberTraitComment> MemberComments = new List<MemberTraitComment>();
+        public TraitTag TraitTag;
         
         public List<float> Effects = new();
         
