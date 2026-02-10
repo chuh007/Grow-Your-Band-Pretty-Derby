@@ -18,6 +18,19 @@
         BreathControl,          // 호흡 조절
     }
 
+    public enum TraitTag
+    {
+        None,           // 특성 태그 없음
+        Teamwork,       // 팀워크	
+        Support,        // 상백업
+        Stability,      // 안정감
+        Energy,         // 텐션 업
+        Genius,         // 천재
+        Solo,           // 독주
+        Mastery,        // 극한 연습
+        Immersion,      // 몰입
+    }
+
     public enum TraitTarget
     {
         None,

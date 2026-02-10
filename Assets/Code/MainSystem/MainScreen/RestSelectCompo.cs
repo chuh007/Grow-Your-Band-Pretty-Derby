@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Code.Core.Addressable;
 using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.CutsceneEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Dialogue;
@@ -33,11 +34,24 @@ namespace Code.MainSystem.MainScreen
         
         private UnitDataSO _lastSelectedUnit; 
         private const float HealAmount = 10f; // 임시 고정 회복량
+        private bool _isWaitingForDialogue = false;
 
         private void Awake()
         {
             button.onClick.AddListener(UnitSelect);
             InitRestDialogues();
+        }
+        
+        private void OnEnable()
+        {
+            // 대화 종료 이벤트 구독
+            Bus<DialogueEndEvent>.OnEvent += HandleDialogueEnd;
+        }
+
+        private void OnDisable()
+        {
+            // 이벤트 해제
+            Bus<DialogueEndEvent>.OnEvent -= HandleDialogueEnd;
         }
 
         private async void InitRestDialogues()
@@ -86,7 +100,8 @@ namespace Code.MainSystem.MainScreen
             
             if (!_restDialogues.TryGetValue(currentUnit.memberType, out var dialogueSO))
                 return;
-            
+
+            _isWaitingForDialogue = true;
             Bus<DialogCutscenePlayEvent>.Raise(new DialogCutscenePlayEvent(dialogueSO));
             ProcessConfirmRest(currentUnit);
             
@@ -97,6 +112,15 @@ namespace Code.MainSystem.MainScreen
         {
             _lastSelectedUnit = null;
             buttonText.color = normalColor;
+        }
+        
+        private void HandleDialogueEnd(DialogueEndEvent evt)
+        {
+            if (!_isWaitingForDialogue) 
+                return;
+            
+            _isWaitingForDialogue = false;
+            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
         }
         
         /// <summary>
@@ -120,7 +144,6 @@ namespace Code.MainSystem.MainScreen
             
             TrainingManager.Instance.MarkMemberTrained(selectedUnit.memberType);
             Bus<ConfirmRestEvent>.Raise(new ConfirmRestEvent(selectedUnit));
-            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
             
             healthBar.SetHealth(afterHealth, selectedUnit.maxCondition);
             healthBar.PrevieMinusHealth(-HealAmount); 

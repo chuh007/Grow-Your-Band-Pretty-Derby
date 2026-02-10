@@ -3,16 +3,18 @@ using Code.MainSystem.TraitSystem.Data;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect
 {
-    
+    /// <summary>
+    /// 기본 효과
+    /// </summary>
     public class MultiStatModifierEffect : AbstractTraitEffect
     {
         public override bool IsTargetStat(TraitTarget category) 
-            => _activeTrait.Data.Impacts.Any(i => i.Target == category);
+            => _ownerTrait.Data.Impacts.Any(i => i.Target == category);
 
         public override float GetAmount(TraitTarget category, object context = null)
         {
             float total = 0;
-            var impacts = _activeTrait.Data.Impacts;
+            var impacts = _ownerTrait.Data.Impacts;
 
             for (int i = 0; i < impacts.Count; i++)
             {
@@ -27,7 +29,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 
         public CalculationType GetCalcType(TraitTarget category)
         {
-            return _activeTrait.Data.Impacts.FirstOrDefault(i => i.Target == category).CalcType;
+            return _ownerTrait.Data.Impacts.FirstOrDefault(i => i.Target == category).CalcType;
         }
 
         protected virtual bool CheckCondition(string tag, object context)

@@ -49,7 +49,7 @@ namespace Code.MainSystem.TraitSystem.UI
             if (IsCheck)
             {
                 Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(TraitManager.Instance.CurrentMember,
-                    trait.Data.TraitType));
+                    trait.Data.IDHash));
                 return;
             }
 
@@ -110,7 +110,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
         private void RemoveTrait()
         {
-            Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_traitManager.CurrentMember, _currentTrait.Data.TraitType));
+            Bus<TraitRemoveRequested>.Raise(new TraitRemoveRequested(_traitManager.CurrentMember, _currentTrait.Data.IDHash));
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(_traitManager.CurrentMember));
         }
 

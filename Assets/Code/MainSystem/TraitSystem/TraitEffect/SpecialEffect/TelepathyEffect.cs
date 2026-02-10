@@ -2,10 +2,10 @@
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 
-namespace Code.MainSystem.TraitSystem.TraitEffect
+namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
     /// <summary>
-    /// 이신 전심 효과
+    /// 이신 전심 특성
     /// </summary>
     public class TelepathyEffect : MultiStatModifierEffect
     {
@@ -14,7 +14,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
             bool hasPartner = true;
             for (int i = 0; i < (int)MemberType.Team; i++)
             {
-                if (!TraitManager.Instance.HasTrait((MemberType)i, TraitType.Telepathy))
+                if (!TraitManager.Instance.HasTrait((MemberType)i, _ownerTrait.Data.IDHash))
                     continue;
                 
                 hasPartner = false;

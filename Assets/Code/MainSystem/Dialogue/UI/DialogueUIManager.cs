@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Member.LS.Code.Dialogue;
@@ -38,6 +37,8 @@ namespace Code.MainSystem.Dialogue.UI
         private GameObject _currentDisplayedImageInstance;
         private AsyncOperationHandle<CharacterInformationSO> _currentCharacterHandle;
         private AsyncOperationHandle<Sprite> _currentCharacterSpriteHandle;
+        
+        private Coroutine _progressCoroutine;
 
         private void Awake()
         {
@@ -86,9 +87,14 @@ namespace Code.MainSystem.Dialogue.UI
             }
         }
 
-        private void OnDialogueProgress(DialogueProgressEvent evt)
+       private void OnDialogueProgress(DialogueProgressEvent evt)
         {
-            StartCoroutine(ProcessDialogueProgressAsync(evt));
+            // 이전 진행 코루틴이 있다면 중지 (레이스 컨디션 방지 핵심)
+            if (_progressCoroutine != null)
+            {
+                StopCoroutine(_progressCoroutine);
+            }
+            _progressCoroutine = StartCoroutine(ProcessDialogueProgressAsync(evt));
         }
 
         private IEnumerator ProcessDialogueProgressAsync(DialogueProgressEvent evt)
@@ -99,25 +105,32 @@ namespace Code.MainSystem.Dialogue.UI
             }
 
             var node = evt.NextDialogueNode;
-            
             CharacterInformationSO characterInfo = null;
+
+            // 1. 캐릭터 정보 로드 (CharacterInformationSO)
             if (node.CharacterInformSO != null && node.CharacterInformSO.RuntimeKeyIsValid())
             {
-                ReleaseCurrentCharacter();
-                
-                _currentCharacterHandle = node.CharacterInformSO.LoadAssetAsync();
-                yield return _currentCharacterHandle;
-
-                if (_currentCharacterHandle.Status == AsyncOperationStatus.Succeeded)
+                // 이미 로드된 에셋인지 확인하여 중복 로드 에러 방지
+                if (node.CharacterInformSO.OperationHandle.IsValid())
                 {
-                    characterInfo = _currentCharacterHandle.Result;
+                    var handle = node.CharacterInformSO.OperationHandle.Convert<CharacterInformationSO>();
+                    if (!handle.IsDone) yield return handle;
+                    characterInfo = handle.Result;
                 }
                 else
                 {
-                    Debug.LogError("Failed to load character information");
+                    ReleaseCurrentCharacter();
+                    _currentCharacterHandle = node.CharacterInformSO.LoadAssetAsync();
+                    yield return _currentCharacterHandle;
+
+                    if (_currentCharacterHandle.IsValid() && _currentCharacterHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        characterInfo = _currentCharacterHandle.Result;
+                    }
                 }
             }
             
+            // 2. 캐릭터 이름 및 스프라이트 처리
             if (characterInfo != null && !string.IsNullOrEmpty(characterInfo.CharacterName))
             {
                 nameTag.SetActive(true);
@@ -128,20 +141,29 @@ namespace Code.MainSystem.Dialogue.UI
                     spriteRef != null && 
                     spriteRef.RuntimeKeyIsValid())
                 {
-                    ReleaseCurrentCharacterSprite();
-                    
-                    _currentCharacterSpriteHandle = spriteRef.LoadAssetAsync();
-                    yield return _currentCharacterSpriteHandle;
-
-                    if (_currentCharacterSpriteHandle.Status == AsyncOperationStatus.Succeeded)
+                    // 스프라이트 중복 로드 체크
+                    if (spriteRef.OperationHandle.IsValid())
                     {
-                        characterImage.sprite = _currentCharacterSpriteHandle.Result;
+                        var sHandle = spriteRef.OperationHandle.Convert<Sprite>();
+                        if (!sHandle.IsDone) yield return sHandle;
+                        characterImage.sprite = sHandle.Result;
                         characterImage.gameObject.SetActive(true);
                     }
                     else
                     {
-                        Debug.LogError("Failed to load character emotion sprite");
-                        characterImage.gameObject.SetActive(false);
+                        ReleaseCurrentCharacterSprite();
+                        _currentCharacterSpriteHandle = spriteRef.LoadAssetAsync();
+                        yield return _currentCharacterSpriteHandle;
+
+                        if (_currentCharacterSpriteHandle.IsValid() && _currentCharacterSpriteHandle.Status == AsyncOperationStatus.Succeeded)
+                        {
+                            characterImage.sprite = _currentCharacterSpriteHandle.Result;
+                            characterImage.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            characterImage.gameObject.SetActive(false);
+                        }
                     }
                 }
                 else
@@ -155,18 +177,13 @@ namespace Code.MainSystem.Dialogue.UI
                 characterImage.gameObject.SetActive(false);
             }
             
+            // 3. UI 연출 및 텍스트 출력
             backgroundImage.sprite = evt.BackgroundImage;
             
-            if (node.NameTagPosition == NameTagPositionType.Left)
-            {
-                nameTag.transform.position = nameTagLeft.position;
-                characterImage.transform.position = nameTagLeft.position;
-            }
-            else
-            {
-                nameTag.transform.position = nameTagRight.position;
-                characterImage.transform.position = nameTagRight.position;
-            }
+            // 위치 설정
+            RectTransform targetPos = (node.NameTagPosition == NameTagPositionType.Left) ? nameTagLeft : nameTagRight;
+            nameTag.transform.position = targetPos.position;
+            characterImage.transform.position = targetPos.position;
             
             if (_typingCoroutine != null)
             {
@@ -175,8 +192,9 @@ namespace Code.MainSystem.Dialogue.UI
 
             _fullDialogueText = node.DialogueDetail;
             _typingCoroutine = StartCoroutine(TypeDialogue(_fullDialogueText));
+            
+            _progressCoroutine = null;
         }
-        
         private void OnDialogueEnd(DialogueEndEvent e)
         {
             if (_typingCoroutine != null)

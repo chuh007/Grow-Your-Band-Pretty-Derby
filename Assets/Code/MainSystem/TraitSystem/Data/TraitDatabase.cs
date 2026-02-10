@@ -12,7 +12,7 @@ namespace Code.MainSystem.TraitSystem.Data
         [SerializeField] private string traitLabel;
         public bool IsInitialized { get; private set; }
         
-        private Dictionary<TraitType, TraitDataSO> _map = new();
+        private Dictionary<int, TraitDataSO> _map = new();
         
         public async Task InitializeAsync()
         {
@@ -20,12 +20,12 @@ namespace Code.MainSystem.TraitSystem.Data
 
             _map.Clear();
             foreach (var trait in allTraits.Where(trait => trait != null))
-                _map[trait.TraitType] = trait;
+                _map[trait.IDHash] = trait;
         }
 
-        public TraitDataSO Get(TraitType traitType)
+        public TraitDataSO Get(int traitID)
         {
-            return _map.GetValueOrDefault(traitType);
+            return _map.GetValueOrDefault(traitID);
         }
     }
 }

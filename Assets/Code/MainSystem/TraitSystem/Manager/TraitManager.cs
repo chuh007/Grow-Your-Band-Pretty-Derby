@@ -105,7 +105,7 @@ namespace Code.MainSystem.TraitSystem.Manager
             if (!TryGetHolder(evt.MemberType, out var holder))
                 return;
 
-            var traitData = _database.Get(evt.TraitType);
+            var traitData = _database.Get(evt.TraitHash);
             if (traitData is null)
                 return;
             
@@ -128,7 +128,7 @@ namespace Code.MainSystem.TraitSystem.Manager
                 return;
 
             var target = holder.ActiveTraits
-                .FirstOrDefault(t => t.Data.TraitType == evt.TraitType);
+                .FirstOrDefault(t => t.Data.IDHash == evt.TraitHash);
 
             if (target == null)
                 return;
@@ -158,7 +158,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         private void TryAddTrait(ITraitHolder holder, TraitDataSO newTrait)
         {
             ActiveTrait existingTrait = holder.ActiveTraits
-                .FirstOrDefault(t => t.Data.TraitType == newTrait.TraitType);
+                .FirstOrDefault(t => t.Data.IDHash == newTrait.IDHash);
             
             if (existingTrait != null || holder.IsAdjusting)
                 return;
@@ -235,9 +235,15 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// <summary>
         /// 특정 멤버가 특정 특성을 보유하고 있는지 확인
         /// </summary>
-        public bool HasTrait(MemberType memberType, TraitType traitType)
+        public bool HasTrait(MemberType memberType, int traitHash)
         {
-            return _holders.TryGetValue(memberType, out var holder) && holder.ActiveTraits.Any(t => t.Data.TraitType == traitType);
+            return _holders.TryGetValue(memberType, out var holder) && holder.ActiveTraits.Any(t => t.Data.IDHash == traitHash);
+        }
+        
+        // TODO 연결 작업시 삭제 필요
+        public bool HasTrait(MemberType memberType, TraitType traitID)
+        {
+            return false;
         }
 
         public IReadOnlyList<TraitGroupStatus> GetTeamGroupStatus()

@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Code.MainSystem.TraitSystem.TraitEffect
+namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
+    /// <summary>
+    /// 반짝이는 눈 효과
+    /// </summary>
     public class ShiningEyesEffect : MultiStatModifierEffect
     {
         public void OnTrainingComplete(object conditionState)
