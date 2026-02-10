@@ -13,7 +13,6 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private TraitPointGauge pointGauge;
         //[SerializeField] private TraitOverflowPanel overflowPanel;
         [SerializeField] private RemoveUI removeUI;
-        [SerializeField] private UpgradeCheckUI upgradeCheckUI;
         
         private ITraitHolder _currentHolder;
         
@@ -37,7 +36,6 @@ namespace Code.MainSystem.TraitSystem.UI
             Bus<TraitOverflow>.OnEvent += HandleTraitOverflow;
             Bus<TraitAdjusted>.OnEvent += HandleTraitAdjusted;
             Bus<TraitRemoveRequestedUI>.OnEvent += HandleTraitRemoveRequestedUI;
-            Bus<TraitUpgraded>.OnEvent += HandleTraitUpgraded;
         }
 
         private void UnregisterEvents()
@@ -47,7 +45,6 @@ namespace Code.MainSystem.TraitSystem.UI
             Bus<TraitOverflow>.OnEvent -= HandleTraitOverflow;
             Bus<TraitAdjusted>.OnEvent -= HandleTraitAdjusted;
             Bus<TraitRemoveRequestedUI>.OnEvent -= HandleTraitRemoveRequestedUI;
-            Bus<TraitUpgraded>.OnEvent -= HandleTraitUpgraded;
         }
 
         #endregion
@@ -57,7 +54,6 @@ namespace Code.MainSystem.TraitSystem.UI
             detailTraitPanel?.Disable();
             //overflowPanel?.Disable();
             removeUI?.Disable();
-            upgradeCheckUI?.Disable();
         }
 
         /// <summary>
@@ -75,11 +71,6 @@ namespace Code.MainSystem.TraitSystem.UI
         private void HandleTraitShowItem(TraitShowItem evt)
         {
             detailTraitPanel?.EnableFor(evt.Trait);
-        }
-        
-        private void HandleTraitUpgraded(TraitUpgraded evt)
-        {
-            upgradeCheckUI?.EnableFor(evt.Trait, evt.PrevLevel);
         }
 
         /// <summary>
@@ -131,7 +122,6 @@ namespace Code.MainSystem.TraitSystem.UI
             pointGauge?.Disable();
             //overflowPanel?.Disable();
             removeUI?.Disable();
-            upgradeCheckUI?.Disable();
         }
     }
 }

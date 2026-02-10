@@ -23,17 +23,5 @@ namespace Code.MainSystem.TraitSystem.UI
         {
             Hide();
         }
-
-        protected override void Show()
-        {
-            base.Show();
-            Debug.Log("Trait Panel Show!");
-        }
-
-        protected override void Hide()
-        {
-            base.Hide();
-            Debug.Log("Trait Panel Hide!");
-        }
     }
 }

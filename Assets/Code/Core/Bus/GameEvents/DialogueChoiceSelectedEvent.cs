@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Code.MainSystem.Dialogue.DialogueEvent;
+using UnityEngine.AddressableAssets;
 
 namespace Code.Core.Bus.GameEvents
 {
@@ -16,14 +17,14 @@ namespace Code.Core.Bus.GameEvents
         /// <summary>
         /// 선택에 따른 추가 이벤트 리스트
         /// </summary>
-        public readonly List<BaseDialogueEventSO> Events;
+        public readonly List<AssetReferenceT<BaseDialogueEventSO>> Events;
 
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="nextNodeIndex">다음 노드 인덱스</param>
         /// <param name="events">발생할 이벤트 리스트</param>
-        public DialogueChoiceSelectedEvent(int nextNodeIndex, List<BaseDialogueEventSO> events)
+        public DialogueChoiceSelectedEvent(int nextNodeIndex, List<AssetReferenceT<BaseDialogueEventSO>> events)
         {
             NextNodeIndex = nextNodeIndex;
             Events = events;

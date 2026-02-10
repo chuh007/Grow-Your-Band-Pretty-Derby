@@ -12,7 +12,6 @@ namespace Code.MainSystem.TraitSystem.Runtime
     {
         public TraitDataSO Data { get; private set; }
         public AbstractTraitEffect TraitEffect { get; private set; }
-        public int CurrentLevel { get; private set; }
         public List<float> CurrentEffects { get; private set; }
 
         public MemberType Owner { get; private set; }
@@ -21,7 +20,6 @@ namespace Code.MainSystem.TraitSystem.Runtime
         {
             Data = data;
             Owner = owner;
-            CurrentLevel = 1;
             CurrentEffects = new List<float>(data.Effects);
             
             TraitEffect = data.CreateEffectInstance();
@@ -30,16 +28,6 @@ namespace Code.MainSystem.TraitSystem.Runtime
 
         public MemberTraitComment GetMemberTraitComment()
             => Data.GetComment(Owner);
-
-        public void LevelUp()
-        {
-            if (CurrentLevel >= Data.MaxLevel)
-                return;
-        
-            CurrentLevel++;
-            for (int i = 0; i < CurrentEffects.Count; i++)
-                CurrentEffects[i] *= 1.1f;
-        }
         
         public string GetFormattedDescription()
         {
