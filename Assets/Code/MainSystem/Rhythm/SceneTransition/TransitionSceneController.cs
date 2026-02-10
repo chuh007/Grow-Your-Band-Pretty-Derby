@@ -1,5 +1,7 @@
 using System;
 using System.Threading;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,23 +33,34 @@ namespace Code.MainSystem.Rhythm.SceneTransition
             using var cts = new CancellationTokenSource();
             cts.CancelAfter(RhythmGameBalanceConsts.TRANSITION_TIMEOUT_MS);
 
-            try 
+            if (toLandscape)
             {
-                if (toLandscape)
-                {
-                    Screen.orientation = ScreenOrientation.LandscapeLeft;
-                    await UniTask.WaitUntil(() => Screen.width > Screen.height, cancellationToken: cts.Token); 
-                }
-                else
-                {
-                    Screen.orientation = ScreenOrientation.Portrait;
-                    await UniTask.WaitUntil(() => Screen.height > Screen.width, cancellationToken: cts.Token); 
-                }
+                Bus<ScreenRotationEvent>.Raise(new ScreenRotationEvent(false));
             }
-            catch (OperationCanceledException)
+            else
             {
-                Debug.LogWarning($"TransitionSceneController: Orientation change timed out after {RhythmGameBalanceConsts.TRANSITION_TIMEOUT_MS}ms. Proceeding anyway.");
+                Bus<ScreenRotationEvent>.Raise(new ScreenRotationEvent(true));
             }
+            
+           
+
+            // try 
+            // {
+            //     if (toLandscape)
+            //     {
+            //         Screen.orientation = ScreenOrientation.LandscapeLeft;
+            //         await UniTask.WaitUntil(() => Screen.width > Screen.height, cancellationToken: cts.Token); 
+            //     }
+            //     else
+            //     {
+            //         Screen.orientation = ScreenOrientation.Portrait;
+            //         await UniTask.WaitUntil(() => Screen.height > Screen.width, cancellationToken: cts.Token); 
+            //     }
+            // }
+            // catch (OperationCanceledException)
+            // {
+            //     Debug.LogWarning($"TransitionSceneController: Orientation change timed out after {RhythmGameBalanceConsts.TRANSITION_TIMEOUT_MS}ms. Proceeding anyway.");
+            // }
 
             await UniTask.Delay(RhythmGameBalanceConsts.MIN_LOADING_TIME_MS);
 

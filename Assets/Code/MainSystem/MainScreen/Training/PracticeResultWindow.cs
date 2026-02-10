@@ -236,8 +236,6 @@ namespace Code.MainSystem.MainScreen.Training
                 await UniTask.Delay(TimeSpan.FromSeconds(previousPageDisplayDuration), cancellationToken: _skipCTS.Token);
                 
                 await PageFlipTransition();
-                
-                ClearComments();
             }
             
             await CreateCurrentComments();
@@ -297,7 +295,9 @@ namespace Code.MainSystem.MainScreen.Training
             if (commentCanvasGroup != null)
                 commentCanvasGroup.alpha = 0f;
             
-            await UniTask.Yield();
+            ClearComments();
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: _skipCTS.Token);
             
             elapsed = 0f;
             while (elapsed < pageTransitionDuration)

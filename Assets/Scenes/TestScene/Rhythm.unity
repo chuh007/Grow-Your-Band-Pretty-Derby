@@ -995,8 +995,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401378495}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.091361225, y: -0.1205632, z: 0.018396469, w: -0.9883214}
-  m_LocalPosition: {x: 0.002686303, y: 1.0901153, z: 2.1788638}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0038562343, y: -0.091849655, z: -3.8220572}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1079,7 +1079,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 40.8
+  field of view: 45
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -1988,6 +1988,22 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4708686988357597214, guid: 17bec6364a704d340949a00d092d1d03, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708686988357597214, guid: 17bec6364a704d340949a00d092d1d03, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708686988357597214, guid: 17bec6364a704d340949a00d092d1d03, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708686988357597214, guid: 17bec6364a704d340949a00d092d1d03, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1920
+      objectReference: {fileID: 0}
     - target: {fileID: 4747006036348669468, guid: 17bec6364a704d340949a00d092d1d03, type: 3}
       propertyPath: targetScore
       value: 500
@@ -2102,6 +2118,18 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8917139798115379884, guid: ebd5151b241fcfe42a7edc7a605a5ea5, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917139798115379884, guid: ebd5151b241fcfe42a7edc7a605a5ea5, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917139798115379884, guid: ebd5151b241fcfe42a7edc7a605a5ea5, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1920
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2115,6 +2143,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1048804080}
     m_Modifications:
+    - target: {fileID: 1680574315033388041, guid: e87e94b592164294a9572419e6c569de, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1680574315033388041, guid: e87e94b592164294a9572419e6c569de, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 1680574315033388041, guid: e87e94b592164294a9572419e6c569de, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1920
+      objectReference: {fileID: 0}
     - target: {fileID: 1910595223719734750, guid: e87e94b592164294a9572419e6c569de, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

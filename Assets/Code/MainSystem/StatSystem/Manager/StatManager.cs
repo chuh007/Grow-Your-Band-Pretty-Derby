@@ -123,7 +123,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void HandlePracticeRequested(PracticenEvent evt)
         {
-            ITraitHolder holder = TraitManager.Instance.GetHolder(evt.memberType);
+            ITraitHolder holder = TraitManager.Instance.GetHolder(evt.MemberType);
             bool isSuccess = PredictMemberPractice(evt.SuccessRate, holder);
 
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
@@ -144,7 +144,7 @@ namespace Code.MainSystem.StatSystem.Manager
             if (evt.Type == PracticenType.Personal)
                 rewardValue = holder.GetCalculatedStat(TraitTarget.Practice,rewardValue);
 
-            _operator.IncreaseMemberStat(evt.memberType, evt.statType, rewardValue);
+            _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, rewardValue);
         }
 
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
