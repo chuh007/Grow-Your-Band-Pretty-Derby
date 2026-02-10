@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Resting
   m_GUID: 3b0fb292ca7aada4c9ac692acb1baa0e
   m_SerializeEntries:
-  - m_GUID: 53431e85d67b5cd41a0d1bd9d136f277
-    m_Address: Guitar Info
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 57affc92858bbd34e8155a0b2d48a414
     m_Address: Vocal dialogue
     m_ReadOnly: 0
@@ -27,26 +22,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 67e6ac3a737ff464d8b4f0ea6be0be9e
     m_Address: Piano dialogue
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 720b2e00147a49f44b3fa858c54ed367
-    m_Address: Drums Info
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7a7d7f105ce8b0e419c25dd6faf06e2b
-    m_Address: Piano Info
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8331fdf7d59de5a408cf4389e91a9cc8
-    m_Address: Vocal Info
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 83c4c301b6970744a80b72281900fa2f
-    m_Address: Bass Info
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea72ad1dbcff487aabe3a2cb110cf1ac, type: 3}
-  m_Name: Bass Info
+  m_Name: Guitar Character Information
   m_EditorClassIdentifier: Assembly-CSharp::Member.LS.Code.Dialogue.Character.CharacterInformationSO
-  <CharacterName>k__BackingField: Bass
+  <CharacterName>k__BackingField: "\uAE30\uD0C0"
   <CharacterEmotions>k__BackingField:
     m_Keys: 0000000001000000020000000300000004000000
     m_Values:
