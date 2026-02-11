@@ -12,6 +12,7 @@ namespace Code.MainSystem.TraitSystem.Interface
         int TotalPoint { get; }
         int MaxPoints { get; }
         IReadOnlyList<ActiveTrait> ActiveTraits { get; }
+        void RestoreTraits(IEnumerable<ActiveTrait> traits);
         
         void BeginAdjustment(TraitDataSO pendingTrait);
         void EndAdjustment();

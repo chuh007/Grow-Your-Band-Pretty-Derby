@@ -25,17 +25,12 @@ namespace Code.MainSystem.TraitSystem.Manager.SubClass
     {
         public ValidationResult CanAdd(ITraitHolder holder, TraitDataSO trait)
         {
-            // 중복 체크
-            if (holder.ActiveTraits.Any(t => t.Data.TraitType == trait.TraitType))
-            {
-                // 레벨업 가능 여부 체크
-                var existing = holder.ActiveTraits.First(t => t.Data.TraitType == trait.TraitType);
-                if (existing.CurrentLevel >= existing.Data.MaxLevel)
-                    return ValidationResult.Fail("최대 레벨 도달");
-            }
+            if (holder.ActiveTraits.Any(t => t.Data.IDHash == trait.IDHash))
+                return ValidationResult.Fail("이미 보유 중인 특성입니다.");
 
             // 최대 개수 체크 (99개)
-            return holder.ActiveTraits.Count >= 99 ? ValidationResult.Fail("최대 보유 개수 초과") : ValidationResult.Success();
+            return holder.ActiveTraits.Count >= 99 ? 
+                ValidationResult.Fail("최대 보유 개수 초과") : ValidationResult.Success();
         }
     
         public ValidationResult CanRemove(ITraitHolder holder, ActiveTrait trait)

@@ -31,7 +31,7 @@ namespace Code.MainSystem.MainScreen
 
         private void HandleTargetChange(TargetChangeEvent evt)
         {
-            if (evt.changeTarget == "")
+            if (evt.ChangeTarget == "")
             {
                 description.SetText("출전 조건 완료");
                 targetText.gameObject.SetActive(false);
@@ -48,22 +48,22 @@ namespace Code.MainSystem.MainScreen
                 {
                     icon.gameObject.SetActive(true);
                 }
-                description.SetText(evt.changeTarget);
+                description.SetText(evt.ChangeTarget);
             }
         }
 
         private void HandleTargetSetting(TargetSettingEvent evt)
         {
-            if (evt.isTargetSet)
+            if (evt.IsTargetSet)
             {
                 description.gameObject.SetActive(true);
                 icon.gameObject.SetActive(true);
                 targetText.gameObject.SetActive(true);
                 bar.SetActive(true);
-                title.SetText(evt.title);
-                icon.sprite = evt.icon;
-                targetText.SetText(evt.target.ToString());
-                if (evt.target <= 0)
+                title.SetText(evt.Title);
+                icon.sprite = evt.Icon;
+                targetText.SetText(evt.Target.ToString());
+                if (evt.Target <= 0)
                 {
                     targetText.gameObject.SetActive(false);
                     icon.gameObject.SetActive(false);
@@ -72,12 +72,12 @@ namespace Code.MainSystem.MainScreen
             }
             else
             {
-                title.SetText(evt.title);
+                title.SetText(evt.Title);
                 description.gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
                 targetText.gameObject.SetActive(false);
                 bar.SetActive(false);
-                if (evt.target <= 0)
+                if (evt.Target <= 0)
                 {
                     targetText.gameObject.SetActive(false);
                     icon.gameObject.SetActive(false);

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Code.Core;
+using Code.Core.Addressable;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
@@ -29,6 +31,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private Image characterIcon;
         [SerializeField] private GameObject teamPanel;
         [SerializeField] private List<Button> practiceBtns;
+        [SerializeField] private AddressableLoadUI loadingUI;
 
         [Header("Button References")] [SerializeField]
         private Transform practiceButtonsParent;
@@ -54,19 +57,42 @@ namespace Code.MainSystem.MainScreen
 
         private async void Start()
         {
+            // 총 로딩 단계 수 설정
+            loadingUI.ShowLoadingUI(6);
+            
             Debug.Log("[MainScreen] Start called");
             try
             {
+                loadingUI.UpdateProgress("Initializing...");
                 InitializeActionCounts();
+                
+                loadingUI.UpdateProgress("Loading Units...");
                 await LoadUnitsAsync();
 
+                loadingUI.UpdateProgress("Setting up UI...");
                 ForceEnableAllButtons();
+                
+                loadingUI.UpdateProgress("Refreshing Layout...");
+                StartCoroutine(RefreshUILayout());
+                
+                loadingUI.UpdateProgress("Finalizing...");
+                await Task.Delay(100);
+                
+                loadingUI.UpdateProgress("Complete!");
             }
             catch (Exception e)
             {
                 Debug.LogError($"[MainScreen] Error in Start: {e.Message}\n{e.StackTrace}");
+                loadingUI.HideLoadingUI();
                 throw;
             }
+        }
+        
+        private IEnumerator RefreshUILayout()
+        {
+            yield return null;
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponentInChildren<RectTransform>());
         }
 
         private void OnEnable()
@@ -100,7 +126,18 @@ namespace Code.MainSystem.MainScreen
         {
             Debug.Log("[MainScreen] Loading units...");
 
-            _loadedUnits = await GameManager.Instance.LoadAllAddressablesAsync<UnitDataSO>(unitLabel);
+            await GameResourceManager.Instance.LoadAllAsync<UnitDataSO>(unitLabel);
+            
+            _loadedUnits = new List<UnitDataSO>();
+            var locations = await UnityEngine.AddressableAssets.Addressables
+                .LoadResourceLocationsAsync(unitLabel, typeof(UnitDataSO)).Task;
+            
+            foreach (var location in locations)
+            {
+                var unit = GameResourceManager.Instance.Load<UnitDataSO>(location.PrimaryKey);
+                if (unit != null)
+                    _loadedUnits.Add(unit);
+            }
 
             if (_loadedUnits == null || _loadedUnits.Count == 0)
             {
@@ -252,17 +289,11 @@ namespace Code.MainSystem.MainScreen
                 {
                     practiceBtns[i].interactable = !isCurrentMemberActed;
                 }
-                else
-                {
-                }
             }
 
             if (practiceBtns[4] != null)
             {
                 practiceBtns[4].interactable = _isbuskingAvailable;
-            }
-            else
-            {
             }
         }
 
@@ -358,18 +389,11 @@ namespace Code.MainSystem.MainScreen
 
             try
             {
-                if (GameManager.Instance == null)
-                {
-                    Debug.LogError("[MainScreen] LoadUnitSprite: GameManager.Instance is null");
-                    return;
-                }
-
-                var sprite = await GameManager.Instance.LoadAddressableAsync<Sprite>(unit.spriteAddressableKey);
+                var sprite = await GameResourceManager.Instance.LoadAssetAsync<Sprite>(unit.spriteAddressableKey);
 
                 if (sprite == null)
                 {
-                    Debug.LogError(
-                        $"[MainScreen] Failed to load sprite for {unit.unitName} with key: {unit.spriteAddressableKey}");
+                    Debug.LogError($"[MainScreen] Failed to load sprite for {unit.unitName} with key: {unit.spriteAddressableKey}");
                     return;
                 }
 
@@ -382,8 +406,7 @@ namespace Code.MainSystem.MainScreen
             }
             catch (System.Exception e)
             {
-                Debug.LogError(
-                    $"[MainScreen] Exception loading sprite for {unit.unitName}: {e.Message}\n{e.StackTrace}");
+                Debug.LogError($"[MainScreen] Exception loading sprite for {unit.unitName}: {e.Message}\n{e.StackTrace}");
             }
         }
 

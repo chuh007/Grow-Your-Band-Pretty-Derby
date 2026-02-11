@@ -22,9 +22,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
             await SetIconSafeAsync(iconImage, item.Data.TraitIcon);
             nameText.SetText(_currentItem.Data.TraitName);
-            levelPointText.SetText(_currentItem.Data.MaxLevel == -1
-                ? $"{_currentItem.Data.Point}"
-                : $"{_currentItem.Data.Point} / {_currentItem.CurrentLevel}.Lv");
+            levelPointText.SetText(_currentItem.Data.Point.ToString());
             gameObject.SetActive(true);
         }
 

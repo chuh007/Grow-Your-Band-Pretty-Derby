@@ -70,16 +70,16 @@ namespace Code.SubSystem.UI
 
         private IEnumerator Play(StatIncreaseDecreaseEvent evt)
         {
-            statIncreaseArrow.SetActive(evt.increase);
-            statDecreaseArrow.SetActive(!evt.increase);
+            statIncreaseArrow.SetActive(evt.Increase);
+            statDecreaseArrow.SetActive(!evt.Increase);
 
-            statText.text = evt.statName;
-            statAmountText.text = evt.increase ? "+" + evt.amount : "-" + evt.amount;
-            statIcon.sprite = evt.statIcon;
+            statText.text = evt.StatName;
+            statAmountText.text = evt.Increase ? "+" + evt.Amount : "-" + evt.Amount;
+            statIcon.sprite = evt.StatIcon;
 
             yield return new WaitForSeconds(0.2f);
 
-            Vector2 targetPos = originPos + Vector2.up * (evt.increase ? moveDistance : -moveDistance);
+            Vector2 targetPos = originPos + Vector2.up * (evt.Increase ? moveDistance : -moveDistance);
 
             float time = 0f;
 

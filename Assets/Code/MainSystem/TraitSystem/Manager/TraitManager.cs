@@ -7,9 +7,7 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Manager.SubClass;
 using Code.MainSystem.Turn;
-using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.TraitSystem.Manager
 {
@@ -18,16 +16,16 @@ namespace Code.MainSystem.TraitSystem.Manager
         public static TraitManager Instance { get; private set; }
         
         public MemberType CurrentMember { get; private set; }
-
-        private ITraitDatabase _database;
+        
         private ITraitValidator _validator;
         private IPointCalculator _pointCalculator;
-        private TraitInteraction _interactionManager;
+        private ITraitRegistry _registry;
 
         private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
+        private readonly Dictionary<MemberType, List<ActiveTrait>> _traitDataStorage = new();
         
 
-        private async void Awake()
+        private void Awake()
         {
             if (Instance != null && Instance != this)
             {
@@ -39,9 +37,13 @@ namespace Code.MainSystem.TraitSystem.Manager
             DontDestroyOnLoad(gameObject);
             
             InitializeDependencies();
-            if (_database is TraitDatabase traitDb)
-                await traitDb.InitializeAsync();
             RegisterEvents();
+        }
+        
+        private async void Start()
+        {
+            if (_registry != null)
+                await _registry.Initialize();
         }
 
         private void OnDestroy()
@@ -53,10 +55,9 @@ namespace Code.MainSystem.TraitSystem.Manager
 
         private void InitializeDependencies()
         {
-            _database = GetComponentInChildren<ITraitDatabase>();
             _validator = GetComponentInChildren<ITraitValidator>();
             _pointCalculator = GetComponentInChildren<IPointCalculator>();
-            _interactionManager = GetComponentInChildren<TraitInteraction>();
+            _registry = GetComponentInChildren<ITraitRegistry>();
         }
 
         /// <summary>
@@ -65,6 +66,9 @@ namespace Code.MainSystem.TraitSystem.Manager
         public void RegisterHolder(ITraitHolder holder)
         {
             _holders[holder.MemberType] = holder;
+            
+            if (_traitDataStorage.TryGetValue(holder.MemberType, out var savedTraits))
+                holder.RestoreTraits(savedTraits);
         }
 
         #endregion
@@ -97,16 +101,14 @@ namespace Code.MainSystem.TraitSystem.Manager
             if (!TryGetHolder(evt.MemberType, out var holder))
                 return;
 
-            var traitData = _database.Get(evt.TraitType);
-            if (traitData is null)
+            if (evt.TraitData is null) 
                 return;
             
+            TraitDataSO traitData = evt.TraitData;
+
             var validation = _validator.CanAdd(holder, traitData);
-            if (!validation.IsValid)
-            {
-                //Bus<TraitAddFailed>.Raise(new TraitAddFailed(validation.Message));
+            if (!validation.IsValid) 
                 return;
-            }
 
             TryAddTrait(holder, traitData);
         }
@@ -119,11 +121,12 @@ namespace Code.MainSystem.TraitSystem.Manager
             if (!TryGetHolder(evt.MemberType, out var holder))
                 return;
 
-            var target = holder.ActiveTraits
-                .FirstOrDefault(t => t.Data.TraitType == evt.TraitType);
+            int targetHash = evt.TraitData.IDHash;
 
-            if (target == null)
-                return;
+            ActiveTrait target = holder.ActiveTraits
+                .FirstOrDefault(t => t.Data.IDHash == targetHash);
+
+            if (target == null) return;
 
             TryRemoveTrait(holder, target);
         }
@@ -149,30 +152,15 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// </summary>
         private void TryAddTrait(ITraitHolder holder, TraitDataSO newTrait)
         {
-            var existingTrait = holder.ActiveTraits
-                .FirstOrDefault(t => t.Data.TraitType == newTrait.TraitType);
+            ActiveTrait existingTrait = holder.ActiveTraits
+                .FirstOrDefault(t => t.Data.IDHash == newTrait.IDHash);
             
-            if (existingTrait != null)
-            {
-                if (existingTrait.Data.MaxLevel == -1 ||
-                    existingTrait.CurrentLevel >= existingTrait.Data.MaxLevel)
-                    return;
-
-                var prevLevel = existingTrait.CurrentLevel;
-                existingTrait.LevelUp();
-
-                Bus<TraitUpgraded>.Raise(new TraitUpgraded(CurrentMember, existingTrait, prevLevel));
-
-                ShowTraitList(holder);
-                return;
-            }
-
-            if (holder.IsAdjusting)
+            if (existingTrait != null || holder.IsAdjusting)
                 return;
 
             holder.AddTrait(newTrait);
 
-            var newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
+            int newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
         
             if (newTotal > holder.MaxPoints)
             {
@@ -181,9 +169,10 @@ namespace Code.MainSystem.TraitSystem.Manager
             }
             else
             {
-                _interactionManager.ProcessAllInteractions(holder);
                 ShowTraitList(holder);
             }
+            
+            _traitDataStorage[holder.MemberType] = holder.ActiveTraits.ToList();
         }
         
         /// <summary>
@@ -240,9 +229,25 @@ namespace Code.MainSystem.TraitSystem.Manager
         /// <summary>
         /// 특정 멤버가 특정 특성을 보유하고 있는지 확인
         /// </summary>
-        public bool HasTrait(MemberType memberType, TraitType traitType)
+        public bool HasTrait(MemberType memberType, int traitHash)
         {
-            return _holders.TryGetValue(memberType, out var holder) && holder.ActiveTraits.Any(t => t.Data.TraitType == traitType);
+            return _holders.TryGetValue(memberType, out var holder) && holder.ActiveTraits.Any(t => t.Data.IDHash == traitHash);
+        }
+        
+        /// <summary>
+        /// 특정 특성이 특정 태그를 가지고 있는지 확인
+        /// </summary>
+        public bool HasTraitTag(MemberType memberType, TraitTag traitTag)
+        {
+            if (!_holders.TryGetValue(memberType, out var holder)) 
+                return false;
+            return holder.ActiveTraits.Any(t => t.Data.TraitTag == traitTag);
+        }
+        
+        // TODO 연결 작업시 삭제 필요
+        public bool HasTrait(MemberType memberType, TraitType traitID)
+        {
+            return false;
         }
 
         public IReadOnlyList<TraitGroupStatus> GetTeamGroupStatus()
@@ -252,11 +257,6 @@ namespace Code.MainSystem.TraitSystem.Manager
         }
 
         #endregion
-        
-        public void NextScene()
-        {
-            SceneManager.LoadScene("Lch");
-        }
 
         public void TurnEnd()
         {

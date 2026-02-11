@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
+  m_Name: SensoryGrowth trait
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
+  TraitName: "\uAC10\uAC01\uC801 \uC131\uC7A5"
+  TraitIcon:
+    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Point: 4
+  IsRemovable: 1
+  Impacts:
+  - Target: 0
+    CalcType: 2
+    RequiredTag: 
+  MemberComments:
+  - MemberType: 0
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 1
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 2
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 3
+    Title: 
+    Content: 
+    Thoughts: 
+  - MemberType: 4
+    Title: 
+    Content: 
+    Thoughts: 
+  TraitTag: 16
+  Effects:
+  - 30
+  DescriptionEffect: "\uAC1C\uC778 \uD6C8\uB828 \uC2DC \uACE0\uC720 \uC2A4\uD0EF
+    \uC0C1\uC2B9\uB7C9 {0}%"
+  SpecialLogicClassName: 
