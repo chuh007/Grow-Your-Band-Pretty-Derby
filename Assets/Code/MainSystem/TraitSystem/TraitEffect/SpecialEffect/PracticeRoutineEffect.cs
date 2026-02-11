@@ -11,7 +11,7 @@ namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
         
         public float GetSuccessBonus(string currentActionId)
         {
-            float bonus = (_lastActionId == currentActionId) ? 10f : 0f;
+            float bonus = _lastActionId == currentActionId ? 10f : 0f;
             _lastActionId = currentActionId;
             return bonus;
         }
