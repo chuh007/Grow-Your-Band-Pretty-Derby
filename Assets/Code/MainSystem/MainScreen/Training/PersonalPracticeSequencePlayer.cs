@@ -71,7 +71,7 @@ namespace Code.MainSystem.MainScreen.Training
             
             float conditionDelta = -dataSo.StaminaReduction;
             
-            CommentManager.instance.SetupComments();
+            CommentManager.Instance.SetupComments();
 
             await practiceResultWindow.Play(
                 StatManager.Instance,
