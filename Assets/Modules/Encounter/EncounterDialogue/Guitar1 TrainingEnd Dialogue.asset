@@ -13,24 +13,49 @@ MonoBehaviour:
   m_Name: Guitar1 TrainingEnd Dialogue
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
-  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
-  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1
   <DialogueDetails>k__BackingField:
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 53431e85d67b5cd41a0d1bd9d136f277
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: "\uC624\uB298\uB3C4 \uC5F4\uC2EC\uD788 \uD6C8\uB828\uD558\uB358
       \uB3C4\uC911, \uBB38\uB4DD \uD55C\uAC00\uC9C0\uB97C \uAE68\uB2EC\uC558\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 53431e85d67b5cd41a0d1bd9d136f277
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uACE1\uC744 10\uBC88 \uC644\uACE1\uD574\uB3C4,
       \uD574\uAC00 \uC9C0\uC9C0 \uC54A\uB294\uAC83\uC774\uB2E4!"
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 53431e85d67b5cd41a0d1bd9d136f277
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uB098 \uAE30\uD0C0\uB294 \uC774\uB85C\uC18C
       \uB3C5\uC790\uC801\uC778 \uC5F0\uC8FC \uB2A5\uB825\uC744 \uD655\uBCF4\uD588\uB2E4\uACE0
       \uD560 \uC218 \uC788\uB2E4."
@@ -38,11 +63,26 @@ MonoBehaviour:
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField:
-    - {fileID: 11400000, guid: 7ed9d276226474f49aac9cb29babfa7c, type: 2}
-    - {fileID: 11400000, guid: 88af23a0036e3774a9b732eb7c00b7b3, type: 2}
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    - m_AssetGUID: 88af23a0036e3774a9b732eb7c00b7b3
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    - m_AssetGUID: 7ed9d276226474f49aac9cb29babfa7c
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 53431e85d67b5cd41a0d1bd9d136f277
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: 
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
+    <Choices>k__BackingField: []

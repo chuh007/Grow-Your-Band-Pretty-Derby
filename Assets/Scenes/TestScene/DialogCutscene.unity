@@ -1101,7 +1101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.7058824}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2051,6 +2051,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Cutscene.DialogCutscene.DialogCutsceneController
   resultSender: {fileID: 11400000, guid: ad4425d6178a484498e82912608c7424, type: 2}
+  resultText: {fileID: 610019992}
   uiRoot: {fileID: 1346493543}
 --- !u!1 &2020959819
 GameObject:

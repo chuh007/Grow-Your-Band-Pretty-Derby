@@ -57,7 +57,6 @@ namespace Code.MainSystem.Encounter
         {
             Bus<TrainingEndEncounterEvent>.OnEvent += HandleTrainingEndEncounter;
             Bus<EncounterCheckEvent>.OnEvent += HandleEncounterCheck;
-            Bus<TeamPracticeEncounterEvent>.OnEvent += HandleTeamPracticeEncounter;
 
             #region 딕셔너리 세팅
 
@@ -87,7 +86,6 @@ namespace Code.MainSystem.Encounter
                 int sum = (int)encounter.members;
                 if(!_teamPracticeData.ContainsKey(sum)) 
                     _teamPracticeData.Add(sum, new List<EncounterDataSO>());
-                Debug.LogError(sum);
                 _teamPracticeData[sum].Add(encounter.encounterData);
             }
             
@@ -111,13 +109,12 @@ namespace Code.MainSystem.Encounter
         {
             Bus<EncounterCheckEvent>.OnEvent -= HandleEncounterCheck;
             Bus<TrainingEndEncounterEvent>.OnEvent -= HandleTrainingEndEncounter;
-            Bus<TeamPracticeEncounterEvent>.OnEvent -= HandleTeamPracticeEncounter;
         }
 
-        private void HandleTeamPracticeEncounter(TeamPracticeEncounterEvent evt)
+        public bool TryTeamPracticeEncounter(List<UnitDataSO> list)
         {
             int sum = 0;
-            foreach (var unit in evt.AllUnits)
+            foreach (var unit in list)
             {
                 switch (unit.memberType)
                 {
@@ -138,13 +135,14 @@ namespace Code.MainSystem.Encounter
                         break;
                 }
             }
-
-            if (!_teamPracticeData.ContainsKey(sum) || _teamPracticeData[sum].Count <= 0) return;
-            Debug.LogError(sum);
+            if (!_teamPracticeData.ContainsKey(sum) || _teamPracticeData[sum].Count <= 0)
+                return false;
+            
             var data = _teamPracticeData[sum][0];
             _teamPracticeData[sum].RemoveAt(0);
             Bus<DialogCutscenePlayEvent>.Raise(new DialogCutscenePlayEvent(data.dialogue));
-
+            
+            return true;
         }
 
         private void HandleTrainingEndEncounter(TrainingEndEncounterEvent evt)

@@ -9,6 +9,7 @@ using Code.MainSystem.StatSystem.Manager;
 using UnityEngine.EventSystems;
 using System.Threading;
 using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 
 namespace Code.MainSystem.MainScreen.Training
