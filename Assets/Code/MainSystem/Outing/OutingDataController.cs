@@ -29,7 +29,6 @@ namespace Code.MainSystem.Outing
         private void Awake()
         {
             Bus<AddOutingEvent>.OnEvent += HandleAddOuting;
-            Bus<CutsceneEndEvent>.OnEvent += HandleOutingEnd;
             
             MemberRealOuting = new Dictionary<(MemberType, OutingPlace), OutingEvent>();
             OutingEvents = new Dictionary<(MemberType, OutingPlace), List<OutingEvent>>();
@@ -65,7 +64,6 @@ namespace Code.MainSystem.Outing
 
         private void OnDestroy()
         {
-            Bus<CutsceneEndEvent>.OnEvent -= HandleOutingEnd;
             Bus<AddOutingEvent>.OnEvent -= HandleAddOuting;
         }
         
@@ -75,22 +73,6 @@ namespace Code.MainSystem.Outing
             // SetMemberOutingData(evt.Event.type, evt.Event.place);
         }
         
-        private void HandleOutingEnd(CutsceneEndEvent evt)
-        {
-            Debug.Log("Outing End");
-            foreach (var stat in dialogSender.changeStats)
-            {
-                Bus<StatIncreaseEvent>.Raise(new StatIncreaseEvent
-                    (stat.targetMember, stat.targetStat, stat.variation));
-            }
-            foreach (var trait in dialogSender.addedTraits)
-            {
-                Bus<TraitAddRequested>.Raise(new TraitAddRequested
-                    (trait.targetMember, trait.targetStat));
-            }
-            Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
-        }
-
         public void TurnStart()
         {
             foreach (MemberType type in Enum.GetValues(typeof(MemberType)))

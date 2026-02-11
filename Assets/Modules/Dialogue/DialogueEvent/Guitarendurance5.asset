@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf0aee1c1b674a029853cfbbf444e9b7, type: 3}
-  m_Name: Harmony3
+  m_Name: Guitarendurance5
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueEvent.StatChangeDialogueEventSO
   stat:
-    targetMember: 5
-    targetStat: 12
-    variation: 3
+    targetMember: 0
+    targetStat: 2
+    variation: 5

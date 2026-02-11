@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Reflex.Attributes;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Code.MainSystem.Turn.UI
 {
@@ -13,7 +11,6 @@ namespace Code.MainSystem.Turn.UI
     {
         일요일 = 0, 월요일 = 1, 화요일 = 2, 수요일 = 3, 목요일 = 4, 금요일 = 5, 토요일 = 6
     }
-
     public class TurnUIController : MonoBehaviour
     {
         [SerializeField] private RectTransform turnCountRectTrm;
@@ -26,7 +23,7 @@ namespace Code.MainSystem.Turn.UI
         [SerializeField] private Vector3 activeScale = new Vector3(1.2f, 1.2f, 1.2f);
         [SerializeField] private Vector3 inactiveScale = new Vector3(0.8f, 0.8f, 0.8f);
         
-        private readonly List<DayOfWeekUI> _spawnedDays = new List<DayOfWeekUI>();
+        private List<DayOfWeekUI> _spawnedDays = new List<DayOfWeekUI>();
         private int _currentDayDisplayCount = 0;
         private bool _isAnimating = false;
         
@@ -40,25 +37,25 @@ namespace Code.MainSystem.Turn.UI
 
         private void InitUI()
         {
+            // 기존 UI 제거
             foreach (var day in _spawnedDays)
             {
                 if(day != null) Destroy(day.gameObject);
             }
             _spawnedDays.Clear();
-            _currentDayDisplayCount = 0; 
             
+            _currentDayDisplayCount = TurnManager.Instance.CurrentTurn; 
+
+            if(_currentDayDisplayCount > 0)
+                CreateDayUI(_currentDayDisplayCount, new Vector2(-daySpacing, 0), inactiveScale);
             CreateDayUI(_currentDayDisplayCount, Vector2.zero, activeScale);
             CreateDayUI(_currentDayDisplayCount + 1, new Vector2(daySpacing, 0), inactiveScale);
+            
             remainingTurnText.SetText(string.Format(RESULT_FORMAT, TurnManager.Instance.RemainingTurn));
         }
 
         public async UniTask TurnChangeAnimation()
         {
-            // 지금 일자는 크고, 나머지 일자는 작은 상태가 기본으로.
-            // 호출시 다음 날로 변경되는 애니메이션 작성.
-            // 지금 날짜는 크기가 작아지며 왼쪽으로 이동. 다음 날짜는 크기가 커지며 왼쪽으로 이동함.
-            // 최종적으로 다음 날짜가 중앙에 위치하게 되며, 다음 날짜 뒤로는 계속 요일이 있음.
-            // 일요일 0일부터 시작함.
             if (_isAnimating) return;
             _isAnimating = true;
             gameObject.SetActive(true);
@@ -76,7 +73,7 @@ namespace Code.MainSystem.Turn.UI
             
             for (int i = 0; i < _spawnedDays.Count; i++)
             {
-                if ((i == 2 && _currentDayDisplayCount != 1) || (_currentDayDisplayCount == 1 && i == 1)) 
+                if ((i == 1 && _currentDayDisplayCount == 1) || (i == 2 && _currentDayDisplayCount > 1)) 
                     seq.Join(_spawnedDays[i].transform.DOScale(activeScale, duration));
                 else 
                     seq.Join(_spawnedDays[i].transform.DOScale(inactiveScale, duration));
@@ -88,7 +85,7 @@ namespace Code.MainSystem.Turn.UI
             
             await UniTask.WaitForSeconds(0.75f);
             
-            if (_spawnedDays.Count > 3) 
+            if (_spawnedDays.Count > 2) 
             {
                 var oldDay = _spawnedDays[0];
                 _spawnedDays.RemoveAt(0);
@@ -96,10 +93,9 @@ namespace Code.MainSystem.Turn.UI
             }
             
             turnCountRectTrm.anchoredPosition = Vector2.zero;
-            float startPosX = -daySpacing;
             for (int i = 0; i < _spawnedDays.Count; i++)
             {
-                _spawnedDays[i].RectTransform.anchoredPosition = new Vector2(startPosX + (i * daySpacing), 0);
+                _spawnedDays[i].RectTransform.anchoredPosition = new Vector2(i * daySpacing, 0);
             }
             
             _isAnimating = false;

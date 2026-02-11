@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Code.Core;
 using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.BaseStats;
@@ -123,7 +124,7 @@ namespace Code.MainSystem.MainScreen.Training
             Debug.Log("[TeamPracticeCutsceneController] 모든 결과 확인 완료");
             
             Debug.Log("[TeamPracticeCutsceneController] Raising CheckTurnEnd event");
-            // Bus<CheckTurnEnd>.Raise(new CheckTurnEnd());
+            Bus<TeamPracticeEncounterEvent>.Raise(new TeamPracticeEncounterEvent(TeamPracticeResultCache.SelectedMembers));
             
             await UniTask.Delay(500);
             

@@ -18,21 +18,12 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
     {
         [SerializeField] private DialogCutsceneSenderSO dialogSender;
         
-        public static DialogCutsceneDataManager Instance;
-
         private void Awake()
         {
             Bus<DialogCutscenePlayEvent>.OnEvent += HandleDialogCutscenePlay;
-            Bus<CutsceneEndEvent>.OnEvent += HandleOutingEnd;
-        }
-        
-        private void OnDestroy()
-        {
-            Bus<DialogCutscenePlayEvent>.OnEvent -= HandleDialogCutscenePlay;
-            Bus<CutsceneEndEvent>.OnEvent -= HandleOutingEnd;
         }
 
-        private void HandleOutingEnd(CutsceneEndEvent evt)
+        private void Start()
         {
             foreach (var stat in dialogSender.changeStats)
             {
@@ -44,13 +35,21 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
                 Bus<TraitAddRequested>.Raise(new TraitAddRequested
                     (trait.targetMember, trait.targetStat));
             }
+            
+            dialogSender.changeStats.Clear();
+            dialogSender.addedTraits.Clear();
+        }
+
+        private void OnDestroy()
+        {
+            Bus<DialogCutscenePlayEvent>.OnEvent -= HandleDialogCutscenePlay;
         }
         
         private void HandleDialogCutscenePlay(DialogCutscenePlayEvent evt)
         {
             Debug.Log("DialogCutscenePlay");
             dialogSender.selectedEvent = evt.Dialogue;
-            SceneManager.LoadScene("DialogCutscene", LoadSceneMode.Additive);
+            SceneManager.LoadScene("DialogCutscene");
         }
     }
 }

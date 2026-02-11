@@ -3,6 +3,8 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.DialogueEvents;
 using Code.MainSystem.Outing;
+using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -21,8 +23,6 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
             Bus<DialogueStatUpgradeEvent>.OnEvent += HandleDialogueStatUpgrade;
             Bus<DialogueGetSkillEvent>.OnEvent += HandleDialogueSkillGet;
             Bus<DialogueEndEvent>.OnEvent += HandleDialogueEnd;
-            resultSender.changeStats.Clear();
-            resultSender.addedTraits.Clear();
         }
 
         private void OnDestroy()
@@ -50,7 +50,7 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
         private void HandleDialogueStatUpgrade(DialogueStatUpgradeEvent evt)
         {
             resultSender.changeStats.Add
-                (new StatVariation{targetStat = evt.StatType, variation = evt.StatValue});
+                (new StatVariation{targetStat = evt.Stat.targetStat, targetMember = evt.Stat.targetMember, variation = evt.Stat.variation});
         }
         
         private void HandleDialogueSkillGet(DialogueGetSkillEvent evt)
@@ -60,6 +60,18 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
         
         private void HandleDialogueEnd(DialogueEndEvent evt)
         {
+            foreach (StatVariation var in resultSender.changeStats)
+            {
+                BaseStat stat;
+                if (var.targetStat == StatType.TeamHarmony)
+                    stat = StatManager.Instance.GetTeamStat(StatType.TeamHarmony);
+                else
+                    stat = StatManager.Instance.GetMemberStat(var.targetMember, var.targetStat);
+                
+                Bus<StatIncreaseDecreaseEvent>.Raise(
+                    new StatIncreaseDecreaseEvent(var.variation > 0, 
+                        var.variation.ToString(), stat.StatIcon, stat.StatName));
+            }
             _ = PlayOutingSequence();
         }
     }

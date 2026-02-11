@@ -68,7 +68,8 @@ namespace Code.MainSystem.Outing
         {
             closeButton.onClick.RemoveAllListeners();
             Bus<CutsceneEndEvent>.Raise(new CutsceneEndEvent());
-            SceneManager.UnloadSceneAsync(_sceneName);
+            // SceneManager.UnloadSceneAsync(_sceneName);
+            SceneManager.LoadScene("Lch");
         }
     }
 }
