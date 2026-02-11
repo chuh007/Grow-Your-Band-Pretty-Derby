@@ -6,6 +6,7 @@ using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 using Reflex.Attributes;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace Code.MainSystem.TraitSystem.UI
 {
@@ -21,10 +22,15 @@ namespace Code.MainSystem.TraitSystem.UI
             label.SetText($"{memberType} 특성 UI");
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(memberType));
         }
+        
+        public void NextScene()
+        {
+            SceneManager.LoadScene("Lch");
+        }
 
         public void AddTrait()
         {
-            Bus<TraitAddRequested>.Raise(new TraitAddRequested(_manager.CurrentMember, traitData.IDHash));
+            Bus<TraitAddRequested>.Raise(new TraitAddRequested(_manager.CurrentMember, traitData));
             Bus<TraitShowRequested>.Raise(new TraitShowRequested(_manager.CurrentMember));
         }
     }
