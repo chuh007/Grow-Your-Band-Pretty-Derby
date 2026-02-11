@@ -27,26 +27,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Trait
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1d4d5d31d2aee1748ae6634c5a93a1ac
-    m_Address: AttentionGain trait data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Trait
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 27449a00ca12e5141baf3f3333824499
     m_Address: HonedTechnique trait data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Trait
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 32b50c7cf5aa22642b80a74705395338
-    m_Address: Dogmatic trait data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Trait
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 452c844e9c6155a4a87b49126fbe43dc
-    m_Address: Focus trait data
     m_ReadOnly: 0
     m_SerializedLabels:
     - Trait
@@ -63,32 +45,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Trait
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 681b16d38ac6d7b459232499197bc0e8
-    m_Address: Injury trait data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Trait
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bce770db155beea429f4c1ca32d2f192
-    m_Address: BreathControl trait data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Trait
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1021c21a289eb843b612d9a4653bce5
     m_Address: FailureBreedsSuccess trait data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Trait
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d26b7679b88f5814b8951c688b174a78
-    m_Address: HighlightBoost trait data
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Trait
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef000d1a2ff4b25409438ab8ed841467
-    m_Address: Entertainer trait data
     m_ReadOnly: 0
     m_SerializedLabels:
     - Trait
