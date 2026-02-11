@@ -1,4 +1,6 @@
-﻿namespace Code.MainSystem.TraitSystem.Data
+﻿using System;
+
+namespace Code.MainSystem.TraitSystem.Data
 {
     public enum TraitType
     {
@@ -18,31 +20,38 @@
         BreathControl,          // 호흡 조절
     }
 
+    [Flags]
     public enum TraitTag
     {
-        None,           // 특성 태그 없음
-        Teamwork,       // 팀워크	
-        Support,        // 상백업
-        Stability,      // 안정감
-        Energy,         // 텐션 업
-        Genius,         // 천재
-        Solo,           // 독주
-        Mastery,        // 극한 연습
-        Immersion,      // 몰입
+        None = 0,           // 특성 태그 없음
+        Teamwork = 1 << 0,  // 팀워크	
+        Support = 1 << 1,   // 백업
+        Stability = 1 << 2, // 안정감
+        Energy = 1 << 3,    // 텐션 업
+        Genius = 1 << 4,    // 천재
+        Solo = 1 << 5,      // 독주
+        Mastery = 1 << 6,   // 극한 연습
+        Immersion = 1 << 7, // 몰입
+        GuitarSolo = 1 << 8,// 기타 솔로
     }
 
     public enum TraitTarget
     {
         None,
-        Ensemble,       // 합주 효과 관련
-        Practice,       // 개인 연습 효과 관련
-        Condition,      // 컨디션 소모/변화 관련
-        SuccessRate,    // 훈련/합주 성공률 관련
-        Training,       // 능력치 상승 효율 관련
-        Mental,         // 멘탈 능력치 관련
-        FeverScore,     // 피버 점수 관련
-        FeverTime,      // 피버 지속시간 관련
-        FeverInput,     // 피버 필요 입력 관련
+        Ensemble,           // 합주 효과 관련
+        EnsembleCondition,  // 합주 컨디션 관련
+        PracticeCondition,  // 개인 연습 컨디션 관련
+        PracticeMental,     // 개인 연습 멘탈 관련
+        Practice,           // 개인 연습 효과 관련
+        Condition,          // 모든 컨디션 소모/변화 관련
+        SuccessRate,        // 훈련/합주 성공률 관련
+        Training,           // 능력치 상승 효율 관련
+        Mental,             // 멘탈 능력치 관련
+        FeverScore,         // 피버 점수 관련
+        FeverTime,          // 피버 지속시간 관련
+        FeverInput,         // 피버 필요 입력 관련
+        Harmony,           // 하모니 관련
+        
     }
 
     public enum CalculationType

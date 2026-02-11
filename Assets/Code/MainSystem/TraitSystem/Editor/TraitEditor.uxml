@@ -10,6 +10,7 @@
             <ui:GroupBox text="Base Settings" name="base-settings" style="margin-bottom: 25px; padding: 15px; background-color: rgb(50, 50, 50); border-radius: 5px;">
                 <uie:PropertyField binding-path="TraitName" label="Display Name" />
                 <uie:PropertyField binding-path="TraitTag" label="Trait Tag" />
+                <uie:PropertyField binding-path="Special Logic" label="Special Logic" />
                 <ui:VisualElement style="margin-top: 5px; margin-bottom: 5px; min-height: 22px;">
                     <uie:PropertyField binding-path="TraitIcon" label="Trait Icon Asset" />
                 </ui:VisualElement>

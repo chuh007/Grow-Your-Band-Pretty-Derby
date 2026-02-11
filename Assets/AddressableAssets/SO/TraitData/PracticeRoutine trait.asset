@@ -10,23 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
-  m_Name: LoneGuitarist trait data
+  m_Name: PracticeRoutine trait
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitName: "\uACE0\uB3C5\uD55C \uAE30\uD0C0\uB9AC\uC2A4\uD2B8"
+  TraitName: "\uC5F0\uC2B5 \uB8E8\uD2F4"
   TraitIcon:
-    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+    m_AssetGUID: 54021ce0553dc4447bd68a62c7dddcaf
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  Point: 6
+  Point: 4
   IsRemovable: 1
   Impacts:
-  - Target: 2
-    CalcType: 2
-    RequiredTag: 
-  - Target: 3
-    CalcType: 3
+  - Target: 0
+    CalcType: 0
     RequiredTag: 
   MemberComments:
   - MemberType: 0
@@ -49,10 +46,9 @@ MonoBehaviour:
     Title: 
     Content: 
     Thoughts: 
-  TraitTag: 272
+  TraitTag: 4
   Effects:
-  - 30
-  - 45
-  DescriptionEffect: "(\uAE30\uD0C0 \uC804\uC6A9) \uAC1C\uC778 \uC5F0\uC2B5 \uD6A8\uACFC
-    {0}%, \uAC1C\uC778 \uC5F0\uC2B5 \uC2DC \uCEE8\uB514\uC158 \uC18C\uBAA8 {1}%"
-  SpecialLogicClassName: 
+  - 10
+  DescriptionEffect: "\uB3D9\uC77C \uD589\uB3D9 \uC5F0\uC18D \uC120\uD0DD \uC2DC
+    \uC131\uACF5\uB960 {0}%"
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect.PracticeRoutineEffect

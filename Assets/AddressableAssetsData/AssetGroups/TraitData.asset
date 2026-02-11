@@ -27,8 +27,32 @@ MonoBehaviour:
     m_SerializedLabels:
     - Trait
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12738fde6030c544488606eeb5e9b1a2
+    m_Address: DisciplinedLifestyle trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 27449a00ca12e5141baf3f3333824499
     m_Address: HonedTechnique trait data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f8f97ead7085864c9a03cc7bc47999c
+    m_Address: IrreversibleChoice trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e8972f119040a04499de2826cc4e692
+    m_Address: EfficientRest trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56c4247ddc9ab6142b4a787cbe3662dc
+    m_Address: HighRiskRoutine trait
     m_ReadOnly: 0
     m_SerializedLabels:
     - Trait
@@ -39,14 +63,74 @@ MonoBehaviour:
     m_SerializedLabels:
     - Trait
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5bd9a0d2d1163fb4fa0d5b4fa450747f
+    m_Address: mood maker trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e7c70aa3538f3b4a99c4011329ca8dd
+    m_Address: GrooveRestoration trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 63212224f82703c45894ef56f8f3a1bf
     m_Address: ShiningEyes trait data
     m_ReadOnly: 0
     m_SerializedLabels:
     - Trait
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 768d9808b209bb74697d5a15d770d927
+    m_Address: SensoryGrowth trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8ad989906da21741874c9a0b5a93034
+    m_Address: MutualAssistance trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1901295c1bd1b546a0e83dd2713358d
+    m_Address: CatchBreath trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd3d49c2242d8d048a41e72fe4642f58
+    m_Address: TeamFirst trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1021c21a289eb843b612d9a4653bce5
     m_Address: FailureBreedsSuccess trait data
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9fcb18852bfb36418749aac9e42ee74
+    m_Address: PracticeRoutine trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da6318b5db4209541af2062ae7a34447
+    m_Address: BornGenius trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e17e51663fdf50348b62a8fe166a667d
+    m_Address: RockSpirit trait
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8f89aea15fc3644294e26225c3bbbbe
+    m_Address: IncompleteRest trait
     m_ReadOnly: 0
     m_SerializedLabels:
     - Trait
