@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
-using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.MainSystem.TraitSystem.Interface;
 

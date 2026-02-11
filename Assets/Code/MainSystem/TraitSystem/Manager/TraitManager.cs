@@ -7,7 +7,6 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Manager.SubClass;
 using Code.MainSystem.Turn;
 using UnityEngine.SceneManagement;
 
@@ -22,13 +21,12 @@ namespace Code.MainSystem.TraitSystem.Manager
         private ITraitDatabase _database;
         private ITraitValidator _validator;
         private IPointCalculator _pointCalculator;
-        private TraitInteraction _interactionManager;
 
         private readonly Dictionary<MemberType, ITraitHolder> _holders = new();
         private readonly Dictionary<MemberType, List<ActiveTrait>> _traitDataStorage = new();
         
 
-        private async void Awake()
+        private void Awake()
         {
             if (Instance != null && Instance != this)
             {
@@ -40,8 +38,6 @@ namespace Code.MainSystem.TraitSystem.Manager
             DontDestroyOnLoad(gameObject);
             
             InitializeDependencies();
-            if (_database is TraitDatabase traitDb)
-                await traitDb.InitializeAsync();
             RegisterEvents();
         }
 
@@ -57,7 +53,6 @@ namespace Code.MainSystem.TraitSystem.Manager
             _database = GetComponentInChildren<ITraitDatabase>();
             _validator = GetComponentInChildren<ITraitValidator>();
             _pointCalculator = GetComponentInChildren<IPointCalculator>();
-            _interactionManager = GetComponentInChildren<TraitInteraction>();
         }
 
         /// <summary>
@@ -66,13 +61,9 @@ namespace Code.MainSystem.TraitSystem.Manager
         public void RegisterHolder(ITraitHolder holder)
         {
             _holders[holder.MemberType] = holder;
-
-            // 만약 이 멤버의 기존 데이터가 있다면 복구해줌
+            
             if (_traitDataStorage.TryGetValue(holder.MemberType, out var savedTraits))
-            {
-                // holder(CharacterTrait)에게 기존 데이터를 전달하는 메서드가 필요합니다.
                 holder.RestoreTraits(savedTraits);
-            }
         }
 
         #endregion
@@ -174,7 +165,6 @@ namespace Code.MainSystem.TraitSystem.Manager
             }
             else
             {
-                _interactionManager.ProcessAllInteractions(holder);
                 ShowTraitList(holder);
             }
             
