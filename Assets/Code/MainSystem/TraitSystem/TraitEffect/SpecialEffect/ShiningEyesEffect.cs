@@ -1,20 +1,19 @@
-﻿using UnityEngine;
+﻿using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
     /// <summary>
     /// 반짝이는 눈 효과
     /// </summary>
-    public class ShiningEyesEffect : MultiStatModifierEffect
+    public class ShiningEyesEffect : MultiStatModifierEffect, IAdditionalActionProvider
     {
-        public void OnTrainingComplete(object conditionState)
+        public float AdditionalActionChance { get; private set; }
+        
+        public override void Initialize(ActiveTrait trait)
         {
-            bool isConditionHigh = conditionState is >= 4; 
-            
-            if (isConditionHigh && Random.Range(0f, 100f) <= GetValue(0))
-            {
-                // TODO: 시스템에 행동권 N2(GetValue(1)) 추가 로직 호출
-            }
+            base.Initialize(trait);
+            AdditionalActionChance = GetValue(2);
         }
     }
 }

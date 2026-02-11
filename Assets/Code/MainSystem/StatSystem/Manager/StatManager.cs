@@ -13,7 +13,6 @@ using Code.MainSystem.StatSystem.Stats;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
-using Code.MainSystem.TraitSystem.TraitEffect;
 using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using UnityEngine.Serialization;
 
@@ -49,6 +48,11 @@ namespace Code.MainSystem.StatSystem.Manager
         private StatRegistry _registry;
         private StatOperator _operator;
         private ConditionHandler _conditionHandler;
+        
+        private static readonly StatType[] _cachedPlayableStats = Enum.GetValues(typeof(StatType))
+            .Cast<StatType>()
+            .Where(s => (int)s > 1 && s != StatType.TeamHarmony)
+            .ToArray();
 
         private void Awake()
         {
@@ -126,6 +130,13 @@ namespace Code.MainSystem.StatSystem.Manager
         {
             ITraitHolder holder = TraitManager.Instance.GetHolder(evt.MemberType);
             bool isSuccess = PredictMemberPractice(evt.SuccessRate, holder);
+            
+            var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
+            if (bufferedEffects != null)
+            {
+                foreach (var effect in bufferedEffects)
+                    effect.Reset();
+            }
 
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
 
@@ -153,6 +164,7 @@ namespace Code.MainSystem.StatSystem.Manager
             if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
                 return;
             bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
+            
             Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
         }
 
@@ -164,6 +176,14 @@ namespace Code.MainSystem.StatSystem.Manager
         private void HandleRestRequested(ConfirmRestEvent evt)
         {
             _conditionHandler.ProcessRest(evt);
+    
+            var holder = TraitManager.Instance.GetHolder(evt.Unit.memberType);
+            var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
+            if (bufferedEffects == null) 
+                return;
+            
+            foreach (var effect in bufferedEffects)
+                effect.IsBuffered = true;
         }
 
         #endregion
@@ -218,5 +238,54 @@ namespace Code.MainSystem.StatSystem.Manager
         }
         
         #endregion
+
+        /// <summary>
+        /// 선택된 멤버들 중 최저 스탯 보유자에게 보너스를 주고, 누구였는지 정보를 반환합니다.
+        /// </summary>
+        public bool ApplyLowestStatBonus(List<IModifierProvider> holders, out MemberType targetMember, out StatType targetStat, out int finalBonus)
+        {
+            targetMember = default;
+            targetStat = default;
+            finalBonus = 0;
+
+            // 1. 보너스 합산 (단순 루프가 LINQ Sum보다 빠름)
+            for (int i = 0; i < holders.Count; i++)
+            {
+                var modifiers = holders[i].GetModifiers<IMultiStatModifier>();
+                foreach (var mod in modifiers) // 인터페이스 리스트 순회
+                    finalBonus += mod.AddValue;
+            }
+
+            if (finalBonus <= 0) return false;
+
+            // 2. 최저값 탐색 (단일 루프)
+            float minStatValue = float.MaxValue;
+            bool found = false;
+
+            for (int i = 0; i < holders.Count; i++)
+            {
+                if (holders[i] is not ITraitHolder traitHolder) continue;
+        
+                MemberType mType = traitHolder.MemberType;
+                for (int j = 0; j < _cachedPlayableStats.Length; j++)
+                {
+                    StatType sType = _cachedPlayableStats[j];
+                    BaseStat stat = _registry.GetMemberStat(mType, sType);
+            
+                    if (stat != null && stat.CurrentValue < minStatValue)
+                    {
+                        minStatValue = stat.CurrentValue;
+                        targetMember = mType;
+                        targetStat = sType;
+                        found = true;
+                    }
+                }
+            }
+
+            if (found)
+                _operator.IncreaseMemberStat(targetMember, targetStat, finalBonus);
+
+            return found;
+        }
     }
 }
