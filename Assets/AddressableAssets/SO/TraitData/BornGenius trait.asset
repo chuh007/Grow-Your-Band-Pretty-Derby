@@ -10,26 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
-  m_Name: Injury trait data
+  m_Name: BornGenius trait
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 6
-  TraitName: "\uBD80\uC0C1"
+  TraitName: "\uD0C0\uACE0\uB09C \uCC9C\uC7AC"
   TraitIcon:
     m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  IconAddress: Icon_Injury trait data
-  MaxLevel: 10
-  Point: 0
+  Point: 5
   IsRemovable: 1
   Impacts:
   - Target: 4
-    CalcType: 3
+    CalcType: 2
     RequiredTag: 
-  - Target: 0
-    CalcType: 0
+  - Target: 12
+    CalcType: 3
     RequiredTag: 
   MemberComments:
   - MemberType: 0
@@ -52,10 +49,10 @@ MonoBehaviour:
     Title: 
     Content: 
     Thoughts: 
+  TraitTag: 1
   Effects:
   - 50
-  - 2
-  DescriptionEffect: "\uC81C\uAC70 \uBD88\uAC00, \uBAA8\uB4E0 \uD6C8\uB828\uC758
-    \uC131\uACF5\uB960 -{0}%, {1}\uD134 \uACBD\uACFC \uC2DC \uC790\uB3D9\uC73C\uB85C
-    \uC81C\uAC70"
-  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.InjuryEffect
+  - 30
+  DescriptionEffect: "\uACE0\uC720 \uC2A4\uD0EF \uC0C1\uC2B9\uB7C9 {0}% \uD558\uBAA8\uB2C8
+    \uC0C1\uC2B9\uB7C9 {1}%"
+  SpecialLogicClassName: 

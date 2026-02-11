@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: HonedTechnique trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 5
   TraitName: "\uB2E8\uB828\uAE30\uC220"
   TraitIcon:
     m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
@@ -20,9 +19,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  IconAddress: Icon_HonedTechnique trait data
-  MaxLevel: 10
-  Point: 3
+  Point: 2
   IsRemovable: 0
   Impacts:
   - Target: 2
@@ -49,8 +46,9 @@ MonoBehaviour:
     Title: 
     Content: 
     Thoughts: 
+  TraitTag: 0
   Effects:
-  - 20
+  - 15
   DescriptionEffect: "\uAC1C\uC778 \uD6C8\uB828\uC758 \uCCB4\uB825 \uC0C1\uC2B9 \uD6A8\uC728
-    +{0}%"
+    {0}%"
   SpecialLogicClassName: 

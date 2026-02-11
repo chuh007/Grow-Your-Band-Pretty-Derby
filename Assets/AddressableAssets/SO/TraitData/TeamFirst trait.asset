@@ -10,26 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
-  m_Name: BreathControl trait data
+  m_Name: TeamFirst trait
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 13
-  TraitName: "\uD638\uD761 \uC870\uC808"
+  TraitName: "\uD300 \uC6B0\uC120\uC8FC\uC758"
   TraitIcon:
     m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  IconAddress: Icon_BreathControl trait data
-  MaxLevel: 10
-  Point: 6
-  IsRemovable: 0
+  Point: 4
+  IsRemovable: 1
   Impacts:
-  - Target: 3
-    CalcType: 3
+  - Target: 12
+    CalcType: 2
     RequiredTag: 
-  - Target: 9
-    CalcType: 1
+  - Target: 4
+    CalcType: 3
     RequiredTag: 
   MemberComments:
   - MemberType: 0
@@ -52,10 +49,10 @@ MonoBehaviour:
     Title: 
     Content: 
     Thoughts: 
+  TraitTag: 1
   Effects:
-  - 20
+  - 25
   - 10
-  DescriptionEffect: "\uC721\uC131: \uCEE8\uB514\uC158 \uBCC0\uD654 \uD3ED {0}% \uAC10\uC18C\r\n\uB9AC\uB4EC
-    \uAC8C\uC784: \uBBF8\uC2A4 \uC774\uD6C4 \uD53C\uBC84 \uD0C0\uC784 \uD544\uC694
-    \uC785\uB825 {1} \uAC10\uC18C"
+  DescriptionEffect: "\uD558\uBAA8\uB2C8 \uC0C1\uC2B9\uB7C9 {0}%, \uAC1C\uC778 \uACE0\uC720
+    \uC2A4\uD0EF \uC0C1\uC2B9\uB7C9 {1}%"
   SpecialLogicClassName: 

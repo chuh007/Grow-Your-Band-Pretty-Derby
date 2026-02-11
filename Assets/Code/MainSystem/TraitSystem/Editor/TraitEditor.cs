@@ -232,23 +232,34 @@ namespace Code.MainSystem.TraitSystem.Editor
                 .Where(p => typeof(AbstractTraitEffect).IsAssignableFrom(p) && !p.IsAbstract)
                 .Select(t => t.FullName)
                 .ToList();
-            
-            effectTypes.Insert(0, "None (Default)");
+    
+            const string defaultNone = "None (Default)";
+            effectTypes.Insert(0, defaultNone);
+
             VisualElement container = _detailPanel.Q<VisualElement>("logic-dropdown-container");
             if (container == null) return;
 
             container.Clear();
+            
             string currentSelection = string.IsNullOrEmpty(target.SpecialLogicClassName) 
-                ? "None (Default)" 
+                ? defaultNone 
                 : target.SpecialLogicClassName;
-
+            
+            if (!effectTypes.Contains(currentSelection))
+            {
+                Debug.LogWarning($"저장된 클래스 {currentSelection}를 찾을 수 없어 기본값으로 표시합니다.");
+                currentSelection = defaultNone;
+            }
+            
             PopupField<string> dropdown = new PopupField<string>("Special Logic", effectTypes, currentSelection);
+    
             dropdown.RegisterValueChangedCallback(evt => {
                 _serializedTrait.Update();
                 SerializedProperty prop = _serializedTrait.FindProperty("SpecialLogicClassName");
-                prop.stringValue = (evt.newValue == "None (Default)") ? "" : evt.newValue;
+                prop.stringValue = (evt.newValue == defaultNone) ? "" : evt.newValue;
                 _serializedTrait.ApplyModifiedProperties();
             });
+    
             container.Add(dropdown);
         }
 
