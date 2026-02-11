@@ -78,7 +78,7 @@ namespace Code.MainSystem.StatSystem.Module
             float routineBonus = 0;
             var routine = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
             if (routine != null) 
-                routineBonus = routine.GetSuccessBonus("current_practice_name"); // 실무에선 실제 ID 전달
+                routineBonus = routine.GetSuccessBonus("current_practice_name"); // TODO: 현재 훈련 이름 전달 필요
             float finalRate = holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate) + routineBonus;
     
             bool isSuccess = Random.Range(0f, 100f) < finalRate;
