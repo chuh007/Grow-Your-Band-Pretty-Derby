@@ -1,4 +1,7 @@
-﻿namespace Code.MainSystem.TraitSystem.Interface
+﻿using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Manager;
+
+namespace Code.MainSystem.TraitSystem.Interface
 {
     public interface ISuccessGuarantor
     {
@@ -15,8 +18,51 @@
         void OnTurnPassed();
     }
     
-    internal interface IJudgmentCorrection
+    public interface IJudgmentCorrection
     {
         bool CorrectMissToGood { get; }
+    }
+
+    public interface IDisciplinedLifestyle
+    {
+        public bool CheckSameBehavior(StatType statType);
+    }
+
+    public interface IMultiStatModifier
+    {
+        public int AddValue { get; }
+    }
+
+    public interface IGrooveRestoration
+    {
+        bool IsBuffered { get; set; }
+        float Multiplier { get; }
+        void Reset();
+    }
+    
+    public interface IConditionModifier {
+        float ConditionCostMultiplier { get; }
+        float ConditionRecoveryMultiplier { get; }
+    }
+    
+    public interface IAdditionalActionProvider {
+        float AdditionalActionChance { get; }
+    }
+    
+    public interface IConsecutiveActionModifier
+    {
+        float GetSuccessBonus(string currentActionId);
+    }
+    
+    public interface ITrainingSuccessBonus {
+        float AddValue { get; }
+        void OnTrainingSuccess(MemberType member);
+    }
+    
+    public interface IRoutineModifier {
+        void OnPracticeSuccess();
+        void OnRest();
+        float GetSuccessBonus(string currentActionId);
+        float GetStatMultiplier();
     }
 }
