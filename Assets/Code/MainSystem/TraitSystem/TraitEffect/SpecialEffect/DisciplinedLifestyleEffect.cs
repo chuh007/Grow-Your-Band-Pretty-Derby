@@ -1,5 +1,7 @@
 ﻿using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
@@ -9,15 +11,29 @@ namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
     public class DisciplinedLifestyleEffect : MultiStatModifierEffect, IDisciplinedLifestyle
     {
         private StatType _prevStatType = (StatType)(-1);
-        
-        /// <summary>
-        /// 스탯 타입으로 이전 행동과 동일한지 확인합니다.
-        /// </summary>
-        public bool CheckSameBehavior(StatType statType)
+
+        public float BonusValue { get; private set; }
+
+        public override void Initialize(ActiveTrait trait)
         {
-            bool isSame = _prevStatType == statType;
-            _prevStatType = statType;
-            return isSame;
+            base.Initialize(trait);
+            BonusValue = GetValue(0);
+        }
+        
+        public override float GetAmount(TraitTarget target, object context = null)
+        {
+            if (context is not StatType currentStatType)
+                return 0f;
+            
+            if (_prevStatType != (StatType)(-1) && _prevStatType == currentStatType)
+                return BonusValue;
+            
+            return 0f;
+        }
+        
+        public void UpdateLastStat(StatType lastType)
+        {
+            _prevStatType = lastType;
         }
     }
 }

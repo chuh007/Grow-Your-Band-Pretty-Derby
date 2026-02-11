@@ -10,7 +10,6 @@ using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
-using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine.AddressableAssets;
@@ -197,7 +196,7 @@ namespace Code.MainSystem.MainScreen
             }
             
             Debug.Log($"Starting practice with {_selectedMembers.Count} members");
-            Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent(_selectedMembers.Select(t => t.currentCondition).ToList()));
+            Bus<TeamPracticeEvent>.Raise(new TeamPracticeEvent(_selectedMembers));
         }
 
         private void BuildResultCache()
@@ -234,35 +233,31 @@ namespace Code.MainSystem.MainScreen
             var statDeltaDict = new Dictionary<(MemberType, StatType), int>();
             float totalTeamStatDelta = 0;
 
+            var statManager = StatManager.Instance;
+            if (statManager == null)
+            {
+                Debug.LogError("StatManager.Instance is null!");
+                return;
+            }
+                
+            var traitManager = TraitManager.Instance;
+            if (traitManager == null)
+            {
+                Debug.LogError("TraitManager.Instance is null!");
+                return;
+            }
+                
+            var ensembleModule = statManager.GetEnsembleModuleHandler();
+            if (ensembleModule == null)
+            {
+                Debug.LogError("Ensemble module is null!");
+                return;
+            }
+            
             if (_wasSuccess)
             {
                 Debug.Log("Practice was successful, calculating stat gains");
                 
-                var statManager = StatManager.Instance;
-                if (statManager == null)
-                {
-                    Debug.LogError("StatManager.Instance is null!");
-                    return;
-                }
-                
-                var traitManager = TraitManager.Instance;
-                if (traitManager == null)
-                {
-                    Debug.LogError("TraitManager.Instance is null!");
-                    return;
-                }
-                
-                var ensembleModule = statManager.GetEnsembleModuleHandler();
-                if (ensembleModule == null)
-                {
-                    Debug.LogError("Ensemble module is null!");
-                    return;
-                }
-                
-                bool isMentalPractice = _teamPracticeData.PracticeStatType == StatType.Mental;
-                bool hasEntertainerBonus = isMentalPractice && 
-                    _selectedMembers.Any(u => traitManager.HasTrait(u.memberType, TraitType.Entertainer));
-
                 foreach (var unit in _selectedMembers)
                 {
                     if (unit == null)
@@ -275,15 +270,6 @@ namespace Code.MainSystem.MainScreen
                     var statType = _teamPracticeData.PracticeStatType;
                     
                     float finalStatGain = ensembleModule.ApplyEnsembleBonus(teamStatIncrease, memberType);
-                    
-                    if (hasEntertainerBonus)
-                    {
-                        var holder = traitManager.GetHolder(memberType);
-                        if (holder != null)
-                        {
-                            finalStatGain = holder.GetCalculatedStat(TraitTarget.Mental, finalStatGain);
-                        }
-                    }
 
                     int roundedStatGain = Mathf.RoundToInt(finalStatGain);
                     
@@ -305,9 +291,13 @@ namespace Code.MainSystem.MainScreen
             
             // TeamHarmony 업데이트
             int roundedTeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
+            float finalValue = _selectedMembers.Sum(member =>
+                ensembleModule.ApplyEnsembleBonus(teamStatIncrease, member.memberType));
+
+            roundedTeamStatDelta += (int)finalValue;
+            
             if (roundedTeamStatDelta > 0)
             {
-                var statManager = StatManager.Instance;
                 if (statManager != null)
                 {
                     var teamHarmonyStat = statManager.GetTeamStat(StatType.TeamHarmony);

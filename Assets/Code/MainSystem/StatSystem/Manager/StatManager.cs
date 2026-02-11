@@ -142,6 +142,9 @@ namespace Code.MainSystem.StatSystem.Manager
 
             if (!isSuccess)
             {
+                if (holder == null)
+                    return;
+                
                 foreach (var inspiration in
                          holder.GetModifiers<IInspirationSystem>()
                              .OfType<FailureBreedsSuccessEffect>())
@@ -151,19 +154,27 @@ namespace Code.MainSystem.StatSystem.Manager
 
             float rewardValue = evt.Value;
 
-            rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
+            if (holder != null)
+            {
+                if (evt.StatType == StatType.Mental)
+                    rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeMental, rewardValue);
+                
+                rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
 
-            if (evt.Type == PracticenType.Personal)
-                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice,rewardValue);
+                if (evt.Type == PracticenType.Personal)
+                    rewardValue = holder.GetCalculatedStat(TraitTarget.Practice, rewardValue);
+            }
 
             _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, rewardValue);
         }
 
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
-            if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
+            if (evt.UnitDataSos == null || evt.UnitDataSos.Count == 0)
                 return;
-            bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
+            
+            List<float> memberConditions = evt.UnitDataSos.Select(t => t.currentCondition).ToList();
+            bool isSuccess = ensembleModule.CheckSuccess(memberConditions);
             
             Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
         }
@@ -248,17 +259,15 @@ namespace Code.MainSystem.StatSystem.Manager
             targetStat = default;
             finalBonus = 0;
 
-            // 1. 보너스 합산 (단순 루프가 LINQ Sum보다 빠름)
-            for (int i = 0; i < holders.Count; i++)
+            foreach (var item in holders)
             {
-                var modifiers = holders[i].GetModifiers<IMultiStatModifier>();
-                foreach (var mod in modifiers) // 인터페이스 리스트 순회
+                var modifiers = item.GetModifiers<IMultiStatModifier>();
+                foreach (var mod in modifiers)
                     finalBonus += mod.AddValue;
             }
 
             if (finalBonus <= 0) return false;
-
-            // 2. 최저값 탐색 (단일 루프)
+            
             float minStatValue = float.MaxValue;
             bool found = false;
 

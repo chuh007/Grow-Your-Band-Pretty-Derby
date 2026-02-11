@@ -94,7 +94,6 @@ namespace Code.MainSystem.StatSystem.Module
                 if (!isSuccess)
                     listener.OnTrainingFailed();
             
-
             return isSuccess;
         }
 

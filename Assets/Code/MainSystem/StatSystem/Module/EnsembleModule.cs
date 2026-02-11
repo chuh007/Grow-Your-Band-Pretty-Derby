@@ -41,7 +41,14 @@ namespace Code.MainSystem.StatSystem.Module
         public float ApplyEnsembleBonus(float baseValue, MemberType memberType)
         {
             var holder = TraitManager.Instance.GetHolder(memberType);
-            return holder.GetCalculatedStat(TraitTarget.Ensemble, baseValue);
+            float rewardValue = holder.GetCalculatedStat(TraitTarget.EnsembleCondition, baseValue);
+            return holder.GetCalculatedStat(TraitTarget.Ensemble, rewardValue);
+        }
+        
+        public float ApplyHarmonyBonus(float baseValue, MemberType memberType)
+        {
+            var holder = TraitManager.Instance.GetHolder(memberType);
+            return holder.GetCalculatedStat(TraitTarget.Harmony, baseValue);
         }
         
         /// <summary>

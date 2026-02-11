@@ -11,6 +11,8 @@ using Code.MainSystem.MainScreen.Resting;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -128,8 +130,10 @@ namespace Code.MainSystem.MainScreen
         /// </summary>
         private void ShowHealPreview(UnitDataSO unit)
         {
+            var holder = TraitManager.Instance.GetHolder(unit.memberType);
+            float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
             healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
-            healthBar.PrevieMinusHealth(-HealAmount);
+            healthBar.PrevieMinusHealth(-rewardValue);
         }
 
         /// <summary>
@@ -137,8 +141,10 @@ namespace Code.MainSystem.MainScreen
         /// </summary>
         private void ProcessConfirmRest(UnitDataSO selectedUnit)
         {
+            var holder = TraitManager.Instance.GetHolder(selectedUnit.memberType);
+            float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
             float beforeHealth = selectedUnit.currentCondition;
-            float afterHealth = Mathf.Min(beforeHealth + HealAmount, selectedUnit.maxCondition);
+            float afterHealth = Mathf.Min(beforeHealth + rewardValue, selectedUnit.maxCondition);
             
             selectedUnit.currentCondition = afterHealth;
             
@@ -146,7 +152,7 @@ namespace Code.MainSystem.MainScreen
             Bus<ConfirmRestEvent>.Raise(new ConfirmRestEvent(selectedUnit));
             
             healthBar.SetHealth(afterHealth, selectedUnit.maxCondition);
-            healthBar.PrevieMinusHealth(-HealAmount); 
+            healthBar.PrevieMinusHealth(-rewardValue); 
         }
 
         private void OnDestroy()

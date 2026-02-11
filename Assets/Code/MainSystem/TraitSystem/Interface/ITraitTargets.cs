@@ -25,7 +25,8 @@ namespace Code.MainSystem.TraitSystem.Interface
 
     public interface IDisciplinedLifestyle
     {
-        public bool CheckSameBehavior(StatType statType);
+        public float BonusValue { get; }
+        public void UpdateLastStat(StatType lastType);
     }
 
     public interface IMultiStatModifier
