@@ -45,6 +45,9 @@ namespace Code.MainSystem.MainScreen
         
         [Header("Team Practice Data")]
         [SerializeField] private AssetReference teamPracticeDataReference;
+        
+        [Header("Result Data")]
+        [SerializeField] private TeamPracticeResultData teamPracticeResultData;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
         private readonly Dictionary<MemberType, Vector3> _originalPosMap = new();
@@ -201,35 +204,34 @@ namespace Code.MainSystem.MainScreen
         {
             Debug.Log("=== BuildResultCache START ===");
             
-            if (_selectedMembers == null)
+            if (_selectedMembers == null || _selectedMembers.Count == 0)
             {
-                Debug.LogError("_selectedMembers is null!");
+                Debug.LogError("No members selected!");
                 return;
             }
-            
-            if (_selectedMembers.Count == 0)
-            {
-                Debug.LogError("_selectedMembers is empty!");
-                return;
-            }
-            
-            Debug.Log($"Selected members count: {_selectedMembers.Count}");
             
             if (_teamPracticeData == null)
             {
                 Debug.LogError("Team practice data is not loaded!");
                 return;
             }
-            
-            Debug.Log("Team practice data is loaded");
+
+            // ScriptableObject가 없으면 런타임에 생성
+            if (teamPracticeResultData == null)
+            {
+                teamPracticeResultData = ScriptableObject.CreateInstance<TeamPracticeResultData>();
+                Debug.Log("Created runtime instance of TeamPracticeResultData");
+            }
+            else
+            {
+                // 기존 데이터 초기화
+                teamPracticeResultData.Clear();
+            }
             
             float totalConditionBefore = _selectedMembers.Sum(u => u.currentCondition);
             float avgConditionAfter = (totalConditionBefore / _selectedMembers.Count) - teamConditionCost;
 
-            TeamPracticeResultCache.IsSuccess = _wasSuccess;
-            TeamPracticeResultCache.SelectedMembers = new List<UnitDataSO>(_selectedMembers);
-            TeamPracticeResultCache.StatDeltaDict = new Dictionary<(MemberType, StatType), int>();
-
+            var statDeltaDict = new Dictionary<(MemberType, StatType), int>();
             float totalTeamStatDelta = 0;
 
             if (_wasSuccess)
@@ -258,7 +260,8 @@ namespace Code.MainSystem.MainScreen
                 }
                 
                 bool isMentalPractice = _teamPracticeData.PracticeStatType == StatType.Mental;
-                bool hasEntertainerBonus = isMentalPractice && _selectedMembers.Any(u => traitManager.HasTrait(u.memberType, TraitType.Entertainer));
+                bool hasEntertainerBonus = isMentalPractice && 
+                    _selectedMembers.Any(u => traitManager.HasTrait(u.memberType, TraitType.Entertainer));
 
                 foreach (var unit in _selectedMembers)
                 {
@@ -292,7 +295,7 @@ namespace Code.MainSystem.MainScreen
                     }
                     
                     memberStat.PlusValue(roundedStatGain);
-                    TeamPracticeResultCache.StatDeltaDict[(memberType, statType)] = roundedStatGain;
+                    statDeltaDict[(memberType, statType)] = roundedStatGain;
     
                     totalTeamStatDelta += finalStatGain;
                 }
@@ -300,6 +303,26 @@ namespace Code.MainSystem.MainScreen
             
             UpdateMembersCondition();
             
+            // TeamHarmony 업데이트
+            int roundedTeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
+            if (roundedTeamStatDelta > 0)
+            {
+                var statManager = StatManager.Instance;
+                if (statManager != null)
+                {
+                    var teamHarmonyStat = statManager.GetTeamStat(StatType.TeamHarmony);
+                    if (teamHarmonyStat != null)
+                    {
+                        teamHarmonyStat.PlusValue(roundedTeamStatDelta);
+                    }
+                    else
+                    {
+                        Debug.LogError("GetTeamStat(TeamHarmony) returned null");
+                    }
+                }
+            }
+
+            // ScriptableObject에 결과 저장
             Debug.Log("Getting first unit for team stat");
             var firstUnit = _selectedMembers[0];
             if (firstUnit == null)
@@ -314,33 +337,21 @@ namespace Code.MainSystem.MainScreen
             {
                 Debug.LogError("firstUnit.teamStat is null!");
             }
-            else
-            {
-                TeamPracticeResultCache.TeamStat = firstUnit.teamStat;
-            }
-            
-            TeamPracticeResultCache.TeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
 
-            if (TeamPracticeResultCache.TeamStatDelta > 0)
-            {
-                var statManager = StatManager.Instance;
-                if (statManager != null)
-                {
-                    var teamHarmonyStat = statManager.GetTeamStat(StatType.TeamHarmony);
-                    if (teamHarmonyStat != null)
-                    {
-                        teamHarmonyStat.PlusValue(TeamPracticeResultCache.TeamStatDelta);
-                    }
-                    else
-                    {
-                        Debug.LogError("GetTeamStat(TeamHarmony) returned null");
-                    }
-                }
-            }
-
-            TeamPracticeResultCache.TeamConditionCurrent = avgConditionAfter;
-            TeamPracticeResultCache.TeamConditionDelta = -teamConditionCost;
+            teamPracticeResultData.SetResult(
+                _wasSuccess,
+                _selectedMembers,
+                statDeltaDict,
+                firstUnit.teamStat,
+                roundedTeamStatDelta,
+                avgConditionAfter,
+                -teamConditionCost
+            );
             
+            // DataManager에 저장하여 씬 전환에도 유지되도록 함
+            TeamPracticeDataManager.Instance.SetResultData(teamPracticeResultData);
+            
+            Debug.Log($"Result data saved - Success: {teamPracticeResultData.isSuccess}, Members: {teamPracticeResultData.selectedMembers.Count}");
             Debug.Log("=== BuildResultCache END ===");
         }
 
@@ -396,6 +407,14 @@ namespace Code.MainSystem.MainScreen
             {
                 probabilityText.SetText("0%");
             }
+        }
+
+        /// <summary>
+        /// 외부에서 결과 데이터를 가져올 수 있는 메서드
+        /// </summary>
+        public TeamPracticeResultData GetResultData()
+        {
+            return teamPracticeResultData;
         }
     }
 }
