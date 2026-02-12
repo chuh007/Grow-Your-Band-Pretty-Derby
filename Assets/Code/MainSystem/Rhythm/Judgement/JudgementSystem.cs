@@ -82,7 +82,11 @@ namespace Code.MainSystem.Rhythm.Judgement
             double compensatedTime = _conductor.SongPosition + _conductor.InputOffset;
             NoteData targetNote = _lineController.GetClosestNoteAcrossAllTracks(compensatedTime);
     
-            if (targetNote == null) return;
+            if (targetNote == null)
+            {
+                HandleEmptyTap();
+                return;
+            }
 
             double diff = Math.Abs(targetNote.Time - compensatedTime);
     
@@ -92,11 +96,34 @@ namespace Code.MainSystem.Rhythm.Judgement
                 difficultyMult = _partDataMap[targetNote.MemberId].judgementDifficulty;
             }
             
-            if (diff > missWindow * difficultyMult) return; 
-            
-            JudgementType finalType = GetJudgement(diff, difficultyMult, targetNote.MemberId);
+            // 판정 범위 내에 들어온 경우
+            if (diff <= missWindow * difficultyMult)
+            {
+                JudgementType finalType = GetJudgement(diff, difficultyMult, targetNote.MemberId);
+                HandleInputResult(targetNote, finalType);
+            }
+            // 판정 범위보다 일찍 누른 경우 (Early Penalty)
+            else if (targetNote.Time > compensatedTime && diff <= missWindow * 1.5 * difficultyMult)
+            {
+                // 너무 일찍 누른 경우 'Bad' 처리하고 노트를 제거함
+                HandleInputResult(targetNote, JudgementType.Bad);
+            }
+            else
+            {
+                // 허공에 눌렀거나 너무 동떨어진 타이밍인 경우
+                HandleEmptyTap();
+            }
+        }
 
-            HandleInputResult(targetNote, finalType);
+        private void HandleEmptyTap()
+        {
+            // 노트를 제거하지 않고 콤보만 끊음
+            if (_scoreManager != null)
+            {
+                _scoreManager.RegisterResult(JudgementType.Miss, -1, -1);
+            }
+
+            Bus<NoteHitEvent>.Raise(new NoteHitEvent(JudgementType.Miss, -1, -1));
         }
 
         private void HandleInputResult(NoteData note, JudgementType type)
