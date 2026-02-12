@@ -76,25 +76,14 @@ namespace Code.MainSystem.StatSystem.Module
             
             float baseRate = GetSuccessRate();
             float routineBonus = 0;
-            var routine = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
-            if (routine != null) 
-                routineBonus = routine.GetSuccessBonus("current_practice_name"); // TODO: 현재 훈련 이름 전달 필요
             float finalRate = holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate) + routineBonus;
     
             bool isSuccess = Random.Range(0f, 100f) < finalRate;
-            if (isSuccess)
-            {
-                routine?.OnPracticeSuccess();
-                
-                foreach (var bonus in holder.GetModifiers<ITrainingSuccessBonus>())
-                    bonus.OnTrainingSuccess(holder.MemberType); 
-            }
             
             foreach (var listener in holder.GetModifiers<IInspirationSystem>())
                 if (!isSuccess)
                     listener.OnTrainingFailed();
             
-
             return isSuccess;
         }
 

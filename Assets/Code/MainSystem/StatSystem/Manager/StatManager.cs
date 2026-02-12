@@ -48,11 +48,6 @@ namespace Code.MainSystem.StatSystem.Manager
         private StatRegistry _registry;
         private StatOperator _operator;
         private ConditionHandler _conditionHandler;
-        
-        private static readonly StatType[] _cachedPlayableStats = Enum.GetValues(typeof(StatType))
-            .Cast<StatType>()
-            .Where(s => (int)s > 1 && s != StatType.TeamHarmony)
-            .ToArray();
 
         private void Awake()
         {
@@ -108,7 +103,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void RegisterEvents()
         {
-            Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
+            Bus<PracticeEvent>.OnEvent += HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent += HandleTeamPracticeRequested;
@@ -116,7 +111,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void UnregisterEvents()
         {
-            Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
+            Bus<PracticeEvent>.OnEvent -= HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent -= HandleTeamPracticeRequested;
@@ -126,12 +121,13 @@ namespace Code.MainSystem.StatSystem.Manager
 
         #region Event Handlers
 
-        private void HandlePracticeRequested(PracticenEvent evt)
+        private void HandlePracticeRequested(PracticeEvent evt)
         {
             ITraitHolder holder = TraitManager.Instance.GetHolder(evt.MemberType);
-            bool isSuccess = PredictMemberPractice(evt.SuccessRate, holder);
+            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
+            bool isSuccess = evt.IsSuccess;
             
-            var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
+            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>();
             if (bufferedEffects != null)
             {
                 foreach (var effect in bufferedEffects)
@@ -151,19 +147,27 @@ namespace Code.MainSystem.StatSystem.Manager
 
             float rewardValue = evt.Value;
 
+            if (routineBonuses != null) 
+                rewardValue *= routineBonuses.GetStatMultiplier();
+
+            if (evt.StatType == StatType.Mental)
+                rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeMental, rewardValue);
+                
             rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
 
             if (evt.Type == PracticenType.Personal)
-                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice,rewardValue);
+                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice, rewardValue);
 
             _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, rewardValue);
         }
 
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
-            if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
+            if (evt.UnitDataSos == null || evt.UnitDataSos.Count == 0)
                 return;
-            bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
+            
+            List<float> memberConditions = evt.UnitDataSos.Select(t => t.currentCondition).ToList();
+            bool isSuccess = ensembleModule.CheckSuccess(memberConditions);
             
             Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
         }
@@ -223,6 +227,9 @@ namespace Code.MainSystem.StatSystem.Manager
 
         public bool PredictMemberPractice(float successRate, ITraitHolder holder)
         {
+            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
+            routineBonuses?.OnPracticeSuccess();
+
             upgradeModuleModule.SetCondition(successRate);
             return upgradeModuleModule.CanUpgrade(holder);
         }
@@ -238,54 +245,5 @@ namespace Code.MainSystem.StatSystem.Manager
         }
         
         #endregion
-
-        /// <summary>
-        /// 선택된 멤버들 중 최저 스탯 보유자에게 보너스를 주고, 누구였는지 정보를 반환합니다.
-        /// </summary>
-        public bool ApplyLowestStatBonus(List<IModifierProvider> holders, out MemberType targetMember, out StatType targetStat, out int finalBonus)
-        {
-            targetMember = default;
-            targetStat = default;
-            finalBonus = 0;
-
-            // 1. 보너스 합산 (단순 루프가 LINQ Sum보다 빠름)
-            for (int i = 0; i < holders.Count; i++)
-            {
-                var modifiers = holders[i].GetModifiers<IMultiStatModifier>();
-                foreach (var mod in modifiers) // 인터페이스 리스트 순회
-                    finalBonus += mod.AddValue;
-            }
-
-            if (finalBonus <= 0) return false;
-
-            // 2. 최저값 탐색 (단일 루프)
-            float minStatValue = float.MaxValue;
-            bool found = false;
-
-            for (int i = 0; i < holders.Count; i++)
-            {
-                if (holders[i] is not ITraitHolder traitHolder) continue;
-        
-                MemberType mType = traitHolder.MemberType;
-                for (int j = 0; j < _cachedPlayableStats.Length; j++)
-                {
-                    StatType sType = _cachedPlayableStats[j];
-                    BaseStat stat = _registry.GetMemberStat(mType, sType);
-            
-                    if (stat != null && stat.CurrentValue < minStatValue)
-                    {
-                        minStatValue = stat.CurrentValue;
-                        targetMember = mType;
-                        targetStat = sType;
-                        found = true;
-                    }
-                }
-            }
-
-            if (found)
-                _operator.IncreaseMemberStat(targetMember, targetStat, finalBonus);
-
-            return found;
-        }
     }
 }

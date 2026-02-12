@@ -7,6 +7,7 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using Code.MainSystem.Turn;
 
 namespace Code.MainSystem.TraitSystem.Manager
@@ -157,8 +158,10 @@ namespace Code.MainSystem.TraitSystem.Manager
             
             if (existingTrait != null || holder.IsAdjusting)
                 return;
-
             holder.AddTrait(newTrait);
+
+            var traitLifecycleListener = holder.GetModifiers<ITraitLifecycleListener>().FirstOrDefault();
+            traitLifecycleListener?.OnTraitAdded(holder.MemberType);
 
             int newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
         
@@ -183,6 +186,9 @@ namespace Code.MainSystem.TraitSystem.Manager
             if (!holder.IsAdjusting && !targetTrait.Data.IsRemovable)
                 return;
 
+            var traitLifecycleListener = holder.GetModifiers<ITraitLifecycleListener>().FirstOrDefault();
+            traitLifecycleListener?.OnTraitAdded(holder.MemberType);
+            
             holder.RemoveActiveTrait(targetTrait);
             
             switch (holder.IsAdjusting)
@@ -232,22 +238,6 @@ namespace Code.MainSystem.TraitSystem.Manager
         public bool HasTrait(MemberType memberType, int traitHash)
         {
             return _holders.TryGetValue(memberType, out var holder) && holder.ActiveTraits.Any(t => t.Data.IDHash == traitHash);
-        }
-        
-        /// <summary>
-        /// 특정 특성이 특정 태그를 가지고 있는지 확인
-        /// </summary>
-        public bool HasTraitTag(MemberType memberType, TraitTag traitTag)
-        {
-            if (!_holders.TryGetValue(memberType, out var holder)) 
-                return false;
-            return holder.ActiveTraits.Any(t => t.Data.TraitTag == traitTag);
-        }
-        
-        // TODO 연결 작업시 삭제 필요
-        public bool HasTrait(MemberType memberType, TraitType traitID)
-        {
-            return false;
         }
 
         public IReadOnlyList<TraitGroupStatus> GetTeamGroupStatus()

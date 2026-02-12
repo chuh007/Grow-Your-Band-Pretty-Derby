@@ -10,6 +10,7 @@ using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.Etc;
 using Code.MainSystem.MainScreen.MemberData;
+using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.Turn;
 using TMPro;
@@ -70,13 +71,16 @@ namespace Code.MainSystem.MainScreen
                 await LoadUnitsAsync();
 
                 loadingUI.UpdateProgress("Setting up UI...");
-                ForceEnableAllButtons();
+                // ForceEnableAllButtons 삭제 - UpdateButton()이 알아서 처리함
                 
                 loadingUI.UpdateProgress("Refreshing Layout...");
                 StartCoroutine(RefreshUILayout());
                 
                 loadingUI.UpdateProgress("Finalizing...");
                 await Task.Delay(100);
+                
+                // 로딩 완료 후 버튼 상태 업데이트
+                UpdateButtonsAfterLoad();
                 
                 loadingUI.UpdateProgress("Complete!");
             }
@@ -100,7 +104,7 @@ namespace Code.MainSystem.MainScreen
             Debug.Log("[MainScreen] OnEnable called");
             Bus<MemberTrainingStateChangedEvent>.OnEvent += OnMemberTrainingStateChanged;
 
-            Invoke(nameof(ForceEnableAllButtons), 0.1f);
+            // ForceEnableAllButtons 삭제 - 불필요한 강제 활성화 제거
         }
 
         private void OnDisable()
@@ -115,11 +119,61 @@ namespace Code.MainSystem.MainScreen
 
         private void InitializeActionCounts()
         {
+            // 기본값으로 초기화
             _memberActionCounts[MemberType.Bass] = false;
             _memberActionCounts[MemberType.Drums] = false;
             _memberActionCounts[MemberType.Guitar] = false;
             _memberActionCounts[MemberType.Piano] = false;
             _memberActionCounts[MemberType.Vocal] = false;
+            
+            // TrainingManager 상태 동기화
+            SyncWithTrainingManager();
+        }
+        
+        /// <summary>
+        /// TrainingManager의 현재 상태와 동기화
+        /// 씬 전환 후에도 훈련 완료 상태를 유지하기 위함
+        /// </summary>
+        private void SyncWithTrainingManager()
+        {
+            if (TrainingManager.Instance == null)
+            {
+                Debug.LogWarning("[MainScreen] TrainingManager.Instance is null - cannot sync");
+                return;
+            }
+            
+            foreach (var memberType in _memberActionCounts.Keys.ToList())
+            {
+                bool isTrained = TrainingManager.Instance.IsMemberTrained(memberType);
+                _memberActionCounts[memberType] = isTrained;
+                
+                if (isTrained)
+                {
+                    Debug.Log($"[MainScreen] {memberType} is already trained - action blocked");
+                }
+            }
+            
+            // Busking 가능 여부 체크 - 한 명이라도 훈련했으면 불가능
+            _isbuskingAvailable = !_memberActionCounts.Values.Any(acted => acted);
+            
+            Debug.Log($"[MainScreen] Synced with TrainingManager - Busking available: {_isbuskingAvailable}");
+        }
+
+        /// <summary>
+        /// 로딩 완료 후 버튼 상태를 업데이트
+        /// </summary>
+        private void UpdateButtonsAfterLoad()
+        {
+            Debug.Log("[MainScreen] UpdateButtonsAfterLoad called");
+            
+            if (_currentUnit != null)
+            {
+                UpdateButton();
+            }
+            else
+            {
+                Debug.LogWarning("[MainScreen] Current unit is null, cannot update buttons");
+            }
         }
 
         private async Task LoadUnitsAsync()
@@ -201,33 +255,6 @@ namespace Code.MainSystem.MainScreen
             Debug.Log("[MainScreen] LoadUnitsAsync completed");
         }
 
-        /// <summary>
-        /// 모든 버튼을 강제로 활성화
-        /// </summary>
-        private void ForceEnableAllButtons()
-        {
-            Debug.Log("[MainScreen] ForceEnableAllButtons called");
-
-            if (practiceBtns == null || practiceBtns.Count == 0)
-            {
-                Debug.LogError("[MainScreen] practiceBtns is null or empty!");
-                return;
-            }
-
-            for (int i = 0; i < practiceBtns.Count; i++)
-            {
-                if (practiceBtns[i] != null)
-                {
-                    practiceBtns[i].interactable = true;
-                    Debug.Log($"[MainScreen] Button {i} ({practiceBtns[i].name}) FORCE ENABLED");
-                }
-                else
-                {
-                    Debug.LogError($"[MainScreen] Button at index {i} is null!");
-                }
-            }
-        }
-
         #endregion
 
         #region Event Handling
@@ -266,16 +293,19 @@ namespace Code.MainSystem.MainScreen
         {
             if (practiceBtns == null)
             {
+                Debug.LogWarning("[MainScreen] practiceBtns is null");
                 return;
             }
 
             if (practiceBtns.Count < 5)
             {
+                Debug.LogWarning($"[MainScreen] practiceBtns count is {practiceBtns.Count}, expected at least 5");
                 return;
             }
 
             if (_currentUnit == null)
             {
+                Debug.LogWarning("[MainScreen] _currentUnit is null in UpdateButton");
                 return;
             }
 
@@ -283,17 +313,24 @@ namespace Code.MainSystem.MainScreen
                 ? _memberActionCounts[_currentUnit.memberType]
                 : false;
 
+            Debug.Log($"[MainScreen] UpdateButton - Current: {_currentUnit.memberType}, Acted: {isCurrentMemberActed}, Busking: {_isbuskingAvailable}");
+
+            // 개인 훈련 버튼들 (0~3)
             for (int i = 0; i < 4; i++)
             {
                 if (practiceBtns[i] != null)
                 {
-                    practiceBtns[i].interactable = !isCurrentMemberActed;
+                    bool shouldEnable = !isCurrentMemberActed;
+                    practiceBtns[i].interactable = shouldEnable;
+                    Debug.Log($"[MainScreen] Button {i} ({practiceBtns[i].name}) set to {shouldEnable}");
                 }
             }
 
+            // 버스킹 버튼 (4)
             if (practiceBtns[4] != null)
             {
                 practiceBtns[4].interactable = _isbuskingAvailable;
+                Debug.Log($"[MainScreen] Busking button set to {_isbuskingAvailable}");
             }
         }
 
@@ -450,18 +487,6 @@ namespace Code.MainSystem.MainScreen
 
             InitializeActionCounts();
             _isbuskingAvailable = true;
-
-            if (practiceBtns != null)
-            {
-                for (int i = 0; i < practiceBtns.Count; i++)
-                {
-                    if (practiceBtns[i] != null)
-                    {
-                        practiceBtns[i].interactable = true;
-                        Debug.Log($"[MainScreen] Force enabled button {i}: {practiceBtns[i].name}");
-                    }
-                }
-            }
 
             UpdateButton();
         }

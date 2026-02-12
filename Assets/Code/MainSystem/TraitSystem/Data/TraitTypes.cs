@@ -46,12 +46,10 @@ namespace Code.MainSystem.TraitSystem.Data
         Condition,          // 모든 컨디션 소모/변화 관련
         SuccessRate,        // 훈련/합주 성공률 관련
         Training,           // 능력치 상승 효율 관련
-        Mental,             // 멘탈 능력치 관련
         FeverScore,         // 피버 점수 관련
         FeverTime,          // 피버 지속시간 관련
         FeverInput,         // 피버 필요 입력 관련
         Harmony,           // 하모니 관련
-        
     }
 
     public enum CalculationType

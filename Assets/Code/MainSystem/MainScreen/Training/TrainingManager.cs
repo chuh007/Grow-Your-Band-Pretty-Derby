@@ -5,6 +5,7 @@ using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Code.Core.Bus.GameEvents.TurnEvents;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.TraitSystem.Manager;
 using UnityEngine;
 
 namespace Code.MainSystem.MainScreen.Training
@@ -128,7 +129,7 @@ namespace Code.MainSystem.MainScreen.Training
                 return;
             }
             
-            _trainedMembers[member] = 0;
+            _trainedMembers[member]--;
             _currentTurnTrainingCount++;
             
             Debug.Log($"[TrainingManager] {member} marked as trained (Total: {_currentTurnTrainingCount})");
@@ -136,6 +137,19 @@ namespace Code.MainSystem.MainScreen.Training
             RaiseMemberTrainingStateChanged(member);
         }
 
+        /// <summary>
+        /// 특정 멤버의 행동권을 추가합니다. (예: 0 -> 1)
+        /// </summary>
+        public void RestoreMemberAction(MemberType member, int amount = 1)
+        {
+            if (!_trainedMembers.ContainsKey(member))
+                return;
+
+            _trainedMembers[member] += amount;
+            
+            RaiseMemberTrainingStateChanged(member);
+        }
+        
         /// <summary>
         /// 모든 멤버의 훈련 상태를 초기화
         /// 새로운 턴 시작 시 호출

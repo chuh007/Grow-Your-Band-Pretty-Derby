@@ -1,4 +1,5 @@
-﻿using Code.MainSystem.StatSystem.BaseStats;
+﻿using System.Collections.Generic;
+using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 
 namespace Code.MainSystem.TraitSystem.Interface
@@ -25,12 +26,22 @@ namespace Code.MainSystem.TraitSystem.Interface
 
     public interface IDisciplinedLifestyle
     {
-        public bool CheckSameBehavior(StatType statType);
+         float BonusValue { get; }
+        float CheckPractice(StatType statType);
+        void UpdateLastStat(StatType lastType);
     }
 
     public interface IMultiStatModifier
     {
         public int AddValue { get; }
+        
+        void ApplyEffect(MemberType memberType, Dictionary<(MemberType, StatType), int> statDeltaDict);
+    }
+    
+    public interface ITraitLifecycleListener
+    {
+        void OnTraitAdded(MemberType member);
+        void OnTraitRemoved(MemberType member);
     }
 
     public interface IGrooveRestoration
@@ -41,6 +52,11 @@ namespace Code.MainSystem.TraitSystem.Interface
     }
     
     public interface IConditionModifier {
+        float ConditionCostMultiplier { get; }
+        float ConditionRecoveryMultiplier { get; }
+    }
+    
+    public interface IOverzealous {
         float ConditionCostMultiplier { get; }
         float ConditionRecoveryMultiplier { get; }
     }
@@ -56,13 +72,11 @@ namespace Code.MainSystem.TraitSystem.Interface
     
     public interface ITrainingSuccessBonus {
         float AddValue { get; }
-        void OnTrainingSuccess(MemberType member);
     }
     
     public interface IRoutineModifier {
         void OnPracticeSuccess();
         void OnRest();
-        float GetSuccessBonus(string currentActionId);
         float GetStatMultiplier();
     }
 }
