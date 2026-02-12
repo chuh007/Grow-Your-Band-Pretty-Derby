@@ -20,6 +20,7 @@ namespace Code.MainSystem.Rhythm.Judgement
         public int PerfectCount => _perfectCount;
         public int GreatCount => _greatCount;
         public int GoodCount => _goodCount;
+        public int BadCount => _badCount;
         public int MissCount => _missCount;
         
         
@@ -28,6 +29,7 @@ namespace Code.MainSystem.Rhythm.Judgement
         private int _perfectCount;
         private int _greatCount;
         private int _goodCount;
+        private int _badCount;
         private int _missCount;
 
         [Header("Score Config")]
@@ -69,6 +71,7 @@ namespace Code.MainSystem.Rhythm.Judgement
             _perfectCount = 0;
             _greatCount = 0;
             _goodCount = 0;
+            _badCount = 0;
             _missCount = 0;
 
             Bus<ScoreUpdateEvent>.Raise(new ScoreUpdateEvent(0, 0, JudgementType.Perfect, -1));
@@ -100,8 +103,14 @@ namespace Code.MainSystem.Rhythm.Judgement
                     baseScore = baseGoodScore;
                     CurrentCombo++;
                     break;
+                case JudgementType.Bad:
+                    _badCount++;
+                    baseScore = 0;
+                    CurrentCombo = 0;
+                    break;
                 case JudgementType.Miss:
                     _missCount++;
+                    baseScore = 0;
                     CurrentCombo = 0;
                     break;
             }
@@ -129,7 +138,7 @@ namespace Code.MainSystem.Rhythm.Judgement
 
             float finalScoreAdded = 0;
             
-            if (type != JudgementType.Miss)
+            if (type != JudgementType.Miss && type != JudgementType.Bad)
             {
                 float comboBonusVal = (CurrentCombo > 1) ? (CurrentCombo * comboBonus) : 0;
                 finalScoreAdded = (baseScore + comboBonusVal) * partMult * statMult * feverMult;
@@ -151,6 +160,7 @@ namespace Code.MainSystem.Rhythm.Judgement
                 _perfectCount, 
                 _greatCount, 
                 _goodCount, 
+                _badCount,
                 _missCount
             ));
         }

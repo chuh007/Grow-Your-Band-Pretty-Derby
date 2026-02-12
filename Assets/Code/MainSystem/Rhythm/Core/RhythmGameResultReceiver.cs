@@ -21,17 +21,22 @@ namespace Code.MainSystem.Rhythm.Core
         private void Start()
         {
             Debug.Assert(dataSender != null, "RhythmGameDataSenderSO is missing");
-        }
 
-        private void Update()
-        {
+            // 씬 진입 시 처리해야 할 리듬 게임 결과 데이터가 있는지 확인
             if (dataSender.isResultDataAvailable)
             {
-                Debug.Log("RhythmGameResultReceiver");
+                Debug.Log("[RhythmGameResultReceiver] 결과 데이터 처리 중...");
                 ProcessGameResult();
             }
+            
+            // 결과 처리가 완료되었거나 데이터가 없는 경우, 안전하게 SO의 모든 필드를 초기화
+            dataSender.Initialize();
+            Debug.Log("[RhythmGameResultReceiver] 데이터 세션 초기화 완료.");
         }
 
+        /// <summary>
+        /// SO에 저장된 리듬 게임 결과를 기반으로 멤버들의 스탯을 올리고 턴을 종료
+        /// </summary>
         private void ProcessGameResult()
         {
             var (isAvailable, allStatUpValue, harmonyStatUpValue) = dataSender.ConsumeResult();
