@@ -108,7 +108,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void RegisterEvents()
         {
-            Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
+            Bus<PracticeEvent>.OnEvent += HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent += HandleTeamPracticeRequested;
@@ -116,7 +116,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void UnregisterEvents()
         {
-            Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
+            Bus<PracticeEvent>.OnEvent -= HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent -= HandleTeamPracticeRequested;
@@ -126,10 +126,10 @@ namespace Code.MainSystem.StatSystem.Manager
 
         #region Event Handlers
 
-        private void HandlePracticeRequested(PracticenEvent evt)
+        private void HandlePracticeRequested(PracticeEvent evt)
         {
             ITraitHolder holder = TraitManager.Instance.GetHolder(evt.MemberType);
-            bool isSuccess = PredictMemberPractice(evt.SuccessRate, holder);
+            bool isSuccess = evt.IsSuccess;
             
             var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
             if (bufferedEffects != null)

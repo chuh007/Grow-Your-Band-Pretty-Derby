@@ -85,9 +85,6 @@ namespace Code.MainSystem.StatSystem.Module
             if (isSuccess)
             {
                 routine?.OnPracticeSuccess();
-                
-                foreach (var bonus in holder.GetModifiers<ITrainingSuccessBonus>())
-                    bonus.OnTrainingSuccess(holder.MemberType); 
             }
             
             foreach (var listener in holder.GetModifiers<IInspirationSystem>())

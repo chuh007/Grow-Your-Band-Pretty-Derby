@@ -10,6 +10,7 @@ using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
+using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine.AddressableAssets;
@@ -253,11 +254,11 @@ namespace Code.MainSystem.MainScreen
                 Debug.LogError("Ensemble module is null!");
                 return;
             }
-            
+
             if (_wasSuccess)
             {
                 Debug.Log("Practice was successful, calculating stat gains");
-                
+
                 foreach (var unit in _selectedMembers)
                 {
                     if (unit == null)

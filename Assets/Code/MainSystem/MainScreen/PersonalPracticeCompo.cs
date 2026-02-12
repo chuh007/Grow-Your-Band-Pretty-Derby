@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Linq;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -9,6 +9,7 @@ using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.Etc;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine;
@@ -332,22 +333,33 @@ namespace Code.MainSystem.MainScreen
             }
 
             var practice = _currentUnit.personalPractices[index];
-
+            var holder = TraitManager.Instance.GetHolder(_currentUnit.memberType);
+            
             if (_selectedPracticeIndex == index)
             {
+                var disciplined = holder.GetModifiers<IDisciplinedLifestyle>().FirstOrDefault();
+                
                 bool success = StatManager.Instance.PredictMemberPractice(
                     _currentCondition, 
                     TraitManager.Instance.GetHolder(_currentUnit.memberType)
                 );
 
-                Bus<PracticenEvent>.Raise(new PracticenEvent(
+
+                float increaseValue = success ? practice.statIncrease : 0;
+
+                if (disciplined != null)
+                {
+                    increaseValue += disciplined.CheckPractice(practice.PracticeStatType);
+                }
+                
+                Bus<PracticeEvent>.Raise(new PracticeEvent(
                     PracticenType.Personal,
                     _currentUnit.memberType,
                     practice.PracticeStatType,
-                    _currentCondition,
-                    success ? practice.statIncrease : 0
+                    success,
+                    increaseValue
                 ));
-
+                
                 float realDamage = StatManager.Instance
                     .GetConditionHandler()
                     .ModifyConditionCost(_currentUnit.memberType, practice.StaminaReduction);

@@ -46,9 +46,16 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
         public float ModifyConditionCost(MemberType memberType, float baseCost)
         {
             var holder = TraitManager.Instance.GetHolder(memberType);
+
+            var trainingBonuses = holder.GetModifiers<ITrainingSuccessBonus>();
+            var trainingBonus = trainingBonuses?.FirstOrDefault();
+
+            if (trainingBonus != null)
+                baseCost += trainingBonus.AddValue;
+            
             float multiplier = holder.GetModifiers<IConditionModifier>().Select(m => m.ConditionCostMultiplier)
                 .DefaultIfEmpty(1f).Aggregate((a, b) => a * b);
-            return (holder?.GetCalculatedStat(TraitTarget.Condition, baseCost) ?? baseCost) * multiplier;
+            return holder.GetCalculatedStat(TraitTarget.Condition, baseCost) * multiplier;
         }
     }
 }

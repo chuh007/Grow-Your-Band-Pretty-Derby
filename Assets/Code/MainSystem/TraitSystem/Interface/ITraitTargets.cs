@@ -26,6 +26,7 @@ namespace Code.MainSystem.TraitSystem.Interface
     public interface IDisciplinedLifestyle
     {
         public float BonusValue { get; }
+        public float CheckPractice(StatType statType);
         public void UpdateLastStat(StatType lastType);
     }
 
@@ -57,7 +58,6 @@ namespace Code.MainSystem.TraitSystem.Interface
     
     public interface ITrainingSuccessBonus {
         float AddValue { get; }
-        void OnTrainingSuccess(MemberType member);
     }
     
     public interface IRoutineModifier {

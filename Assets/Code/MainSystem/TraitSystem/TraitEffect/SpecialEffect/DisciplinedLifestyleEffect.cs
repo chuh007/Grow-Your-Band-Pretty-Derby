@@ -1,5 +1,4 @@
 ﻿using Code.MainSystem.StatSystem.BaseStats;
-using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Runtime;
 
@@ -20,14 +19,15 @@ namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
             BonusValue = GetValue(0);
         }
         
-        public override float GetAmount(TraitTarget target, object context = null)
+        public float CheckPractice(StatType statType)
         {
-            if (context is not StatType currentStatType)
-                return 0f;
-            
-            if (_prevStatType != (StatType)(-1) && _prevStatType == currentStatType)
+            if (_prevStatType != (StatType)(-1) && _prevStatType == statType)
+            {
+                UpdateLastStat(statType);
                 return BonusValue;
-            
+            }
+
+            UpdateLastStat(statType);
             return 0f;
         }
         
