@@ -52,22 +52,17 @@ MonoBehaviour:
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 720b2e00147a49f44b3fa858c54ed367
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: 
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
-    <Events>k__BackingField:
-    - m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+    <Events>k__BackingField: []
     <Choices>k__BackingField: []

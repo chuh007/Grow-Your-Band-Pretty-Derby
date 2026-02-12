@@ -18,11 +18,41 @@ MonoBehaviour:
     place: 0
     weight: 1
     isImportance: 0
-    description: "\uD53C\uC544\uB178\uAE30\uBCF8"
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
     dialogue: {fileID: 11400000, guid: a96d77e9449eaed4d9b32ebccc421799, type: 2}
   - type: 4
     place: 3
     weight: 1
     isImportance: 0
-    description: "\uD53C\uC544\uB178\uC2A4\uD0AC"
+    description: "\uC694\uC998 \uC720\uD589\uD558\uB294 \uCE74\uD398\uC5D0\uB294,
+      \uD070 \uD53C\uC544\uB178\uAC00 \uC788\uB2E4\uACE0 \uD55C\uB2E4."
     dialogue: {fileID: 11400000, guid: 5f29c10b945321c4ca4aba3972093f1c, type: 2}
+  - type: 4
+    place: 3
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: c387afa526f95f047b30f341c92d8153, type: 2}
+  - type: 4
+    place: 4
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: d5d1587446bb3614694f7109c786a975, type: 2}
+  - type: 4
+    place: 1
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: 3b68898ac6e92504fb2ea94e880cf288, type: 2}
+  - type: 4
+    place: 2
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: 28f3c6bb3048a7647b55179ca76199ce, type: 2}

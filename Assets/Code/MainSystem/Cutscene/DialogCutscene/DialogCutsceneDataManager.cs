@@ -33,7 +33,7 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
             foreach (var trait in dialogSender.addedTraits)
             {
                 Bus<TraitAddRequested>.Raise(new TraitAddRequested
-                    (trait.targetMember, trait.targetStat));
+                    (trait.targetMember, trait.targetTrait));
             }
             
             dialogSender.changeStats.Clear();

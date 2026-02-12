@@ -6,6 +6,7 @@ using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Code.MainSystem.Cutscene.DialogCutscene
 {
@@ -21,7 +22,7 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
     public struct TraitVariation
     {
         public MemberType targetMember;
-        public TraitDataSO targetStat;
+        public TraitDataSO targetTrait;
     }
     
     // 외출, 인카운터 등 모두 병합한 sender
