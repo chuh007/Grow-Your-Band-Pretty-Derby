@@ -21,7 +21,7 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
     public struct TraitVariation
     {
         public MemberType targetMember;
-        public TraitType targetStat;
+        public TraitDataSO targetStat;
     }
     
     // 외출, 인카운터 등 모두 병합한 sender
