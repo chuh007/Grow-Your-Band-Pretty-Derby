@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf0aee1c1b674a029853cfbbf444e9b7, type: 3}
-  m_Name: Condition5
+  m_Name: Bass Condition5
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueEvent.StatChangeDialogueEventSO
-  statType: 0
-  statChangeAmount: 5
+  stat:
+    targetMember: 2
+    targetStat: 0
+    variation: 5

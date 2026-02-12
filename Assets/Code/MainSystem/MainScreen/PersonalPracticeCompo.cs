@@ -4,6 +4,7 @@ using System.Linq;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
+using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.Etc;
@@ -409,6 +410,7 @@ namespace Code.MainSystem.MainScreen
                 HideProbabilityText();
                 
                 CollapsePanel();
+                Bus<TrainingEndEncounterEvent>.Raise(new TrainingEndEncounterEvent(practice));
                 return;
             }
 

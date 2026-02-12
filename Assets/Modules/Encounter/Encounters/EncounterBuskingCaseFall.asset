@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Encounter.EncounterDataSO
   dialogue: {fileID: 11400000, guid: f8f27b6d175a7884bae98a88a48d7963, type: 2}
   percent: 0.3
-  type: 2
+  type: 0

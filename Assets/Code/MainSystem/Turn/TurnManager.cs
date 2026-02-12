@@ -37,15 +37,18 @@ namespace Code.MainSystem.Turn
                 TurnChanged?.Invoke(_remainingTurn);
             }
         }
+
+        public int CurrentTurn { get; private set; } = 0;
         
         private void Awake()
         {
-            Bus<TurnReturnEvent>.OnEvent += HandleTurnReturn;
             if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(this);
+                Bus<TurnReturnEvent>.OnEvent += HandleTurnReturn;
                 RemainingTurn = flowSO.goals[0].turn;
+                CurrentTurn = 0;
             }
             else
             {
@@ -114,12 +117,12 @@ namespace Code.MainSystem.Turn
                     BaseStat stat = GetStat(goal.targetType);
                     if (stat.CurrentValue < goal.target)
                     {
-                        Debug.Log("버스킹실패");
+                        Debug.Log("버스킹조건실패");
                         Bus<EncounterCheckEvent>.Raise(new EncounterCheckEvent(EncounterConditionType.BuskingCaseFall));
                     }
                     else
                     {
-                        Debug.Log("버스킹성공");
+                        Debug.Log("버스킹으로");
                         Bus<ConcertStartRequested>.Raise(new ConcertStartRequested("TestSong", ConcertType.Busking,
                             RhythmGameConsts.MEMBERS_GROUP));
                     }
@@ -144,6 +147,7 @@ namespace Code.MainSystem.Turn
         public void TurnEnd()
         {
             RemainingTurn--;
+            CurrentTurn++;
             if (RemainingTurn <= 0)
             {
                 if (flowSO != null && _currentGoalIndex < flowSO.goals.Count)
@@ -160,6 +164,8 @@ namespace Code.MainSystem.Turn
         {
             if (RemainingTurn <= 0)
                 OnGoalFinished();
+            else
+                Bus<EncounterCheckEvent>.Raise(new EncounterCheckEvent(EncounterConditionType.TurnStart));
         }
 
         public void UpdateTarget()

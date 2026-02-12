@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using Code.Core.Bus;
+using Code.Core.Bus.GameEvents.EncounterEvents;
+using Code.MainSystem.Encounter;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
 using Cysharp.Threading.Tasks;
@@ -231,6 +234,9 @@ namespace Code.MainSystem.MainScreen.Training
             // 결과 표시 시퀀스
             await ShowResults();
 
+            if (EncounterManager.Instance.TryTeamPracticeEncounter(_resultData.selectedMembers))
+                return;
+            
             // 메인 씬으로 복귀
             await ReturnToMainScene();
         }
@@ -273,7 +279,6 @@ namespace Code.MainSystem.MainScreen.Training
             {
                 await ShowResultForMember(unit);
             }
-
             Debug.Log("[TeamPracticeCutscene] All results displayed");
         }
 
