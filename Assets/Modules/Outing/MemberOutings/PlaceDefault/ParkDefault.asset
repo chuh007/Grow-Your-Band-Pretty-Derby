@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: ParkDefault
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
-  - m_AssetGUID: 
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  - m_AssetGUID: 
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
+    m_EditorAssetChanged: 1
   <DialogueDetails>k__BackingField:
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 53431e85d67b5cd41a0d1bd9d136f277
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
@@ -37,36 +37,31 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 53431e85d67b5cd41a0d1bd9d136f277
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uD568\uAED8 \uB2EC\uB9AC\uAE30\uB97C \uD588\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField:
-    - m_AssetGUID: 
+    - m_AssetGUID: ae2eb61b323083a439a859dbd5903cdd
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 53431e85d67b5cd41a0d1bd9d136f277
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: 
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
-    <Events>k__BackingField:
-    - m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+    <Events>k__BackingField: []
     <Choices>k__BackingField: []

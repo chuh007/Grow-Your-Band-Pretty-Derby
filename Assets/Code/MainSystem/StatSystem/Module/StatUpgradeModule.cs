@@ -75,7 +75,8 @@ namespace Code.MainSystem.StatSystem.Module
             
             
             float baseRate = GetSuccessRate();
-            float finalRate = holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate);
+            float routineBonus = 0;
+            float finalRate = holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate) + routineBonus;
     
             bool isSuccess = Random.Range(0f, 100f) < finalRate;
             
@@ -83,7 +84,6 @@ namespace Code.MainSystem.StatSystem.Module
                 if (!isSuccess)
                     listener.OnTrainingFailed();
             
-
             return isSuccess;
         }
 

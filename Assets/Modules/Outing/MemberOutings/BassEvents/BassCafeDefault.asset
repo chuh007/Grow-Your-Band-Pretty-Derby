@@ -13,30 +13,58 @@ MonoBehaviour:
   m_Name: BassCafeDefault
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
-  - {fileID: 0}
-  - {fileID: 0}
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: TestImg1_0
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: TestImg1_0
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1
   <DialogueDetails>k__BackingField:
-  - <CharacterInformSO>k__BackingField: {fileID: 0}
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uCE74\uD398\uC5D0 \uAC14\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
-  - <CharacterInformSO>k__BackingField: {fileID: 0}
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: "\uC544\uBA54\uB9AC\uCE74\uB178 \uD55C\uC794\uACFC
       \uD568\uAED8\uB77C\uBA74 \uB450\uB835\uC9C0 \uC54A\uC544."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField:
-    - {fileID: 0}
+    - m_AssetGUID: b00fc50ebf7ced743bf8b6688a160409
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <Choices>k__BackingField: []
-  - <CharacterInformSO>k__BackingField: {fileID: 0}
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: 
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
-    <Events>k__BackingField:
-    - {fileID: 0}
+    <Events>k__BackingField: []
     <Choices>k__BackingField: []

@@ -1,6 +1,8 @@
-﻿using Code.MainSystem.MainScreen.MemberData;
+﻿using System.Linq;
+using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using UnityEngine;
 
@@ -25,8 +27,14 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
 
             var holder = TraitManager.Instance.GetHolder(unit.memberType);
 
-            float finalRecovery =
-                holder.GetCalculatedStat(TraitTarget.Condition, _restRecoveryAmount);
+            var routine = holder.GetModifiers<IRoutineModifier>();
+            foreach(var r in routine)
+                r.OnRest();
+            
+            float multiplier = holder.GetModifiers<IConditionModifier>().Select(m => m.ConditionRecoveryMultiplier)
+                .DefaultIfEmpty(1f).Aggregate((a, b) => a * b);
+
+            float finalRecovery = holder.GetCalculatedStat(TraitTarget.Condition, _restRecoveryAmount) * multiplier;
 
             unit.currentCondition = Mathf.Clamp(
                 unit.currentCondition + finalRecovery,
@@ -38,8 +46,16 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
         public float ModifyConditionCost(MemberType memberType, float baseCost)
         {
             var holder = TraitManager.Instance.GetHolder(memberType);
-            var result = holder?.GetCalculatedStat(TraitTarget.Condition, baseCost);
-            return result ?? 0f;
+
+            var trainingBonuses = holder.GetModifiers<ITrainingSuccessBonus>();
+            var trainingBonus = trainingBonuses?.FirstOrDefault();
+
+            if (trainingBonus != null)
+                baseCost += trainingBonus.AddValue;
+            
+            float multiplier = holder.GetModifiers<IConditionModifier>().Select(m => m.ConditionCostMultiplier)
+                .DefaultIfEmpty(1f).Aggregate((a, b) => a * b);
+            return holder.GetCalculatedStat(TraitTarget.Condition, baseCost) * multiplier;
         }
     }
 }

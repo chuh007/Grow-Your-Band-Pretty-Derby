@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Outing
   m_GUID: fac3ec8b0f2a76446a96bd812ba5b67f
   m_SerializeEntries:
+  - m_GUID: 6de53076378c8ac449646b5714a024a1
+    m_Address: Sprites/Backgrounds/Test
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AddresableSprites
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7569b131a91c6174f8639d5820d1930b
     m_Address: Outing/UI/Result
     m_ReadOnly: 0

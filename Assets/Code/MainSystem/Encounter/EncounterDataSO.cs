@@ -9,13 +9,13 @@ namespace Code.MainSystem.Encounter
         BuskingFall, // 버스킹 클리어 실패
         BuskingSuccess, // 버스킹 성공
         StatCaseFall, // 스텟 검사
-        LiveCaseFall,
-        LiveFall,
-        LiveSuccess,
-        TrainingEnd,
-        TeamPractice,
+        LiveCaseFall, // 라이브 조건실패
+        LiveFall, // 라이브 실패
+        LiveSuccess, // 라이브 성공
+        TrainingEnd, // 훈련 종료시
+        TeamPractice, // 합주시
+        TraitsGet, //특성 일정량 획득
         TurnStart, // 턴 시작
-        
     }
     
     [CreateAssetMenu(fileName = "EncounterData", menuName = "SO/Encounter/Data", order = 0)]

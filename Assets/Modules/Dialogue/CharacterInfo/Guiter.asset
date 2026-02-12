@@ -16,4 +16,8 @@ MonoBehaviour:
   <CharacterEmotions>k__BackingField:
     m_Keys: 00000000
     m_Values:
-    - {fileID: 8702507947865688393, guid: b0643fd0f83e6bc4aafc23532de834a9, type: 3}
+    - m_AssetGUID: b0643fd0f83e6bc4aafc23532de834a9
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

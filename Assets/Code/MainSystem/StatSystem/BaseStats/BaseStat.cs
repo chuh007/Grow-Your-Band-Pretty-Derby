@@ -62,5 +62,17 @@ namespace Code.MainSystem.StatSystem.BaseStats
 
         private void SetValue(int newValue) 
             => CurrentValue = Mathf.Clamp(newValue, MinValue, MaxValue);
+        
+        public void AddMaxValue(int amount)
+        {
+            MaxValue += amount;
+            SetValue(CurrentValue); 
+        }
+
+        public void SubtractMaxValue(int amount)
+        {
+            MaxValue -= amount;
+            SetValue(CurrentValue);
+        }
     }
 }

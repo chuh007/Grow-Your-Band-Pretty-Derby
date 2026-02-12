@@ -13,7 +13,6 @@ using Code.MainSystem.StatSystem.Stats;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
-using Code.MainSystem.TraitSystem.TraitEffect;
 using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using UnityEngine.Serialization;
 
@@ -104,7 +103,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void RegisterEvents()
         {
-            Bus<PracticenEvent>.OnEvent += HandlePracticeRequested;
+            Bus<PracticeEvent>.OnEvent += HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent += HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent += HandleSingleStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent += HandleTeamPracticeRequested;
@@ -112,7 +111,7 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void UnregisterEvents()
         {
-            Bus<PracticenEvent>.OnEvent -= HandlePracticeRequested;
+            Bus<PracticeEvent>.OnEvent -= HandlePracticeRequested;
             Bus<ConfirmRestEvent>.OnEvent -= HandleRestRequested;
             Bus<StatIncreaseEvent>.OnEvent -= HandleSingleStatIncreaseRequested;
             Bus<TeamPracticeEvent>.OnEvent -= HandleTeamPracticeRequested;
@@ -122,10 +121,18 @@ namespace Code.MainSystem.StatSystem.Manager
 
         #region Event Handlers
 
-        private void HandlePracticeRequested(PracticenEvent evt)
+        private void HandlePracticeRequested(PracticeEvent evt)
         {
             ITraitHolder holder = TraitManager.Instance.GetHolder(evt.MemberType);
-            bool isSuccess = PredictMemberPractice(evt.SuccessRate, holder);
+            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
+            bool isSuccess = evt.IsSuccess;
+            
+            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>();
+            if (bufferedEffects != null)
+            {
+                foreach (var effect in bufferedEffects)
+                    effect.Reset();
+            }
 
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
 
@@ -140,19 +147,28 @@ namespace Code.MainSystem.StatSystem.Manager
 
             float rewardValue = evt.Value;
 
+            if (routineBonuses != null) 
+                rewardValue *= routineBonuses.GetStatMultiplier();
+
+            if (evt.StatType == StatType.Mental)
+                rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeMental, rewardValue);
+                
             rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
 
             if (evt.Type == PracticenType.Personal)
-                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice,rewardValue);
+                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice, rewardValue);
 
             _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, rewardValue);
         }
 
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
-            if (evt.MemberConditions == null || evt.MemberConditions.Count == 0)
+            if (evt.UnitDataSos == null || evt.UnitDataSos.Count == 0)
                 return;
-            bool isSuccess = ensembleModule.CheckSuccess(evt.MemberConditions);
+            
+            List<float> memberConditions = evt.UnitDataSos.Select(t => t.currentCondition).ToList();
+            bool isSuccess = ensembleModule.CheckSuccess(memberConditions);
+            
             Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
         }
 
@@ -164,6 +180,14 @@ namespace Code.MainSystem.StatSystem.Manager
         private void HandleRestRequested(ConfirmRestEvent evt)
         {
             _conditionHandler.ProcessRest(evt);
+    
+            var holder = TraitManager.Instance.GetHolder(evt.Unit.memberType);
+            var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
+            if (bufferedEffects == null) 
+                return;
+            
+            foreach (var effect in bufferedEffects)
+                effect.IsBuffered = true;
         }
 
         #endregion
@@ -203,6 +227,9 @@ namespace Code.MainSystem.StatSystem.Manager
 
         public bool PredictMemberPractice(float successRate, ITraitHolder holder)
         {
+            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
+            routineBonuses?.OnPracticeSuccess();
+
             upgradeModuleModule.SetCondition(successRate);
             return upgradeModuleModule.CanUpgrade(holder);
         }

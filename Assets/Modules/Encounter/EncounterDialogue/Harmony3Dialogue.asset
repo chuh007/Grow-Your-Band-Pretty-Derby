@@ -13,32 +13,68 @@ MonoBehaviour:
   m_Name: Harmony3Dialogue
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
-  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
-  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1
   <DialogueDetails>k__BackingField:
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD788 \uC2DC\uAC04\uC744
       \uB0B4\uC11C \uBAA8\uC5EC\uBCF4\uAE30\uB85C \uD588\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: "\uB2E4\uAC19\uC774 \uD569\uC744 \uB9DE\uCD94\uC5B4\uBCF4\uC558\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: "\uC815\uB9D0 \uB73B\uAE4A\uC740 \uC2DC\uAC04\uC774\uC5C8\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField:
-    - {fileID: 11400000, guid: 038652935e91f6241acf215de94da96e, type: 2}
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    - m_AssetGUID: 038652935e91f6241acf215de94da96e
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: 
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
+    <Choices>k__BackingField: []
