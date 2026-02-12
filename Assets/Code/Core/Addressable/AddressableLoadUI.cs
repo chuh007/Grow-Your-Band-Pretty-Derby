@@ -19,8 +19,6 @@ namespace Code.Core.Addressable
             _totalSteps = totalSteps;
             _currentStep = 0;
             
-            Debug.Log($"[LoadingUI] ShowLoadingUI - Total Steps: {totalSteps}");
-            
             if (loadingPanel != null)
             {
                 loadingPanel.SetActive(true);
@@ -33,8 +31,6 @@ namespace Code.Core.Addressable
         {
             _currentStep++;
             
-            Debug.Log($"[LoadingUI] Step {_currentStep}/{_totalSteps}: {message}");
-            
             if (loadingText != null)
             {
                 loadingText.text = message;
@@ -45,7 +41,6 @@ namespace Code.Core.Addressable
 
         public void HideLoadingUI()
         {
-            Debug.Log("[LoadingUI] HideLoadingUI called");
             
             if (loadingPanel != null)
                 loadingPanel.SetActive(false);
@@ -64,7 +59,6 @@ namespace Code.Core.Addressable
             
             if (_currentStep >= _totalSteps)
             {
-                Debug.Log("[LoadingUI] Loading completed!");
                 Invoke(nameof(HideLoadingUI), 0.5f);
             }
         }
