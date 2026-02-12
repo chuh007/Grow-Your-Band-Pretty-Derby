@@ -817,8 +817,8 @@ namespace Code.Editor.Dialogue
             }
             EditorGUILayout.EndScrollView();
         }
-
-      /// <summary>
+        
+/// <summary>
 /// 노드 기본 정보 (캐릭터, 감정, 배경, 네임태그)
 /// </summary>
 private void DrawNodeBasicInfo(SerializedProperty node)
@@ -844,49 +844,43 @@ private void DrawNodeBasicInfo(SerializedProperty node)
         {
             EditorGUILayout.PropertyField(emotionProp, new GUIContent("감정"), GUILayout.Width(position.width * 0.5f));
             
-            // 캐릭터 미리보기 (AssetReference에서 에디터 에셋 가져오기)
-            var editorAssetProp = characterProp?.FindPropertyRelative("m_EditorAsset");
-            CharacterInformationSO character = editorAssetProp?.objectReferenceValue as CharacterInformationSO;
+            // AssetReference에서 캐릭터 정보 가져오기
+            CharacterInformationSO character = null;
+            if (characterProp != null)
+            {
+                var editorAssetProp = characterProp.FindPropertyRelative("m_EditorAsset");
+                if (editorAssetProp != null && editorAssetProp.objectReferenceValue != null)
+                {
+                    character = editorAssetProp.objectReferenceValue as CharacterInformationSO;
+                }
+            }
+            
+            // 캐릭터 감정 스프라이트 미리보기
             if (character != null && emotionProp != null && character.CharacterEmotions != null)
             {
                 CharacterEmotionType emotion = (CharacterEmotionType)emotionProp.enumValueIndex;
-                if (character.CharacterEmotions.TryGetValue(emotion, out var spriteRef) && spriteRef != null)
+                
+                // CharacterEmotions도 AssetReferenceSprite를 사용한다고 가정
+                if (character.CharacterEmotions.TryGetValue(emotion, out var emotionAssetRef))
                 {
-                    // AssetReferenceSprite에서 에디터 에셋 가져오기
-                    var emotionSerializedObj = new UnityEditor.SerializedObject(character);
-                    var emotionsDict = emotionSerializedObj.FindProperty("<CharacterEmotions>k__BackingField");
-                    if (emotionsDict == null) emotionsDict = emotionSerializedObj.FindProperty("CharacterEmotions");
+                    // AssetReferenceSprite의 경우도 m_EditorAsset으로 접근
+                    Sprite sprite = null;
                     
-                    if (emotionsDict != null)
+                    // Reflection을 사용하여 EditorAsset 가져오기
+                    var emotionRefType = emotionAssetRef.GetType();
+                    var editorAssetField = emotionRefType.GetProperty("editorAsset", 
+                        System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                    
+                    if (editorAssetField != null)
                     {
-                        // SerializedDictionary의 경우 _keys와 _values 배열로 저장됨
-                        var keys = emotionsDict.FindPropertyRelative("_keys");
-                        var values = emotionsDict.FindPropertyRelative("_values");
-                        
-                        if (keys != null && values != null)
-                        {
-                            for (int i = 0; i < keys.arraySize; i++)
-                            {
-                                var key = keys.GetArrayElementAtIndex(i);
-                                if (key.enumValueIndex == (int)emotion)
-                                {
-                                    var value = values.GetArrayElementAtIndex(i);
-                                    var spriteEditorAsset = value.FindPropertyRelative("m_EditorAsset");
-                                    
-                                    if (spriteEditorAsset != null && spriteEditorAsset.objectReferenceValue != null)
-                                    {
-                                        Sprite sprite = spriteEditorAsset.objectReferenceValue as Sprite;
-                                        if (sprite != null)
-                                        {
-                                            Rect previewRect = GUILayoutUtility.GetRect(PREVIEW_SIZE, PREVIEW_SIZE);
-                                            GUI.Box(previewRect, "");
-                                            GUI.DrawTexture(previewRect, sprite.texture, ScaleMode.ScaleToFit);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
+                        sprite = editorAssetField.GetValue(emotionAssetRef) as Sprite;
+                    }
+                    
+                    if (sprite != null)
+                    {
+                        Rect previewRect = GUILayoutUtility.GetRect(PREVIEW_SIZE, PREVIEW_SIZE);
+                        GUI.Box(previewRect, "");
+                        GUI.DrawTexture(previewRect, sprite.texture, ScaleMode.ScaleToFit);
                     }
                 }
             }
@@ -895,7 +889,6 @@ private void DrawNodeBasicInfo(SerializedProperty node)
         
         EditorGUILayout.PropertyField(nameTagProp, new GUIContent("네임태그 위치"));
         
-        // 배경 선택 (드롭다운)
         DrawBackgroundSelector(bgIndexProp);
     }
     EditorGUILayout.EndVertical();
