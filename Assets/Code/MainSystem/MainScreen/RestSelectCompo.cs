@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Code.Core.Addressable;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -11,10 +12,15 @@ using Code.MainSystem.MainScreen.Resting;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
+using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Manager;
+using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -128,8 +134,10 @@ namespace Code.MainSystem.MainScreen
         /// </summary>
         private void ShowHealPreview(UnitDataSO unit)
         {
+            var holder = TraitManager.Instance.GetHolder(unit.memberType);
+            float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
             healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
-            healthBar.PrevieMinusHealth(-HealAmount);
+            healthBar.PrevieMinusHealth(-rewardValue);
         }
 
         /// <summary>
@@ -137,16 +145,41 @@ namespace Code.MainSystem.MainScreen
         /// </summary>
         private void ProcessConfirmRest(UnitDataSO selectedUnit)
         {
+            var holder = TraitManager.Instance.GetHolder(selectedUnit.memberType);
+            
+            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
+            var routineModifier = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
+            var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
+            var overzealousEffect = holder.GetModifiers<IAdditionalActionProvider>().Cast<OverzealousEffect>().FirstOrDefault();
+            
+            if (bufferedEffects != null) 
+                bufferedEffects.IsBuffered = true;
+            routineModifier?.OnRest();
+
+            float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
+            
+            if (consecutive != null) 
+                rewardValue *= consecutive.GetSuccessBonus("Rest");
+            
             float beforeHealth = selectedUnit.currentCondition;
-            float afterHealth = Mathf.Min(beforeHealth + HealAmount, selectedUnit.maxCondition);
+            float afterHealth = Mathf.Min(beforeHealth + rewardValue, selectedUnit.maxCondition);
             
             selectedUnit.currentCondition = afterHealth;
+            
+            if(overzealousEffect != null)
+            {
+                float rand = Random.Range(0f, 100f);
+                if (rand < overzealousEffect.AdditionalActionChance)
+                {
+                    TrainingManager.Instance.RestoreMemberAction(selectedUnit.memberType, 1);
+                }
+            }
             
             TrainingManager.Instance.MarkMemberTrained(selectedUnit.memberType);
             Bus<ConfirmRestEvent>.Raise(new ConfirmRestEvent(selectedUnit));
             
             healthBar.SetHealth(afterHealth, selectedUnit.maxCondition);
-            healthBar.PrevieMinusHealth(-HealAmount); 
+            healthBar.PrevieMinusHealth(-rewardValue); 
         }
 
         private void OnDestroy()

@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using Code.Core.Bus;
+using Code.MainSystem.MainScreen.MemberData;
 
 namespace Code.MainSystem.StatSystem.Events
 {
     public struct TeamPracticeEvent : IEvent
     {
-        public List<float> MemberConditions;
+        public List<UnitDataSO> UnitDataSos;
 
-        public TeamPracticeEvent(List<float> memberConditions)
+        public TeamPracticeEvent(List<UnitDataSO> unitDataSos)
         {
-            MemberConditions = memberConditions;
+            UnitDataSos = unitDataSos;
         }
     }
 }
