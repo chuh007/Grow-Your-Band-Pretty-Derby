@@ -16,6 +16,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -341,6 +342,7 @@ namespace Code.MainSystem.MainScreen
                 var disciplined = holder.GetModifiers<IDisciplinedLifestyle>().FirstOrDefault();
                 var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
                 var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
+                var additionalAction = holder.GetModifiers<IAdditionalActionProvider>().FirstOrDefault();
                 
                 if (bufferedEffects != null) 
                     bufferedEffects.IsBuffered = false;
@@ -386,6 +388,15 @@ namespace Code.MainSystem.MainScreen
                     healthBar.ApplyHealth(realDamage);
                 }
 
+                if (additionalAction != null)
+                {
+                    float rand = Random.Range(0f, 100f);
+                    if (rand < additionalAction.AdditionalActionChance)
+                    {
+                        TrainingManager.Instance.RestoreMemberAction(_currentUnit.memberType, 1);
+                    }
+                }
+                
                 TrainingManager.Instance.MarkMemberTrained(_currentUnit.memberType);
 
                 _selectedPracticeIndex = -1;

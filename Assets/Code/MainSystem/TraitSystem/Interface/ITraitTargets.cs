@@ -1,4 +1,6 @@
-﻿using Code.MainSystem.StatSystem.BaseStats;
+﻿using System.Collections.Generic;
+using Code.MainSystem.StatSystem.BaseStats;
+using Code.MainSystem.StatSystem.Manager;
 
 namespace Code.MainSystem.TraitSystem.Interface
 {
@@ -32,6 +34,14 @@ namespace Code.MainSystem.TraitSystem.Interface
     public interface IMultiStatModifier
     {
         public int AddValue { get; }
+        
+        void ApplyEffect(MemberType memberType, Dictionary<(MemberType, StatType), int> statDeltaDict);
+    }
+    
+    public interface ITraitLifecycleListener
+    {
+        void OnTraitAdded(MemberType member);
+        void OnTraitRemoved(MemberType member);
     }
 
     public interface IGrooveRestoration
@@ -49,8 +59,6 @@ namespace Code.MainSystem.TraitSystem.Interface
     public interface IOverzealous {
         float ConditionCostMultiplier { get; }
         float ConditionRecoveryMultiplier { get; }
-
-        bool CheckAction();
     }
     
     public interface IAdditionalActionProvider {

@@ -15,10 +15,12 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
+using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -147,8 +149,9 @@ namespace Code.MainSystem.MainScreen
             
             var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
             var routineModifier = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
-            var conditionModifier = holder.GetModifiers<IConditionModifier>().FirstOrDefault();
             var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
+            var overzealousEffect = holder.GetModifiers<IAdditionalActionProvider>().Cast<OverzealousEffect>().FirstOrDefault();
+            
             if (bufferedEffects != null) 
                 bufferedEffects.IsBuffered = true;
             routineModifier?.OnRest();
@@ -161,10 +164,16 @@ namespace Code.MainSystem.MainScreen
             float beforeHealth = selectedUnit.currentCondition;
             float afterHealth = Mathf.Min(beforeHealth + rewardValue, selectedUnit.maxCondition);
             
-            if(conditionModifier != null)
-                afterHealth = Mathf.Clamp(afterHealth, 0, selectedUnit.maxCondition - 10);
-            
             selectedUnit.currentCondition = afterHealth;
+            
+            if(overzealousEffect != null)
+            {
+                float rand = Random.Range(0f, 100f);
+                if (rand < overzealousEffect.AdditionalActionChance)
+                {
+                    TrainingManager.Instance.RestoreMemberAction(selectedUnit.memberType, 1);
+                }
+            }
             
             TrainingManager.Instance.MarkMemberTrained(selectedUnit.memberType);
             Bus<ConfirmRestEvent>.Raise(new ConfirmRestEvent(selectedUnit));

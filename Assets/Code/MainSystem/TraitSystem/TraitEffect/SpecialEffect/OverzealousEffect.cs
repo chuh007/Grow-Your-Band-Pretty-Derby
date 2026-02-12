@@ -12,23 +12,12 @@ namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
         public float ConditionRecoveryMultiplier { get; private set; }
         public float AdditionalActionChance { get; private set; }
 
-        private float _currentAction;
-
         public override void Initialize(ActiveTrait trait)
         {
             base.Initialize(trait);
             ConditionCostMultiplier = GetValue(0);
             ConditionRecoveryMultiplier = GetValue(1);
             AdditionalActionChance = GetValue(2);
-        }
-        
-        public bool CheckAction()
-        {
-            if (_currentAction <= 0)
-                return false;
-            
-            _currentAction -= 1;
-            return true;
         }
     }
 }
