@@ -6,7 +6,6 @@ using Cysharp.Threading.Tasks;
 using Code.Core.Bus;
 using Code.MainSystem.Rhythm.Data;
 using Code.Core.Bus.GameEvents.RhythmEvents;
-using UnityEngine.Serialization;
 
 namespace Code.MainSystem.Rhythm.Notes
 {
