@@ -81,7 +81,10 @@ namespace Code.MainSystem.MainScreen.Training
             
             foreach (MemberType memberType in Enum.GetValues(typeof(MemberType)))
             {
-                _trainedMembers[memberType] = 1; // 1 = 훈련 가능
+                if (memberType != MemberType.Team)
+                {
+                    _trainedMembers[memberType] = 1; // 1 = 훈련 가능
+                }
             }
             
             Debug.Log($"[TrainingManager] Initialized {_trainedMembers.Count} members");
