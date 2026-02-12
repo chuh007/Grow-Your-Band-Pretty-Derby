@@ -1,0 +1,269 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5834baa11b7e4df7852c768540b3796e, type: 3}
+  m_Name: VocalBornGenius
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
+  <DialogueBackground>k__BackingField:
+  - m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  <DialogueDetails>k__BackingField:
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uD654\uC5F0\uC544, \uB9C8\uC774\uD06C \uBCF4\uACE0
+      \uC788\uC5B4?"
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: " ...\uB124. \uC0C8 \uB9C8\uC774\uD06C \uD544\uC694\uD574\uC11C\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uB9C8\uC774\uD06C\uB3C4 \uCC28\uC774 \uC788\uC5B4?"
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "..\uB2F9\uC5F0\uD558\uC8E0. \uC74C\uC0C9 \uC804\uBD80
+      \uB2EC\uB77C\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uC5B4\uB5BB\uAC8C \uACE8\uB77C?"
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uC77C\uB2E8 \uC7A1\uC544\uBD10\uC57C \uD574\uC694.
+      \uBB34\uAC8C\uAC10, \uADF8\uB9BD\uAC10... \uB2E4 \uC911\uC694\uD558\uAC70\uB4E0\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uB9CC\uC838\uBCF4\uAE30\uB9CC \uD574\uB3C4
+      \uC54C\uC544?"
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: ".\uC5B4\uB290 \uC815\uB3C4\uC694. \uBB34\uAC8C
+      \uC911\uC2EC\uC774\uB791 \uADF8\uB9BD \uC7AC\uC9C8\uB9CC \uBD10\uB3C4 \uB178\uB798
+      \uBD80\uB974\uAE30 \uD3B8\uD55C\uC9C0 \uC54C \uC218 \uC788\uC5B4\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uC5B4\uB290 \uC815\uB3C4\uC694. \uBB34\uAC8C
+      \uC911\uC2EC\uC774\uB791 \uADF8\uB9BD \uC7AC\uC9C8\uB9CC \uBD10\uB3C4 \uB178\uB798
+      \uBD80\uB974\uAE30 \uD3B8\uD55C\uC9C0 \uC54C \uC218 \uC788\uC5B4\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uC18C\uB9AC\uB294 \uC548 \uB4E4\uC5B4\uBD10\uB3C4
+      \uB3FC?"
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: ".\uB098\uC911\uC5D0 \uB4E4\uC5B4\uBCF4\uC8E0.
+      \uC9C0\uAE08\uC740 \uC190\uC5D0 \uB9DE\uB294\uC9C0\uAC00 \uBA3C\uC800\uC608\uC694.
+      \uC544, \uC774\uAC70... \uBC38\uB7F0\uC2A4 \uC88B\uB124\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uAE08\uBC29 \uCC3E\uB124."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uB178\uB798 \uB9CE\uC774 \uBD88\uB7EC\uBD10\uC11C\uC694.
+      \uC5B4\uB5A4 \uAC8C \uC88B\uC740\uC9C0 \uAC10\uC774 \uC640\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uD654\uC5F0\uC774\uB3C4 \uCC9C\uC7AC\uAD6C\uB098."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: ".\uCC9C\uC7AC\uB294 \uC544\uB2C8\uC5D0\uC694.
+      \uADF8\uB0E5... \uC544\uBC84\uC9C0\uAC00 \uAC00\uC218\uC600\uAC70\uB4E0\uC694.
+      \uC5B4\uB9B4 \uB54C\uBD80\uD130 \uB9C8\uC774\uD06C \uB9CE\uC774 \uBD10\uC11C
+      \uC775\uC219\uD55C \uAC70\uC608\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uC544\uBC84\uC9C0\uAC00 \uAC00\uC218\uC600\uC5B4?"
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uCD95\uAD6C \uC120\uC218\uC600\uB294\uB370
+      \uCDE8\uBBF8\uB85C \uB178\uB798 \uD588\uC5B4\uC694. \uC9D1\uC5D0 \uB9C8\uC774\uD06C
+      \uB9CE\uC558\uC5B4\uC694. \uADF8\uB798\uC11C \uC790\uC5F0\uC2A4\uB7FD\uAC8C
+      \uBC30\uC6E0\uC5B4\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uC88B\uC740 \uD658\uACBD\uC774\uC5C8\uB124."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <DialogueDetail>k__BackingField: "\uB124. \uB355\uBD84\uC5D0 \uC774\uB7F0 \uAC10\uAC01
+      \uC0DD\uAE34 \uAC83 \uAC19\uC544\uC694. \uB9C8\uB9AC \uC5B8\uB2C8\uAC00 \uC800\uBCF4\uACE0
+      \uC7AC\uB2A5 \uC788\uB2E4\uACE0 \uD588\uB294\uB370... \uC9C4\uC9DC \uADF8\uB7F0\uAC00\uBD10\uC694."
+    <NameTagPosition>k__BackingField: 0
+    <BackgroundIndex>k__BackingField: 0
+    <CharacterEmotion>k__BackingField: 0
+    <Events>k__BackingField: []
+    <Choices>k__BackingField: []
