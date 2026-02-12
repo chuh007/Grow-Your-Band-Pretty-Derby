@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.StatSystem.Module.Data;
 using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -41,7 +42,20 @@ namespace Code.MainSystem.StatSystem.Module
         public float ApplyEnsembleBonus(float baseValue, MemberType memberType)
         {
             var holder = TraitManager.Instance.GetHolder(memberType);
-            float rewardValue = holder.GetCalculatedStat(TraitTarget.EnsembleCondition, baseValue);
+            
+            float finalValue = baseValue;
+            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
+            
+            if (bufferedEffects is { IsBuffered: true })
+            {
+                finalValue *= bufferedEffects.Multiplier;
+                bufferedEffects.Reset();
+            }
+
+            if (bufferedEffects != null) 
+                bufferedEffects.IsBuffered = false;
+            
+            float rewardValue = holder.GetCalculatedStat(TraitTarget.EnsembleCondition, finalValue);
             return holder.GetCalculatedStat(TraitTarget.Ensemble, rewardValue);
         }
         

@@ -339,13 +339,16 @@ namespace Code.MainSystem.MainScreen
             if (_selectedPracticeIndex == index)
             {
                 var disciplined = holder.GetModifiers<IDisciplinedLifestyle>().FirstOrDefault();
+                var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
+                
+                if (bufferedEffects != null) 
+                    bufferedEffects.IsBuffered = false;
                 
                 bool success = StatManager.Instance.PredictMemberPractice(
                     _currentCondition, 
                     TraitManager.Instance.GetHolder(_currentUnit.memberType)
                 );
-
-
+                
                 float increaseValue = success ? practice.statIncrease : 0;
 
                 if (disciplined != null)

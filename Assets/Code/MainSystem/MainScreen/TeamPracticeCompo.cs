@@ -258,7 +258,7 @@ namespace Code.MainSystem.MainScreen
             if (_wasSuccess)
             {
                 Debug.Log("Practice was successful, calculating stat gains");
-
+                
                 foreach (var unit in _selectedMembers)
                 {
                     if (unit == null)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Code.Core.Addressable;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -12,6 +13,7 @@ using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Data;
+using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine;
@@ -142,6 +144,11 @@ namespace Code.MainSystem.MainScreen
         private void ProcessConfirmRest(UnitDataSO selectedUnit)
         {
             var holder = TraitManager.Instance.GetHolder(selectedUnit.memberType);
+            
+            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
+            if (bufferedEffects != null) 
+                bufferedEffects.IsBuffered = true;
+
             float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
             float beforeHealth = selectedUnit.currentCondition;
             float afterHealth = Mathf.Min(beforeHealth + rewardValue, selectedUnit.maxCondition);
