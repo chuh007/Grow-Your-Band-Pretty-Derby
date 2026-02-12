@@ -11,9 +11,10 @@ namespace Code.Core.Bus.GameEvents.RhythmEvents
         public readonly int PerfectCount;
         public readonly int GreatCount;
         public readonly int GoodCount;
+        public readonly int BadCount;
         public readonly int MissCount;
 
-        public RhythmGameResultEvent(int score, int maxCombo, string rank, int perfect, int great, int good, int miss)
+        public RhythmGameResultEvent(int score, int maxCombo, string rank, int perfect, int great, int good, int bad, int miss)
         {
             FinalScore = score;
             MaxCombo = maxCombo;
@@ -21,6 +22,7 @@ namespace Code.Core.Bus.GameEvents.RhythmEvents
             PerfectCount = perfect;
             GreatCount = great;
             GoodCount = good;
+            BadCount = bad;
             MissCount = miss;
         }
     }

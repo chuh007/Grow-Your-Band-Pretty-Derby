@@ -58,6 +58,8 @@ namespace Code.MainSystem.Rhythm.Judgement
 
         private void HandleNoteHit(NoteHitEvent evt)
         {
+            if (evt.TrackIndex < 0) return;
+
             if (evt.Judgement == JudgementType.Miss)
             {
                 _hasMissedSinceLastFever = true;

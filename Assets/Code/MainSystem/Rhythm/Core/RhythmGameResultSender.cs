@@ -47,6 +47,7 @@ namespace Code.MainSystem.Rhythm.Core
                 _scoreManager.PerfectCount,
                 _scoreManager.GreatCount,
                 _scoreManager.GoodCount,
+                _scoreManager.BadCount,
                 _scoreManager.MissCount
             ));
         }
