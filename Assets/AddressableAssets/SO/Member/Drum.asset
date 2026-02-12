@@ -85,7 +85,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   maxCondition: 100
-  currentCondition: 100
+  currentCondition: 80
   TeamStat:
     m_AssetGUID: 19c37e942ee3da545adcf240f1dd8c3a
     m_SubObjectName: 

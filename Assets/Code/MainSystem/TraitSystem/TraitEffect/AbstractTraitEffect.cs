@@ -6,12 +6,12 @@ namespace Code.MainSystem.TraitSystem.TraitEffect
 {
     public abstract class AbstractTraitEffect
     {
-        protected ActiveTrait _activeTrait;
+        protected ActiveTrait _ownerTrait;
         
         public virtual void Initialize(ActiveTrait trait) 
-            => _activeTrait = trait;
+            => _ownerTrait = trait;
 
-        protected float GetValue(int index) => _activeTrait.CurrentEffects.ElementAtOrDefault(index);
+        protected float GetValue(int index) => _ownerTrait.CurrentEffects.ElementAtOrDefault(index);
         
         public abstract bool IsTargetStat(TraitTarget category);
         public abstract float GetAmount(TraitTarget category, object context = null);

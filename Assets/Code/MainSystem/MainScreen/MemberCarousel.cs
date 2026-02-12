@@ -2,6 +2,7 @@
 using Code.Core;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using DG.Tweening;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
@@ -11,7 +12,7 @@ namespace Code.MainSystem.MainScreen
     /// <summary>
     /// 멤버 캐러셀 UI 컨트롤러 (고정된 5개 아이콘, 테두리만 이동)
     /// </summary>
-    public class MemberCarousel : MonoBehaviour
+    public class MemberCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Member Icon Slots")]
         [SerializeField] private List<Image> memberIconSlots;
@@ -27,11 +28,17 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private float borderMoveDuration = 0.3f;
         [SerializeField] private Ease borderMoveEase = Ease.OutCubic;
         
+        [Header("Swipe Settings")]
+        [SerializeField] private float swipeThreshold = 50f;
+        
         private List<UnitDataSO> _allUnits;
         private int _currentSelectedIndex = 2;
         private bool _isTransitioning = false;
         
         private System.Action<UnitDataSO> _onMemberSelected;
+        
+        private Vector2 _dragStartPos;
+        private bool _isDragging = false;
 
         public void Init(List<UnitDataSO> units, System.Action<UnitDataSO> onMemberSelected)
         {
@@ -115,6 +122,44 @@ namespace Code.MainSystem.MainScreen
                 }
             }
         }
+
+        #region Swipe Handlers
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (_isTransitioning) return;
+            
+            _dragStartPos = eventData.position;
+            _isDragging = true;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (!_isDragging || _isTransitioning) return;
+            
+            _isDragging = false;
+            
+            Vector2 dragEndPos = eventData.position;
+            Vector2 dragDelta = dragEndPos - _dragStartPos;
+            
+            if (Mathf.Abs(dragDelta.x) > swipeThreshold)
+            {
+                if (dragDelta.x > 0)
+                {
+                    MoveSelectionLeft();
+                }
+                else
+                {
+                    MoveSelectionRight();
+                }
+            }
+        }
+
+        #endregion
 
         private void OnLeftArrowClicked()
         {

@@ -1,16 +1,15 @@
-﻿using Code.MainSystem.StatSystem.BaseStats;
+﻿using Code.MainSystem.Cutscene.DialogCutscene;
+using Code.MainSystem.StatSystem.BaseStats;
 
 namespace Code.Core.Bus.GameEvents
 {
     public struct DialogueStatUpgradeEvent : IEvent
     {
-        public StatType StatType;
-        public int StatValue;
+        public StatVariation Stat;
 
-        public DialogueStatUpgradeEvent(StatType statType, int statValue)
+        public DialogueStatUpgradeEvent(StatVariation stat)
         {
-            StatType = statType;
-            StatValue = statValue;
+            Stat = stat;
         }
     }
 }

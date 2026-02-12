@@ -1,15 +1,14 @@
-using Code.Core.Bus;
-using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Code.Core.Bus.GameEvents
 {
     public struct ImageDisplayEvent : IEvent
     {
-        public GameObject ImagePrefabToDisplay { get; }
+        public readonly AssetReferenceGameObject ImagePrefabReference;
 
-        public ImageDisplayEvent(GameObject imagePrefabToDisplay)
+        public ImageDisplayEvent(AssetReferenceGameObject imagePrefabReference)
         {
-            ImagePrefabToDisplay = imagePrefabToDisplay;
+            ImagePrefabReference = imagePrefabReference;
         }
     }
 }

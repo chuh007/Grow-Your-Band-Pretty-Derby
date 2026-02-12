@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: ShiningEyes trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 3
   TraitName: "\uBC18\uC9DD\uC774\uB294 \uB208"
   TraitIcon:
     m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
@@ -20,9 +19,7 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  IconAddress: Icon_ShiningEyes trait data
-  MaxLevel: 10
-  Point: 11
+  Point: 9
   IsRemovable: 1
   Impacts:
   - Target: 0
@@ -52,10 +49,11 @@ MonoBehaviour:
     Title: 
     Content: 
     Thoughts: 
+  TraitTag: 64
   Effects:
   - 20
   - 1
   DescriptionEffect: "\uCEE8\uB514\uC158\uC774 \u2018\uB9E4\uC6B0 \uC88B\uC74C\u2019
     \uC774\uC0C1\uC5D0\uC11C \uAC1C\uC778 \uD6C8\uB828 \uB610\uB294 \uD569\uC8FC
     \uC9C4\uD589 \uD6C4 {0}%\uD655\uB960\uB85C \uCD94\uAC00 \uD589\uB3D9 +{1}"
-  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.ShiningEyesEffect
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect.ShiningEyesEffect

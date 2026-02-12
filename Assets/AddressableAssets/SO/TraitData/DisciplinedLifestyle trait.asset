@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
+  m_Name: DisciplinedLifestyle trait
+  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
+  TraitName: "\uADDC\uCE59\uC801\uC778 \uC0DD\uD65C"
+  TraitIcon:
+    m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  Point: 6
+  IsRemovable: 1
+  Impacts:
+  - Target: 0
+    CalcType: 2
+    RequiredTag: 
+  MemberComments: []
+  TraitTag: 4
+  Effects:
+  - 20
+  DescriptionEffect: "\uB3D9\uC77C \uD589\uB3D9 \uC5F0\uC18D \uC120\uD0DD \uC2DC
+    \uD6A8\uACFC {0}%"
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect.DisciplinedLifestyleEffect

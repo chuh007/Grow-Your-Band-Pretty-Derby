@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DialogEvents
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: DialogEvents
+  m_GUID: 6ebc32500c7df6f46a79e34cfade9acc
+  m_SerializeEntries:
+  - m_GUID: 038652935e91f6241acf215de94da96e
+    m_Address: Dialogue/Harmony3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d5e020366ace9843b38886c28081d23
+    m_Address: Dialogue/Drum Condition 10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 348fcad79fbdaeb4e95fb1dfad6a8f52
+    m_Address: Dialogue/PianoSkillGet1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4cbc569a2bafdea4dac93d89069d2fc9
+    m_Address: Dialogue/BassSkillGet1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 646db5dd6cb27bc40893627074a647ab
+    m_Address: Dialogue/Piano Condition5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ed9d276226474f49aac9cb29babfa7c
+    m_Address: Dialogue/Guitar Condition 10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80395e2223da2d348a499b50814c9dd7
+    m_Address: Dialogue/VocalCondition5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88af23a0036e3774a9b732eb7c00b7b3
+    m_Address: Dialogue/Guitarendurance5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae2eb61b323083a439a859dbd5903cdd
+    m_Address: Dialogue/Guitar Condition5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b00fc50ebf7ced743bf8b6688a160409
+    m_Address: Dialogue/Bass Condition5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c28537c932955df4c9f54dd9c4885185
+    m_Address: Dialogue/Drum Condition5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c279d04240cf433458b346ef3f6e61a5, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 377a3f28df278d54c96dba4869b942ef, type: 2}
+    - {fileID: 11400000, guid: 1fc015f6a1620dd469be5cc8e0318035, type: 2}

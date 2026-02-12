@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: LoneGuitarist trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 2
   TraitName: "\uACE0\uB3C5\uD55C \uAE30\uD0C0\uB9AC\uC2A4\uD2B8"
   TraitIcon:
     m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
@@ -20,8 +19,6 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  IconAddress: Icon_LoneGuitarist trait data
-  MaxLevel: 10
   Point: 6
   IsRemovable: 1
   Impacts:
@@ -52,9 +49,10 @@ MonoBehaviour:
     Title: 
     Content: 
     Thoughts: 
+  TraitTag: 272
   Effects:
-  - 50
-  - 50
+  - 30
+  - 45
   DescriptionEffect: "(\uAE30\uD0C0 \uC804\uC6A9) \uAC1C\uC778 \uC5F0\uC2B5 \uD6A8\uACFC
     {0}%, \uAC1C\uC778 \uC5F0\uC2B5 \uC2DC \uCEE8\uB514\uC158 \uC18C\uBAA8 {1}%"
   SpecialLogicClassName: 

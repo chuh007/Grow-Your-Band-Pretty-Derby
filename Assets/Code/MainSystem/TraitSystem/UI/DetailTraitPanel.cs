@@ -19,6 +19,7 @@ namespace Code.MainSystem.TraitSystem.UI
         [SerializeField] private Image iconImage;
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private Button removeButton;
+        [SerializeField] private TextMeshProUGUI traitNameText;
         
         private ActiveTrait _currentTrait;
 
@@ -53,6 +54,7 @@ namespace Code.MainSystem.TraitSystem.UI
 
             await SetIconSafeAsync(iconImage, _currentTrait.Data.TraitIcon);
             
+            traitNameText.SetText(_currentTrait.Data.TraitName);
             descriptionText.SetText(_currentTrait.GetFormattedDescription());
 
             if (removeButton is null)

@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c866addf3353437f885284c1614a0f53, type: 3}
   m_Name: Telepathy trait data
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.TraitSystem.Data.TraitDataSO
-  TraitType: 1
   TraitName: "\uC774\uC2EC\uC804\uC2EC"
   TraitIcon:
     m_AssetGUID: 2168768e0c44d204598654fe7c2254d7
@@ -20,8 +19,6 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  IconAddress: Icon_Telepathy trait data
-  MaxLevel: 10
   Point: 5
   IsRemovable: 1
   Impacts:
@@ -52,11 +49,12 @@ MonoBehaviour:
     Title: 
     Content: 
     Thoughts: 
+  TraitTag: 1
   Effects:
-  - 50
-  - 4
+  - 25
+  - 100
   DescriptionEffect: "\uD569\uC8FC \uBA64\uBC84\uAC00 2\uC778\uC778 \uACBD\uC6B0
     \uD569\uC8FC\uC758 \uD6A8\uACFC +{0}%, \n\uB098\uBA38\uC9C0 \uD55C\uBA85\uC758
     \uBA64\uBC84\uB3C4 \u2018\uC774\uC2EC\uC804\uC2EC\u2019\uC744 \uBCF4\uC720\uD55C
     \uACBD\uC6B0 +{0} X {1}%\uB85C \uBCC0\uACBD"
-  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.TelepathyEffect
+  SpecialLogicClassName: Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect.TelepathyEffect

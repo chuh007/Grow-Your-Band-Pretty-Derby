@@ -2,9 +2,12 @@ using System.Collections;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
 using Member.LS.Code.Dialogue;
+using Member.LS.Code.Dialogue.Character;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Code.MainSystem.Dialogue.UI
 {
@@ -32,6 +35,10 @@ namespace Code.MainSystem.Dialogue.UI
         private string _fullDialogueText;
         
         private GameObject _currentDisplayedImageInstance;
+        private AsyncOperationHandle<CharacterInformationSO> _currentCharacterHandle;
+        private AsyncOperationHandle<Sprite> _currentCharacterSpriteHandle;
+        
+        private Coroutine _progressCoroutine;
 
         private void Awake()
         {
@@ -57,15 +64,19 @@ namespace Code.MainSystem.Dialogue.UI
             Bus<DialogueEndEvent>.OnEvent -= OnDialogueEnd;
             Bus<UIContinueButtonPressedEvent>.OnEvent -= OnUIContinueButtonPressed;
             Bus<ImageDisplayEvent>.OnEvent -= OnImageDisplayEvent;
+    
+            ReleaseCurrentCharacter();
+            ReleaseCurrentCharacterSprite();
+            ReleaseCurrentImage();
         }
 
         private void OnDestroy()
         {
             characterImage.gameObject.SetActive(false);
-            if (_currentDisplayedImageInstance != null)
-            {
-                Destroy(_currentDisplayedImageInstance);
-            }
+    
+            ReleaseCurrentCharacter();
+            ReleaseCurrentCharacterSprite();
+            ReleaseCurrentImage();
         }
 
         private void OnDialogueStart(DialogueStartEvent obj)
@@ -76,7 +87,17 @@ namespace Code.MainSystem.Dialogue.UI
             }
         }
 
-        private void OnDialogueProgress(DialogueProgressEvent evt)
+       private void OnDialogueProgress(DialogueProgressEvent evt)
+        {
+            // 이전 진행 코루틴이 있다면 중지 (레이스 컨디션 방지 핵심)
+            if (_progressCoroutine != null)
+            {
+                StopCoroutine(_progressCoroutine);
+            }
+            _progressCoroutine = StartCoroutine(ProcessDialogueProgressAsync(evt));
+        }
+
+        private IEnumerator ProcessDialogueProgressAsync(DialogueProgressEvent evt)
         {
             if (_currentDisplayedImageInstance != null && _currentDisplayedImageInstance.activeSelf)
             {
@@ -84,16 +105,66 @@ namespace Code.MainSystem.Dialogue.UI
             }
 
             var node = evt.NextDialogueNode;
+            CharacterInformationSO characterInfo = null;
 
-            if (node.CharacterInformSO != null && !string.IsNullOrEmpty(node.CharacterInformSO.CharacterName))
+            // 1. 캐릭터 정보 로드 (CharacterInformationSO)
+            if (node.CharacterInformSO != null && node.CharacterInformSO.RuntimeKeyIsValid())
+            {
+                // 이미 로드된 에셋인지 확인하여 중복 로드 에러 방지
+                if (node.CharacterInformSO.OperationHandle.IsValid())
+                {
+                    var handle = node.CharacterInformSO.OperationHandle.Convert<CharacterInformationSO>();
+                    if (!handle.IsDone) yield return handle;
+                    characterInfo = handle.Result;
+                }
+                else
+                {
+                    ReleaseCurrentCharacter();
+                    _currentCharacterHandle = node.CharacterInformSO.LoadAssetAsync();
+                    yield return _currentCharacterHandle;
+
+                    if (_currentCharacterHandle.IsValid() && _currentCharacterHandle.Status == AsyncOperationStatus.Succeeded)
+                    {
+                        characterInfo = _currentCharacterHandle.Result;
+                    }
+                }
+            }
+            
+            // 2. 캐릭터 이름 및 스프라이트 처리
+            if (characterInfo != null && !string.IsNullOrEmpty(characterInfo.CharacterName))
             {
                 nameTag.SetActive(true);
-                nameText.text = node.CharacterInformSO.CharacterName;
-
-                if (node.CharacterInformSO.CharacterEmotions.TryGetValue(node.CharacterEmotion, out var characterSprite) && characterSprite != null)
+                nameText.text = characterInfo.CharacterName;
+                
+                if (characterInfo.CharacterEmotions != null && 
+                    characterInfo.CharacterEmotions.TryGetValue(node.CharacterEmotion, out var spriteRef) && 
+                    spriteRef != null && 
+                    spriteRef.RuntimeKeyIsValid())
                 {
-                    characterImage.sprite = characterSprite;
-                    characterImage.gameObject.SetActive(true);
+                    // 스프라이트 중복 로드 체크
+                    if (spriteRef.OperationHandle.IsValid())
+                    {
+                        var sHandle = spriteRef.OperationHandle.Convert<Sprite>();
+                        if (!sHandle.IsDone) yield return sHandle;
+                        characterImage.sprite = sHandle.Result;
+                        characterImage.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        ReleaseCurrentCharacterSprite();
+                        _currentCharacterSpriteHandle = spriteRef.LoadAssetAsync();
+                        yield return _currentCharacterSpriteHandle;
+
+                        if (_currentCharacterSpriteHandle.IsValid() && _currentCharacterSpriteHandle.Status == AsyncOperationStatus.Succeeded)
+                        {
+                            characterImage.sprite = _currentCharacterSpriteHandle.Result;
+                            characterImage.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            characterImage.gameObject.SetActive(false);
+                        }
+                    }
                 }
                 else
                 {
@@ -105,20 +176,15 @@ namespace Code.MainSystem.Dialogue.UI
                 nameTag.SetActive(false);
                 characterImage.gameObject.SetActive(false);
             }
-
+            
+            // 3. UI 연출 및 텍스트 출력
             backgroundImage.sprite = evt.BackgroundImage;
-
-            if (node.NameTagPosition == NameTagPositionType.Left)
-            {
-                nameTag.transform.position = nameTagLeft.position;
-                characterImage.transform.position = nameTagLeft.position;
-            }
-            else
-            {
-                nameTag.transform.position = nameTagRight.position;
-                characterImage.transform.position = nameTagRight.position;
-            }
-
+            
+            // 위치 설정
+            RectTransform targetPos = (node.NameTagPosition == NameTagPositionType.Left) ? nameTagLeft : nameTagRight;
+            nameTag.transform.position = targetPos.position;
+            characterImage.transform.position = targetPos.position;
+            
             if (_typingCoroutine != null)
             {
                 StopCoroutine(_typingCoroutine);
@@ -126,8 +192,9 @@ namespace Code.MainSystem.Dialogue.UI
 
             _fullDialogueText = node.DialogueDetail;
             _typingCoroutine = StartCoroutine(TypeDialogue(_fullDialogueText));
+            
+            _progressCoroutine = null;
         }
-        
         private void OnDialogueEnd(DialogueEndEvent e)
         {
             if (_typingCoroutine != null)
@@ -142,10 +209,8 @@ namespace Code.MainSystem.Dialogue.UI
                 _currentDisplayedImageInstance.SetActive(false);
             }
             
-            // if (dialogueUIParent != null)
-            // {
-            //     dialogueUIParent.SetActive(false);
-            // }
+            ReleaseCurrentCharacter();
+            ReleaseCurrentCharacterSprite();
         }
         
         private void OnUIContinueButtonPressed(UIContinueButtonPressedEvent e)
@@ -180,24 +245,69 @@ namespace Code.MainSystem.Dialogue.UI
             _isTyping = false;
         }
 
+        private AsyncOperationHandle<GameObject> _currentImageHandle;
+
         private void OnImageDisplayEvent(ImageDisplayEvent evt)
         {
-            if (_currentDisplayedImageInstance != null && _currentDisplayedImageInstance.activeSelf)
+            StartCoroutine(LoadAndDisplayImageAsync(evt.ImagePrefabReference));
+        }
+
+        private IEnumerator LoadAndDisplayImageAsync(AssetReferenceGameObject prefabRef)
+        {
+            if (_currentDisplayedImageInstance != null)
             {
-                _currentDisplayedImageInstance.SetActive(false);
+                if (_currentDisplayedImageInstance.activeSelf)
+                {
+                    _currentDisplayedImageInstance.SetActive(false);
+                }
+                
+                if (_currentImageHandle.IsValid())
+                {
+                    Addressables.ReleaseInstance(_currentImageHandle);
+                }
+        
+                _currentDisplayedImageInstance = null;
             }
 
-            if (_currentDisplayedImageInstance == null || _currentDisplayedImageInstance.name != evt.ImagePrefabToDisplay.name)
+            if (prefabRef != null && prefabRef.RuntimeKeyIsValid())
             {
-                if (_currentDisplayedImageInstance != null)
+                _currentImageHandle = prefabRef.InstantiateAsync(imageDisplayParent);
+                yield return _currentImageHandle;
+
+                if (_currentImageHandle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    Destroy(_currentDisplayedImageInstance);
+                    _currentDisplayedImageInstance = _currentImageHandle.Result;
+                    _currentDisplayedImageInstance.SetActive(true);
                 }
-                _currentDisplayedImageInstance = Instantiate(evt.ImagePrefabToDisplay, imageDisplayParent);
-                _currentDisplayedImageInstance.name = evt.ImagePrefabToDisplay.name;
+                else
+                {
+                    Debug.LogError("Failed to load image prefab");
+                }
             }
-            
-            _currentDisplayedImageInstance.SetActive(true);
+        }
+        
+        private void ReleaseCurrentImage()
+        {
+            if (_currentImageHandle.IsValid())
+            {
+                Addressables.ReleaseInstance(_currentImageHandle);
+            }
+        }
+
+        private void ReleaseCurrentCharacter()
+        {
+            if (_currentCharacterHandle.IsValid())
+            {
+                Addressables.Release(_currentCharacterHandle);
+            }
+        }
+
+        private void ReleaseCurrentCharacterSprite()
+        {
+            if (_currentCharacterSpriteHandle.IsValid())
+            {
+                Addressables.Release(_currentCharacterSpriteHandle);
+            }
         }
     }
 }

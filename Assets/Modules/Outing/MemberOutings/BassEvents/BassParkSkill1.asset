@@ -13,27 +13,57 @@ MonoBehaviour:
   m_Name: BassParkSkill1
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
-  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
-  - {fileID: 7675876998321073162, guid: 6de53076378c8ac449646b5714a024a1, type: 3}
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1
   <DialogueDetails>k__BackingField:
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: "\uC774\uBC88\uC5D0\uB294 \uC774\uB978 \uC0C8\uBCBD\uC5D0
       \uACF5\uC6D0\uC5D0 \uBC29\uBB38\uD588\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uC774\uB978 \uC2DC\uAC04\uBD80\uD130 \uD568\uAED8
       \uB2EC\uB9AC\uB2C8 \uAE30\uBD84\uC774 \uC0C1\uCF8C\uD558\uB2E4."
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField:
-    - {fileID: 11400000, guid: 4cbc569a2bafdea4dac93d89069d2fc9, type: 2}
-  - <CharacterInformSO>k__BackingField: {fileID: 11400000, guid: 88e45bfed9f7c6840a98b157f73d75df, type: 2}
+    - m_AssetGUID: 4cbc569a2bafdea4dac93d89069d2fc9
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+    <Choices>k__BackingField: []
+  - <CharacterInformSO>k__BackingField:
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     <DialogueDetail>k__BackingField: 
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
     <CharacterEmotion>k__BackingField: 0
     <Events>k__BackingField: []
+    <Choices>k__BackingField: []
