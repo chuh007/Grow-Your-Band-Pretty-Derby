@@ -340,6 +340,7 @@ namespace Code.MainSystem.MainScreen
             {
                 var disciplined = holder.GetModifiers<IDisciplinedLifestyle>().FirstOrDefault();
                 var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
+                var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
                 
                 if (bufferedEffects != null) 
                     bufferedEffects.IsBuffered = false;
@@ -355,6 +356,9 @@ namespace Code.MainSystem.MainScreen
                 {
                     increaseValue += disciplined.CheckPractice(practice.PracticeStatType);
                 }
+                
+                if(consecutive != null)
+                    increaseValue *= consecutive.GetSuccessBonus(practice.PracticeStatType.ToString());
                 
                 Bus<PracticeEvent>.Raise(new PracticeEvent(
                     PracticenType.Personal,

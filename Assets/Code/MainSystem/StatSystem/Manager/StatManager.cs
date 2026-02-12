@@ -48,11 +48,6 @@ namespace Code.MainSystem.StatSystem.Manager
         private StatRegistry _registry;
         private StatOperator _operator;
         private ConditionHandler _conditionHandler;
-        
-        private static readonly StatType[] _cachedPlayableStats = Enum.GetValues(typeof(StatType))
-            .Cast<StatType>()
-            .Where(s => (int)s > 1 && s != StatType.TeamHarmony)
-            .ToArray();
 
         private void Awake()
         {
@@ -132,7 +127,7 @@ namespace Code.MainSystem.StatSystem.Manager
             var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
             bool isSuccess = evt.IsSuccess;
             
-            var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
+            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>();
             if (bufferedEffects != null)
             {
                 foreach (var effect in bufferedEffects)
@@ -250,52 +245,5 @@ namespace Code.MainSystem.StatSystem.Manager
         }
         
         #endregion
-
-        /// <summary>
-        /// 선택된 멤버들 중 최저 스탯 보유자에게 보너스를 주고, 누구였는지 정보를 반환합니다.
-        /// </summary>
-        public bool ApplyLowestStatBonus(List<IModifierProvider> holders, out MemberType targetMember, out StatType targetStat, out int finalBonus)
-        {
-            targetMember = default;
-            targetStat = default;
-            finalBonus = 0;
-
-            foreach (var item in holders)
-            {
-                var modifiers = item.GetModifiers<IMultiStatModifier>();
-                foreach (var mod in modifiers)
-                    finalBonus += mod.AddValue;
-            }
-
-            if (finalBonus <= 0) return false;
-            
-            float minStatValue = float.MaxValue;
-            bool found = false;
-
-            for (int i = 0; i < holders.Count; i++)
-            {
-                if (holders[i] is not ITraitHolder traitHolder) continue;
-        
-                MemberType mType = traitHolder.MemberType;
-                for (int j = 0; j < _cachedPlayableStats.Length; j++)
-                {
-                    StatType sType = _cachedPlayableStats[j];
-                    BaseStat stat = _registry.GetMemberStat(mType, sType);
-            
-                    if (stat != null && stat.CurrentValue < minStatValue)
-                    {
-                        minStatValue = stat.CurrentValue;
-                        targetMember = mType;
-                        targetStat = sType;
-                        found = true;
-                    }
-                }
-            }
-
-            if (found)
-                _operator.IncreaseMemberStat(targetMember, targetStat, finalBonus);
-
-            return found;
-        }
     }
 }

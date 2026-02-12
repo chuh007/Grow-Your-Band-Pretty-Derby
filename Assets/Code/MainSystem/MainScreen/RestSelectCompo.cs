@@ -147,13 +147,22 @@ namespace Code.MainSystem.MainScreen
             
             var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
             var routineModifier = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
+            var conditionModifier = holder.GetModifiers<IConditionModifier>().FirstOrDefault();
+            var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
             if (bufferedEffects != null) 
                 bufferedEffects.IsBuffered = true;
             routineModifier?.OnRest();
 
             float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
+            
+            if (consecutive != null) 
+                rewardValue *= consecutive.GetSuccessBonus("Rest");
+            
             float beforeHealth = selectedUnit.currentCondition;
             float afterHealth = Mathf.Min(beforeHealth + rewardValue, selectedUnit.maxCondition);
+            
+            if(conditionModifier != null)
+                afterHealth = Mathf.Clamp(afterHealth, 0, selectedUnit.maxCondition - 10);
             
             selectedUnit.currentCondition = afterHealth;
             

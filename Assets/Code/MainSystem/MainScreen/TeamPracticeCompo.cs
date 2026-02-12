@@ -268,10 +268,16 @@ namespace Code.MainSystem.MainScreen
                     }
                     
                     var memberType = unit.memberType;
+                    var holder = traitManager.GetHolder(memberType);
+                    var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
+                    
                     var statType = _teamPracticeData.PracticeStatType;
                     
                     float finalStatGain = ensembleModule.ApplyEnsembleBonus(teamStatIncrease, memberType);
 
+                    if (consecutive != null)
+                        finalStatGain *= consecutive.GetSuccessBonus("Team");
+                    
                     int roundedStatGain = Mathf.RoundToInt(finalStatGain);
                     
                     var memberStat = statManager.GetTeamStat(statType);

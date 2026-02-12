@@ -1,5 +1,4 @@
 ﻿using Code.MainSystem.StatSystem.BaseStats;
-using Code.MainSystem.StatSystem.Manager;
 
 namespace Code.MainSystem.TraitSystem.Interface
 {
@@ -25,9 +24,9 @@ namespace Code.MainSystem.TraitSystem.Interface
 
     public interface IDisciplinedLifestyle
     {
-        public float BonusValue { get; }
-        public float CheckPractice(StatType statType);
-        public void UpdateLastStat(StatType lastType);
+         float BonusValue { get; }
+        float CheckPractice(StatType statType);
+        void UpdateLastStat(StatType lastType);
     }
 
     public interface IMultiStatModifier
@@ -45,6 +44,13 @@ namespace Code.MainSystem.TraitSystem.Interface
     public interface IConditionModifier {
         float ConditionCostMultiplier { get; }
         float ConditionRecoveryMultiplier { get; }
+    }
+    
+    public interface IOverzealous {
+        float ConditionCostMultiplier { get; }
+        float ConditionRecoveryMultiplier { get; }
+
+        bool CheckAction();
     }
     
     public interface IAdditionalActionProvider {
