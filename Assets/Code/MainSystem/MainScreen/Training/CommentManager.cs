@@ -221,6 +221,7 @@ namespace Code.MainSystem.MainScreen.Training
         /// <summary>
         /// 현재 코멘트들을 이전 코멘트로 저장
         /// 다음 턴 시작 전에 호출하여 이전 내역 보관
+        /// ✅ 수정: Clear()를 제거하여 다른 멤버의 이전 코멘트 보존
         /// </summary>
         public void SaveCurrentAsPrevious()
         {
@@ -230,14 +231,16 @@ namespace Code.MainSystem.MainScreen.Training
                 return;
             }
 
-            // Deep copy
-            _previousCommentsByMember.Clear();
+            // ✅ Clear()를 하지 않음 - 다른 멤버의 이전 코멘트 보존
+            // _previousCommentsByMember.Clear(); ← 이 줄 제거!
+            
+            // Deep copy - 현재 멤버의 것만 덮어씀
             foreach (var kvp in _currentCommentsByMember)
             {
                 _previousCommentsByMember[kvp.Key] = new List<CommentData>(kvp.Value);
             }
 
-            Debug.Log($"[CommentManager] Saved {_previousCommentsByMember.Count} member groups as previous");
+            Debug.Log($"[CommentManager] Saved {_currentCommentsByMember.Count} member groups as previous (Total: {_previousCommentsByMember.Count})");
         }
 
         #endregion
