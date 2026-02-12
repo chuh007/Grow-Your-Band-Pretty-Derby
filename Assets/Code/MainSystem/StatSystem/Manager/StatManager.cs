@@ -129,6 +129,7 @@ namespace Code.MainSystem.StatSystem.Manager
         private void HandlePracticeRequested(PracticeEvent evt)
         {
             ITraitHolder holder = TraitManager.Instance.GetHolder(evt.MemberType);
+            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
             bool isSuccess = evt.IsSuccess;
             
             var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
@@ -142,9 +143,6 @@ namespace Code.MainSystem.StatSystem.Manager
 
             if (!isSuccess)
             {
-                if (holder == null)
-                    return;
-                
                 foreach (var inspiration in
                          holder.GetModifiers<IInspirationSystem>()
                              .OfType<FailureBreedsSuccessEffect>())
@@ -154,16 +152,16 @@ namespace Code.MainSystem.StatSystem.Manager
 
             float rewardValue = evt.Value;
 
-            if (holder != null)
-            {
-                if (evt.StatType == StatType.Mental)
-                    rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeMental, rewardValue);
-                
-                rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
+            if (routineBonuses != null) 
+                rewardValue *= routineBonuses.GetStatMultiplier();
 
-                if (evt.Type == PracticenType.Personal)
-                    rewardValue = holder.GetCalculatedStat(TraitTarget.Practice, rewardValue);
-            }
+            if (evt.StatType == StatType.Mental)
+                rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeMental, rewardValue);
+                
+            rewardValue = holder.GetCalculatedStat(TraitTarget.Training, rewardValue);
+
+            if (evt.Type == PracticenType.Personal)
+                rewardValue = holder.GetCalculatedStat(TraitTarget.Practice, rewardValue);
 
             _operator.IncreaseMemberStat(evt.MemberType, evt.StatType, rewardValue);
         }
@@ -234,6 +232,9 @@ namespace Code.MainSystem.StatSystem.Manager
 
         public bool PredictMemberPractice(float successRate, ITraitHolder holder)
         {
+            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
+            routineBonuses?.OnPracticeSuccess();
+
             upgradeModuleModule.SetCondition(successRate);
             return upgradeModuleModule.CanUpgrade(holder);
         }

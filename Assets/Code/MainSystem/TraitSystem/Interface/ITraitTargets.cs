@@ -63,7 +63,6 @@ namespace Code.MainSystem.TraitSystem.Interface
     public interface IRoutineModifier {
         void OnPracticeSuccess();
         void OnRest();
-        float GetSuccessBonus(string currentActionId);
         float GetStatMultiplier();
     }
 }

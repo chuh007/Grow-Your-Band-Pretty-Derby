@@ -146,8 +146,10 @@ namespace Code.MainSystem.MainScreen
             var holder = TraitManager.Instance.GetHolder(selectedUnit.memberType);
             
             var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
+            var routineModifier = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
             if (bufferedEffects != null) 
                 bufferedEffects.IsBuffered = true;
+            routineModifier?.OnRest();
 
             float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
             float beforeHealth = selectedUnit.currentCondition;
