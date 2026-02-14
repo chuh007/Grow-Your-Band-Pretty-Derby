@@ -199,6 +199,12 @@ namespace Code.MainSystem.TraitSystem.Manager
                     break;
             }
         }
+        
+        public void TurnEnd()
+        {
+            foreach (var holder in _holders.Values)
+                holder.ExecuteTrigger(TraitTrigger.OnTurnPassed);
+        }
 
         /// <summary>
         /// 특성 보유 현황 표시
@@ -244,11 +250,5 @@ namespace Code.MainSystem.TraitSystem.Manager
         }
 
         #endregion
-
-        public void TurnEnd()
-        {
-            foreach (var holder in _holders.Values)
-                holder.ExecuteTrigger(TraitTrigger.OnTurnPassed);
-        }
     }
 }
