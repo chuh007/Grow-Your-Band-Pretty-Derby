@@ -2,24 +2,32 @@
 
 namespace Code.MainSystem.TraitSystem.Data
 {
-    public enum TraitType
+    public enum TraitTrigger
     {
-        NoneTrait,              // 특성 없음
-        Telepathy,              // 이심전심
-        LoneGuitarist,          // 고독한 기타리스트
-        ShiningEyes,            // 반짝이는 눈
-        FailureBreedsSuccess,   // 실패는 성공의 어머니
-        HonedTechnique,         // 단련기술
-        Injury,                 // 부상
-        Overzealous,            // 지나친 열정
-        Dogmatic,               // 독선적
-        Entertainer,            // 만담가
-        Focus,                  // 집중력
-        HighlightBoost,         // 하이라이트 강화
-        AttentionGain,          // 주목도 상승
-        BreathControl,          // 호흡 조절
-    }
+        None,
 
+        // void OnTrigger
+        OnPracticeSuccess,      // 연습 성공 직후
+        OnPracticeFailed,       // 연습 실패 직후
+        OnRestStarted,          // 휴식 시작 시 (루틴 초기화 등)
+        OnTurnPassed,           // 턴 종료 시
+        OnTraitAdded,           // 특성 획득 시 (최대치 확장 등)
+        OnTraitRemoved,         // 특성 제거 시
+        OnEnsembleSuccess,      // 합주 성공 시 (이심전심 등)
+
+        // float QueryValue
+        CalcStatMultiplier,     // 능력치 상승 효율 배율 (고위험 루틴, 흐름 되살리기)
+        CalcSuccessRateBonus,   // 성공률 가산 보너스 (연습 루틴, 규칙적인 생활)
+        CalcConditionCost,      // 컨디션 소모 배율 (지나친 열정)
+        CalcTrainingReward,     // 훈련 성공 시 컨디션/멘탈 리워드 가산 (록스피릿)
+        CalcEnsembleBonus,      // 합주 효과 배율 (이심전심)
+
+        // bool CheckCondition
+        CheckAdditionalAction,  // 추가 행동 발생 여부 (반짝이는 눈, 지나친 열정)
+        CheckSuccessGuaranteed, // 성공 확정 여부 (실패는 성공의 어머니)
+        CheckMaxConditionCap,   // 최대 컨디션 돌파 가능 여부
+    }
+    
     [Flags]
     public enum TraitTag
     {

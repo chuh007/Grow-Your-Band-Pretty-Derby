@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using Code.MainSystem.StatSystem.Module.Data;
@@ -10,23 +9,23 @@ namespace Code.MainSystem.StatSystem.Module
 {
     public enum ConditionLevel
     {
-        VeryBad = 0,    // 매우 나쁨 (0-20%)
-        Bad = 1,        // 나쁨 (20-40%)
-        Normal = 2,     // 보통 (40-60%)
-        Good = 3,       // 좋음 (60-80%)
-        VeryGood = 4    // 매우 좋음 (80-100%)
+        VeryBad = 0, // 매우 나쁨 (0-20%)
+        Bad = 1, // 나쁨 (20-40%)
+        Normal = 2, // 보통 (40-60%)
+        Good = 3, // 좋음 (60-80%)
+        VeryGood = 4 // 매우 좋음 (80-100%)
     }
-    
+
     public class StatUpgradeModule : MonoBehaviour
     {
         [SerializeField] private string upgradeDataLabel;
-        
-        private float _currentCondition; 
+
+        private float _currentCondition;
         private UpgradeData _upgradeData;
 
         public async Task Initialize()
-        { 
-            var handle  = Addressables.LoadAssetAsync<UpgradeData>(upgradeDataLabel);
+        {
+            var handle = Addressables.LoadAssetAsync<UpgradeData>(upgradeDataLabel);
             await handle.Task;
             _upgradeData = handle.Result;
         }
@@ -45,18 +44,21 @@ namespace Code.MainSystem.StatSystem.Module
                 _ => ConditionLevel.VeryGood
             };
         }
-        
+
         /// <summary>
         /// 특정 홀더(멤버)의 현재 컨디션 기반 최종 성공 확률을 반환
         /// </summary>
         public float GetFinalSuccessRate(float condition, ITraitHolder holder)
         {
-            ConditionLevel level = GetConditionLevel(condition); 
+            ConditionLevel level = GetConditionLevel(condition);
             float baseRate = _upgradeData.conditionSuccessRates[(int)level];
-            
-            return holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate);
+
+            float calculatedRate = holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate);
+
+            float triggerBonus = holder.QueryTriggerValue(TraitTrigger.CalcSuccessRateBonus, "Training");
+            return calculatedRate + triggerBonus;
         }
-        
+
         /// <summary>
         /// 컨디션 레벨에 따른 성공 확률 반환
         /// </summary>
@@ -68,22 +70,15 @@ namespace Code.MainSystem.StatSystem.Module
         /// </summary>
         public bool CanUpgrade(ITraitHolder holder)
         {
-            var guarantors = holder.GetModifiers<ISuccessGuarantor>();
-
-            if (guarantors.Any(g => g.ShouldGuarantee()))
+            if (holder.CheckTriggerCondition(TraitTrigger.CheckSuccessGuaranteed))
                 return true;
-            
-            
-            float baseRate = GetSuccessRate();
-            float routineBonus = 0;
-            float finalRate = holder.GetCalculatedStat(TraitTarget.SuccessRate, baseRate) + routineBonus;
-    
+
+            float finalRate = GetFinalSuccessRate(_currentCondition, holder);
+
             bool isSuccess = Random.Range(0f, 100f) < finalRate;
-            
-            foreach (var listener in holder.GetModifiers<IInspirationSystem>())
-                if (!isSuccess)
-                    listener.OnTrainingFailed();
-            
+
+            holder.ExecuteTrigger(isSuccess ? TraitTrigger.OnPracticeSuccess : TraitTrigger.OnPracticeFailed);
+
             return isSuccess;
         }
 

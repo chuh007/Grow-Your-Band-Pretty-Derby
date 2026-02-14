@@ -1,29 +1,34 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.MainSystem.TraitSystem.Data;
+
 
 namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
     /// <summary>
     /// 연습 루틴 효과
     /// </summary>
-    public class PracticeRoutineEffect : MultiStatModifierEffect, IConsecutiveActionModifier
+    public class PracticeRoutineEffect : MultiStatModifierEffect
     {
-        public float PecValue { get; private set; }
+        private string _lastActionId = string.Empty;
 
-        private string _lastActionId;
-
-        public override void Initialize(ActiveTrait trait)
+        public override float QueryValue(TraitTrigger trigger, object context = null)
         {
-            base.Initialize(trait);
-            PecValue = GetValue(0);
-            _lastActionId = "";
+            if (trigger != TraitTrigger.CalcSuccessRateBonus || context is not string currentActionId)
+                return base.QueryValue(trigger, context);
+
+            float bonus = 0f;
+
+            if (!string.IsNullOrEmpty(_lastActionId) && _lastActionId == currentActionId)
+                bonus = GetValue(0);
+
+            _lastActionId = currentActionId;
+            return bonus;
+
         }
 
-        public float GetSuccessBonus(string currentActionId)
+        public override void OnTrigger(TraitTrigger trigger, object context = null)
         {
-            float bonus = _lastActionId == currentActionId ? PecValue : 0f;
-            _lastActionId = currentActionId;
-            return bonus * 0.01f;
+            if (trigger == TraitTrigger.OnRestStarted)
+                _lastActionId = string.Empty;
         }
     }
 }

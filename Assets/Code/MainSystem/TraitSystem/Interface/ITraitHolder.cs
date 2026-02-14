@@ -5,7 +5,7 @@ using Code.MainSystem.TraitSystem.Runtime;
 
 namespace Code.MainSystem.TraitSystem.Interface
 {
-    public interface ITraitHolder : IModifierProvider
+    public interface ITraitHolder : IModifierProvider, ITraitTrigger
     {
         public MemberType MemberType { get; }
         

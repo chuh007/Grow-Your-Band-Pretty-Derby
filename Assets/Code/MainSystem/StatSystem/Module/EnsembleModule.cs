@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.StatSystem.Module.Data;
 using Code.MainSystem.TraitSystem.Data;
-using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -39,39 +38,38 @@ namespace Code.MainSystem.StatSystem.Module
             return _upgradeData.conditionSuccessRates[avgLevel];
         }
         
-        public float ApplyEnsembleBonus(float baseValue, MemberType memberType)
+        public float ApplyEnsembleBonus(float baseValue, MemberType memberType, List<MemberType> ensembleMembers)
         {
             var holder = TraitManager.Instance.GetHolder(memberType);
             
-            float finalValue = baseValue;
-            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
+            float calculatedValue = holder.GetCalculatedStat(TraitTarget.Ensemble, baseValue);
+            calculatedValue = holder.GetCalculatedStat(TraitTarget.EnsembleCondition, calculatedValue);
             
-            if (bufferedEffects is { IsBuffered: true })
-            {
-                finalValue *= bufferedEffects.Multiplier;
-                bufferedEffects.Reset();
-            }
+            float multiplier = holder.QueryTriggerValue(TraitTrigger.CalcEnsembleBonus, ensembleMembers);
+            
+            float finalValue = calculatedValue * (multiplier > 0 ? multiplier : 1f);
 
-            if (bufferedEffects != null) 
-                bufferedEffects.IsBuffered = false;
-            
-            float rewardValue = holder.GetCalculatedStat(TraitTarget.EnsembleCondition, finalValue);
-            return holder.GetCalculatedStat(TraitTarget.Ensemble, rewardValue);
+            holder.ExecuteTrigger(TraitTrigger.OnPracticeSuccess); 
+
+            return finalValue;
         }
-        
-        public float ApplyHarmonyBonus(float baseValue, MemberType memberType)
-        {
-            var holder = TraitManager.Instance.GetHolder(memberType);
-            return holder.GetCalculatedStat(TraitTarget.Harmony, baseValue);
-        }
-        
+
         /// <summary>
         /// 합주 성공 여부 판정
         /// </summary>
-        public bool CheckSuccess(List<float> memberConditions)
+        public bool CheckSuccess(List<MemberType> members, List<float>  memberConditions)
         {
             float successRate = CalculateSuccessRate(memberConditions);
-            return Random.Range(0f, 100f) < successRate;
+            
+            bool isSuccess = Random.Range(0f, 100f) < successRate;
+
+            if (!isSuccess) 
+                return false;
+            
+            foreach (var holder in members.Select(member => TraitManager.Instance.GetHolder(member)))
+                holder.ExecuteTrigger(TraitTrigger.OnEnsembleSuccess, members);
+
+            return true;
         }
 
         private ConditionLevel GetConditionLevel(float condition)
