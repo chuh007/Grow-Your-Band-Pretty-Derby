@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Code.Core.Addressable;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -13,14 +12,11 @@ using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Data;
-using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
-using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -99,7 +95,6 @@ namespace Code.MainSystem.MainScreen
             {
                 _lastSelectedUnit = currentUnit;
                 ShowHealPreview(currentUnit);
-                
                 buttonText.color = confirmColor;
                 return;
             }
@@ -109,6 +104,7 @@ namespace Code.MainSystem.MainScreen
 
             _isWaitingForDialogue = true;
             Bus<DialogCutscenePlayEvent>.Raise(new DialogCutscenePlayEvent(dialogueSO));
+            
             ProcessConfirmRest(currentUnit);
             
             ResetButtonState();
@@ -135,9 +131,13 @@ namespace Code.MainSystem.MainScreen
         private void ShowHealPreview(UnitDataSO unit)
         {
             var holder = TraitManager.Instance.GetHolder(unit.memberType);
-            float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
+            
+            float bonusMultiplier = holder.QueryTriggerValue(TraitTrigger.CalcStatMultiplier, TraitTarget.Condition);
+            float finalMultiplier = bonusMultiplier > 0 ? 1f + bonusMultiplier : 1f;
+            float previewHeal = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount) * finalMultiplier;
+
             healthBar.SetHealth(unit.currentCondition, unit.maxCondition);
-            healthBar.PrevieMinusHealth(-rewardValue);
+            healthBar.PrevieMinusHealth(-previewHeal);
         }
 
         /// <summary>
@@ -147,39 +147,16 @@ namespace Code.MainSystem.MainScreen
         {
             var holder = TraitManager.Instance.GetHolder(selectedUnit.memberType);
             
-            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
-            var routineModifier = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
-            var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
-            var overzealousEffect = holder.GetModifiers<IAdditionalActionProvider>().Cast<OverzealousEffect>().FirstOrDefault();
+            bool hasAdditionalAction = holder.CheckTriggerCondition(TraitTrigger.CheckAdditionalAction, selectedUnit.currentCondition);
             
-            if (bufferedEffects != null) 
-                bufferedEffects.IsBuffered = true;
-            routineModifier?.OnRest();
-
-            float rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeCondition, HealAmount);
-            
-            if (consecutive != null) 
-                rewardValue *= consecutive.GetSuccessBonus("Rest");
-            
-            float beforeHealth = selectedUnit.currentCondition;
-            float afterHealth = Mathf.Min(beforeHealth + rewardValue, selectedUnit.maxCondition);
-            
-            selectedUnit.currentCondition = afterHealth;
-            
-            if(overzealousEffect != null)
-            {
-                float rand = Random.Range(0f, 100f);
-                if (rand < overzealousEffect.AdditionalActionChance)
-                {
-                    TrainingManager.Instance.RestoreMemberAction(selectedUnit.memberType, 1);
-                }
-            }
-            
-            TrainingManager.Instance.MarkMemberTrained(selectedUnit.memberType);
             Bus<ConfirmRestEvent>.Raise(new ConfirmRestEvent(selectedUnit));
             
-            healthBar.SetHealth(afterHealth, selectedUnit.maxCondition);
-            healthBar.PrevieMinusHealth(-rewardValue); 
+            if (hasAdditionalAction)
+                TrainingManager.Instance.RestoreMemberAction(selectedUnit.memberType, 1);
+            
+            TrainingManager.Instance.MarkMemberTrained(selectedUnit.memberType);
+            
+            healthBar.SetHealth(selectedUnit.currentCondition, selectedUnit.maxCondition);
         }
 
         private void OnDestroy()
