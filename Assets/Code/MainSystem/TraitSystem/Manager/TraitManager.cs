@@ -7,7 +7,6 @@ using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Runtime;
 using Code.Core.Bus.GameEvents.TraitEvents;
 using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using Code.MainSystem.Turn;
 
 namespace Code.MainSystem.TraitSystem.Manager
@@ -160,8 +159,7 @@ namespace Code.MainSystem.TraitSystem.Manager
                 return;
             holder.AddTrait(newTrait);
 
-            var traitLifecycleListener = holder.GetModifiers<ITraitLifecycleListener>().FirstOrDefault();
-            traitLifecycleListener?.OnTraitAdded(holder.MemberType);
+            holder.ExecuteTrigger(TraitTrigger.OnTraitAdded);
 
             int newTotal = _pointCalculator.CalculateTotalPoints(holder.ActiveTraits);
         
@@ -186,8 +184,7 @@ namespace Code.MainSystem.TraitSystem.Manager
             if (!holder.IsAdjusting && !targetTrait.Data.IsRemovable)
                 return;
 
-            var traitLifecycleListener = holder.GetModifiers<ITraitLifecycleListener>().FirstOrDefault();
-            traitLifecycleListener?.OnTraitAdded(holder.MemberType);
+            holder.ExecuteTrigger(TraitTrigger.OnTraitRemoved);
             
             holder.RemoveActiveTrait(targetTrait);
             
@@ -251,9 +248,7 @@ namespace Code.MainSystem.TraitSystem.Manager
         public void TurnEnd()
         {
             foreach (var holder in _holders.Values)
-            {
-               holder.GetModifiers<ITurnProcessListener>().FirstOrDefault()?.OnTurnPassed();
-            }
+                holder.ExecuteTrigger(TraitTrigger.OnTurnPassed);
         }
     }
 }
