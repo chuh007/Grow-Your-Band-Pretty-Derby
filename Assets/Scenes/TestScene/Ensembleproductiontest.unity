@@ -2359,6 +2359,15 @@ MonoBehaviour:
     characterObject: {fileID: 1051431932}
   - memberType: 4
     characterObject: {fileID: 986289815}
+  memberAudios:
+  - memberType: 0
+    audioSource: {fileID: 538099146}
+  - memberType: 2
+    audioSource: {fileID: 909646278}
+  - memberType: 1
+    audioSource: {fileID: 1724041205}
+  - memberType: 4
+    audioSource: {fileID: 1655468160}
   resultWindow: {fileID: 158297005}
   commentBuilder: {fileID: 130670867}
   allowSkip: 1

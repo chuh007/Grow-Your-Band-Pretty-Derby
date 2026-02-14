@@ -58,7 +58,6 @@ namespace Code.MainSystem.MainScreen
 
         private async void Start()
         {
-            // 총 로딩 단계 수 설정
             loadingUI.ShowLoadingUI(6);
             
             Debug.Log("[MainScreen] Start called");
@@ -71,7 +70,7 @@ namespace Code.MainSystem.MainScreen
                 await LoadUnitsAsync();
 
                 loadingUI.UpdateProgress("Setting up UI...");
-                // ForceEnableAllButtons 삭제 - UpdateButton()이 알아서 처리함
+              
                 
                 loadingUI.UpdateProgress("Refreshing Layout...");
                 StartCoroutine(RefreshUILayout());
@@ -79,7 +78,6 @@ namespace Code.MainSystem.MainScreen
                 loadingUI.UpdateProgress("Finalizing...");
                 await Task.Delay(100);
                 
-                // 로딩 완료 후 버튼 상태 업데이트
                 UpdateButtonsAfterLoad();
                 
                 loadingUI.UpdateProgress("Complete!");
@@ -104,7 +102,6 @@ namespace Code.MainSystem.MainScreen
             Debug.Log("[MainScreen] OnEnable called");
             Bus<MemberTrainingStateChangedEvent>.OnEvent += OnMemberTrainingStateChanged;
 
-            // ForceEnableAllButtons 삭제 - 불필요한 강제 활성화 제거
         }
 
         private void OnDisable()
@@ -119,14 +116,13 @@ namespace Code.MainSystem.MainScreen
 
         private void InitializeActionCounts()
         {
-            // 기본값으로 초기화
+
             _memberActionCounts[MemberType.Bass] = false;
             _memberActionCounts[MemberType.Drums] = false;
             _memberActionCounts[MemberType.Guitar] = false;
             _memberActionCounts[MemberType.Piano] = false;
             _memberActionCounts[MemberType.Vocal] = false;
             
-            // TrainingManager 상태 동기화
             SyncWithTrainingManager();
         }
         
@@ -152,11 +148,29 @@ namespace Code.MainSystem.MainScreen
                     Debug.Log($"[MainScreen] {memberType} is already trained - action blocked");
                 }
             }
-            
-            // Busking 가능 여부 체크 - 한 명이라도 훈련했으면 불가능
+
             _isbuskingAvailable = !_memberActionCounts.Values.Any(acted => acted);
             
             Debug.Log($"[MainScreen] Synced with TrainingManager - Busking available: {_isbuskingAvailable}");
+        }
+        
+        /// <summary>
+        /// MemberCarousel에 현재 행동 상태 동기화 (Init 이후 호출)
+        /// </summary>
+        private void SyncCarouselWithActionStates()
+        {
+            if (memberCarousel == null)
+            {
+                Debug.LogWarning("[MainScreen] MemberCarousel is null - cannot sync");
+                return;
+            }
+            
+            foreach (var kvp in _memberActionCounts)
+            {
+                memberCarousel.UpdateMemberActionState(kvp.Key, kvp.Value);
+            }
+            
+            Debug.Log("[MainScreen] Synced action states with MemberCarousel");
         }
 
         /// <summary>
@@ -236,6 +250,8 @@ namespace Code.MainSystem.MainScreen
             {
                 Debug.Log("[MainScreen] Initializing member carousel");
                 memberCarousel.Init(_loadedUnits, OnMemberSelectedFromCarousel);
+                
+                SyncCarouselWithActionStates();
             }
             else
             {
@@ -264,6 +280,17 @@ namespace Code.MainSystem.MainScreen
             Debug.Log($"[MainScreen] Member training state changed: {evt.MemberType}");
             _memberActionCounts[evt.MemberType] = true;
             _isbuskingAvailable = false;
+            
+            if (memberCarousel != null)
+            {
+                memberCarousel.UpdateMemberActionState(evt.MemberType, true);
+                
+                if (_currentUnit != null && _currentUnit.memberType == evt.MemberType)
+                {
+                    memberCarousel.MoveToNextActiveMember();
+                }
+            }
+            
             UpdateButton();
         }
 
@@ -313,20 +340,18 @@ namespace Code.MainSystem.MainScreen
                 ? _memberActionCounts[_currentUnit.memberType]
                 : false;
 
-            Debug.Log($"[MainScreen] UpdateButton - Current: {_currentUnit.memberType}, Acted: {isCurrentMemberActed}, Busking: {_isbuskingAvailable}");
-
-            // 개인 훈련 버튼들 (0~3)
+          
+            
             for (int i = 0; i < 4; i++)
             {
                 if (practiceBtns[i] != null)
                 {
                     bool shouldEnable = !isCurrentMemberActed;
                     practiceBtns[i].interactable = shouldEnable;
-                    Debug.Log($"[MainScreen] Button {i} ({practiceBtns[i].name}) set to {shouldEnable}");
+                    
                 }
             }
-
-            // 버스킹 버튼 (4)
+            
             if (practiceBtns[4] != null)
             {
                 practiceBtns[4].interactable = _isbuskingAvailable;
@@ -487,6 +512,11 @@ namespace Code.MainSystem.MainScreen
 
             InitializeActionCounts();
             _isbuskingAvailable = true;
+            
+            if (memberCarousel != null)
+            {
+                memberCarousel.ResetAllActionStates();
+            }
 
             UpdateButton();
         }

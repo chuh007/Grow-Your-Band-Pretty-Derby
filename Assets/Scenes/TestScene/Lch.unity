@@ -6739,6 +6739,8 @@ MonoBehaviour:
   - {fileID: 1022719568}
   - {fileID: 733711903}
   liftY: 20
+  inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
   teamHealthBar: {fileID: 508380102}
   teamPracticeDataReference:
     m_AssetGUID: c5cd732ad5379364d95147312e6d9c1e
@@ -6770,6 +6772,8 @@ MonoBehaviour:
   rightArrowButton: {fileID: 1354271559}
   borderMoveDuration: 0.3
   borderMoveEase: 9
+  inactiveColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
   swipeThreshold: 50
 --- !u!114 &904073746
 MonoBehaviour:
@@ -12067,6 +12071,14 @@ PrefabInstance:
     - target: {fileID: 489698026971723296, guid: 076e942fc7751954aa76fb7ae14ca355, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622326671483451963, guid: 076e942fc7751954aa76fb7ae14ca355, type: 3}
+      propertyPath: changeOnEachStep
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622326671483451963, guid: 076e942fc7751954aa76fb7ae14ca355, type: 3}
+      propertyPath: tmiChangeInterval
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3518605424165217574, guid: 076e942fc7751954aa76fb7ae14ca355, type: 3}
       propertyPath: m_Name

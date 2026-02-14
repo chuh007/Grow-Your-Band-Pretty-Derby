@@ -585,6 +585,9 @@ MonoBehaviour:
   loadingPanel: {fileID: 904647532737692711}
   progressBar: {fileID: 1363916153923985978}
   loadingText: {fileID: 4656868634698588222}
+  tmiText: {fileID: 3081429737110539325}
+  tmiList: {fileID: 11400000, guid: 23005c4195527ff44a85f2635dbf09bb, type: 2}
+  changeOnEachStep: 0
 --- !u!1 &4071547011860275847
 GameObject:
   m_ObjectHideFlags: 0
