@@ -10,12 +10,11 @@ using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Events;
-using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -255,6 +254,8 @@ namespace Code.MainSystem.MainScreen
                 Debug.LogError("Ensemble module is null!");
                 return;
             }
+            
+            var memberTypes = _selectedMembers.Select(u => u.memberType).ToList();
 
             if (_wasSuccess)
             {
@@ -270,17 +271,15 @@ namespace Code.MainSystem.MainScreen
                     
                     var memberType = unit.memberType;
                     var holder = traitManager.GetHolder(memberType);
-                    
-                    var assistanceEffect = holder.GetModifiers<IMultiStatModifier>().FirstOrDefault();
-                    assistanceEffect?.ApplyEffect(memberType, statDeltaDict);
-
-                    var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
                     var statType = _teamPracticeData.PracticeStatType;
                     
-                    float finalStatGain = ensembleModule.ApplyEnsembleBonus(teamStatIncrease, memberType);
-
-                    if (consecutive != null)
-                        finalStatGain *= consecutive.GetSuccessBonus("Team");
+                    holder.ExecuteTrigger(TraitTrigger.OnEnsembleSuccess, statDeltaDict);
+                    
+                    float finalStatGain = ensembleModule.ApplyEnsembleBonus(teamStatIncrease, memberType, memberTypes);
+                    
+                    float routineBonus = holder.QueryTriggerValue(TraitTrigger.CalcStatMultiplier, "Team");
+                    if (routineBonus > 0)
+                        finalStatGain *= (1 + routineBonus);
                     
                     int roundedStatGain = Mathf.RoundToInt(finalStatGain);
                     
@@ -292,8 +291,8 @@ namespace Code.MainSystem.MainScreen
                     }
                     
                     memberStat.PlusValue(roundedStatGain);
-                    statDeltaDict[(memberType, statType)] = roundedStatGain;
-    
+                    
+                    statDeltaDict[(memberType, statType)] = statDeltaDict.GetValueOrDefault((memberType, statType)) + roundedStatGain;
                     totalTeamStatDelta += finalStatGain;
                 }
             }
@@ -303,7 +302,7 @@ namespace Code.MainSystem.MainScreen
             // TeamHarmony 업데이트
             int roundedTeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
             float finalValue = _selectedMembers.Sum(member =>
-                ensembleModule.ApplyEnsembleBonus(teamStatIncrease, member.memberType));
+                ensembleModule.ApplyEnsembleBonus(teamStatIncrease, member.memberType, _selectedMembers.Select(m => m.memberType).ToList()));
 
             roundedTeamStatDelta += (int)finalValue;
             
@@ -340,13 +339,8 @@ namespace Code.MainSystem.MainScreen
             }
 
             teamPracticeResultData.SetResult(
-                _wasSuccess,
-                _selectedMembers,
-                statDeltaDict,
-                firstUnit.teamStat,
-                roundedTeamStatDelta,
-                avgConditionAfter,
-                -teamConditionCost
+                _wasSuccess, _selectedMembers, statDeltaDict, _selectedMembers[0].teamStat,
+                roundedTeamStatDelta, avgConditionAfter, -teamConditionCost
             );
             
             // DataManager에 저장하여 씬 전환에도 유지되도록 함
@@ -364,20 +358,15 @@ namespace Code.MainSystem.MainScreen
             {
                 if (unit == null) continue;
                 var holder = TraitManager.Instance.GetHolder(unit.memberType);
-                var additionalAction = holder.GetModifiers<IAdditionalActionProvider>().FirstOrDefault();
-                
+                bool hasAdditionalAction = holder.CheckTriggerCondition(TraitTrigger.CheckAdditionalAction, unit.currentCondition);
+
                 unit.currentCondition = Mathf.Clamp(unit.currentCondition - teamConditionCost, 0, unit.maxCondition);
 
                 if (TrainingManager.Instance != null)
                 {
-                    if (additionalAction != null)
-                    {
-                        float rand = Random.Range(0f, 100f);
-                        if (rand < additionalAction.AdditionalActionChance)
-                        {
-                            TrainingManager.Instance.RestoreMemberAction(unit.memberType, 1);
-                        }
-                    }
+                    if (hasAdditionalAction)
+                        TrainingManager.Instance.RestoreMemberAction(unit.memberType, 1);
+                    
                     TrainingManager.Instance.MarkMemberTrained(unit.memberType);
                 }
             }

@@ -1,39 +1,31 @@
 ﻿using Code.MainSystem.StatSystem.BaseStats;
-using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+using Code.MainSystem.TraitSystem.Data;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
     /// <summary>
     /// 규칙적인 생활 효과
     /// </summary>
-    public class DisciplinedLifestyleEffect : MultiStatModifierEffect, IDisciplinedLifestyle
+    public class DisciplinedLifestyleEffect : MultiStatModifierEffect
     {
         private StatType _prevStatType = (StatType)(-1);
 
-        public float BonusValue { get; private set; }
+        public override float QueryValue(TraitTrigger trigger, object context = null)
+        {
+            if (trigger != TraitTrigger.CalcSuccessRateBonus || context is not StatType currentType) 
+                return 0f;
+            
+            bool isConsecutive = _prevStatType != (StatType)(-1) && _prevStatType == currentType;
+              
+            _prevStatType = currentType;
 
-        public override void Initialize(ActiveTrait trait)
-        {
-            base.Initialize(trait);
-            BonusValue = GetValue(0);
+            return isConsecutive ? GetValue(0) : 0f;
         }
-        
-        public float CheckPractice(StatType statType)
-        {
-            if (_prevStatType != (StatType)(-1) && _prevStatType == statType)
-            {
-                UpdateLastStat(statType);
-                return BonusValue;
-            }
 
-            UpdateLastStat(statType);
-            return 0f;
-        }
-        
-        public void UpdateLastStat(StatType lastType)
+        public override void OnTrigger(TraitTrigger trigger, object context = null)
         {
-            _prevStatType = lastType;
+            if (trigger == TraitTrigger.OnRestStarted)
+                _prevStatType = (StatType)(-1);
         }
     }
 }

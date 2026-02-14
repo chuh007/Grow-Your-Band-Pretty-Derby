@@ -1,4 +1,5 @@
-﻿using Code.MainSystem.StatSystem.Manager;
+﻿using System.Collections.Generic;
+using Code.MainSystem.StatSystem.Manager;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 
@@ -9,22 +10,16 @@ namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
     /// </summary>
     public class TelepathyEffect : MultiStatModifierEffect
     {
-        public override float GetAmount(TraitTarget category, object context = null)
+        public override float QueryValue(TraitTrigger trigger, object context = null)
         {
-            bool hasPartner = true;
-            for (int i = 0; i < (int)MemberType.Team; i++)
-            {
-                if (!TraitManager.Instance.HasTrait((MemberType)i, _ownerTrait.Data.IDHash))
-                    continue;
-                
-                hasPartner = false;
-                break;
-            }
+            if (trigger != TraitTrigger.CalcEnsembleBonus || 
+                context is not List<MemberType> { Count: 2 } members)
+                return 0f;
+
+            MemberType partner = members.Find(m => m != _ownerTrait.Owner);
             
-            if (hasPartner) 
-                return GetValue(0) * (GetValue(1) * 0.01f);
-            
-            return GetValue(0);
+            bool hasPartnerTrait = TraitManager.Instance.HasTrait(partner, _ownerTrait.Data.IDHash);
+            return GetValue(hasPartnerTrait ? 1 : 0);
         }
     }
 }

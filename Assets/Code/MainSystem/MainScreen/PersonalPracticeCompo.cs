@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Code.Core;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents;
@@ -10,13 +9,12 @@ using Code.MainSystem.MainScreen.Training;
 using Code.MainSystem.Etc;
 using Code.MainSystem.StatSystem.BaseStats;
 using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Random = UnityEngine.Random;
 
 namespace Code.MainSystem.MainScreen
 {
@@ -339,48 +337,33 @@ namespace Code.MainSystem.MainScreen
             
             if (_selectedPracticeIndex == index)
             {
-                var disciplined = holder.GetModifiers<IDisciplinedLifestyle>().FirstOrDefault();
-                var bufferedEffects = holder.GetModifiers<IGrooveRestoration>().FirstOrDefault();
-                var consecutive = holder.GetModifiers<IConsecutiveActionModifier>().FirstOrDefault();
-                var additionalAction = holder.GetModifiers<IAdditionalActionProvider>().FirstOrDefault();
+                bool success = StatManager.Instance.PredictMemberPractice(_currentCondition, holder);
                 
-                if (bufferedEffects != null) 
-                    bufferedEffects.IsBuffered = false;
+                float baseIncrease = success ? practice.statIncrease : 0;
+                float finalStatGain = baseIncrease;
                 
-                bool success = StatManager.Instance.PredictMemberPractice(
-                    _currentCondition, 
-                    TraitManager.Instance.GetHolder(_currentUnit.memberType)
-                );
-                
-                float increaseValue = success ? practice.statIncrease : 0;
-
-                if (disciplined != null)
+                if (success)
                 {
-                    increaseValue += disciplined.CheckPractice(practice.PracticeStatType);
+                    float bonusMultiplier = holder.QueryTriggerValue(TraitTrigger.CalcStatMultiplier, practice.PracticeStatType);
+                    float additiveBonus = holder.QueryTriggerValue(TraitTrigger.CalcTrainingReward, practice.PracticeStatType);
+                    
+                    finalStatGain = (baseIncrease + additiveBonus) * (1f + bonusMultiplier);
                 }
-                
-                if(consecutive != null)
-                    increaseValue *= consecutive.GetSuccessBonus(practice.PracticeStatType.ToString());
-                
+              
                 Bus<PracticeEvent>.Raise(new PracticeEvent(
                     PracticenType.Personal,
                     _currentUnit.memberType,
                     practice.PracticeStatType,
                     success,
-                    increaseValue
+                    finalStatGain
                 ));
-                
-                float realDamage = StatManager.Instance
-                    .GetConditionHandler()
+
+                float realDamage = StatManager.Instance.GetConditionHandler()
                     .ModifyConditionCost(_currentUnit.memberType, practice.StaminaReduction);
                 
                 Debug.Log($"[PersonalPracticeCompo] Real damage: {realDamage}");
 
-                _currentCondition = Mathf.Clamp(
-                    _currentCondition - realDamage,
-                    0,
-                    _currentUnit.maxCondition);
-                
+                _currentCondition = Mathf.Clamp(_currentCondition - realDamage, 0, _currentUnit.maxCondition);
                 _currentUnit.currentCondition = _currentCondition;
                 
                 if (healthBar != null)
@@ -388,13 +371,11 @@ namespace Code.MainSystem.MainScreen
                     healthBar.ApplyHealth(realDamage);
                 }
 
-                if (additionalAction != null)
+                bool hasAdditionalAction = holder.CheckTriggerCondition(TraitTrigger.CheckAdditionalAction, _currentCondition);
+
+                if (hasAdditionalAction)
                 {
-                    float rand = Random.Range(0f, 100f);
-                    if (rand < additionalAction.AdditionalActionChance)
-                    {
-                        TrainingManager.Instance.RestoreMemberAction(_currentUnit.memberType, 1);
-                    }
+                    TrainingManager.Instance.RestoreMemberAction(_currentUnit.memberType, 1);
                 }
                 
                 TrainingManager.Instance.MarkMemberTrained(_currentUnit.memberType);
@@ -433,7 +414,7 @@ namespace Code.MainSystem.MainScreen
             }
 
             _selectedPracticeIndex = index;
-            _previewDamage = practice.StaminaReduction;
+            _previewDamage = StatManager.Instance.GetConditionHandler().ModifyConditionCost(_currentUnit.memberType, practice.StaminaReduction);
             
             if (healthBar != null)
             {

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Code.MainSystem.MainScreen.MemberData;
+﻿using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Events;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
@@ -19,22 +18,23 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
             _restRecoveryAmount = restRecoveryAmount;
         }
 
+        /// <summary>
+        /// 휴식 시 컨디션 회복 처리
+        /// </summary>
         public void ProcessRest(ConfirmRestEvent evt)
         {
             UnitDataSO unit = evt.Unit;
             if (unit is null || !_registry.TryGetMember(unit.memberType, out _))
                 return;
 
-            var holder = TraitManager.Instance.GetHolder(unit.memberType);
-
-            var routine = holder.GetModifiers<IRoutineModifier>();
-            foreach(var r in routine)
-                r.OnRest();
+            ITraitHolder holder = TraitManager.Instance.GetHolder(unit.memberType);
             
-            float multiplier = holder.GetModifiers<IConditionModifier>().Select(m => m.ConditionRecoveryMultiplier)
-                .DefaultIfEmpty(1f).Aggregate((a, b) => a * b);
-
-            float finalRecovery = holder.GetCalculatedStat(TraitTarget.Condition, _restRecoveryAmount) * multiplier;
+            holder.ExecuteTrigger(TraitTrigger.OnRestStarted);
+            
+            float bonusMultiplier = holder.QueryTriggerValue(TraitTrigger.CalcStatMultiplier, TraitTarget.Condition);
+            float finalMultiplier = bonusMultiplier > 0 ? (1f + bonusMultiplier) : 1f;
+            
+            float finalRecovery = holder.GetCalculatedStat(TraitTarget.PracticeCondition, _restRecoveryAmount) * finalMultiplier;
 
             unit.currentCondition = Mathf.Clamp(
                 unit.currentCondition + finalRecovery,
@@ -43,19 +43,20 @@ namespace Code.MainSystem.StatSystem.Manager.SubClass
             );
         }
 
+        /// <summary>
+        /// 행동 시 소모되는 컨디션 수치 보정
+        /// </summary>
         public float ModifyConditionCost(MemberType memberType, float baseCost)
         {
-            var holder = TraitManager.Instance.GetHolder(memberType);
-
-            var trainingBonuses = holder.GetModifiers<ITrainingSuccessBonus>();
-            var trainingBonus = trainingBonuses?.FirstOrDefault();
-
-            if (trainingBonus != null)
-                baseCost += trainingBonus.AddValue;
+            ITraitHolder holder = TraitManager.Instance.GetHolder(memberType);
             
-            float multiplier = holder.GetModifiers<IConditionModifier>().Select(m => m.ConditionCostMultiplier)
-                .DefaultIfEmpty(1f).Aggregate((a, b) => a * b);
-            return holder.GetCalculatedStat(TraitTarget.Condition, baseCost) * multiplier;
+            float trainingBonus = holder.QueryTriggerValue(TraitTrigger.CalcTrainingReward);
+            baseCost += trainingBonus;
+            
+            float costMultiplier = holder.QueryTriggerValue(TraitTrigger.CalcConditionCost);
+            float finalMultiplier = costMultiplier > 0 ? costMultiplier : 1f;
+            
+            return holder.GetCalculatedStat(TraitTarget.Condition, baseCost) * finalMultiplier;
         }
     }
 }

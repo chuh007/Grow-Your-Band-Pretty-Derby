@@ -52,6 +52,30 @@ namespace Code.MainSystem.TraitSystem.Data
 
             _activeTraits.Remove(trait);
         }
+        
+        public void ExecuteTrigger(TraitTrigger trigger, object context = null)
+        {
+            foreach (var trait in _activeTraits)
+                trait.TraitEffect?.OnTrigger(trigger, context);
+        }
+
+        public float QueryTriggerValue(TraitTrigger trigger, object context = null)
+        {
+            bool isMultiplier = trigger.ToString().Contains("Multiplier");
+            float result = isMultiplier ? 1f : 0f;
+
+            foreach (var trait in _activeTraits)
+            {
+                float val = trait.TraitEffect?.QueryValue(trigger, context) ?? 0f;
+                if (isMultiplier) result *= (1f + val); 
+            }
+            return result;
+        }
+
+        public bool CheckTriggerCondition(TraitTrigger trigger, object context = null)
+        {
+            return _activeTraits.Any(t => t.TraitEffect != null && t.TraitEffect.CheckCondition(trigger, context));
+        }
 
         public void RestoreTraits(IEnumerable<ActiveTrait> traits)
         {

@@ -13,7 +13,6 @@ using Code.MainSystem.StatSystem.Stats;
 using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Interface;
 using Code.MainSystem.TraitSystem.Manager;
-using Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect;
 using UnityEngine.Serialization;
 
 namespace Code.MainSystem.StatSystem.Manager
@@ -124,32 +123,19 @@ namespace Code.MainSystem.StatSystem.Manager
         private void HandlePracticeRequested(PracticeEvent evt)
         {
             ITraitHolder holder = TraitManager.Instance.GetHolder(evt.MemberType);
-            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
             bool isSuccess = evt.IsSuccess;
             
-            var bufferedEffects = holder.GetModifiers<IGrooveRestoration>();
-            if (bufferedEffects != null)
-            {
-                foreach (var effect in bufferedEffects)
-                    effect.Reset();
-            }
-
+            holder.ExecuteTrigger(isSuccess ? TraitTrigger.OnPracticeSuccess : TraitTrigger.OnPracticeFailed);
+            
             Bus<StatUpgradeEvent>.Raise(new StatUpgradeEvent(isSuccess));
 
-            if (!isSuccess)
-            {
-                foreach (var inspiration in
-                         holder.GetModifiers<IInspirationSystem>()
-                             .OfType<FailureBreedsSuccessEffect>())
-                    inspiration.OnTrainingFailed();
-                return;
-            }
-
+            if (!isSuccess) return;
+            
             float rewardValue = evt.Value;
-
-            if (routineBonuses != null) 
-                rewardValue *= routineBonuses.GetStatMultiplier();
-
+            
+            float multiplier = holder.QueryTriggerValue(TraitTrigger.CalcStatMultiplier, evt.Type);
+            if (multiplier > 0) rewardValue *= (1 + multiplier); 
+            
             if (evt.StatType == StatType.Mental)
                 rewardValue = holder.GetCalculatedStat(TraitTarget.PracticeMental, rewardValue);
                 
@@ -163,11 +149,11 @@ namespace Code.MainSystem.StatSystem.Manager
 
         private void HandleTeamPracticeRequested(TeamPracticeEvent evt)
         {
-            if (evt.UnitDataSos == null || evt.UnitDataSos.Count == 0)
-                return;
+            if (evt.UnitDataSos == null || evt.UnitDataSos.Count == 0) return;
             
-            List<float> memberConditions = evt.UnitDataSos.Select(t => t.currentCondition).ToList();
-            bool isSuccess = ensembleModule.CheckSuccess(memberConditions);
+            var memberTypes = evt.UnitDataSos.Select(t => t.memberType).ToList();
+            var conditions = evt.UnitDataSos.Select(c => c.currentCondition).ToList();
+            bool isSuccess = ensembleModule.CheckSuccess(memberTypes, conditions);
             
             Bus<TeamPracticeResultEvent>.Raise(new TeamPracticeResultEvent(isSuccess));
         }
@@ -180,14 +166,9 @@ namespace Code.MainSystem.StatSystem.Manager
         private void HandleRestRequested(ConfirmRestEvent evt)
         {
             _conditionHandler.ProcessRest(evt);
-    
-            var holder = TraitManager.Instance.GetHolder(evt.Unit.memberType);
-            var bufferedEffects = holder?.GetModifiers<IGrooveRestoration>();
-            if (bufferedEffects == null) 
-                return;
             
-            foreach (var effect in bufferedEffects)
-                effect.IsBuffered = true;
+            ITraitHolder holder = TraitManager.Instance.GetHolder(evt.Unit.memberType);
+            holder?.ExecuteTrigger(TraitTrigger.OnRestStarted);
         }
 
         #endregion
@@ -225,12 +206,9 @@ namespace Code.MainSystem.StatSystem.Manager
             return _registry.GetTeamStatValue();
         }
 
-        public bool PredictMemberPractice(float successRate, ITraitHolder holder)
+        public bool PredictMemberPractice(float currentCondition, ITraitHolder holder)
         {
-            var routineBonuses = holder.GetModifiers<IRoutineModifier>().FirstOrDefault();
-            routineBonuses?.OnPracticeSuccess();
-
-            upgradeModuleModule.SetCondition(successRate);
+            upgradeModuleModule.SetCondition(currentCondition);
             return upgradeModuleModule.CanUpgrade(holder);
         }
 
@@ -242,6 +220,12 @@ namespace Code.MainSystem.StatSystem.Manager
         public EnsembleModule GetEnsembleModuleHandler()
         {
             return ensembleModule;
+        }
+        
+        public float GetMemberCondition(MemberType memberType)
+        {
+            var stat = GetMemberStat(memberType, StatType.GuitarEndurance);
+            return stat?.CurrentValue ?? 0f;
         }
         
         #endregion

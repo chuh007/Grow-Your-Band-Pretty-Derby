@@ -1,23 +1,30 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.MainSystem.TraitSystem.Data;
+using UnityEngine;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
     /// <summary>
     /// 지나친 열정 효과
     /// </summary>
-    public class OverzealousEffect : MultiStatModifierEffect, IOverzealous, IAdditionalActionProvider
+    public class OverzealousEffect : MultiStatModifierEffect
     {
-        public float ConditionCostMultiplier { get; private set; }
-        public float ConditionRecoveryMultiplier { get; private set; }
-        public float AdditionalActionChance { get; private set; }
-
-        public override void Initialize(ActiveTrait trait)
+        public override float QueryValue(TraitTrigger trigger, object context = null)
         {
-            base.Initialize(trait);
-            ConditionCostMultiplier = GetValue(0);
-            ConditionRecoveryMultiplier = GetValue(1);
-            AdditionalActionChance = GetValue(2);
+            return trigger switch
+            {
+                TraitTrigger.CalcConditionCost 
+                    => GetValue(0),
+                
+                TraitTrigger.CheckAdditionalAction
+                    => RollAdditionalAction(),
+                
+                _ => base.QueryValue(trigger, context)
+            };
+        }
+
+        private float RollAdditionalAction()
+        {
+            return Random.Range(0f, 100f) < GetValue(2) ? 1f : 0f;
         }
     }
 }
