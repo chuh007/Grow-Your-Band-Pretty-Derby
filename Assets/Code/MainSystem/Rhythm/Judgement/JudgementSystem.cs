@@ -1,16 +1,14 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Reflex.Attributes;
 using Code.Core.Bus;
 using Code.Core.Bus.GameEvents.RhythmEvents;
-
 using Code.MainSystem.Rhythm.Notes;
 using Code.MainSystem.Rhythm.Audio;
 using Code.MainSystem.Rhythm.Data;
 using Code.MainSystem.StatSystem.Manager;
-using Code.MainSystem.TraitSystem.Interface;
+using Code.MainSystem.TraitSystem.Data;
 using Code.MainSystem.TraitSystem.Manager;
 
 namespace Code.MainSystem.Rhythm.Judgement
@@ -69,10 +67,8 @@ namespace Code.MainSystem.Rhythm.Judgement
         {
             var holder = TraitManager.Instance.GetHolder((MemberType)memberId);
             if (holder == null) return type;
-            
-            var corrections = holder.GetModifiers<IJudgmentCorrection>();
 
-            return corrections.Any(modifier => type == JudgementType.Miss && modifier.CorrectMissToGood) ? JudgementType.Good : type;
+            return holder.CheckTriggerCondition(TraitTrigger.CheckSuccessGuaranteed, type) ? JudgementType.Good : type;
         }
 
         public void OnInputDetected()
