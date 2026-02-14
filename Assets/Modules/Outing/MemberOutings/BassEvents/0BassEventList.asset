@@ -18,35 +18,47 @@ MonoBehaviour:
     place: 0
     weight: 1
     isImportance: 0
-    description: "\uBCA0\uC774\uC2A4\uAE30\uBCF8\uACF5\uC6D0"
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
     dialogue: {fileID: 11400000, guid: 729da69877e80d042a74fdc662708c6f, type: 2}
   - type: 2
     place: 0
     weight: 1
-    isImportance: 1
-    description: "\uBCA0\uC774\uC2A4\uC2A4\uD0AC"
+    isImportance: 0
+    description: "\uC0C1\uCF8C\uD55C \uBC14\uB78C\uC774 \uBD88\uC5B4\uC628\uB2E4.
+      \uBB34\uC5B8\uAC00 \uAE68\uB2EC\uC744 \uC218 \uC788\uC744\uAC83\uAC19\uB2E4."
     dialogue: {fileID: 11400000, guid: 14ba74c0c6e29d945b0f1d971a53686e, type: 2}
   - type: 2
     place: 3
     weight: 1
-    isImportance: 1
-    description: "\uBCA0\uC774\uC2A4\uCE74\uD398"
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
     dialogue: {fileID: 11400000, guid: 684f85cad19024e469d4657d59543d18, type: 2}
   - type: 2
     place: 4
     weight: 1
-    isImportance: 1
-    description: "\uBCA0\uC774\uC2A4\uC2DC\uC7A5"
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
     dialogue: {fileID: 11400000, guid: 2d96ea7db5c08f24cb91d9d03a227ea0, type: 2}
   - type: 2
     place: 2
     weight: 1
-    isImportance: 1
-    description: "\uBCA0\uC774\uC2A4\uC624\uB77D"
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
     dialogue: {fileID: 11400000, guid: 1a29d03b70335314db1cd3db6f68edb4, type: 2}
   - type: 2
     place: 1
+    weight: 2
+    isImportance: 0
+    description: "\uCCAD\uC774\uAC00 \uAC11\uC790\uAE30 \uB098\uB97C \uBD80\uB978\uB2E4."
+    dialogue: {fileID: 11400000, guid: 646ecba205b724a40b74e5762bd795ec, type: 2}
+  - type: 2
+    place: 1
     weight: 1
-    isImportance: 1
-    description: "\uBCA0\uC774\uC2A4\uC624\uB77D"
-    dialogue: {fileID: 11400000, guid: 1a29d03b70335314db1cd3db6f68edb4, type: 2}
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: b88cea2f68ac78d40bdebf2f6e3b088d, type: 2}

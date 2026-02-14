@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: BassBornGenius
   m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Dialogue.DialogueInformationSO
   <DialogueBackground>k__BackingField:
-  - m_AssetGUID: 
+  - m_AssetGUID: 6de53076378c8ac449646b5714a024a1
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
+    m_EditorAssetChanged: 1
   <DialogueDetails>k__BackingField:
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 7087b0725c6427941bd6f1c91afc4a12
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uCCAD\uC544, \uBCA0\uC774\uC2A4 \uC904 \uBCF4\uB7EC
       \uC654\uC5B4?"
     <NameTagPosition>k__BackingField: 0
@@ -33,11 +33,11 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "..\uB124. \uC0C8\uB85C\uC6B4 \uBE0C\uB79C\uB4DC
       \uB098\uC654\uB2E4\uACE0 \uD574\uC11C\uC694."
     <NameTagPosition>k__BackingField: 0
@@ -46,11 +46,11 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uC904\uB3C4 \uCC28\uC774\uAC00 \uC788\uC5B4\uC694?"
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
@@ -71,11 +71,11 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uC5B4\uB5A4 \uAC78 \uACE0\uB97C \uAC70\uC608\uC694?"
     <NameTagPosition>k__BackingField: 0
     <BackgroundIndex>k__BackingField: 0
@@ -83,11 +83,11 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "...\uC77C\uB2E8 \uB9CC\uC838\uBD10\uC57C \uD574\uC694.
       \uC774\uAC74 \uD150\uC158\uC774 \uAC15\uD558\uACE0... \uC774\uAC74 \uBD80\uB4DC\uB7FD\uB124\uC694."
     <NameTagPosition>k__BackingField: 0
@@ -96,11 +96,11 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uB9CC\uC9C0\uB294 \uAC83\uB9CC\uC73C\uB85C
       \uC54C\uC544\uC694?"
     <NameTagPosition>k__BackingField: 0
@@ -109,11 +109,11 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "\uB2F9\uC5F0\uD558\uC8E0! \uAC01\uC790 \uB290\uB08C\uC774
       \uB2E4 \uB2EC\uB77C\uC694. \uC774\uAC74 \uD301\uC774 \uB465\uAE00\uC5B4\uC11C
       \uC2EC\uBC8C \uCE60 \uB54C \uC88B\uACE0, \uC774\uAC74 \uB0A0\uCE74\uB85C\uC6CC\uC11C
@@ -124,11 +124,11 @@ MonoBehaviour:
     <Events>k__BackingField: []
     <Choices>k__BackingField: []
   - <CharacterInformSO>k__BackingField:
-      m_AssetGUID: 
+      m_AssetGUID: 83c4c301b6970744a80b72281900fa2f
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
-      m_EditorAssetChanged: 0
+      m_EditorAssetChanged: 1
     <DialogueDetail>k__BackingField: "..\uB124. \uC190\uB05D \uAC10\uAC01\uC73C\uB85C\uC694.
       \uD45C\uBA74 \uC9C8\uAC10\uC774\uB791 \uD0C4\uC131\uB9CC \uBD10\uB3C4 \uC5B4\uB5A4
       \uC18C\uB9AC \uB0A0\uC9C0 \uBCF4\uC5EC\uC694."

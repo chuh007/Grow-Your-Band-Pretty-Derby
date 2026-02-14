@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7087b0725c6427941bd6f1c91afc4a12
+    m_Address: Manager Info
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 720b2e00147a49f44b3fa858c54ed367
     m_Address: Drums Info
     m_ReadOnly: 0

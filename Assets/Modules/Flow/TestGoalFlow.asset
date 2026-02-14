@@ -19,18 +19,20 @@ MonoBehaviour:
     targetType: 12
     target: 10
     type: 2
-    turn: 2
-  - titleText: "\uBC84\uC2A4\uD0B9 \uCC38\uC5EC"
+    turn: 3
+  - titleText: "\uBC84\uC2A4\uD0B9\uC5D0 \uCC38\uAC00\uD574 300\uC810 \uC774\uC0C1
+      \uD68D\uB4DD"
     isTargetSet: 1
     icon: {fileID: 21300000, guid: 79f207fa03251374984180437024066a, type: 3}
     targetType: 12
-    target: 15
+    target: 150
     type: 2
     turn: 5
-  - titleText: "\uAC1C\uBC1C\uC911"
+  - titleText: "\uBC84\uC2A4\uD0B9\uC5D0 \uCC38\uAC00\uD574 1000\uC810 \uC774\uC0C1
+      \uD68D\uB4DD"
     isTargetSet: 1
     icon: {fileID: 21300000, guid: 79f207fa03251374984180437024066a, type: 3}
     targetType: 12
-    target: 100
+    target: 500
     type: 2
     turn: 10

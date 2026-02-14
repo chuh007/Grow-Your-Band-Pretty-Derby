@@ -27,12 +27,5 @@ namespace Code.Core.Bus.GameEvents.TraitEvents
             MemberType = memberType;
             TraitData = traitData;
         }
-        
-        // TODO 연결 작업시 삭제 필요
-        public TraitAddRequested(MemberType memberType, TraitType traitID)
-        {
-            MemberType = memberType;
-            TraitData = null;
-        }
     }
 }

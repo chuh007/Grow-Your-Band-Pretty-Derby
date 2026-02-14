@@ -619,29 +619,36 @@ namespace Code.MainSystem.MainScreen.Training
                 return;
             }
 
-            var setupComments = CommentManager.Instance.GetCurrentComments();
-            
-            if (setupComments == null || setupComments.Count == 0)
+            // 현재 멤버 이름 가져오기
+            string memberName = GetCurrentMemberName();
+            if (memberName == null)
             {
-                Debug.Log("[PracticeResultWindow] No current comments to display");
+                Debug.LogWarning("[PracticeResultWindow] No member name available");
+                return;
+            }
+
+            // ✅ 수정: 특정 멤버의 현재 코멘트만 가져오기 (모든 멤버가 아닌)
+            var currentComments = CommentManager.Instance.GetCurrentCommentsByMember(memberName);
+            
+            if (currentComments == null || currentComments.Count == 0)
+            {
+                Debug.Log($"[PracticeResultWindow] No current comments for {memberName}");
                 return;
             }
 
             TMP_FontAsset handwritingFont = GetHandwritingFont();
             
-            Debug.Log($"[PracticeResultWindow] Creating {setupComments.Count} comment groups");
+            Debug.Log($"[PracticeResultWindow] Creating {currentComments.Count} comments for {memberName}");
 
-            foreach (var kvp in setupComments)
+            // 해당 멤버의 코멘트만 표시
+            foreach (var commentData in currentComments)
             {
                 _skipCTS.Token.ThrowIfCancellationRequested();
 
-                foreach (var commentData in kvp.Value)
+                var go = CreateCommentUI(commentData, handwritingFont, instant: false);
+                if (go != null)
                 {
-                    var go = CreateCommentUI(commentData, handwritingFont, instant: false);
-                    if (go != null)
-                    {
-                        _spawnedComments.Add(go);
-                    }
+                    _spawnedComments.Add(go);
                 }
             }
 

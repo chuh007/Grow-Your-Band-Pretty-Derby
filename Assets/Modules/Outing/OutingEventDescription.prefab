@@ -146,7 +146,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6090827582580206157}
   - component: {fileID: 9024351667494174365}
-  - component: {fileID: 3345943584897228852}
   m_Layer: 5
   m_Name: OutingEventDescription
   m_TagString: Untagged
@@ -195,20 +194,6 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &3345943584897228852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5186635564134134849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02ba2802055447b38ca9c50ef6f6e636, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Code.MainSystem.Outing.OutingDataInfoUI
-  memberText: {fileID: 5700183738537435147}
-  outingDescriptionText: {fileID: 9127372185081698605}
 --- !u!1 &6563516296063947503
 GameObject:
   m_ObjectHideFlags: 0

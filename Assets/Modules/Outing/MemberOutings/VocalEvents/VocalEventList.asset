@@ -18,5 +18,34 @@ MonoBehaviour:
     place: 0
     weight: 1
     isImportance: 0
-    description: "\uBCF4\uCEEC\uAE30\uBCF8"
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
     dialogue: {fileID: 11400000, guid: b3963f71e09d2034ab8bfdf9eab9f41f, type: 2}
+  - type: 3
+    place: 3
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: dc7b256b3896d3843bc521111f77cc18, type: 2}
+  - type: 3
+    place: 4
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: cb741c146aa1e7e4982775ba5332216c, type: 2}
+  - type: 3
+    place: 1
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: f8dd4d7051f40eb4c8d090aa9a7aa240, type: 2}
+  - type: 3
+    place: 2
+    weight: 1
+    isImportance: 0
+    description: "\uC624\uB298\uC740 \uD2B9\uBCC4\uD55C \uC77C\uC774 \uC77C\uC5B4\uB098\uC9C0
+      \uC54A\uC744 \uAC83 \uAC19\uB2E4."
+    dialogue: {fileID: 11400000, guid: 0065820bf9254c3409d4f60678b6eb33, type: 2}

@@ -52,7 +52,7 @@ MonoBehaviour:
     - DialogueEvent
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 80395e2223da2d348a499b50814c9dd7
-    m_Address: Dialogue/VocalCondition5
+    m_Address: Dialogue/Vocal Condition5
     m_ReadOnly: 0
     m_SerializedLabels:
     - DialogueEvent
@@ -77,6 +77,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c28537c932955df4c9f54dd9c4885185
     m_Address: Dialogue/Drum Condition5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DialogueEvent
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd6a8675fdb27994089914ed3d9016ec
+    m_Address: Dialogue/Bass Born Genius Get
     m_ReadOnly: 0
     m_SerializedLabels:
     - DialogueEvent

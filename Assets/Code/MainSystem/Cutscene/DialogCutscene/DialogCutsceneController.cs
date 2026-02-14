@@ -78,7 +78,7 @@ namespace Code.MainSystem.Cutscene.DialogCutscene
 
             foreach (var skill in resultSender.addedTraits)
             {
-                resultBuilder.Append(string.Format(SKILL_RESULT_FORMAT, skill.targetStat.ToString()));
+                resultBuilder.Append(string.Format(SKILL_RESULT_FORMAT, skill.targetTrait.TraitName));
             }
 
             resultText.SetText(resultBuilder.ToString());
