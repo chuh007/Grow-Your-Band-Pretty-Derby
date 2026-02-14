@@ -1,19 +1,17 @@
-﻿using Code.MainSystem.TraitSystem.Interface;
-using Code.MainSystem.TraitSystem.Runtime;
+﻿using Code.MainSystem.TraitSystem.Data;
 
 namespace Code.MainSystem.TraitSystem.TraitEffect.SpecialEffect
 {
     /// <summary>
     /// 록스피릿 효과
     /// </summary>
-    public class RockSpiritEffect : MultiStatModifierEffect, ITrainingSuccessBonus
+    public class RockSpiritEffect : MultiStatModifierEffect
     {
-        public float AddValue { get; private set; }
-
-        public override void Initialize(ActiveTrait trait)
+        public override float QueryValue(TraitTrigger trigger, object context = null)
         {
-            base.Initialize(trait);
-            AddValue = GetValue(0);
+            return trigger == TraitTrigger.CalcTrainingReward
+                ? GetValue(0)
+                : base.QueryValue(trigger, context);
         }
     }
 }
