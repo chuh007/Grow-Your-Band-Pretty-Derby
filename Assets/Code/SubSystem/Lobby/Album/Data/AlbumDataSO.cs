@@ -20,8 +20,6 @@ namespace Code.SubSystem.Lobby.Album.Data
         public Sprite AlbumImage;
         public List<MemberPart> FirstSongMemberPart;
         public List<MemberPart> SecondSongMemberPart;
-        public AudioClip FirstSongHighlight;
-        public AudioClip SecondSongHighlight;
         
     }
 }

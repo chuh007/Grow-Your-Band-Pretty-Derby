@@ -46,6 +46,9 @@ namespace Code.MainSystem.MainScreen.Training
         [SerializeField] private string mainSceneName = "Lch";
         [SerializeField] private float postTimelineDelay = 1.0f;
         [SerializeField] private float preSceneTransitionDelay = 0.5f;
+        
+        [Header("MemeberAudios")]
+        [SerializeField] private List<AudioClip> memeberAudios = new List<AudioClip>();
 
         #endregion
 

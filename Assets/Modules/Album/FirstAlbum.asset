@@ -12,10 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a551b2103a47df96bf55f0da41fd98, type: 3}
   m_Name: FirstAlbum
   m_EditorClassIdentifier: Assembly-CSharp::Code.SubSystem.Lobby.Album.Data.AlbumDataSO
-  FirstSong: {fileID: 8300000, guid: 8ce5259faca1777409458c9878107e51, type: 3}
+  FirstSong: {fileID: 8300000, guid: 36da3293aa317f548ba936de78a1ff95, type: 3}
   SecondSong: {fileID: 8300000, guid: bc525d7817af76c4ea2cae6eb0e8d6ba, type: 3}
   AlbumImage: {fileID: 0}
-  FirstSongMemberPart: []
-  SecondSongMemberPart: []
+  FirstSongMemberPart:
+  - memberType: 0
+    partClip: {fileID: 8300000, guid: 7b5421c478e9e59488285836b8869485, type: 3}
+  - memberType: 1
+    partClip: {fileID: 8300000, guid: 50bdf835c5ac42b4ba6bd98b9391edcb, type: 3}
+  - memberType: 2
+    partClip: {fileID: 8300000, guid: 1d2cba009f7f93f47b9f8d87f820f2bc, type: 3}
+  - memberType: 4
+    partClip: {fileID: 8300000, guid: 5084f1a3c60dd8544a5304e4ec45d56d, type: 3}
+  SecondSongMemberPart:
+  - memberType: 0
+    partClip: {fileID: 8300000, guid: f01414a5a9bd52c4bb51860b05ea7930, type: 3}
+  - memberType: 1
+    partClip: {fileID: 8300000, guid: e9ce5e832b91b5d48b5b32f193bca81e, type: 3}
+  - memberType: 2
+    partClip: {fileID: 8300000, guid: c9de39830ee715d428d0bbbaa2218e32, type: 3}
+  - memberType: 4
+    partClip: {fileID: 8300000, guid: 8d07f233019b0f34cbb1ec161cb964b4, type: 3}
   FirstSongHighlight: {fileID: 0}
   SecondSongHighlight: {fileID: 0}
