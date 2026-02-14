@@ -39,6 +39,10 @@ namespace Code.MainSystem.MainScreen
 
         [Header("Button Move")]
         [SerializeField] private float liftY = 20f;
+        
+        [Header("Visual Settings")]
+        [SerializeField] private Color inactiveColor = new Color(0.5f, 0.5f, 0.5f, 1f); 
+        [SerializeField] private Color activeColor = Color.white;
 
         [Header("Health Bars")]
         [SerializeField] private HealthBar teamHealthBar;
@@ -50,6 +54,7 @@ namespace Code.MainSystem.MainScreen
         [SerializeField] private TeamPracticeResultData teamPracticeResultData;
 
         private readonly Dictionary<MemberType, Button> _buttonMap = new();
+        private readonly Dictionary<MemberType, Image> _buttonImageMap = new();
         private readonly Dictionary<MemberType, Vector3> _originalPosMap = new();
         private readonly List<UnitDataSO> _selectedMembers = new();
 
@@ -131,6 +136,16 @@ namespace Code.MainSystem.MainScreen
                 {
                     _buttonMap[type] = btn;
                     _originalPosMap[type] = btn.transform.localPosition;
+                    
+                    var btnImage = btn.GetComponent<Image>();
+                    if (btnImage != null)
+                    {
+                        _buttonImageMap[type] = btnImage;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Button {btn.name} has no Image component");
+                    }
                 }
             }
         }
@@ -139,6 +154,7 @@ namespace Code.MainSystem.MainScreen
         {
             _isTeamPracticeMode = true;
             ResetSelection();
+            UpdateMemberButtonStates();
             UpdateUI();
         }
 
@@ -150,7 +166,13 @@ namespace Code.MainSystem.MainScreen
                 Debug.LogWarning($"Unit map not initialized or member {member} not found");
                 return;
             }
-            if (!_isTeamPracticeMode || TrainingManager.Instance.IsMemberTrained(member)) return;
+            if (!_isTeamPracticeMode) return;
+            
+            if (TrainingManager.Instance.IsMemberTrained(member))
+            {
+                Debug.Log($"[TeamPractice] Cannot select {member} - already trained");
+                return;
+            }
 
             var unit = _unitMap[member];
             if (_selectedMembers.Contains(unit))
@@ -180,6 +202,35 @@ namespace Code.MainSystem.MainScreen
             _buttonMap[member].transform.localPosition = _originalPosMap[member];
 
             teamHealthBar.SetHealth(unit.currentCondition, unit.maxCondition);
+        }
+
+        /// <summary>
+        /// 모든 멤버 버튼의 상태 업데이트 (행동 여부에 따라)
+        /// </summary>
+        private void UpdateMemberButtonStates()
+        {
+            if (TrainingManager.Instance == null)
+            {
+                Debug.LogWarning("[TeamPractice] TrainingManager is null");
+                return;
+            }
+            
+            foreach (var kvp in _buttonMap)
+            {
+                var memberType = kvp.Key;
+                var button = kvp.Value;
+                
+                bool isTrained = TrainingManager.Instance.IsMemberTrained(memberType);
+                
+                button.interactable = !isTrained;
+                
+                if (_buttonImageMap.TryGetValue(memberType, out var btnImage))
+                {
+                    btnImage.color = isTrained ? inactiveColor : activeColor;
+                }
+                
+                Debug.Log($"[TeamPractice] {memberType} - Trained: {isTrained}, Interactable: {!isTrained}");
+            }
         }
 
         private void OnClickStartPractice()
@@ -216,7 +267,6 @@ namespace Code.MainSystem.MainScreen
                 return;
             }
 
-            // ScriptableObject가 없으면 런타임에 생성
             if (teamPracticeResultData == null)
             {
                 teamPracticeResultData = ScriptableObject.CreateInstance<TeamPracticeResultData>();
@@ -224,7 +274,6 @@ namespace Code.MainSystem.MainScreen
             }
             else
             {
-                // 기존 데이터 초기화
                 teamPracticeResultData.Clear();
             }
             
@@ -298,8 +347,7 @@ namespace Code.MainSystem.MainScreen
             }
             
             UpdateMembersCondition();
-            
-            // TeamHarmony 업데이트
+
             int roundedTeamStatDelta = Mathf.RoundToInt(totalTeamStatDelta);
             float finalValue = _selectedMembers.Sum(member =>
                 ensembleModule.ApplyEnsembleBonus(teamStatIncrease, member.memberType, _selectedMembers.Select(m => m.memberType).ToList()));
@@ -321,8 +369,7 @@ namespace Code.MainSystem.MainScreen
                     }
                 }
             }
-
-            // ScriptableObject에 결과 저장
+            
             Debug.Log("Getting first unit for team stat");
             var firstUnit = _selectedMembers[0];
             if (firstUnit == null)
@@ -343,7 +390,6 @@ namespace Code.MainSystem.MainScreen
                 roundedTeamStatDelta, avgConditionAfter, -teamConditionCost
             );
             
-            // DataManager에 저장하여 씬 전환에도 유지되도록 함
             TeamPracticeDataManager.Instance.SetResultData(teamPracticeResultData);
             
             Debug.Log($"Result data saved - Success: {teamPracticeResultData.isSuccess}, Members: {teamPracticeResultData.selectedMembers.Count}");

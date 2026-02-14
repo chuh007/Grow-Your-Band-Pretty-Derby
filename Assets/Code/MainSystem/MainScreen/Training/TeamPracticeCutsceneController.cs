@@ -4,6 +4,8 @@ using Code.Core.Bus.GameEvents.EncounterEvents;
 using Code.MainSystem.Encounter;
 using Code.MainSystem.MainScreen.MemberData;
 using Code.MainSystem.StatSystem.Manager;
+using Code.SubSystem.Lobby.Album;
+using Code.SubSystem.Lobby.Album.Data;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,6 +21,7 @@ namespace Code.MainSystem.MainScreen.Training
     /// 책임:
     /// - 타임라인 재생/스킵
     /// - 멤버별 캐릭터 바인딩
+    /// - 멤버별 오디오 재생 및 동기화
     /// - 타임라인 종료 후 결과 표시 시퀀스 시작
     /// 
     /// 책임 아님:
@@ -36,6 +39,9 @@ namespace Code.MainSystem.MainScreen.Training
 
         [Header("Character Bindings")]
         [SerializeField] private List<MemberObjectBinding> memberObjects;
+
+        [Header("Member Audios")]
+        [SerializeField] private List<MemberAudioBinding> memberAudios = new List<MemberAudioBinding>();
 
         [Header("Result Components")]
         [SerializeField] private PracticeResultWindow resultWindow;
@@ -56,6 +62,13 @@ namespace Code.MainSystem.MainScreen.Training
         {
             public MemberType memberType;
             public GameObject characterObject;
+        }
+
+        [System.Serializable]
+        public class MemberAudioBinding
+        {
+            public MemberType memberType;
+            public AudioSource audioSource;
         }
 
         #endregion
@@ -86,6 +99,9 @@ namespace Code.MainSystem.MainScreen.Training
                 director.stopped -= OnTimelineEnd;
             }
             
+            // 오디오 정리
+            StopAllMemberAudios();
+            
             // 씬을 떠날 때 데이터 정리
             if (TeamPracticeDataManager.Instance != null)
             {
@@ -110,13 +126,21 @@ namespace Code.MainSystem.MainScreen.Training
 
             if (commentBuilder == null)
                 Debug.LogError("[TeamPracticeCutscene] CommentBuilder is missing!");
+                
+            if (AlbumManager.Instance == null)
+                Debug.LogError("[TeamPracticeCutscene] AlbumManager instance is missing!");
         }
 
         private void InitializeTimeline()
         {
             ApplyCharacterBindings();
+            SetupMemberAudios();
+            
             director.stopped += OnTimelineEnd;
             director.Play();
+            
+            // 타임라인 시작과 동시에 오디오 재생
+            PlayAllMemberAudios();
 
             Debug.Log("[TeamPracticeCutscene] Timeline started");
         }
@@ -196,6 +220,85 @@ namespace Code.MainSystem.MainScreen.Training
 
         #endregion
 
+        #region Audio Control
+
+        /// <summary>
+        /// 선택된 멤버들의 오디오 설정
+        /// </summary>
+        private void SetupMemberAudios()
+        {
+            if (_resultData == null || _resultData.selectedMembers == null)
+            {
+                Debug.LogError("[TeamPracticeCutscene] Cannot setup audio - no result data");
+                return;
+            }
+
+            if (AlbumManager.Instance == null)
+            {
+                Debug.LogError("[TeamPracticeCutscene] AlbumManager is not available");
+                return;
+            }
+
+            foreach (var unit in _resultData.selectedMembers)
+            {
+                var audioBinding = memberAudios.Find(a => a.memberType == unit.memberType);
+                if (audioBinding == null || audioBinding.audioSource == null)
+                {
+                    Debug.LogWarning($"[TeamPracticeCutscene] No audio source found for {unit.memberType}");
+                    continue;
+                }
+
+                // AlbumManager에서 해당 멤버의 파트 오디오 가져오기
+                AudioClip partClip = AlbumManager.Instance.GetMemberPartAudio(unit.memberType);
+                if (partClip != null)
+                {
+                    audioBinding.audioSource.clip = partClip;
+                    Debug.Log($"[TeamPracticeCutscene] Loaded audio clip for {unit.memberType}");
+                }
+                else
+                {
+                    Debug.LogWarning($"[TeamPracticeCutscene] No audio clip found for {unit.memberType}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 모든 멤버 오디오 재생
+        /// </summary>
+        private void PlayAllMemberAudios()
+        {
+            if (_resultData == null || _resultData.selectedMembers == null)
+                return;
+
+            foreach (var unit in _resultData.selectedMembers)
+            {
+                var audioBinding = memberAudios.Find(a => a.memberType == unit.memberType);
+                if (audioBinding != null && audioBinding.audioSource != null && audioBinding.audioSource.clip != null)
+                {
+                    audioBinding.audioSource.Play();
+                    Debug.Log($"[TeamPracticeCutscene] Playing audio for {unit.memberType}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 모든 멤버 오디오 정지
+        /// </summary>
+        private void StopAllMemberAudios()
+        {
+            foreach (var audioBinding in memberAudios)
+            {
+                if (audioBinding.audioSource != null && audioBinding.audioSource.isPlaying)
+                {
+                    audioBinding.audioSource.Stop();
+                }
+            }
+            
+            Debug.Log("[TeamPracticeCutscene] All member audios stopped");
+        }
+
+        #endregion
+
         #region Skip Handling
 
         public void OnPointerDown(PointerEventData eventData)
@@ -211,10 +314,15 @@ namespace Code.MainSystem.MainScreen.Training
             if (!_isTimelinePlaying || _hasSkipped) return;
 
             _hasSkipped = true;
+            
+            // 타임라인 스킵
             director.time = director.duration;
             director.Evaluate();
+            
+            // 오디오도 함께 정지
+            StopAllMemberAudios();
 
-            Debug.Log("[TeamPracticeCutscene] Timeline skipped");
+            Debug.Log("[TeamPracticeCutscene] Timeline and audios skipped");
         }
 
         #endregion
@@ -224,6 +332,10 @@ namespace Code.MainSystem.MainScreen.Training
         private async void OnTimelineEnd(PlayableDirector finishedDirector)
         {
             _isTimelinePlaying = false;
+            
+            // 타임라인이 끝나면 오디오도 정지
+            StopAllMemberAudios();
+            
             Debug.Log("[TeamPracticeCutscene] Timeline ended");
 
             // 결과 애니메이션 재생

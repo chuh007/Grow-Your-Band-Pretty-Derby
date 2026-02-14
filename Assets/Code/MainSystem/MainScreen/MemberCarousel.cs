@@ -11,6 +11,7 @@ namespace Code.MainSystem.MainScreen
 {
     /// <summary>
     /// 멤버 캐러셀 UI 컨트롤러 (고정된 5개 아이콘, 테두리만 이동)
+    /// 행동한 멤버는 회색 처리되고 건너뛰어집니다
     /// </summary>
     public class MemberCarousel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
@@ -27,6 +28,8 @@ namespace Code.MainSystem.MainScreen
         [Header("Visual Settings")]
         [SerializeField] private float borderMoveDuration = 0.3f;
         [SerializeField] private Ease borderMoveEase = Ease.OutCubic;
+        [SerializeField] private Color inactiveColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+        [SerializeField] private Color activeColor = Color.white;
         
         [Header("Swipe Settings")]
         [SerializeField] private float swipeThreshold = 50f;
@@ -39,6 +42,8 @@ namespace Code.MainSystem.MainScreen
         
         private Vector2 _dragStartPos;
         private bool _isDragging = false;
+
+        private Dictionary<MemberType, bool> _memberActionStates = new Dictionary<MemberType, bool>();
 
         public void Init(List<UnitDataSO> units, System.Action<UnitDataSO> onMemberSelected)
         {
@@ -73,6 +78,8 @@ namespace Code.MainSystem.MainScreen
                 return;
             }
             
+            InitializeActionStates();
+            
             LoadAllIcons();
             
             MoveBorderToIndex(_currentSelectedIndex, false);
@@ -90,6 +97,84 @@ namespace Code.MainSystem.MainScreen
             if (rightArrowButton != null)
                 rightArrowButton.onClick.RemoveListener(OnRightArrowClicked);
         }
+
+        #region Action State Management
+
+        /// <summary>
+        /// 모든 멤버를 활성 상태로 초기화
+        /// </summary>
+        private void InitializeActionStates()
+        {
+            _memberActionStates.Clear();
+            
+            foreach (var unit in _allUnits)
+            {
+                _memberActionStates[unit.memberType] = false;
+            }
+        }
+
+        /// <summary>
+        /// 특정 멤버의 행동 상태 업데이트
+        /// </summary>
+        public void UpdateMemberActionState(MemberType memberType, bool hasActed)
+        {
+            _memberActionStates[memberType] = hasActed;
+            UpdateIconVisuals();
+            
+            Debug.Log($"[MemberCarousel] {memberType} action state updated to {hasActed}");
+        }
+
+        /// <summary>
+        /// 모든 멤버의 행동 상태 초기화 (턴 시작 시)
+        /// </summary>
+        public void ResetAllActionStates()
+        {
+            InitializeActionStates();
+            UpdateIconVisuals();
+            
+            Debug.Log("[MemberCarousel] All action states reset");
+        }
+
+        /// <summary>
+        /// 아이콘 색상 업데이트
+        /// </summary>
+        private void UpdateIconVisuals()
+        {
+            if (_allUnits == null || memberIconSlots == null)
+            {
+                Debug.LogWarning("[MemberCarousel] UpdateIconVisuals called before initialization");
+                return;
+            }
+            
+            for (int i = 0; i < memberIconSlots.Count && i < _allUnits.Count; i++)
+            {
+                var slot = memberIconSlots[i];
+                var unit = _allUnits[i];
+                
+                if (slot == null || unit == null)
+                    continue;
+                
+                bool hasActed = _memberActionStates.ContainsKey(unit.memberType) 
+                    ? _memberActionStates[unit.memberType] 
+                    : false;
+                
+                slot.color = hasActed ? inactiveColor : activeColor;
+            }
+        }
+
+        /// <summary>
+        /// 특정 멤버가 행동했는지 확인
+        /// </summary>
+        private bool HasMemberActed(int index)
+        {
+            if (index < 0 || index >= _allUnits.Count)
+                return false;
+            
+            var memberType = _allUnits[index].memberType;
+            return _memberActionStates.ContainsKey(memberType) ? _memberActionStates[memberType] : false;
+        }
+
+        #endregion
 
         /// <summary>
         /// 5개 아이콘에 각 유닛의 스프라이트를 로드
@@ -113,7 +198,7 @@ namespace Code.MainSystem.MainScreen
                     if (slot != null && sprite != null)
                     {
                         slot.sprite = sprite;
-                        slot.color = Color.white;
+
                     }
                 }
                 catch (System.Exception e)
@@ -121,6 +206,8 @@ namespace Code.MainSystem.MainScreen
                     Debug.LogError($"Failed to load icon for {unit.unitName}: {e.Message}");
                 }
             }
+            
+            UpdateIconVisuals();
         }
 
         #region Swipe Handlers
@@ -176,15 +263,22 @@ namespace Code.MainSystem.MainScreen
         }
 
         /// <summary>
-        /// 선택을 왼쪽으로 이동
+        /// 선택을 왼쪽으로 이동 (행동한 멤버 건너뛰기)
         /// </summary>
         private void MoveSelectionLeft()
         {
             _isTransitioning = true;
             
-            _currentSelectedIndex--;
-            if (_currentSelectedIndex < 0)
-                _currentSelectedIndex = _allUnits.Count - 1;
+            int nextIndex = FindNextActiveIndex(_currentSelectedIndex, -1);
+            
+            if (nextIndex == -1)
+            {
+                Debug.LogWarning("[MemberCarousel] No active member found to the left");
+                _isTransitioning = false;
+                return;
+            }
+            
+            _currentSelectedIndex = nextIndex;
             
             MoveBorderToIndex(_currentSelectedIndex, true, () =>
             {
@@ -194,21 +288,61 @@ namespace Code.MainSystem.MainScreen
         }
 
         /// <summary>
-        /// 선택을 오른쪽으로 이동
+        /// 선택을 오른쪽으로 이동 (행동한 멤버 건너뛰기)
         /// </summary>
         private void MoveSelectionRight()
         {
             _isTransitioning = true;
             
-            _currentSelectedIndex++;
-            if (_currentSelectedIndex >= _allUnits.Count)
-                _currentSelectedIndex = 0;
+            int nextIndex = FindNextActiveIndex(_currentSelectedIndex, 1);
+            
+            if (nextIndex == -1)
+            {
+                Debug.LogWarning("[MemberCarousel] No active member found to the right");
+                _isTransitioning = false;
+                return;
+            }
+            
+            _currentSelectedIndex = nextIndex;
             
             MoveBorderToIndex(_currentSelectedIndex, true, () =>
             {
                 _isTransitioning = false;
                 _onMemberSelected?.Invoke(_allUnits[_currentSelectedIndex]);
             });
+        }
+
+        /// <summary>
+        /// 다음 활성 멤버의 인덱스 찾기 (행동하지 않은 멤버)
+        /// </summary>
+        /// <param name="startIndex">시작 인덱스</param>
+        /// <param name="direction">방향 (-1: 왼쪽, 1: 오른쪽)</param>
+        /// <returns>다음 활성 멤버 인덱스, 없으면 -1</returns>
+        private int FindNextActiveIndex(int startIndex, int direction)
+        {
+            int count = _allUnits.Count;
+            int nextIndex = startIndex;
+
+            for (int i = 0; i < count; i++)
+            {
+                nextIndex += direction;
+                
+
+                if (nextIndex < 0)
+                    nextIndex = count - 1;
+                else if (nextIndex >= count)
+                    nextIndex = 0;
+
+                if (nextIndex == startIndex)
+                    break;
+
+                if (!HasMemberActed(nextIndex))
+                {
+                    return nextIndex;
+                }
+            }
+            
+            return -1;
         }
 
         /// <summary>
@@ -265,6 +399,51 @@ namespace Code.MainSystem.MainScreen
         }
 
         /// <summary>
+        /// 현재 선택된 멤버가 행동했는지 확인
+        /// </summary>
+        public bool IsCurrentMemberActed()
+        {
+            if (_currentSelectedIndex < 0 || _currentSelectedIndex >= _allUnits.Count)
+                return false;
+            
+            return HasMemberActed(_currentSelectedIndex);
+        }
+
+        /// <summary>
+        /// 다음 활성 멤버로 자동 전환 (현재 멤버가 행동했을 때)
+        /// </summary>
+        public void MoveToNextActiveMember()
+        {
+            if (!IsCurrentMemberActed())
+            {
+                Debug.Log("[MemberCarousel] Current member is still active");
+                return;
+            }
+            
+            int nextIndex = FindNextActiveIndex(_currentSelectedIndex, 1);
+            
+            if (nextIndex == -1)
+            {
+                nextIndex = FindNextActiveIndex(_currentSelectedIndex, -1);
+            }
+            
+            if (nextIndex == -1)
+            {
+                Debug.LogWarning("[MemberCarousel] No active members remaining");
+                return;
+            }
+            
+            _currentSelectedIndex = nextIndex;
+            
+            MoveBorderToIndex(_currentSelectedIndex, true, () =>
+            {
+                _onMemberSelected?.Invoke(_allUnits[_currentSelectedIndex]);
+            });
+            
+            Debug.Log($"[MemberCarousel] Auto-switched to next active member: {_allUnits[_currentSelectedIndex].unitName}");
+        }
+
+        /// <summary>
         /// 슬롯을 직접 클릭했을 때
         /// </summary>
         public void OnSlotClicked(int slotIndex)
@@ -272,6 +451,12 @@ namespace Code.MainSystem.MainScreen
             if (_isTransitioning) return;
             if (slotIndex < 0 || slotIndex >= memberIconSlots.Count) return;
             if (slotIndex >= _allUnits.Count) return;
+
+            if (HasMemberActed(slotIndex))
+            {
+                Debug.Log($"[MemberCarousel] Cannot select member at index {slotIndex} - already acted");
+                return;
+            }
             
             if (slotIndex != _currentSelectedIndex)
             {

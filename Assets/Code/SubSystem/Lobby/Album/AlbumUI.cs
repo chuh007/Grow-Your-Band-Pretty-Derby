@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 namespace Code.SubSystem.Lobby.Album
 {
@@ -15,13 +16,14 @@ namespace Code.SubSystem.Lobby.Album
         public AlbumDataSO Albums;
     }
     
-    public class AlbumUI : MonoBehaviour
+    public class AlbumUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("Data")]
         [SerializeField] private List<AlbumListData> albums;
 
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private string gameSceneName;
+        
         [Header("UI")] 
         [SerializeField] private GameObject panel;
         [SerializeField] private Image albumImage;
@@ -34,9 +36,19 @@ namespace Code.SubSystem.Lobby.Album
         [SerializeField] private Slider progressSlider;
         [SerializeField] private TextMeshProUGUI timeText;
         
+        [Header("Album Navigation")]
+        [SerializeField] private Button prevAlbumButton;
+        [SerializeField] private Button nextAlbumButton;
+        [SerializeField] private TextMeshProUGUI albumIndexText;
+        [SerializeField] private float swipeThreshold = 50f; 
+        
         private AlbumDataSO _currentAlbum;
+        private int _currentAlbumIndex = 0;
         private int _currentSongIndex = -1;
         private bool _isPaused = false;
+        
+        private Vector2 _dragStartPos;
+        private bool _isDragging = false;
 
         private void Start()
         {
@@ -46,8 +58,6 @@ namespace Code.SubSystem.Lobby.Album
             }
             audioSource.playOnAwake = false;
             audioSource.volume = 1f; 
-            
-            
             
             if (playSong1Button != null)
             {
@@ -82,18 +92,29 @@ namespace Code.SubSystem.Lobby.Album
             {
                 progressSlider.onValueChanged.AddListener(OnProgressSliderChanged);
             }
-            
-            if (albums.Count > 0)
-            {
-                SelectAlbum(albums[0].Id);
-            }
 
             if (nextButton != null)
             {
                 nextButton.onClick.AddListener(OnGameStart);
             }
             
+            if (prevAlbumButton != null)
+            {
+                prevAlbumButton.onClick.AddListener(ShowPreviousAlbum);
+            }
+            
+            if (nextAlbumButton != null)
+            {
+                nextAlbumButton.onClick.AddListener(ShowNextAlbum);
+            }
+            
+            if (albums.Count > 0)
+            {
+                SelectAlbum(0);
+            }
+            
             UpdateUI();
+            UpdateAlbumNavigationUI();
             
             panel.SetActive(false);
         }
@@ -128,17 +149,123 @@ namespace Code.SubSystem.Lobby.Album
             }
         }
         
-        public void SelectAlbum(int albumId)
+        #region Album Navigation
+        
+        /// <summary>
+        /// 인덱스로 앨범 선택
+        /// </summary>
+        private void SelectAlbum(int index)
         {
-            
-            _currentAlbum = albums.Find(a => a.Id == albumId)?.Albums;
+            if (index < 0 || index >= albums.Count)
+                return;
+                
+            _currentAlbumIndex = index;
+            _currentAlbum = albums[_currentAlbumIndex].Albums;
             
             StopSong();
+            
+            if (albumImage != null && _currentAlbum != null && _currentAlbum.AlbumImage != null)
+            {
+                albumImage.sprite = _currentAlbum.AlbumImage;
+            }
+            
+            UpdateAlbumNavigationUI();
+            Debug.Log($"[AlbumUI] Selected album {_currentAlbumIndex + 1}/{albums.Count}");
         }
+        
+        /// <summary>
+        /// 이전 앨범으로 이동
+        /// </summary>
+        public void ShowPreviousAlbum()
+        {
+            if (albums.Count <= 1) return;
+            
+            int newIndex = _currentAlbumIndex - 1;
+            if (newIndex < 0)
+                newIndex = albums.Count - 1; 
+            
+            SelectAlbum(newIndex);
+        }
+        
+        /// <summary>
+        /// 다음 앨범으로 이동
+        /// </summary>
+        public void ShowNextAlbum()
+        {
+            if (albums.Count <= 1) return;
+            
+            int newIndex = _currentAlbumIndex + 1;
+            if (newIndex >= albums.Count)
+                newIndex = 0; 
+            
+            SelectAlbum(newIndex);
+        }
+        
+        /// <summary>
+        /// 앨범 네비게이션 UI 업데이트 (버튼 활성화, 인덱스 표시)
+        /// </summary>
+        private void UpdateAlbumNavigationUI()
+        {
+            if (albumIndexText != null)
+            {
+                albumIndexText.text = $"{_currentAlbumIndex + 1} / {albums.Count}";
+            }
+            
+            bool hasMultipleAlbums = albums.Count > 1;
+            
+            if (prevAlbumButton != null)
+            {
+                prevAlbumButton.gameObject.SetActive(hasMultipleAlbums);
+            }
+            
+            if (nextAlbumButton != null)
+            {
+                nextAlbumButton.gameObject.SetActive(hasMultipleAlbums);
+            }
+        }
+        
+        #endregion
+        
+        #region Swipe Handling
+        
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            _dragStartPos = eventData.position;
+            _isDragging = true;
+        }
+        
+        public void OnDrag(PointerEventData eventData)
+        {
+        }
+        
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (!_isDragging) return;
+            
+            _isDragging = false;
+            
+            Vector2 dragEndPos = eventData.position;
+            Vector2 dragDelta = dragEndPos - _dragStartPos;
+            
+            if (Mathf.Abs(dragDelta.x) > swipeThreshold && Mathf.Abs(dragDelta.x) > Mathf.Abs(dragDelta.y))
+            {
+                if (dragDelta.x > 0)
+                {
+                    ShowPreviousAlbum();
+                    Debug.Log("[AlbumUI] Swiped right - Previous album");
+                }
+                else
+                {
+                    ShowNextAlbum();
+                    Debug.Log("[AlbumUI] Swiped left - Next album");
+                }
+            }
+        }
+        
+        #endregion
         
         private void PlaySong(int songIndex)
         {
-            
             if (_currentAlbum == null)
             {
                 return;
@@ -149,21 +276,16 @@ namespace Code.SubSystem.Lobby.Album
             if (songIndex == 0)
             {
                 clipToPlay = _currentAlbum.FirstSong;
-                
             }
             else if (songIndex == 1)
             {
                 clipToPlay = _currentAlbum.SecondSong;
-                
             }
             
             if (clipToPlay == null)
             {
-               
                 return;
             }
-            
-           
             
             if (_currentSongIndex == songIndex)
             {
@@ -178,7 +300,6 @@ namespace Code.SubSystem.Lobby.Album
             
             audioSource.Play();
             
-            
             _currentSongIndex = songIndex;
             _isPaused = false;
             
@@ -187,8 +308,6 @@ namespace Code.SubSystem.Lobby.Album
         
         private void TogglePause()
         {
-           
-            
             if (_currentSongIndex == -1)
             {
                 return;
@@ -198,7 +317,6 @@ namespace Code.SubSystem.Lobby.Album
             {
                 audioSource.Pause();
                 _isPaused = true;
-               
             }
             else if (_isPaused)
             {
@@ -297,20 +415,12 @@ namespace Code.SubSystem.Lobby.Album
             if (playSong2Button != null) playSong2Button.onClick.RemoveAllListeners();
             if (pauseButton != null) pauseButton.onClick.RemoveAllListeners();
             if (stopButton != null) stopButton.onClick.RemoveAllListeners();
-            if (closeButton != null)
-            {
-                closeButton.onClick.RemoveAllListeners();
-            }
+            if (closeButton != null) closeButton.onClick.RemoveAllListeners();
+            if (nextButton != null) nextButton.onClick.RemoveAllListeners();
+            if (progressSlider != null) progressSlider.onValueChanged.RemoveAllListeners();
             
-            if (nextButton != null)
-            {
-                nextButton.onClick.RemoveAllListeners();
-            }
-            
-            if (progressSlider != null)
-            {
-                progressSlider.onValueChanged.RemoveAllListeners();
-            }
+            if (prevAlbumButton != null) prevAlbumButton.onClick.RemoveAllListeners();
+            if (nextAlbumButton != null) nextAlbumButton.onClick.RemoveAllListeners();
         }
     }
 }
